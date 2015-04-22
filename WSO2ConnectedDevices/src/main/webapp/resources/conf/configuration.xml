@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<IOT>
+	<Database>
+		<driver>com.mysql.jdbc.Driver</driver>
+		<url>jdbc:mysql://localhost:3306/DB</url>
+		<username>admin</username>
+		<password>admin</password>
+		<validation>SELECT 1</validation>
+	</Database>
+
+	<BAM-Endpoint>
+		<url>tcp://localhost:7613</url>
+		<username>admin</username>
+		<password>admin</password>
+	</BAM-Endpoint>
+
+	<Security>
+		<client>client-trustsotre.jks</client>
+		<password>wso2carbon</password>
+	</Security>
+</IOT>
