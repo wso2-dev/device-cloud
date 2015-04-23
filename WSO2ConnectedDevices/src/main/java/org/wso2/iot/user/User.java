@@ -28,8 +28,8 @@ public class User {
 	private String username;
 	private String password;
 	private String email;
-	private String firstname;
-	private String lastname;
+	private String firstName;
+	private String lastName;
 	private ArrayList<String> roles = new ArrayList<String>();
 	
 			
@@ -66,25 +66,27 @@ public class User {
 	}
 	
 	public String getFirstname() {
-		return firstname;
+		return firstName;
 	}
 	
-	public void setFirstname(String firstname) {
-		this.firstname = firstname;
+	public void setFirstname(String firstName) {
+		this.firstName = firstName;
 	}
 	
 	public String getLastname() {
-		return lastname;
+		return lastName;
 	}
 	
 	public void setLastname(String lastname) {
-		this.lastname = lastname;
+		this.lastName = lastName;
 	}
 	
 	public void addRole(String role){
 		roles.add(role);
 		
 	}
+	
+	
 	
 	public List getRoles(){
 		return Collections.unmodifiableList(roles);

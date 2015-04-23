@@ -14,11 +14,13 @@
 * limitations under the License.
 */
 
-package org.wso2.iot.datasource;
+package org.wso2.iot.mdm;
 
-public class DBFault  extends Exception{
+import org.wso2.iot.user.User;
 
-    public DBFault(String msg) {
-    	super(msg);
-    }
+
+public interface UserManagement {
+	public void addNewUser(User user);
+	public void removeUser(User user);
+	public void updateUser(User user);
 }

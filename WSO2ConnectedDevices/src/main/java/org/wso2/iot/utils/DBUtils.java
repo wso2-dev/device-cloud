@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.wso2.iot.datasource;
+package org.wso2.iot.utils;
 
 import java.io.File;
 import java.io.IOException;
@@ -29,34 +29,32 @@ import javax.xml.xpath.XPathExpressionException;
 import org.apache.commons.dbcp2.BasicDataSource;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.wso2.iot.fileloader.ResourceFileLoader;
 import org.xml.sax.SAXException;
 
 public class DBUtils {
-	
+
 	private static Log log = LogFactory.getLog(DBUtils.class);
 	private static Connection dbConnection;
 
-    static {
-        BasicDataSource ds;
-        try {
-	        ds = getBasicDataSource();
-	        dbConnection = ds.getConnection();
-        } catch (DBFault e) {
-        	log.error("Cannot acquire DB connection", e);
-        }catch (SQLException e) {
-            log.error("Cannot acquire DB connection", e);
-        }
-    }
-    
-    public Connection getConnection(){
-    	
-    	return dbConnection;
-    	
-    }
-    
-	private static BasicDataSource getBasicDataSource() throws DBFault {
+	static {
+		BasicDataSource ds;
+		try {
+			ds = getBasicDataSource();
+			dbConnection = ds.getConnection();
+		} catch (DBFault e) {
+			log.error("Cannot acquire DB connection", e);
+		} catch (SQLException e) {
+			log.error("Cannot acquire DB connection", e);
+		}
+	}
 
+	public Connection getConnection() {
+
+		return dbConnection;
+
+	}
+
+	private static BasicDataSource getBasicDataSource() throws DBFault {
 
 		File file = new ResourceFileLoader("/resources/conf/configuration.xml").getFile();
 
@@ -71,24 +69,23 @@ public class DBUtils {
 					String username = xmlParser.getTagValues("IOT/Database/username")[0];
 					String password = xmlParser.getTagValues("IOT/Database/password")[0];
 					String validation = xmlParser.getTagValues("IOT/Database/validation")[0];
-					
+
 					BasicDataSource ds = new BasicDataSource();
-			        ds.setDriverClassName(driverClassName);
-			        ds.setUrl(url);
-			        ds.setUsername(username);
-			        ds.setPassword(password);
-			        ds.setValidationQuery(validation);
-			        return ds;
-					
-					
+					ds.setDriverClassName(driverClassName);
+					ds.setUrl(url);
+					ds.setUsername(username);
+					ds.setPassword(password);
+					ds.setValidationQuery(validation);
+					return ds;
+
 				} catch (XPathExpressionException e) {
 					log.error("Database Connection Failed, Invalid Xpath Expression: " +
-					         e.getMessage());
+					          e.getMessage());
 					throw new DBFault("Connection Failed");
-				} catch(ArrayIndexOutOfBoundsException e){
+				} catch (ArrayIndexOutOfBoundsException e) {
 					log.error("Database Connection Failed" + e.getMessage());
 					throw new DBFault("Connection Failed");
-					
+
 				}
 			} catch (ParserConfigurationException e) {
 				log.error("Database Connection Failed Parsing Error:" + e.getMessage());
@@ -109,9 +106,5 @@ public class DBUtils {
 		}
 
 	}
-	
-	
-
 
 }
-

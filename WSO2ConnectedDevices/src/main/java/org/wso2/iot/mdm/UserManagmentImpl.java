@@ -14,21 +14,36 @@
 * limitations under the License.
 */
 
-package org.wso2.iot.platform.devices;
+package org.wso2.iot.mdm;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.wso2.iot.services.api.DeviceController;
+import org.wso2.iot.user.User;
 
 /**
  * @author ayyoobhamza
  *
  */
-public class DeviceManager {
+public class UserManagmentImpl implements UserManagement {
 
-	public String Register(){
-		return "";
-		
-	}
-	
-	public String login(){
-		
-		return "";
-	}
+	private static Log log = LogFactory.getLog(UserManagmentImpl.class);
+    @Override
+    public void addNewUser(User user) {
+    	log.info("new User added");
+	    
+    }
+
+    @Override
+    public void removeUser(User user) {
+    	log.info("User removed");
+	    
+    }
+
+    @Override
+    public void updateUser(User user) {
+    	log.info("User updated");
+	    
+    }
+
 }

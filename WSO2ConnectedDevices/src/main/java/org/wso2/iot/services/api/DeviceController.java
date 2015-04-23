@@ -1,4 +1,4 @@
-package org.wso2.iot.platform.devices;
+package org.wso2.iot.services.api;
 
 import java.io.File;
 import java.io.IOException;
@@ -17,47 +17,45 @@ import org.wso2.carbon.databridge.commons.exception.DifferentStreamDefinitionAlr
 import org.wso2.carbon.databridge.commons.exception.MalformedStreamDefinitionException;
 import org.wso2.carbon.databridge.commons.exception.StreamDefinitionException;
 import org.wso2.carbon.databridge.commons.exception.TransportException;
-import org.wso2.iot.datasource.XmlParser;
-import org.wso2.iot.fileloader.ResourceFileLoader;
+import org.wso2.iot.utils.ResourceFileLoader;
+import org.wso2.iot.utils.XmlParser;
 import org.xml.sax.SAXException;
 
-@Path("")
+@Path("/DeviceController")
 public class DeviceController {
 	private static Log log = LogFactory.getLog(DeviceController.class);
-	private static  String dataStoreEndpoint = "tcp://localhost:7613";
-	private static  String dataStoreUsername = "admin";
-	private static  String dataStorePassword = "admin";
-	
-	
-	 static {
-		 
-		 File file = new ResourceFileLoader("/resources/conf/configuration.xml").getFile();
-		 if(file.exists()){
-			 XmlParser xml;
-            try {
-	            xml = new XmlParser(file);
-	            dataStoreEndpoint= xml.getTagValues("IOT/BAM-Endpoint/url")[0];
-				 dataStoreUsername=xml.getTagValues("IOT/BAM-Endpoint/username")[0];
-				 dataStorePassword=xml.getTagValues("IOT/BAM-Endpoint/password")[0];
-				 
-				 file = new ResourceFileLoader("/resources/security/"+xml.getTagValues("IOT/Security/client")[0]).getFile();
-				 if (file.exists()) {
-						String trustStore = file.getAbsolutePath();
-						System.setProperty("javax.net.ssl.trustStore", trustStore);
-						System.setProperty("javax.net.ssl.trustStorePassword", xml.getTagValues("IOT/Security/password")[0]);
-				}
-            } catch (ParserConfigurationException | SAXException | IOException e) {
-	            log.error("Error on configuration"+e);
-            } catch (XPathExpressionException e) {
-            	 log.error("Error on configuration"+e);
-            } 
-		 }
-	       
-	}
-	    
-	 
-	
+	private static String dataStoreEndpoint = "tcp://localhost:7613";
+	private static String dataStoreUsername = "admin";
+	private static String dataStorePassword = "admin";
 
+	static {
+
+		File file = new ResourceFileLoader("/resources/conf/configuration.xml").getFile();
+		if (file.exists()) {
+			XmlParser xml;
+			try {
+				xml = new XmlParser(file);
+				dataStoreEndpoint = xml.getTagValues("IOT/BAM-Endpoint/url")[0];
+				dataStoreUsername = xml.getTagValues("IOT/BAM-Endpoint/username")[0];
+				dataStorePassword = xml.getTagValues("IOT/BAM-Endpoint/password")[0];
+
+				file =
+				       new ResourceFileLoader("/resources/security/" +
+				                              xml.getTagValues("IOT/Security/client")[0]).getFile();
+				if (file.exists()) {
+					String trustStore = file.getAbsolutePath();
+					System.setProperty("javax.net.ssl.trustStore", trustStore);
+					System.setProperty("javax.net.ssl.trustStorePassword",
+					                   xml.getTagValues("IOT/Security/password")[0]);
+				}
+			} catch (ParserConfigurationException | SAXException | IOException e) {
+				log.error("Error on configuration" + e);
+			} catch (XPathExpressionException e) {
+				log.error("Error on configuration" + e);
+			}
+		}
+
+	}
 
 	@Path("/pushdata/{ip}/{owner}/{type}/{mac}/{time}/{pin}/{value}")
 	@POST
@@ -67,8 +65,6 @@ public class DeviceController {
 	                       @PathParam("pin") String pin, @PathParam("time") String time,
 	                       @PathParam("value") String pinValue,
 	                       @HeaderParam("description") String description) {
-
-		
 
 		DataPublisher dataPublisher;
 		try {
@@ -121,8 +117,8 @@ public class DeviceController {
 
 		try {
 			dataPublisher.publish(devicePinDataStream, System.currentTimeMillis(),
-			                      new Object[] { ipAdd, deviceType, owner, Long.parseLong(time) }, null,
-			                      new Object[] { macAddress, pin, pinValue, description });
+			                      new Object[] { ipAdd, deviceType, owner, Long.parseLong(time) },
+			                      null, new Object[] { macAddress, pin, pinValue, description });
 
 			log.info("event published to devicePinDataStream");
 
@@ -137,21 +133,14 @@ public class DeviceController {
 		       true + "\n\t\t</result>" + "\n\t</pushdata>" + "\n</connect>";
 	}
 
-
-	
-
-
-
 	public static void main(String[] args) {
 		log.info("TEst");
 		DeviceController TestObject = new DeviceController();
 
-		 String out =
-		 TestObject.pushData("localhost", "arduino", "smean", "123456", "Today", "13",
-		 "HIGH",
-		 "Test");
-		 System.out.println("PushData : " + out);
-
+		String out =
+		             TestObject.pushData("localhost", "arduino", "smean", "123456", "Today", "13",
+		                                 "HIGH", "Test");
+		System.out.println("PushData : " + out);
 
 	}
 }
