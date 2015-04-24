@@ -50,6 +50,7 @@ public class DeviceController {
 				}
 			} catch (ParserConfigurationException | SAXException | IOException e) {
 				log.error("Error on configuration" + e);
+				
 			} catch (XPathExpressionException e) {
 				log.error("Error on configuration" + e);
 			}

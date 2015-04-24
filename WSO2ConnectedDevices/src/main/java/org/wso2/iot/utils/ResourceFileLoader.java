@@ -21,7 +21,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 
 public class ResourceFileLoader {
-	private File file;
+	private String filePath;
 
 	public ResourceFileLoader(String fileName) {
 		String path = DBUtils.class.getClassLoader().getResource("").getPath();
@@ -34,12 +34,15 @@ public class ResourceFileLoader {
 		String pathArr[] = fullPath.split("/WEB-INF/classes/");
 		String filePath = pathArr[0] + fileName;
 
-		file = new File(filePath);
+	}
+
+	public String getPath() {
+		return filePath;
 
 	}
 
 	public File getFile() {
-
+		File file = new File(filePath);
 		return file;
 	}
 

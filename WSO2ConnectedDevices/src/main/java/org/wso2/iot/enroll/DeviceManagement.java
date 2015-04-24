@@ -14,13 +14,23 @@
 * limitations under the License.
 */
 
-package org.wso2.iot.mdm;
+package org.wso2.iot.enroll;
 
+import org.wso2.iot.device.Device;
 import org.wso2.iot.user.User;
 
 
-public interface UserManagement {
-	public void addNewUser(User user);
-	public void removeUser(User user);
-	public void updateUser(User user);
+/**
+ * @author ayyoobhamza
+ *
+ */
+public interface DeviceManagement {
+	
+	
+	public void addNewDevice(Device device, User user);
+	public void removeDevice(Device device);
+	public void updateToken(Device device, String token);
+	public String getToken(Device device, User user);
+	public Device getDevice(String deviceId);
+
 }

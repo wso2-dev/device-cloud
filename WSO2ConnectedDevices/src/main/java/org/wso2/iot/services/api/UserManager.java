@@ -23,11 +23,13 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.QueryParam;
 
+import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.wso2.iot.mdm.UserManagement;
-import org.wso2.iot.mdm.UserManagmentImpl;
+import org.wso2.iot.enroll.UserManagement;
+import org.wso2.iot.enroll.UserManagementImpl;
 import org.wso2.iot.user.User;
+import org.wso2.iot.utils.IOTConfiguration;
 
 @Path("/UserManager")
 public class UserManager {
@@ -39,7 +41,7 @@ public class UserManager {
 	                         @QueryParam("password") String password,
 	                         @QueryParam("firstName") String firstName,
 	                         @QueryParam("lastName") String lastName,
-	                         @QueryParam("email") String email, @QueryParam("roles") String[] roles) {
+	                         @QueryParam("email") String email, @QueryParam("roles") String[] roles) throws ConfigurationException, InstantiationException, IllegalAccessException {
 		
 		
 		User user = new User();
@@ -52,9 +54,51 @@ public class UserManager {
 			log.info(role);
 		}
 	
-		UserManagement userManagement = new UserManagmentImpl();
+		UserManagement userManagement = IOTConfiguration.getInstance().getUserManagementImpl();
 		
 		userManagement.addNewUser(user);
 	}
+	
+	
+	@POST
+	public void removeUser(@QueryParam("username") String username) throws InstantiationException, IllegalAccessException, ConfigurationException {
+		
+		
+		User user = new User();
+		user.setUsername(username);
+		
+		UserManagement userManagement = IOTConfiguration.getInstance().getUserManagementImpl();
+		userManagement.removeUser(user);
+		
+		
+	}
+	
+	@POST
+	public void updateUser(@QueryParam("username") String username,
+	                         @QueryParam("password") String password,
+	                         @QueryParam("firstName") String firstName,
+	                         @QueryParam("lastName") String lastName,
+	                         @QueryParam("email") String email, @QueryParam("roles") String[] roles) throws InstantiationException, IllegalAccessException, ConfigurationException {
+		
+		
+		User user = new User();
+		user.setUsername(username);
+		user.setPassword(password);
+		user.setFirstname(firstName);
+		user.setLastname(lastName);
+		for(String role: roles){
+			user.addRole(role);
+			log.info(role);
+		}
+	
+		UserManagement userManagement = IOTConfiguration.getInstance().getUserManagementImpl();
+		
+		userManagement.updateUser(user);
+	}
+	
+	
+	
+	
+	
 
 }

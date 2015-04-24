@@ -14,44 +14,42 @@
 * limitations under the License.
 */
 
-package org.wso2.iot.mdm;
+package org.wso2.iot.enroll;
 
-import org.wso2.iot.device.Device;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.wso2.iot.services.api.DeviceController;
 import org.wso2.iot.user.User;
 
-/**
- * @author ayyoobhamza
- *
- */
-public class DeviceManagementImpl implements DeviceManagement {
 
+public class UserManagementImpl implements UserManagement {
+
+	private static Log log = LogFactory.getLog(UserManagementImpl.class);
+	
 	
     @Override
-    public void addNewDevice(Device device, User user) {
-	   	
+    public void addNewUser(User user) {
+    	log.info("new User added");
 	    
     }
 
-	
     @Override
-    public void removeDevice(Device device) {
-	    // TODO Auto-generated method stub
+    public void removeUser(User user) {
+    	log.info("User removed");
 	    
     }
 
-	
     @Override
-    public void updateTocken(Device device, String token) {
-	    // TODO Auto-generated method stub
+    public void updateUser(User user) {
+    	log.info("User updated");
 	    
     }
 
-	
+
     @Override
-    public String getTocken(Device device, User user) {
-	    // TODO Auto-generated method stub
+    public User getUser() {
+	    
 	    return null;
     }
 
-	
 }

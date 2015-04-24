@@ -16,6 +16,10 @@
 
 package org.wso2.iot.device;
 
+
+/**
+* Description of a device
+*/
 public class Device {
 	private String deviceId;
 	private String name;
