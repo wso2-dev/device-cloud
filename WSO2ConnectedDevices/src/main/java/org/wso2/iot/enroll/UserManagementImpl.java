@@ -34,7 +34,7 @@ public class UserManagementImpl implements UserManagement {
     }
 
     @Override
-    public void removeUser(User user) {
+    public void removeUser(String username) {
     	log.info("User removed");
 	    
     }
@@ -47,9 +47,16 @@ public class UserManagementImpl implements UserManagement {
 
 
     @Override
-    public User getUser() {
+    public User getUser(String userName) {
 	    
 	    return null;
+    }
+
+	
+    @Override
+    public boolean isAuthenticated(String username, String password) {
+	    // TODO Auto-generated method stub
+	    return true;
     }
 
 }

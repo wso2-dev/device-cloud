@@ -21,7 +21,8 @@ import org.wso2.iot.user.User;
 
 public interface UserManagement {
 	public void addNewUser(User user);
-	public void removeUser(User user);
+	public void removeUser(String username);
 	public void updateUser(User user);
-	public User getUser();
+	public User getUser(String username);
+	public boolean isAuthenticated(String username,String password);
 }
