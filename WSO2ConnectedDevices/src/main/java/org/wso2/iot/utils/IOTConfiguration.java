@@ -39,16 +39,14 @@ public class IOTConfiguration {
 	private Class<?> userManagement;
 	private Class<?> deviceManagement;
 
-	
-    private IOTConfiguration() throws ConfigurationException {
+	private IOTConfiguration() throws ConfigurationException {
 		String fileName = "";
 		String enrollClassName = "";
 		try {
 
 			fileName = new ResourceFileLoader("/resources/conf/configuration.xml").getPath();
-			//log.info(fileName);
-//			 fileName =
-//			 "/Users/ayyoobhamza/wso2/Iot Git/device-cloud/WSO2ConnectedDevices/src/main/webapp/resources/conf/configuration.xml";
+			// fileName =
+			// "/Users/ayyoobhamza/wso2/Iot Git/device-cloud/WSO2ConnectedDevices/src/main/webapp/resources/conf/configuration.xml";
 
 			XMLConfiguration config = new XMLConfiguration(fileName);
 			config.setExpressionEngine(new XPathExpressionEngine());
@@ -59,20 +57,16 @@ public class IOTConfiguration {
 			enrollClassName =
 			                  config.getString("device-enroll-endpoint/class[@name='" + className +
 			                                   "']");
-			
-			
-			
-			deviceManagement = IOTConfiguration.class.forName(enrollClassName);
+			deviceManagement.forName(enrollClassName);
 
 			className = config.getString("main/enroll/user-class-name");
 			enrollClassName =
 			                  config.getString("user-enroll-endpoint/class[@name='" + className +
 			                                   "']");
-			//log.info(enrollClassName);
-			userManagement = IOTConfiguration.class.forName(enrollClassName);
-			//log.info(userManagement);;
+			userManagement.forName(enrollClassName);
+
 		} catch (ConfigurationException cex) {
-			log.error("Configuration File is missing on path: " + fileName, cex);
+			log.error("Configuration File is missing on path" + fileName, cex);
 			throw cex;
 		} catch (ClassNotFoundException e) {
 			log.error("Invalid Class Name: " + enrollClassName + "  :" + e);
@@ -123,9 +117,9 @@ public class IOTConfiguration {
 
 //	public static void main(String args[]) throws ConfigurationException, InstantiationException,
 //	                                      IllegalAccessException {
-//		 UserManagement
-//		user=IOTConfiguration.getInstance().getUserManagementImpl();
-//		//IOTConfiguration.getInstance().getUserManagementImpl();
+//		// UserManagement
+//		// user=IOTConfiguration.getInstance().getUserManagementImpl();
+//		IOTConfiguration.getInstance().getUserManagementImpl();
 //	}
 
 }
