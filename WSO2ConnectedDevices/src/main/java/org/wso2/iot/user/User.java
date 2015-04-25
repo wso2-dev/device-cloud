@@ -16,12 +16,19 @@
 
 package org.wso2.iot.user;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 
-public class User {
+public class User implements Serializable{
+	/**
+	 * 
+	 */
+    private static final long serialVersionUID = 1L;
+
+
 	private String id;
 	
 	
@@ -77,7 +84,7 @@ public class User {
 		return lastName;
 	}
 	
-	public void setLastname(String lastname) {
+	public void setLastname(String lastName) {
 		this.lastName = lastName;
 	}
 	
@@ -88,7 +95,7 @@ public class User {
 	
 	
 	
-	public List getRoles(){
+	public List<String> getRoles(){
 		return Collections.unmodifiableList(roles);
 	}
 	

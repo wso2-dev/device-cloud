@@ -14,9 +14,10 @@
 * limitations under the License.
 */
 
-package org.wso2.iot.enroll;
+package org.wso2.iot.enroll.db;
 
 import org.wso2.iot.device.Device;
+import org.wso2.iot.enroll.DeviceManagement;
 import org.wso2.iot.user.User;
 
 /**
