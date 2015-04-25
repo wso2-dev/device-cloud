@@ -118,7 +118,6 @@ public class IOTConfiguration {
 		               "Invalid class format for usermanagement, Make sure it has implemented UserManagment Interface";
 		log.error(error);
 		throw new InstantiationException(error);
-
 	}
 
 //	public static void main(String args[]) throws ConfigurationException, InstantiationException,

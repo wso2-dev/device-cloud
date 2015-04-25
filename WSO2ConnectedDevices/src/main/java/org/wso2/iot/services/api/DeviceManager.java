@@ -38,11 +38,7 @@ public class DeviceManager {
 
 	}
 	
-	public String login(String userId,String password){
-		//return a Session Cookie
-		
-		return "";
-	}
+	
 
 	public String getDeviceToken() {
 		//get Device Token with security

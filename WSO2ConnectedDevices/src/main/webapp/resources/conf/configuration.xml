@@ -20,19 +20,13 @@
 	</data-publisher>
 	
 	<device-enroll-endpoint>
-		<class name="DB-DEVICE">org.wso2.iot.enroll.DeviceManagementImpl</class>
+		<class name="DB-DEVICE">org.wso2.iot.enroll.db.DeviceManagementImpl</class>
 	</device-enroll-endpoint>
 
 	<user-enroll-endpoint>
-			<class name="DB-USER">org.wso2.iot.enroll.UserManagementImpl</class>
+			<class name="DB-USER">org.wso2.iot.enroll.db.UserManagementImpl</class>
 	</user-enroll-endpoint>
 
 
-	<database>
-		<driver>com.mysql.jdbc.Driver</driver>
-		<url>jdbc:mysql://localhost:3306/DB</url>
-		<username>admin</username>
-		<password>admin</password>
-		<validation>SELECT 1</validation>
-	</database>
+	
 </IOT>
