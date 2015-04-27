@@ -28,28 +28,28 @@ public class DeviceManagementImpl implements DeviceManagement {
 
 	
     @Override
-    public void addNewDevice(Device device, User user) {
+    public boolean addNewDevice(Device device) {
 	   	
-	    
+	    return false;
     }
 
 	
     @Override
-    public void removeDevice(Device device) {
+    public boolean removeDevice(Device device) {
 	    // TODO Auto-generated method stub
-	    
+	    return false;
     }
 
 	
     @Override
-    public void updateToken(Device device, String token) {
+    public boolean updateToken(Device device, String token) {
 	    // TODO Auto-generated method stub
-	    
+	    return false;
     }
 
 	
     @Override
-    public String getToken(Device device, User user) {
+    public String getToken(Device device) {
 	    // TODO Auto-generated method stub
 	    return null;
     }
@@ -59,6 +59,22 @@ public class DeviceManagementImpl implements DeviceManagement {
     @Override
     public Device getDevice(String deviceId) {
 	    // TODO Auto-generated method stub
+	    return null;
+    }
+    
+    public String generateToken(){
+    	
+    	
+    	return "";
+    }
+
+
+	/* (non-Javadoc)
+	 * @see org.wso2.iot.enroll.DeviceManagement#generateNewToken()
+	 */
+    @Override
+    public String generateNewToken() {
+	    
 	    return null;
     }
 

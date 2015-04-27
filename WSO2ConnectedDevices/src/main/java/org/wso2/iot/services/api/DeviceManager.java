@@ -16,24 +16,64 @@
 
 package org.wso2.iot.services.api;
 
-/**
- * @author ayyoobhamza
- * 
- */
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.ws.rs.PUT;
+import javax.ws.rs.Path;
+import javax.ws.rs.core.Context;
+
+import org.apache.commons.configuration.ConfigurationException;
+import org.wso2.iot.device.Device;
+import org.wso2.iot.enroll.DeviceManagement;
+import org.wso2.iot.enroll.UserManagement;
+import org.wso2.iot.utils.IOTConfiguration;
+
+
+
+@Path("/DeviceManager")
 public class DeviceManager {
 	
 	
-
-	public String Register(String deviceId, boolean anonymous) {
+	@Path("/DeviceRegister")
+	@PUT
+	public String Register(String deviceId, boolean anonymous,@Context HttpServletRequest request, @Context HttpServletResponse response) throws InstantiationException, IllegalAccessException, ConfigurationException {
 		
-		// get DeviceId
-		// return a unique Device ID
-		// if device is registered return a token<API manager style> to communicate.
-		//return "";
 		
-		//if cookie sent then registered under user or registered under anonymousd
+		UserManagement userManagement = IOTConfiguration.getInstance().getUserManagementImpl();
+		DeviceManagement deviceManagement= IOTConfiguration.getInstance().getDeviceManagementImpl();
+		boolean added=false;
+		if(anonymous){
+			
+			
+			Device device = new Device();
+			device.setDeviceId(deviceId);
+			String token = deviceManagement.generateNewToken();
+			device.setToken(token);
+			device.setOwner(userManagement.getAnonymousUserName());
+			
+			added=deviceManagement.addNewDevice(device);
+			
+			
+			
+		}else{
+			Device device = new Device();
+			device.setDeviceId(deviceId);
+			String token = deviceManagement.generateNewToken();
+			device.setToken(token);
+			device.setOwner(userManagement.getAnonymousUserName());
+			
+			added=deviceManagement.addNewDevice(device);
+			
+			
+		}
 		
-		//return devicetoken
+		if (added) {
+			response.setStatus(200);
+		} else {
+			response.setStatus(409);
+		}
+		
+	
 		return "";
 
 	}
@@ -42,6 +82,11 @@ public class DeviceManager {
 
 	public String getDeviceToken() {
 		//get Device Token with security
+		return "";
+	}
+	
+	public String generateDeviceToken(){
+		
 		return "";
 	}
 }

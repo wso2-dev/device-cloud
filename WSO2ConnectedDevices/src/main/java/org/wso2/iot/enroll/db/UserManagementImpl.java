@@ -243,4 +243,13 @@ public class UserManagementImpl implements UserManagement {
 		return false;
 	}
 
+	/* (non-Javadoc)
+	 * @see org.wso2.iot.enroll.UserManagement#getAnonymousUserName()
+	 */
+    @Override
+    public String getAnonymousUserName() {
+	    
+	    return "org.wso2.anonymous";
+    }
+
 }

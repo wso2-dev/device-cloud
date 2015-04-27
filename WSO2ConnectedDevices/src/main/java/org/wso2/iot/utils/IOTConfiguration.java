@@ -56,11 +56,7 @@ public class IOTConfiguration {
 			// read all configurations
 
 			String className = config.getString("main/enroll/device-class-name");
-			enrollClassName =
-			                  config.getString("device-enroll-endpoint/class[@name='" + className +
-			                                   "']");
-			
-			
+			enrollClassName =config.getString("device-enroll-endpoint/class[@name='" + className +"']");
 			
 			deviceManagement = IOTConfiguration.class.forName(enrollClassName);
 
