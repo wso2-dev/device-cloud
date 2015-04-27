@@ -27,10 +27,11 @@ import org.wso2.iot.user.User;
 public interface DeviceManagement {
 	
 	
-	public void addNewDevice(Device device, User user);
-	public void removeDevice(Device device);
-	public void updateToken(Device device, String token);
-	public String getToken(Device device, User user);
+	public boolean addNewDevice(Device device);
+	public boolean removeDevice(Device device);
+	public boolean updateToken(Device device, String token);
+	public String getToken(Device device);
 	public Device getDevice(String deviceId);
+	public String generateNewToken();
 
 }

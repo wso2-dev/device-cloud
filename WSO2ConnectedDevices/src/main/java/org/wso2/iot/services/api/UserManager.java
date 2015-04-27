@@ -53,6 +53,13 @@ public class UserManager {
 	                                                               InstantiationException,
 	                                                               IllegalAccessException {
 
+		
+		UserManagement userManagement = IoTConfiguration.getInstance().getUserManagementImpl();
+		if(username.equals(userManagement.getAnonymousUserName())){
+			response.setStatus(400);
+			return;
+		}
+		
 		User user = new User();
 		user.setUsername(username);
 		user.setPassword(password);
@@ -64,7 +71,8 @@ public class UserManager {
 
 		}
 
-		UserManagement userManagement = IoTConfiguration.getInstance().getUserManagementImpl();
+
+		
 
 		boolean added = userManagement.addNewUser(user);
 
@@ -217,5 +225,9 @@ public class UserManager {
 		}
 		return true;
 	}
+	
+	
+	
+	
 
 }

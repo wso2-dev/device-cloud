@@ -16,10 +16,9 @@
 
 package org.wso2.iot.device;
 
-
 /**
-* Description of a device
-*/
+ * Description of a device
+ */
 public class Device {
 	private String deviceId;
 	private String name;
@@ -28,6 +27,7 @@ public class Device {
 	private Long enrolledOn;
 	private String desciption;
 	private String owner;
+	private String token;
 
 	public String getDeviceId() {
 		return deviceId;
@@ -79,6 +79,15 @@ public class Device {
 
 	public void setOwner(String owner) {
 		this.owner = owner;
+	}
+
+	public void setToken(String token) {
+		this.token=token;
+	}
+
+	public String getToken() {
+
+		return token;
 	}
 
 }
