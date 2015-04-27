@@ -24,6 +24,8 @@ import org.apache.commons.configuration.tree.xpath.XPathExpressionEngine;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.aop.ThrowsAdvice;
+import org.wso2.iot.devicecontroller.ControlQueueConnector;
+import org.wso2.iot.devicecontroller.DataStoreConnector;
 import org.wso2.iot.enroll.DeviceManagement;
 import org.wso2.iot.enroll.UserManagement;
 
@@ -33,60 +35,92 @@ import org.wso2.iot.enroll.UserManagement;
  */
 public class IoTConfiguration {
 	private static Log log = LogFactory.getLog(IoTConfiguration.class);
-	private static IoTConfiguration iotInstance = null;
+	private static IoTConfiguration iotConfigurationInstance = null;
 
 	// configuration variables
 	private Class<?> userManagement;
 	private Class<?> deviceManagement;
+	private Class<?> dataStore;
+	private Class<?> controlQueue;
 
-	
-    private IoTConfiguration() throws ConfigurationException {
-		String fileName = "";
-		String enrollClassName = "";
+	private String CONFIGS_FILE_LOCATION = "resources/conf/configuration.xml";
+	private String absolutePathToConfigsFile = null;
+	private String classTypeToLoad = null;
+	private String classNameToLoad = null;
+
+	private IoTConfiguration() throws ConfigurationException {
 		try {
 
-			fileName = new ResourceFileLoader("/resources/conf/configuration.xml").getPath();
-			//log.info(fileName);
-//			 fileName =
-//			 "/Users/ayyoobhamza/wso2/Iot Git/device-cloud/WSO2ConnectedDevices/src/main/webapp/resources/conf/configuration.xml";
+			absolutePathToConfigsFile = new ResourceFileLoader(CONFIGS_FILE_LOCATION).getPath();
+			log.info(absolutePathToConfigsFile);
+			// absolutePathToConfigsFile =
+			// "/Users/smean-MAC/Documents/WSO2Git/device-cloud/WSO2ConnectedDevices/src/main/webapp/resources/conf/configuration.xml";
 
-			XMLConfiguration config = new XMLConfiguration(fileName);
+			XMLConfiguration config = new XMLConfiguration(absolutePathToConfigsFile);
 			config.setExpressionEngine(new XPathExpressionEngine());
 
 			// read all configurations
 
-			String className = config.getString("main/enroll/device-class-name");
-			enrollClassName =config.getString("device-enroll-endpoint/class[@name='" + className +"']");
-			
-			deviceManagement = IoTConfiguration.class.forName(enrollClassName);
+			// Load class mapped for device management from configuration.xml
+			classTypeToLoad = config.getString("Main/Enroll/Device-Class-Type");
+			classNameToLoad =
+			                  config.getString("Device-Enroll-Endpoint/class[@type='" +
+			                                   classTypeToLoad + "']");
+			log.info(classNameToLoad);
 
-			className = config.getString("main/enroll/user-class-name");
-			enrollClassName =
-			                  config.getString("user-enroll-endpoint/class[@name='" + className +
-			                                   "']");
-			//log.info(enrollClassName);
-			userManagement = IoTConfiguration.class.forName(enrollClassName);
-			//log.info(userManagement);;
+			deviceManagement = IoTConfiguration.class.forName(classNameToLoad);
+			log.info(deviceManagement);
+
+			// Load class mapped for user management from configuration.xml
+			classTypeToLoad = config.getString("Main/Enroll/User-Class-Type");
+			classNameToLoad =
+			                  config.getString("User-Enroll-Endpoint/class[@type='" +
+			                                   classTypeToLoad + "']");
+			log.info(classNameToLoad);
+
+			userManagement = IoTConfiguration.class.forName(classNameToLoad);
+			log.info(userManagement);
+
+			// Load class mapped for data-store from configuration.xml
+			classTypeToLoad = config.getString("Main/DeviceController/DeviceDataStore");
+			classNameToLoad =
+			                  config.getString("DataStores/DataStore/class[@type='" +
+			                                   classTypeToLoad + "']");
+			log.info(classNameToLoad);
+
+			dataStore = IoTConfiguration.class.forName(classNameToLoad);
+			log.info(dataStore);
+
+			// Load class mapped for control-queue from configuration.xml
+			classTypeToLoad = config.getString("Main/DeviceController/DeviceControlQueue");
+			classNameToLoad =
+			                  config.getString("ControlQueues/ControlQueue/class[@type='" +
+			                                   classTypeToLoad + "']");
+			log.info(classNameToLoad);
+
+			controlQueue = IoTConfiguration.class.forName(classNameToLoad);
+			log.info(controlQueue);
+
 		} catch (ConfigurationException cex) {
-			log.error("Configuration File is missing on path: " + fileName, cex);
+			log.error("Configuration File is missing on path: " + absolutePathToConfigsFile, cex);
 			throw cex;
 		} catch (ClassNotFoundException e) {
-			log.error("Invalid Class Name: " + enrollClassName + "  :" + e);
-			throw new ConfigurationException("Invalid className: " + enrollClassName, e);
+			log.error("Invalid Class Name: " + classNameToLoad + "  :" + e);
+			throw new ConfigurationException("Invalid className: " + classNameToLoad, e);
 		}
 
 	}
 
 	public static IoTConfiguration getInstance() throws ConfigurationException {
 
-		if (iotInstance == null) {
+		if (iotConfigurationInstance == null) {
 			synchronized (IoTConfiguration.class) {
-				if (iotInstance == null) {
-					iotInstance = new IoTConfiguration();
+				if (iotConfigurationInstance == null) {
+					iotConfigurationInstance = new IoTConfiguration();
 				}
 			}
 		}
-		return iotInstance;
+		return iotConfigurationInstance;
 	}
 
 	public UserManagement getUserManagementImpl() throws InstantiationException,
@@ -97,7 +131,7 @@ public class IoTConfiguration {
 		}
 
 		String error =
-		               "Invalid class format for usermanagement, Make sure it has implemented UserManagment Interface";
+		               "Invalid class format for <User-Enroll-Endpoint>, Make sure it has implemented UserManagment Interface correctly";
 		log.error(error);
 		throw new InstantiationException(error);
 
@@ -111,16 +145,44 @@ public class IoTConfiguration {
 		}
 
 		String error =
-		               "Invalid class format for usermanagement, Make sure it has implemented UserManagment Interface";
+		               "Invalid class format for <Device-Enroll-Endpoint>, Make sure it has implemented DeviceManagement Interface correctly";
 		log.error(error);
 		throw new InstantiationException(error);
 	}
 
-//	public static void main(String args[]) throws ConfigurationException, InstantiationException,
-//	                                      IllegalAccessException {
-//		 UserManagement
-//		user=IoTConfiguration.getInstance().getUserManagementImpl();
-//		//IoTConfiguration.getInstance().getUserManagementImpl();
-//	}
+	public DataStoreConnector getDataStore() throws InstantiationException, IllegalAccessException {
+
+		if (DataStoreConnector.class.isAssignableFrom(dataStore)) {
+			return (DataStoreConnector) dataStore.newInstance();
+		}
+
+		String error =
+		               "Invalid class format for <DataStore>, Make sure it has implemented DataStoreConnector Interface correctly";
+		log.error(error);
+		throw new InstantiationException(error);
+
+	}
+
+	public ControlQueueConnector getControlQueue() throws InstantiationException,
+	                                              IllegalAccessException {
+
+		if (ControlQueueConnector.class.isAssignableFrom(controlQueue)) {
+			return (ControlQueueConnector) controlQueue.newInstance();
+		}
+
+		String error =
+		               "Invalid class format for <ControlQueue>, Make sure it has implemented ControlQueueConnector Interface correctly";
+		log.error(error);
+		throw new InstantiationException(error);
+
+	}
+
+	// public static void main(String args[]) throws ConfigurationException,
+	// InstantiationException,
+	// IllegalAccessException {
+	// UserManagement
+	// user=IoTConfiguration.getInstance().getUserManagementImpl();
+	// //IoTConfiguration.getInstance().getUserManagementImpl();
+	// }
 
 }
