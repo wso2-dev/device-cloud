@@ -46,6 +46,8 @@ public class BAMDataStore implements DataStoreConnector {
 	private String DATASTORE_PASSWORD = "";
 
 	private DataPublisher BAM_DATA_PUBLISHER = null;
+	private String DEVICE_DATA_STREAM = null;
+
 	private String httpReply = "%d - %s";
 
 	private BAMDataStore() {
@@ -84,6 +86,8 @@ public class BAMDataStore implements DataStoreConnector {
 			DATASTORE_USERNAME = DefaultDeviceControlConfigs.getInstance().getDataStoreUsername();
 			DATASTORE_PASSWORD = DefaultDeviceControlConfigs.getInstance().getDataStorePassword();
 
+			log.info("DATASTORE_ENDPOINT : " + DATASTORE_ENDPOINT);
+
 		} catch (ConfigurationException e) {
 			log.error("Error occured when retreiving configs for DataStore - " + dataStore +
 			          " from controller.xml" + ": ", e);
@@ -103,6 +107,38 @@ public class BAMDataStore implements DataStoreConnector {
 			                     HttpStatus.getStatusText(HttpStatus.SC_BAD_GATEWAY));
 		}
 
+		try {
+			DEVICE_DATA_STREAM =
+			                     BAM_DATA_PUBLISHER.defineStream("{"
+			                                                     + "'name':'org_wso2_iot_statistics_device_data',"
+			                                                     + "'version':'1.0.0',"
+			                                                     + "'nickName': 'IoT Connected Device Pin Data',"
+			                                                     + "'description': 'Pin Data Received',"
+			                                                     + "'tags': ['arduino', 'led13'],"
+			                                                     + "'metaData':["
+			                                                     + "        {'name':'ipAdd','type':'STRING'},"
+			                                                     + "        {'name':'deviceType','type':'STRING'},"
+			                                                     + "        {'name':'owner','type':'STRING'},"
+			                                                     + "		{'name':'requestTime','type':'LONG'}"
+			                                                     + "],"
+			                                                     + "'payloadData':["
+			                                                     + "        {'name':'macAddress','type':'STRING'},"
+			                                                     + "        {'name':'key','type':'STRING'},"
+			                                                     + "        {'name':'value','type':'STRING'},"
+			                                                     + "        {'name':'description','type':'STRING'}"
+			                                                     + "]" + "}");
+
+			log.info("stream definition ID for data from device pin: " + DEVICE_DATA_STREAM);
+
+		} catch (AgentException | MalformedStreamDefinitionException | StreamDefinitionException
+		        | DifferentStreamDefinitionAlreadyDefinedException e) {
+
+			log.error("Error in defining stream for data publisher: ", e);
+			return String.format(httpReply, HttpStatus.SC_INTERNAL_SERVER_ERROR,
+			                     HttpStatus.getStatusText(HttpStatus.SC_INTERNAL_SERVER_ERROR));
+
+		}
+
 		return String.format(httpReply, HttpStatus.SC_OK,
 		                     HttpStatus.getStatusText(HttpStatus.SC_OK));
 
@@ -117,7 +153,7 @@ public class BAMDataStore implements DataStoreConnector {
 	 */
 	@Override
 	public String publishIoTData(HashMap<String, String> deviceData) {
-		
+
 		String ipAdd = deviceData.get("ipAdd");
 		String deviceType = deviceData.get("deviceType");
 		String owner = deviceData.get("owner");
@@ -126,44 +162,13 @@ public class BAMDataStore implements DataStoreConnector {
 		String key = deviceData.get("key");
 		String value = deviceData.get("value");
 		String description = deviceData.get("description");
-		
-		String devicePinDataStream;
-		try {
-			devicePinDataStream =
-			                      BAM_DATA_PUBLISHER.defineStream("{"
-			                                                 + "'name':'org_wso2_iot_statistics_device_data',"
-			                                                 + "'version':'1.0.0',"
-			                                                 + "'nickName': 'IoT Connected Device Pin Data',"
-			                                                 + "'description': 'Pin Data Received',"
-			                                                 + "'tags': ['arduino', 'led13'],"
-			                                                 + "'metaData':["
-			                                                 + "        {'name':'ipAdd','type':'STRING'},"
-			                                                 + "        {'name':'deviceType','type':'STRING'},"
-			                                                 + "        {'name':'owner','type':'STRING'},"
-			                                                 + "		{'name':'requestTime','type':'LONG'}"
-			                                                 + "],"
-			                                                 + "'payloadData':["
-			                                                 + "        {'name':'macAddress','type':'STRING'},"
-			                                                 + "        {'name':'key','type':'STRING'},"
-			                                                 + "        {'name':'value','type':'STRING'},"
-			                                                 + "        {'name':'description','type':'STRING'}"
-			                                                 + "]" + "}");
-
-			log.info("stream definition ID for data from device pin: " + devicePinDataStream);
-
-		} catch (AgentException | MalformedStreamDefinitionException | StreamDefinitionException
-		        | DifferentStreamDefinitionAlreadyDefinedException e) {
-
-			log.error("Error in defining stream for data publisher: ", e);
-			return String.format(httpReply, HttpStatus.SC_INTERNAL_SERVER_ERROR,
-			                     HttpStatus.getStatusText(HttpStatus.SC_INTERNAL_SERVER_ERROR));
-
-		}
 
 		try {
-			BAM_DATA_PUBLISHER.publish(devicePinDataStream, System.currentTimeMillis(),
-			                      new Object[] { ipAdd, deviceType, owner, Long.parseLong(time) },
-			                      null, new Object[] { macAddress, key, value, description });
+			BAM_DATA_PUBLISHER.publish(DEVICE_DATA_STREAM,
+			                           System.currentTimeMillis(),
+			                           new Object[] { ipAdd, deviceType, owner,
+			                                         Long.parseLong(time) }, null,
+			                           new Object[] { macAddress, key, value, description });
 
 			log.info("event published to devicePinDataStream");
 
@@ -180,12 +185,12 @@ public class BAMDataStore implements DataStoreConnector {
 	/*
 	 * 
 	 * ==========================================================
-	// Have to define the stream definition in the BAM tbox
+	 * // Have to define the stream definition in the BAM tbox
 	 * 
 	 * ==========================================================
-	*/
-	
-    public static void main(String[] args) {
+	 */
+
+	public static void main(String[] args) {
 
 		File file =
 		            new File(
@@ -198,17 +203,17 @@ public class BAMDataStore implements DataStoreConnector {
 			System.setProperty("javax.net.ssl.trustStore", trustStore);
 			System.setProperty("javax.net.ssl.trustStorePassword", "wso2carbon");
 		}
-		
+
 		HashMap<String, String> myMap = new HashMap<String, String>();
 		myMap.put("ipAdd", "192.168.1.216");
 		myMap.put("deviceType", "Arduino");
 		myMap.put("owner", "Smeansbeer");
 		myMap.put("macAddress", "123456");
-		myMap.put("time", ""+System.nanoTime());
+		myMap.put("time", "" + System.nanoTime());
 		myMap.put("key", "TempSensor");
 		myMap.put("value", "123");
 		myMap.put("description", "TetsCase");
-		
+
 		BAMDataStore newinst = BAMDataStore.getInstance();
 		System.out.println(newinst.initDataStore());
 		System.out.println(newinst.publishIoTData(myMap));

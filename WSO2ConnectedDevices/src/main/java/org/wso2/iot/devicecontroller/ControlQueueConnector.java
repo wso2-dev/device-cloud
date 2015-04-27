@@ -23,6 +23,6 @@ import java.util.HashMap;
  *
  */
 public interface ControlQueueConnector {
-	public void initControlQueue();
+	public String initControlQueue();
 	public String enqueueControls( HashMap<String, String> deviceControls );
 }
