@@ -26,4 +26,5 @@ public interface UserManagement {
 	public User getUser(String username);
 	public boolean isAuthenticated(String username,String password);
 	public String getAnonymousUserName();
+	public boolean isExist(String username);
 }

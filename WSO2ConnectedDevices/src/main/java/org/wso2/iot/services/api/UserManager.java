@@ -54,7 +54,14 @@ public class UserManager {
 	                                                               IllegalAccessException {
 
 		
+		
+		
 		UserManagement userManagement = IoTConfiguration.getInstance().getUserManagementImpl();
+		if(userManagement.isExist(username)){
+			response.setStatus(409);
+			return;
+			
+		}
 		if(username.equals(userManagement.getAnonymousUserName())){
 			response.setStatus(400);
 			return;
@@ -85,7 +92,7 @@ public class UserManager {
 		}
 	}
 
-	@Path("RemoveUser")
+	@Path("/RemoveUser")
 	@DELETE
 	public void removeUser(@QueryParam("username") String username,
 	                       @Context HttpServletRequest request,
@@ -108,7 +115,7 @@ public class UserManager {
 
 	}
 
-	@Path("UpdateUser")
+	@Path("/UpdateUser")
 	@POST
 	public void updateUser(@QueryParam("username") String username,
 	                       @QueryParam("password") String password,
@@ -200,7 +207,7 @@ public class UserManager {
 
 	}
 
-	private boolean authorizedCheck(String username, HttpServletRequest request,
+	public boolean authorizedCheck(String username, HttpServletRequest request,
 	                                @Context HttpServletResponse response) {
 
 		User loggedInUser = (User) request.getSession().getAttribute("user");

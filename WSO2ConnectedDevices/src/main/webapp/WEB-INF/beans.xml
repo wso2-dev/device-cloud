@@ -20,8 +20,9 @@ http://cxf.apache.org/schemas/jaxrs.xsd">
 
 	<jaxrs:server id="IOTService" address="">
 		<jaxrs:serviceBeans>
-			<bean class="org.wso2.iot.services.api.DeviceController" />
+			<!--bean class="org.wso2.iot.services.api.DeviceController" /-->
 			<bean class="org.wso2.iot.services.api.UserManager" />
+			<bean class="org.wso2.iot.services.api.DeviceManager" />
 		</jaxrs:serviceBeans>
 		<jaxrs:providers>
 			<bean class="org.codehaus.jackson.jaxrs.JacksonJsonProvider" />

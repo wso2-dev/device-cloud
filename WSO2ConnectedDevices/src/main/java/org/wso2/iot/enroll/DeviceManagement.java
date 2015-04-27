@@ -28,10 +28,10 @@ public interface DeviceManagement {
 	
 	
 	public boolean addNewDevice(Device device);
-	public boolean removeDevice(Device device);
-	public boolean updateToken(Device device, String token);
-	public String getToken(Device device);
+	public boolean removeDevice(String deviceId);
+	public boolean update(Device device);
 	public Device getDevice(String deviceId);
 	public String generateNewToken();
+	public boolean isExist(String deviceId);
 
 }

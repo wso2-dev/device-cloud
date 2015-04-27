@@ -43,7 +43,7 @@ public class IoTConfiguration {
 	private Class<?> dataStore;
 	private Class<?> controlQueue;
 
-	private String CONFIGS_FILE_LOCATION = "resources/conf/configuration.xml";
+	private String CONFIGS_FILE_LOCATION = "/resources/conf/configuration.xml";
 
 	private IoTConfiguration() throws ConfigurationException {
 		String absolutePathToConfigsFile = null;

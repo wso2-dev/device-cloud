@@ -243,6 +243,40 @@ public class UserManagementImpl implements UserManagement {
 		return false;
 	}
 
+	
+	@Override
+	public boolean isExist(String username) {
+		User result = null;
+		PreparedStatement prepStmt = null;
+		Connection dbConnection = new DBUtils().getConnection();
+		ResultSet rs = null;
+		try {
+			prepStmt =
+			           dbConnection.prepareStatement("SELECT * FROM user where  username='" +
+			                                         username + "'");
+			rs = prepStmt.executeQuery();
+
+			if (rs.next()) {
+				return true;
+			}
+		} catch (SQLException e) {
+			log.error("", e);
+		} finally {
+			try {
+				if (prepStmt != null) {
+					prepStmt.close();
+				}
+				if (rs != null) {
+					rs.close();
+				}
+			} catch (SQLException e) {
+				
+				log.error("", e);
+			}
+		}
+		return false;
+	}
+	
 	/* (non-Javadoc)
 	 * @see org.wso2.iot.enroll.UserManagement#getAnonymousUserName()
 	 */

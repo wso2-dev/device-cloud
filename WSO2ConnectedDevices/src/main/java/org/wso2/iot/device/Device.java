@@ -16,10 +16,16 @@
 
 package org.wso2.iot.device;
 
+import java.io.Serializable;
+
 /**
  * Description of a device
  */
-public class Device {
+public class Device implements Serializable{
+	/**
+	 * 
+	 */
+    private static final long serialVersionUID = 1L;
 	private String deviceId;
 	private String name;
 	private String type;
