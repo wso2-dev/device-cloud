@@ -54,9 +54,9 @@ public class IoTConfiguration {
 		String classNameToLoad = null;
 		try {
 
-			absolutePathToConfigsFile = new ResourceFileLoader(CONFIGS_FILE_LOCATION).getPath();
-			// absolutePathToConfigsFile =
-			// "/Users/smean-MAC/Documents/WSO2Git/device-cloud/WSO2ConnectedDevices/src/main/webapp/resources/conf/configuration.xml";
+//			absolutePathToConfigsFile = new ResourceFileLoader(CONFIGS_FILE_LOCATION).getPath();
+			 absolutePathToConfigsFile =
+			 "/Users/smean-MAC/Documents/WSO2Git/device-cloud/WSO2ConnectedDevices/src/main/webapp/resources/conf/configuration.xml";
 			log.info(absolutePathToConfigsFile);
 
 			XMLConfiguration config = new XMLConfiguration(absolutePathToConfigsFile);
@@ -181,7 +181,7 @@ public class IoTConfiguration {
 		throw new InstantiationException(error);
 
 	}
-	
+
 	/**
 	 * @return the activeDataStore
 	 */
