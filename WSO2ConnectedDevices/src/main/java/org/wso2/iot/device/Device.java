@@ -64,6 +64,10 @@ public class Device {
 	public Long getEnrolledOn() {
 		return enrolledOn;
 	}
+	
+	public void setEnrolledOn(Long timestamp){
+		enrolledOn=timestamp;
+	}
 
 	public String getDesciption() {
 		return desciption;

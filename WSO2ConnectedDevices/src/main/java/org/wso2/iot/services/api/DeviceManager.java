@@ -26,67 +26,98 @@ import org.apache.commons.configuration.ConfigurationException;
 import org.wso2.iot.device.Device;
 import org.wso2.iot.enroll.DeviceManagement;
 import org.wso2.iot.enroll.UserManagement;
+import org.wso2.iot.user.User;
 import org.wso2.iot.utils.IOTConfiguration;
-
-
 
 @Path("/DeviceManager")
 public class DeviceManager {
-	
-	
-	@Path("/DeviceRegister")
+
+	@Path("/DeviceAnonymousRegister")
 	@PUT
-	public String Register(String deviceId, boolean anonymous,@Context HttpServletRequest request, @Context HttpServletResponse response) throws InstantiationException, IllegalAccessException, ConfigurationException {
-		
-		
+	public void Register(String deviceId,@Context HttpServletRequest request,
+	                     @Context HttpServletResponse response) throws InstantiationException,
+	                                                           IllegalAccessException,
+	                                                           ConfigurationException {
+
 		UserManagement userManagement = IOTConfiguration.getInstance().getUserManagementImpl();
-		DeviceManagement deviceManagement= IOTConfiguration.getInstance().getDeviceManagementImpl();
-		boolean added=false;
-		if(anonymous){
-			
-			
-			Device device = new Device();
-			device.setDeviceId(deviceId);
-			String token = deviceManagement.generateNewToken();
-			device.setToken(token);
-			device.setOwner(userManagement.getAnonymousUserName());
-			
-			added=deviceManagement.addNewDevice(device);
-			
-			
-			
-		}else{
-			Device device = new Device();
-			device.setDeviceId(deviceId);
-			String token = deviceManagement.generateNewToken();
-			device.setToken(token);
-			device.setOwner(userManagement.getAnonymousUserName());
-			
-			added=deviceManagement.addNewDevice(device);
-			
-			
-		}
+		DeviceManagement deviceManagement =IOTConfiguration.getInstance().getDeviceManagementImpl();
+		Device device = new Device();
+		device.setDeviceId(deviceId);
+
+		String token = deviceManagement.generateNewToken();
+		device.setToken(token);
+		boolean added = false;
 		
+
+		device.setOwner(userManagement.getAnonymousUserName());
+		added = deviceManagement.addNewDevice(device);
+
 		if (added) {
+			setDeviceToken(device);
 			response.setStatus(200);
 		} else {
 			response.setStatus(409);
 		}
-		
-	
-		return "";
 
 	}
 	
 	
+	@Path("/DeviceRegister")
+	@PUT
+	public void Register(String deviceId, String model, String type, String name,
+	                     String description, @Context HttpServletRequest request,
+	                     @Context HttpServletResponse response) throws InstantiationException,
+	                                                           IllegalAccessException,
+	                                                           ConfigurationException {
 
-	public String getDeviceToken() {
-		//get Device Token with security
+		UserManagement userManagement = IOTConfiguration.getInstance().getUserManagementImpl();
+		DeviceManagement deviceManagement =
+		                                    IOTConfiguration.getInstance()
+		                                                    .getDeviceManagementImpl();
+		Device device = new Device();
+		device.setDeviceId(deviceId);
+		device.setDesciption(description);
+		device.setModel(model);
+		device.setName(name);
+		device.setType(type);
+
+		String token = deviceManagement.generateNewToken();
+		device.setToken(token);
+		boolean added = false;
+
+		User user = (User) request.getSession().getAttribute("user");
+		if (user == null) {
+
+			response.setStatus(403);
+			return;
+		} else {
+
+			device.setOwner(user.getUsername());
+			added = deviceManagement.addNewDevice(device);
+
+		}
+		if (added) {
+			setDeviceToken(device);
+			response.setStatus(200);
+		} else {
+			response.setStatus(409);
+		}
+
+	}
+
+	public String getDeviceToken(@Context HttpServletRequest request) {
+		// get Device Token with security
 		return "";
 	}
-	
-	public String generateDeviceToken(){
-		
-		return "";
+
+	private void setDeviceToken(Device device) {
+		// add into localstore
+
 	}
+
+	private boolean isAvailableOnLocalDataStore() {
+		return false;
+
+	}
+
 }
