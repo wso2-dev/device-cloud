@@ -44,17 +44,17 @@ public class IoTConfiguration {
 	private Class<?> controlQueue;
 
 	private String CONFIGS_FILE_LOCATION = "resources/conf/configuration.xml";
-	private String absolutePathToConfigsFile = null;
-	private String classTypeToLoad = null;
-	private String classNameToLoad = null;
 
 	private IoTConfiguration() throws ConfigurationException {
+		String absolutePathToConfigsFile = null;
+		String classTypeToLoad = null;
+		String classNameToLoad = null;
 		try {
 
 			absolutePathToConfigsFile = new ResourceFileLoader(CONFIGS_FILE_LOCATION).getPath();
-			log.info(absolutePathToConfigsFile);
 			// absolutePathToConfigsFile =
 			// "/Users/smean-MAC/Documents/WSO2Git/device-cloud/WSO2ConnectedDevices/src/main/webapp/resources/conf/configuration.xml";
+			log.info(absolutePathToConfigsFile);
 
 			XMLConfiguration config = new XMLConfiguration(absolutePathToConfigsFile);
 			config.setExpressionEngine(new XPathExpressionEngine());
@@ -66,7 +66,6 @@ public class IoTConfiguration {
 			classNameToLoad =
 			                  config.getString("Device-Enroll-Endpoint/class[@type='" +
 			                                   classTypeToLoad + "']");
-			log.info(classNameToLoad);
 
 			deviceManagement = IoTConfiguration.class.forName(classNameToLoad);
 			log.info(deviceManagement);
@@ -76,7 +75,6 @@ public class IoTConfiguration {
 			classNameToLoad =
 			                  config.getString("User-Enroll-Endpoint/class[@type='" +
 			                                   classTypeToLoad + "']");
-			log.info(classNameToLoad);
 
 			userManagement = IoTConfiguration.class.forName(classNameToLoad);
 			log.info(userManagement);
@@ -86,7 +84,6 @@ public class IoTConfiguration {
 			classNameToLoad =
 			                  config.getString("DataStores/DataStore/class[@type='" +
 			                                   classTypeToLoad + "']");
-			log.info(classNameToLoad);
 
 			dataStore = IoTConfiguration.class.forName(classNameToLoad);
 			log.info(dataStore);
@@ -96,7 +93,6 @@ public class IoTConfiguration {
 			classNameToLoad =
 			                  config.getString("ControlQueues/ControlQueue/class[@type='" +
 			                                   classTypeToLoad + "']");
-			log.info(classNameToLoad);
 
 			controlQueue = IoTConfiguration.class.forName(classNameToLoad);
 			log.info(controlQueue);
@@ -180,9 +176,10 @@ public class IoTConfiguration {
 	// public static void main(String args[]) throws ConfigurationException,
 	// InstantiationException,
 	// IllegalAccessException {
-	// UserManagement
-	// user=IoTConfiguration.getInstance().getUserManagementImpl();
-	// //IoTConfiguration.getInstance().getUserManagementImpl();
+	//
+	// DataStoreConnector BAMDataStore =
+	// IoTConfiguration.getInstance().getDataStore();
+	// BAMDataStore.initDataStore();
 	// }
 
 }
