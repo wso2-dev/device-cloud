@@ -10,6 +10,9 @@ import javax.xml.xpath.XPathExpressionException;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.log4j.Logger;
+import org.eclipse.paho.client.mqttv3.MqttClient;
+import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.wso2.carbon.databridge.agent.thrift.DataPublisher;
 import org.wso2.carbon.databridge.agent.thrift.exception.AgentException;
 import org.wso2.carbon.databridge.commons.exception.AuthenticationException;
@@ -23,10 +26,15 @@ import org.xml.sax.SAXException;
 
 @Path("/DeviceController")
 public class DeviceController {
-	private static Log log = LogFactory.getLog(DeviceController.class);
-	private static String dataStoreEndpoint = "tcp://localhost:7613";
-	private static String dataStoreUsername = "admin";
-	private static String dataStorePassword = "admin";
+	static Logger log = Logger.getLogger("org.wso2.iot.services.api");
+
+	MqttClient client;
+	MqttConnectOptions options;
+
+	static final String mqttEndpoint = "tcp://192.168.1.216:1883";
+	static String dataStoreEndpoint = "tcp://localhost:7613";
+	static String dataStoreUsername = "admin";
+	static String dataStorePassword = "admin";
 
 	static {
 

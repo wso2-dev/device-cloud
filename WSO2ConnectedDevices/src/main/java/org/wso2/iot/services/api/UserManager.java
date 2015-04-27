@@ -35,7 +35,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wso2.iot.enroll.UserManagement;
 import org.wso2.iot.user.User;
-import org.wso2.iot.utils.IOTConfiguration;
+import org.wso2.iot.utils.IoTConfiguration;
 
 @Path("/UserManager")
 public class UserManager {
@@ -54,7 +54,7 @@ public class UserManager {
 	                                                               IllegalAccessException {
 
 		
-		UserManagement userManagement = IOTConfiguration.getInstance().getUserManagementImpl();
+		UserManagement userManagement = IoTConfiguration.getInstance().getUserManagementImpl();
 		if(username.equals(userManagement.getAnonymousUserName())){
 			response.setStatus(400);
 			return;
@@ -71,7 +71,9 @@ public class UserManager {
 
 		}
 
+
 		
+
 		boolean added = userManagement.addNewUser(user);
 
 		if (added) {
@@ -93,7 +95,7 @@ public class UserManager {
 
 		boolean status = authorizedCheck(username, request, response);
 		if (status) {
-			UserManagement userManagement = IOTConfiguration.getInstance().getUserManagementImpl();
+			UserManagement userManagement = IoTConfiguration.getInstance().getUserManagementImpl();
 			boolean removed = userManagement.removeUser(username);
 			if (removed) {
 
@@ -132,7 +134,7 @@ public class UserManager {
 
 			}
 
-			UserManagement userManagement = IOTConfiguration.getInstance().getUserManagementImpl();
+			UserManagement userManagement = IoTConfiguration.getInstance().getUserManagementImpl();
 			boolean updated = userManagement.updateUser(user);
 			if (updated) {
 				response.setStatus(200);
@@ -155,7 +157,7 @@ public class UserManager {
 
 		boolean status = authorizedCheck(username, request, response);
 		if (status) {
-			UserManagement userManagement = IOTConfiguration.getInstance().getUserManagementImpl();
+			UserManagement userManagement = IoTConfiguration.getInstance().getUserManagementImpl();
 			User user = userManagement.getUser(username);
 			if (user != null) {
 
@@ -179,7 +181,7 @@ public class UserManager {
 	                                                                                                InstantiationException,
 	                                                                                                IllegalAccessException {
 
-		UserManagement userManagement = IOTConfiguration.getInstance().getUserManagementImpl();
+		UserManagement userManagement = IoTConfiguration.getInstance().getUserManagementImpl();
 
 		boolean authenticated = userManagement.isAuthenticated(username, password);
 

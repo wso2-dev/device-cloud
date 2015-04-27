@@ -26,28 +26,30 @@ import org.apache.commons.configuration.ConfigurationException;
 import org.wso2.iot.device.Device;
 import org.wso2.iot.enroll.DeviceManagement;
 import org.wso2.iot.enroll.UserManagement;
+
 import org.wso2.iot.user.User;
-import org.wso2.iot.utils.IOTConfiguration;
+import org.wso2.iot.utils.IoTConfiguration;
 
 @Path("/DeviceManager")
 public class DeviceManager {
 
 	@Path("/DeviceAnonymousRegister")
 	@PUT
-	public void Register(String deviceId,@Context HttpServletRequest request,
+	public void Register(String deviceId, @Context HttpServletRequest request,
 	                     @Context HttpServletResponse response) throws InstantiationException,
 	                                                           IllegalAccessException,
 	                                                           ConfigurationException {
 
-		UserManagement userManagement = IOTConfiguration.getInstance().getUserManagementImpl();
-		DeviceManagement deviceManagement =IOTConfiguration.getInstance().getDeviceManagementImpl();
+		UserManagement userManagement = IoTConfiguration.getInstance().getUserManagementImpl();
+		DeviceManagement deviceManagement =
+		                                    IoTConfiguration.getInstance()
+		                                                    .getDeviceManagementImpl();
 		Device device = new Device();
 		device.setDeviceId(deviceId);
 
 		String token = deviceManagement.generateNewToken();
 		device.setToken(token);
 		boolean added = false;
-		
 
 		device.setOwner(userManagement.getAnonymousUserName());
 		added = deviceManagement.addNewDevice(device);
@@ -60,8 +62,7 @@ public class DeviceManager {
 		}
 
 	}
-	
-	
+
 	@Path("/DeviceRegister")
 	@PUT
 	public void Register(String deviceId, String model, String type, String name,
@@ -70,9 +71,9 @@ public class DeviceManager {
 	                                                           IllegalAccessException,
 	                                                           ConfigurationException {
 
-		UserManagement userManagement = IOTConfiguration.getInstance().getUserManagementImpl();
+		UserManagement userManagement = IoTConfiguration.getInstance().getUserManagementImpl();
 		DeviceManagement deviceManagement =
-		                                    IOTConfiguration.getInstance()
+		                                    IoTConfiguration.getInstance()
 		                                                    .getDeviceManagementImpl();
 		Device device = new Device();
 		device.setDeviceId(deviceId);

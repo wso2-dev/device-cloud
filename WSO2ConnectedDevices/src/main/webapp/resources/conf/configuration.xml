@@ -1,32 +1,46 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <IOT>
+	<Main>
+		<Enroll>
+			<Device-Class-Type> DB-DEVICE </Device-Class-Type>
+			<User-Class-Type> DB-USER </User-Class-Type>
+		</Enroll>
 
-	<main>
-		<data-publisher>
-			<device-data>BAM</device-data>
-			<control-data>AMQ</control-data>
-		</data-publisher>
-		
-		<enroll>
-			<device-class-name>DB-DEVICE</device-class-name>
-			<user-class-name>DB-USER</user-class-name>
-		</enroll>
-	</main>
+		<DeviceController>
+			<DeviceDataStore> WSO2-BAM </DeviceDataStore>
+			<DeviceControlQueue> AMQ </DeviceControlQueue>
+		</DeviceController>
+	</Main>
 
-	<data-publisher>
-		<endpoint name="BAM">
-			<class></class>
-		</endpoint>
-	</data-publisher>
+	<Device-Enroll-Endpoint>
+		<class type="DB-DEVICE"> org.wso2.iot.enroll.db.DeviceManagementImpl </class>
+	</Device-Enroll-Endpoint>
+
+	<User-Enroll-Endpoint>
+		<class type="DB-USER"> org.wso2.iot.enroll.db.UserManagementImpl </class>
+	</User-Enroll-Endpoint>
 	
-	<device-enroll-endpoint>
-		<class name="DB-DEVICE">org.wso2.iot.enroll.db.DeviceManagementImpl</class>
-	</device-enroll-endpoint>
+	<DataStores>
+		<DataStore>
+			<class type="WSO2-BAM"> org.wso2.iot.devicecontroller.impl.BAMDataStore
+			</class>
+		</DataStore>
 
-	<user-enroll-endpoint>
-			<class name="DB-USER">org.wso2.iot.enroll.db.UserManagementImpl</class>
-	</user-enroll-endpoint>
+		<DataStore>
+			<class type="WSO2-CEP"> org.wso2.iot.devicecontroller.impl.CEPDataStore
+			</class>
+		</DataStore>
+	</DataStores>
+
+	<ControlQueues>
+		<ControlQueue>
+			<class type="AMQ"> org.wso2.iot.devicecontroller.impl.AMQControlQueue
+			</class>
+		</ControlQueue>
+	</ControlQueues>
 
 
-	
+
+
+
 </IOT>

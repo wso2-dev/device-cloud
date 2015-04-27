@@ -31,16 +31,16 @@ import org.wso2.iot.enroll.UserManagement;
  * @author ayyoobhamza
  * 
  */
-public class IOTConfiguration {
-	private static Log log = LogFactory.getLog(IOTConfiguration.class);
-	private static IOTConfiguration iotInstance = null;
+public class IoTConfiguration {
+	private static Log log = LogFactory.getLog(IoTConfiguration.class);
+	private static IoTConfiguration iotInstance = null;
 
 	// configuration variables
 	private Class<?> userManagement;
 	private Class<?> deviceManagement;
 
 	
-    private IOTConfiguration() throws ConfigurationException {
+    private IoTConfiguration() throws ConfigurationException {
 		String fileName = "";
 		String enrollClassName = "";
 		try {
@@ -58,14 +58,14 @@ public class IOTConfiguration {
 			String className = config.getString("main/enroll/device-class-name");
 			enrollClassName =config.getString("device-enroll-endpoint/class[@name='" + className +"']");
 			
-			deviceManagement = IOTConfiguration.class.forName(enrollClassName);
+			deviceManagement = IoTConfiguration.class.forName(enrollClassName);
 
 			className = config.getString("main/enroll/user-class-name");
 			enrollClassName =
 			                  config.getString("user-enroll-endpoint/class[@name='" + className +
 			                                   "']");
 			//log.info(enrollClassName);
-			userManagement = IOTConfiguration.class.forName(enrollClassName);
+			userManagement = IoTConfiguration.class.forName(enrollClassName);
 			//log.info(userManagement);;
 		} catch (ConfigurationException cex) {
 			log.error("Configuration File is missing on path: " + fileName, cex);
@@ -77,12 +77,12 @@ public class IOTConfiguration {
 
 	}
 
-	public static IOTConfiguration getInstance() throws ConfigurationException {
+	public static IoTConfiguration getInstance() throws ConfigurationException {
 
 		if (iotInstance == null) {
-			synchronized (IOTConfiguration.class) {
+			synchronized (IoTConfiguration.class) {
 				if (iotInstance == null) {
-					iotInstance = new IOTConfiguration();
+					iotInstance = new IoTConfiguration();
 				}
 			}
 		}
@@ -119,8 +119,8 @@ public class IOTConfiguration {
 //	public static void main(String args[]) throws ConfigurationException, InstantiationException,
 //	                                      IllegalAccessException {
 //		 UserManagement
-//		user=IOTConfiguration.getInstance().getUserManagementImpl();
-//		//IOTConfiguration.getInstance().getUserManagementImpl();
+//		user=IoTConfiguration.getInstance().getUserManagementImpl();
+//		//IoTConfiguration.getInstance().getUserManagementImpl();
 //	}
 
 }
