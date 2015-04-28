@@ -16,7 +16,6 @@
 
 package org.wso2.iot.devicecontroller.impl;
 
-import java.io.File;
 import java.net.MalformedURLException;
 import java.util.HashMap;
 

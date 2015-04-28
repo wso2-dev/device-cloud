@@ -16,11 +16,7 @@
 
 package org.wso2.iot.devicecontroller.impl;
 
-import java.io.File;
-import java.net.MalformedURLException;
 import java.util.HashMap;
-
-import javax.ws.rs.FormParam;
 
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.httpclient.HttpStatus;
@@ -31,11 +27,8 @@ import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
-import org.wso2.carbon.databridge.agent.thrift.DataPublisher;
-import org.wso2.carbon.databridge.agent.thrift.exception.AgentException;
-import org.wso2.carbon.databridge.commons.exception.AuthenticationException;
-import org.wso2.carbon.databridge.commons.exception.TransportException;
 import org.wso2.iot.devicecontroller.ControlQueueConnector;
+import org.wso2.iot.devicecontroller.exception.InvalidLengthException;
 import org.wso2.iot.utils.DefaultDeviceControlConfigs;
 
 /**
@@ -49,7 +42,7 @@ public class AMQControlQueue implements ControlQueueConnector, MqttCallback {
 	private String CONTROL_QUEUE_USERNAME = "";
 	private String CONTROL_QUEUE_PASSWORD = "";
 
-	private String httpReply = "%d - %s";
+	private String httpReply = "%d - %s \n %s";
 
 	public AMQControlQueue() {
 		initControlQueue();
@@ -82,16 +75,15 @@ public class AMQControlQueue implements ControlQueueConnector, MqttCallback {
 			                                                    .getControlQueuePassword();
 
 			log.info("CONTROL_QUEUE_ENDPOINT : " + CONTROL_QUEUE_ENDPOINT);
-
 		} catch (ConfigurationException e) {
 			log.error("Error occured when retreiving configs for DataStore - " + controlQueue +
 			          " from controller.xml" + ": ", e);
 			return String.format(httpReply, HttpStatus.SC_INTERNAL_SERVER_ERROR,
-			                     HttpStatus.getStatusText(HttpStatus.SC_INTERNAL_SERVER_ERROR));
+			                     HttpStatus.getStatusText(HttpStatus.SC_INTERNAL_SERVER_ERROR), e);
 		}
 
 		return String.format(httpReply, HttpStatus.SC_OK,
-		                     HttpStatus.getStatusText(HttpStatus.SC_OK));
+		                     HttpStatus.getStatusText(HttpStatus.SC_OK), "");
 	}
 
 	/*
@@ -102,7 +94,8 @@ public class AMQControlQueue implements ControlQueueConnector, MqttCallback {
 	 * java.util.HashMap)
 	 */
 	@Override
-	public String enqueueControls(HashMap<String, String> deviceControls) {
+	public String enqueueControls(HashMap<String, String> deviceControls)
+	                                                                     throws InvalidLengthException {
 
 		MqttClient client;
 		MqttConnectOptions options;
@@ -114,6 +107,16 @@ public class AMQControlQueue implements ControlQueueConnector, MqttCallback {
 		String value = deviceControls.get("value");
 
 		String clientId = owner + "." + macAddress;
+
+		if (clientId.length() > 24) {
+			String lengthError = "No of characters '" + clientId.length() + "' for ClientID: '" + clientId +
+			          "' is invalid (should be less than 24, hence please provide a simple 'owner' tag)";
+			log.error(lengthError);
+			throw new InvalidLengthException(lengthError);
+		} else {
+			log.info("No of Characters in ClientID : '" + clientId + "' is " + clientId.length());
+		}
+
 		String publishTopic = "wso2/iot/" + owner + "/" + deviceType + "/" + macAddress;
 		String payLoad = key + ":" + value;
 
@@ -125,7 +128,7 @@ public class AMQControlQueue implements ControlQueueConnector, MqttCallback {
 			client.connect(options);
 
 			log.info("MQTT Client successfully connected to: " + CONTROL_QUEUE_ENDPOINT +
-			         ", with client ID-" + clientId);
+			         ", with client ID - " + clientId);
 
 			MqttMessage message = new MqttMessage();
 			message.setPayload(payLoad.getBytes());
@@ -137,14 +140,13 @@ public class AMQControlQueue implements ControlQueueConnector, MqttCallback {
 			client.disconnect();
 
 			log.info("MQTT Client disconnected from MQTT broker");
-
 		} catch (MqttException e) {
 			log.error("MQTT Client Error", e);
 			return String.format(httpReply, HttpStatus.SC_INTERNAL_SERVER_ERROR,
-			                     HttpStatus.getStatusText(HttpStatus.SC_INTERNAL_SERVER_ERROR));
+			                     HttpStatus.getStatusText(HttpStatus.SC_INTERNAL_SERVER_ERROR), e);
 		}
 		return String.format(httpReply, HttpStatus.SC_ACCEPTED,
-		                     HttpStatus.getStatusText(HttpStatus.SC_ACCEPTED));
+		                     HttpStatus.getStatusText(HttpStatus.SC_ACCEPTED), "");
 	}
 
 	/*
@@ -184,17 +186,17 @@ public class AMQControlQueue implements ControlQueueConnector, MqttCallback {
 		log.info("MQTT Message recieved: " + arg1.toString());
 	}
 
-//	public static void main(String[] args) {
-//
-//		HashMap<String, String> myMap = new HashMap<String, String>();
-//		myMap.put("deviceType", "Arduino");
-//		myMap.put("owner", "Smeansbeer");
-//		myMap.put("macAddress", "123456");
-//		myMap.put("key", "TempSensor");
-//		myMap.put("value", "123");
-//
-//		AMQControlQueue newInst = new AMQControlQueue();
-//		System.out.println(newInst.initControlQueue());
-//		System.out.println(newInst.enqueueControls(myMap));
-//	}
+	// public static void main(String[] args) {
+	//
+	// HashMap<String, String> myMap = new HashMap<String, String>();
+	// myMap.put("deviceType", "Arduino");
+	// myMap.put("owner", "Smeansbeer");
+	// myMap.put("macAddress", "123456");
+	// myMap.put("key", "TempSensor");
+	// myMap.put("value", "123");
+	//
+	// AMQControlQueue newInst = new AMQControlQueue();
+	// System.out.println(newInst.initControlQueue());
+	// System.out.println(newInst.enqueueControls(myMap));
+	// }
 }
