@@ -19,7 +19,7 @@ package org.wso2.iot.devicecontroller.exception;
 // TODO: Auto-generated Javadoc
 /**
  * The Class InvalidLengthException.
- *
+ * 
  * @author smean-MAC
  */
 public class InvalidLengthException extends Exception {
@@ -36,8 +36,9 @@ public class InvalidLengthException extends Exception {
 	// Constructor that accepts a message
 	/**
 	 * Instantiates a new invalid length exception.
-	 *
-	 * @param message the message
+	 * 
+	 * @param message
+	 *            the message
 	 */
 	public InvalidLengthException(String message) {
 		super(message);

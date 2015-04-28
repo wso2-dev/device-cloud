@@ -30,19 +30,40 @@ import org.eclipse.paho.client.mqttv3.MqttMessage;
 import org.wso2.iot.devicecontroller.ControlQueueConnector;
 import org.wso2.iot.utils.DefaultDeviceControlConfigs;
 
+// TODO: Auto-generated Javadoc
 /**
- * @author smean-MAC
+ * The Class AMQControlQueue. It is an implementation of the interface
+ * ControlQueueConnector.
+ * This implementation supports publishing of control signals received to an
+ * MQTT end-point.
+ * The configuration settings for the MQTT end-point are read from the
+ * 'controller.xml' file of the project.
+ * This is done using the class 'DefaultDeviceControlConfigs.java' which loads
+ * the settings from the default xml configs file -
+ * /resources/conf/device-controls/controller.xml
  * 
+ * @author smean-MAC
  */
 public class AMQControlQueue implements ControlQueueConnector, MqttCallback {
+
+	/** The logger for this class. */
 	Logger log = Logger.getLogger(AMQControlQueue.class);
 
+	/** The control queue (mqtt) endpoint. */
 	private String CONTROL_QUEUE_ENDPOINT = "";
+
+	/** The control queue () username. */
 	private String CONTROL_QUEUE_USERNAME = "";
+
+	/** The control queue password. */
 	private String CONTROL_QUEUE_PASSWORD = "";
 
+	/** The http reply. */
 	private String httpReply = "%d - %s \n%s";
 
+	/**
+	 * Instantiates a new AMQ control queue.
+	 */
 	public AMQControlQueue() {
 	}
 
