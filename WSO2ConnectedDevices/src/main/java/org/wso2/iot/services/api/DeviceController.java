@@ -72,6 +72,10 @@ public class DeviceController {
 		try {
 			iotDataStore = IoTConfiguration.getInstance().getDataStore();
 			iotControlQueue = IoTConfiguration.getInstance().getControlQueue();
+
+			iotDataStore.initDataStore();
+			iotControlQueue.initControlQueue();
+
 		} catch (InstantiationException | IllegalAccessException | ConfigurationException e) {
 			log.error("Error creating DataStore or ControlQueue objects");
 		}
@@ -117,7 +121,7 @@ public class DeviceController {
 		deviceControlsMap.put("value", value);
 
 		String result = null;
-        result = iotControlQueue.enqueueControls(deviceControlsMap);
+		result = iotControlQueue.enqueueControls(deviceControlsMap);
 		return result;
 	}
 

@@ -18,11 +18,27 @@ package org.wso2.iot.devicecontroller;
 
 import java.util.HashMap;
 
+// TODO: Auto-generated Javadoc
 /**
+ * The Interface ControlQueueConnector.
+ *
  * @author smean-MAC
- * 
  */
 public interface ControlQueueConnector {
+	
+	/**
+	 * Initializes the control queue.
+	 * This method loads the initial configurations 
+	 *
+	 * @return the string
+	 */
 	public String initControlQueue();
+	
+	/**
+	 * Enqueue controls.
+	 *
+	 * @param deviceControls the device controls
+	 * @return the string
+	 */
 	public String enqueueControls(HashMap<String, String> deviceControls);
 }

@@ -44,7 +44,6 @@ public class AMQControlQueue implements ControlQueueConnector, MqttCallback {
 	private String httpReply = "%d - %s \n%s";
 
 	public AMQControlQueue() {
-		initControlQueue();
 	}
 
 	/*

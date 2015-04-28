@@ -16,11 +16,19 @@
 
 package org.wso2.iot.device;
 
+// TODO: Auto-generated Javadoc
 /**
- * @author ayyoobhamza
+ * The Class DeviceException.
  *
+ * @author ayyoobhamza
  */
 public class DeviceException extends Exception {
+	
+	/**
+	 * Instantiates a new device exception.
+	 *
+	 * @param msg the exception error msg
+	 */
 	public DeviceException(String msg){
 		super(msg);
 		

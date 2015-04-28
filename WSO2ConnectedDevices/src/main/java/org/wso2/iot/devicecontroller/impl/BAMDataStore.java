@@ -49,7 +49,6 @@ public class BAMDataStore implements DataStoreConnector {
 	private String httpReply = "%d - %s";
 
 	public BAMDataStore() {
-		initDataStore();
 	}
 
 	/*
