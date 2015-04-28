@@ -32,7 +32,7 @@ import org.wso2.iot.utils.DefaultDeviceControlConfigs;
 
 // TODO: Auto-generated Javadoc
 /**
- * The Class AMQControlQueue. It is an implementation of the interface
+ * The Class MQTTControlQueue. It is an implementation of the interface
  * ControlQueueConnector.
  * This implementation supports publishing of control signals received to an
  * MQTT end-point.
@@ -44,27 +44,27 @@ import org.wso2.iot.utils.DefaultDeviceControlConfigs;
  * 
  * @author smean-MAC
  */
-public class AMQControlQueue implements ControlQueueConnector, MqttCallback {
+public class MQTTControlQueue implements ControlQueueConnector, MqttCallback {
 
 	/** The logger for this class. */
-	Logger log = Logger.getLogger(AMQControlQueue.class);
+	Logger log = Logger.getLogger(MQTTControlQueue.class);
 
-	/** The control queue (mqtt) endpoint. */
+	/** The control queue (mqtt) endpoint to publish control messages. */
 	private String CONTROL_QUEUE_ENDPOINT = "";
 
-	/** The control queue () username. */
+	/** The control queue username. */
 	private String CONTROL_QUEUE_USERNAME = "";
 
 	/** The control queue password. */
 	private String CONTROL_QUEUE_PASSWORD = "";
 
-	/** The http reply. */
+	/** The HTTP reply token. */
 	private String httpReply = "%d - %s \n%s";
 
 	/**
-	 * Instantiates a new AMQ control queue.
+	 * Instantiates a new MQTT control queue.
 	 */
-	public AMQControlQueue() {
+	public MQTTControlQueue() {
 	}
 
 	/*
@@ -217,7 +217,7 @@ public class AMQControlQueue implements ControlQueueConnector, MqttCallback {
 	// myMap.put("key", "TempSensor");
 	// myMap.put("value", "123");
 	//
-	// AMQControlQueue newInst = new AMQControlQueue();
+	// MQTTControlQueue newInst = new MQTTControlQueue();
 	// System.out.println(newInst.initControlQueue());
 	// System.out.println(newInst.enqueueControls(myMap));
 	// }

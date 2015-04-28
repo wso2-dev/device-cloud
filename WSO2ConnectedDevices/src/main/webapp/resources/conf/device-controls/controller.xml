@@ -3,7 +3,7 @@
 
 	<DeviceController>
 		<DeviceDataStore> WSO2-BAM </DeviceDataStore>
-		<DeviceControlQueue> AMQ </DeviceControlQueue>
+		<DeviceControlQueue> MQTT </DeviceControlQueue>
 	</DeviceController>
 	
 	<DataStores>
@@ -27,7 +27,7 @@
 
 	<ControlQueues>
 		<ControlQueue>
-			<class type="AMQ"> org.wso2.iot.devicecontroller.impl.AMQControlQueue </class>
+			<class type="MQTT"> org.wso2.iot.devicecontroller.impl.MQTTControlQueue </class>
 			<protocol> MQTT </protocol>
 			<endpoint> tcp://localhost </endpoint>
 			<port> 1883 </port>
