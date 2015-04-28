@@ -28,7 +28,6 @@ import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 import org.wso2.iot.devicecontroller.ControlQueueConnector;
-import org.wso2.iot.devicecontroller.exception.InvalidLengthException;
 import org.wso2.iot.utils.DefaultDeviceControlConfigs;
 
 /**
@@ -42,7 +41,7 @@ public class AMQControlQueue implements ControlQueueConnector, MqttCallback {
 	private String CONTROL_QUEUE_USERNAME = "";
 	private String CONTROL_QUEUE_PASSWORD = "";
 
-	private String httpReply = "%d - %s \n %s";
+	private String httpReply = "%d - %s \n%s";
 
 	public AMQControlQueue() {
 		initControlQueue();
@@ -94,8 +93,7 @@ public class AMQControlQueue implements ControlQueueConnector, MqttCallback {
 	 * java.util.HashMap)
 	 */
 	@Override
-	public String enqueueControls(HashMap<String, String> deviceControls)
-	                                                                     throws InvalidLengthException {
+	public String enqueueControls(HashMap<String, String> deviceControls) {
 
 		MqttClient client;
 		MqttConnectOptions options;
@@ -109,10 +107,14 @@ public class AMQControlQueue implements ControlQueueConnector, MqttCallback {
 		String clientId = owner + "." + macAddress;
 
 		if (clientId.length() > 24) {
-			String lengthError = "No of characters '" + clientId.length() + "' for ClientID: '" + clientId +
-			          "' is invalid (should be less than 24, hence please provide a simple 'owner' tag)";
-			log.error(lengthError);
-			throw new InvalidLengthException(lengthError);
+			String errorString =
+			                     "No of characters '" + clientId.length() + "' for ClientID: '" +
+			                             clientId +
+			                             "' is invalid (should be less than 24, hence please provide a simple 'owner' tag)";
+			log.error(errorString);
+			return String.format(httpReply, HttpStatus.SC_NOT_ACCEPTABLE,
+			                     HttpStatus.getStatusText(HttpStatus.SC_NOT_ACCEPTABLE),
+			                     errorString);
 		} else {
 			log.info("No of Characters in ClientID : '" + clientId + "' is " + clientId.length());
 		}

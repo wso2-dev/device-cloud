@@ -25,11 +25,9 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 
 import org.apache.commons.configuration.ConfigurationException;
-import org.apache.commons.httpclient.HttpStatus;
 import org.apache.log4j.Logger;
 import org.wso2.iot.devicecontroller.ControlQueueConnector;
 import org.wso2.iot.devicecontroller.DataStoreConnector;
-import org.wso2.iot.devicecontroller.exception.InvalidLengthException;
 import org.wso2.iot.utils.DefaultDeviceControlConfigs;
 import org.wso2.iot.utils.IoTConfiguration;
 import org.wso2.iot.utils.ResourceFileLoader;
@@ -119,14 +117,7 @@ public class DeviceController {
 		deviceControlsMap.put("value", value);
 
 		String result = null;
-		try {
-			result = iotControlQueue.enqueueControls(deviceControlsMap);
-		} catch (InvalidLengthException e) {
-			result =
-			         HttpStatus.SC_NOT_ACCEPTABLE + " - " +
-			                 HttpStatus.getStatusText(HttpStatus.SC_NOT_ACCEPTABLE) + "\n" +
-			                 e.getMessage();
-		}
+        result = iotControlQueue.enqueueControls(deviceControlsMap);
 		return result;
 	}
 
