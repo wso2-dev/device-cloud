@@ -44,7 +44,6 @@ import org.wso2.iot.utils.DefaultDeviceControlConfigs;
  */
 public class AMQControlQueue implements ControlQueueConnector, MqttCallback {
 	Logger log = Logger.getLogger(AMQControlQueue.class);
-	private static AMQControlQueue amqQueueInstance = null;
 
 	private String CONTROL_QUEUE_ENDPOINT = "";
 	private String CONTROL_QUEUE_USERNAME = "";
@@ -52,19 +51,8 @@ public class AMQControlQueue implements ControlQueueConnector, MqttCallback {
 
 	private String httpReply = "%d - %s";
 
-	private AMQControlQueue() {
+	public AMQControlQueue() {
 		initControlQueue();
-	}
-
-	public static AMQControlQueue getInstance() {
-		if (amqQueueInstance == null) {
-			synchronized (AMQControlQueue.class) {
-				if (amqQueueInstance == null) {
-					amqQueueInstance = new AMQControlQueue();
-				}
-			}
-		}
-		return amqQueueInstance;
 	}
 
 	/*
@@ -196,17 +184,17 @@ public class AMQControlQueue implements ControlQueueConnector, MqttCallback {
 		log.info("MQTT Message recieved: " + arg1.toString());
 	}
 
-	public static void main(String[] args) {
-
-		HashMap<String, String> myMap = new HashMap<String, String>();
-		myMap.put("deviceType", "Arduino");
-		myMap.put("owner", "Smeansbeer");
-		myMap.put("macAddress", "123456");
-		myMap.put("key", "TempSensor");
-		myMap.put("value", "123");
-
-		AMQControlQueue newInst = new AMQControlQueue();
-		System.out.println(newInst.initControlQueue());
-		System.out.println(newInst.enqueueControls(myMap));
-	}
+//	public static void main(String[] args) {
+//
+//		HashMap<String, String> myMap = new HashMap<String, String>();
+//		myMap.put("deviceType", "Arduino");
+//		myMap.put("owner", "Smeansbeer");
+//		myMap.put("macAddress", "123456");
+//		myMap.put("key", "TempSensor");
+//		myMap.put("value", "123");
+//
+//		AMQControlQueue newInst = new AMQControlQueue();
+//		System.out.println(newInst.initControlQueue());
+//		System.out.println(newInst.enqueueControls(myMap));
+//	}
 }

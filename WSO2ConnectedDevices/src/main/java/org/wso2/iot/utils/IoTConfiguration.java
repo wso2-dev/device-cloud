@@ -16,17 +16,11 @@
 
 package org.wso2.iot.utils;
 
-import java.io.File;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.XMLConfiguration;
 import org.apache.commons.configuration.tree.xpath.XPathExpressionEngine;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.springframework.aop.ThrowsAdvice;
 import org.wso2.iot.devicecontroller.ControlQueueConnector;
 import org.wso2.iot.devicecontroller.DataStoreConnector;
 import org.wso2.iot.enroll.DeviceManagement;
@@ -57,10 +51,9 @@ public class IoTConfiguration {
 		String classNameToLoad = null;
 		try {
 
-			// absolutePathToConfigsFile = new
-			// ResourceFileLoader(CONFIGS_FILE_LOCATION).getPath();
-			absolutePathToConfigsFile =
-			                            "/Users/smean-MAC/Documents/WSO2Git/device-cloud/WSO2ConnectedDevices/src/main/webapp/resources/conf/configuration.xml";
+			absolutePathToConfigsFile = new ResourceFileLoader(CONFIGS_FILE_LOCATION).getPath();
+			// absolutePathToConfigsFile =
+			// "/Users/smean-MAC/Documents/WSO2Git/device-cloud/WSO2ConnectedDevices/src/main/webapp/resources/conf/configuration.xml";
 			log.info(absolutePathToConfigsFile);
 
 			XMLConfiguration config = new XMLConfiguration(absolutePathToConfigsFile);
@@ -162,20 +155,7 @@ public class IoTConfiguration {
 	public DataStoreConnector getDataStore() throws InstantiationException, IllegalAccessException {
 
 		if (DataStoreConnector.class.isAssignableFrom(dataStore)) {
-
-			Constructor[] constructors = dataStore.getDeclaredConstructors();
-			constructors[0].setAccessible(true);
-
-			DataStoreConnector dataStoreInstance = null;
-
-			try {
-				dataStoreInstance = (DataStoreConnector) constructors[0].newInstance();
-			} catch (IllegalArgumentException | InvocationTargetException e) {
-				log.error("Error in creating object of class : " + dataStore, e);
-			}
-
-			return dataStoreInstance;
-			// return (DataStoreConnector) dataStore.newInstance();
+			return (DataStoreConnector) dataStore.newInstance();
 		}
 
 		String error =
@@ -189,19 +169,7 @@ public class IoTConfiguration {
 	                                              IllegalAccessException {
 
 		if (ControlQueueConnector.class.isAssignableFrom(controlQueue)) {
-			Constructor[] constructors = controlQueue.getDeclaredConstructors();
-			constructors[0].setAccessible(true);
-
-			ControlQueueConnector controlQueueInstance = null;
-
-			try {
-				controlQueueInstance = (ControlQueueConnector) constructors[0].newInstance();
-			} catch (IllegalArgumentException | InvocationTargetException e) {
-				log.error("Error in creating object of class : " + controlQueue, e);
-			}
-
-			return controlQueueInstance;
-			// return (ControlQueueConnector) controlQueue.newInstance();
+			return (ControlQueueConnector) controlQueue.newInstance();
 		}
 
 		String error =

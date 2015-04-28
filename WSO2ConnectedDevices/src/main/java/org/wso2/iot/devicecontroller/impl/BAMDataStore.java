@@ -39,7 +39,6 @@ import org.wso2.iot.utils.DefaultDeviceControlConfigs;
  */
 public class BAMDataStore implements DataStoreConnector {
 	Logger log = Logger.getLogger(BAMDataStore.class);
-	private static BAMDataStore bamDataStoreInstance = null;
 
 	private String DATASTORE_ENDPOINT = "";
 	private String DATASTORE_USERNAME = "";
@@ -50,19 +49,8 @@ public class BAMDataStore implements DataStoreConnector {
 
 	private String httpReply = "%d - %s";
 
-	private BAMDataStore() {
+	public BAMDataStore() {
 		initDataStore();
-	}
-
-	public static BAMDataStore getInstance() {
-		if (bamDataStoreInstance == null) {
-			synchronized (BAMDataStore.class) {
-				if (bamDataStoreInstance == null) {
-					bamDataStoreInstance = new BAMDataStore();
-				}
-			}
-		}
-		return bamDataStoreInstance;
 	}
 
 	/*
@@ -190,32 +178,32 @@ public class BAMDataStore implements DataStoreConnector {
 	 * ==========================================================
 	 */
 
-	public static void main(String[] args) {
-
-		File file =
-		            new File(
-		                     "/Users/smean-MAC/Documents/WSO2Git/device-cloud/WSO2ConnectedDevices/src/main/webapp/resources/security/client-truststore.jks");
-		System.out.println(file);
-
-		if (file.exists()) {
-			String trustStore = file.getAbsolutePath();
-			System.out.println(trustStore);
-			System.setProperty("javax.net.ssl.trustStore", trustStore);
-			System.setProperty("javax.net.ssl.trustStorePassword", "wso2carbon");
-		}
-
-		HashMap<String, String> myMap = new HashMap<String, String>();
-		myMap.put("ipAdd", "192.168.1.216");
-		myMap.put("deviceType", "Arduino");
-		myMap.put("owner", "Smeansbeer");
-		myMap.put("macAddress", "123456");
-		myMap.put("time", "" + System.nanoTime());
-		myMap.put("key", "TempSensor");
-		myMap.put("value", "123");
-		myMap.put("description", "TetsCase");
-
-		BAMDataStore newinst = BAMDataStore.getInstance();
-		System.out.println(newinst.initDataStore());
-		System.out.println(newinst.publishIoTData(myMap));
-	}
+//	public static void main(String[] args) {
+//
+//		File file =
+//		            new File(
+//		                     "/Users/smean-MAC/Documents/WSO2Git/device-cloud/WSO2ConnectedDevices/src/main/webapp/resources/security/client-truststore.jks");
+//		System.out.println(file);
+//
+//		if (file.exists()) {
+//			String trustStore = file.getAbsolutePath();
+//			System.out.println(trustStore);
+//			System.setProperty("javax.net.ssl.trustStore", trustStore);
+//			System.setProperty("javax.net.ssl.trustStorePassword", "wso2carbon");
+//		}
+//
+//		HashMap<String, String> myMap = new HashMap<String, String>();
+//		myMap.put("ipAdd", "192.168.1.216");
+//		myMap.put("deviceType", "Arduino");
+//		myMap.put("owner", "Smeansbeer");
+//		myMap.put("macAddress", "123456");
+//		myMap.put("time", "" + System.nanoTime());
+//		myMap.put("key", "TempSensor");
+//		myMap.put("value", "123");
+//		myMap.put("description", "TetsCase");
+//
+//		BAMDataStore newinst = new BAMDataStore();
+//		System.out.println(newinst.initDataStore());
+//		System.out.println(newinst.publishIoTData(myMap));
+//	}
 }

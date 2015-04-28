@@ -32,6 +32,7 @@ import org.apache.log4j.Logger;
 import org.wso2.iot.devicecontroller.ControlQueueConnector;
 import org.wso2.iot.devicecontroller.DataStoreConnector;
 import org.wso2.iot.utils.IoTConfiguration;
+import org.wso2.iot.utils.ResourceFileLoader;
 import org.wso2.iot.utils.XmlParser;
 import org.xml.sax.SAXException;
 
@@ -48,33 +49,38 @@ public class DeviceController {
 
 	static {
 
-		// File file = new
-		// ResourceFileLoader("/resources/conf/device-controls/controller.xml").getFile();
 		File file =
-		            new File(
-		                     "/Users/smean-MAC/Documents/WSO2Git/device-cloud/WSO2ConnectedDevices/src/main/webapp/resources/security/client-truststore.jks");
-System.out.println(file);
+		            new ResourceFileLoader("/resources/conf/device-controls/controller.xml").getFile();
+		// File file =
+		// new File(
+		// "/Users/smean-MAC/Documents/WSO2Git/device-cloud/WSO2ConnectedDevices/src/main/webapp/resources/security/client-truststore.jks");
+		System.out.println(file);
 		if (file.exists()) {
 			XmlParser xml;
-//			try {
-//				xml = new XmlParser(file);
-				// file =
-				// new ResourceFileLoader("/resources/security/" +
-				// xml.getTagValues("IoTDeviceController/Security/client")[0]).getFile();
+			try {
+				xml = new XmlParser(file);
+				file =
+				       new ResourceFileLoader(
+				                              "/resources/security/" +
+				                                      xml.getTagValues("IoTDeviceController/Security/client")[0]).getFile();
 				if (file.exists()) {
 					String trustStore = file.getAbsolutePath();
-					System.out.println(trustStore);
-					System.setProperty("javax.net.ssl.trustStore", trustStore);
-					// System.setProperty("javax.net.ssl.trustStorePassword",
-					// xml.getTagValues("IoTDeviceController/Security/password")[0]);
-					System.setProperty("javax.net.ssl.trustStorePassword", "wso2carbon");
-				}
-//			} catch (ParserConfigurationException | SAXException | IOException e) {
-//				log.error("Error on configuration" + e);
+					log.info("Trust Store Path : " + trustStore);
 
-				// } catch (XPathExpressionException e) {
-				// log.error("Error on configuration" + e);
-//			}
+					System.setProperty("javax.net.ssl.trustStore", trustStore);
+					System.setProperty("javax.net.ssl.trustStorePassword",
+					                   xml.getTagValues("IoTDeviceController/Security/password")[0]);
+					// System.setProperty("javax.net.ssl.trustStorePassword",
+					// "wso2carbon");
+				} else {
+					log.error("Trust Store not found in path : " + file);
+				}
+			} catch (ParserConfigurationException | SAXException | IOException e) {
+				log.error("Error on configuration" + e);
+
+			} catch (XPathExpressionException e) {
+				log.error("Error on configuration" + e);
+			}
 		}
 
 		try {
@@ -128,18 +134,18 @@ System.out.println(file);
 		return result;
 	}
 
-	public static void main(String[] args) {
-		
-		DeviceController myController = new DeviceController();
-		String pushOut =
-		                 myController.pushData("10.100.7.38", "Arduino", "Shabirmean", "123456",
-		                                       Long.parseLong("234890"), "Sensor", "23", "Testing");
-
-		String setOut = myController.setControl("Shabirmean", "Arduino", "123456", "13", "HIGH");
-
-		System.out.println("---------------------------------------");
-		System.out.println("PUSH : " + pushOut);
-		System.out.println("---------------------------------------");
-		System.out.println("SET : " + setOut);
-	}
+//	public static void main(String[] args) {
+//
+//		DeviceController myController = new DeviceController();
+//		String pushOut =
+//		                 myController.pushData("10.100.7.38", "Arduino", "Shabirmean", "123456",
+//		                                       Long.parseLong("234890"), "Sensor", "23", "Testing");
+//
+//		String setOut = myController.setControl("Shabirmean", "Arduino", "123456", "13", "HIGH");
+//
+//		System.out.println("---------------------------------------");
+//		System.out.println("PUSH : " + pushOut);
+//		System.out.println("---------------------------------------");
+//		System.out.println("SET : " + setOut);
+//	}
 }
