@@ -18,9 +18,10 @@ http://cxf.apache.org/schemas/jaxrs.xsd">
 	<bean
 		class="org.springframework.beans.factory.config.PreferencesPlaceholderConfigurer" />
 
-	<jaxrs:server id="IOTService" address="">
+	<jaxrs:server id="IoTService" address="">
 		<jaxrs:serviceBeans>
-			<!--bean class="org.wso2.iot.services.api.DeviceController" /-->
+
+			<bean class="org.wso2.iot.services.api.DeviceController" />		
 			<bean class="org.wso2.iot.services.api.UserManager" />
 			<bean class="org.wso2.iot.services.api.DeviceManager" />
 		</jaxrs:serviceBeans>

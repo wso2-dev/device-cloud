@@ -16,14 +16,11 @@
 
 package org.wso2.iot.utils;
 
-import java.io.File;
-
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.XMLConfiguration;
 import org.apache.commons.configuration.tree.xpath.XPathExpressionEngine;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.springframework.aop.ThrowsAdvice;
 import org.wso2.iot.devicecontroller.ControlQueueConnector;
 import org.wso2.iot.devicecontroller.DataStoreConnector;
 import org.wso2.iot.enroll.DeviceManagement;
@@ -42,6 +39,10 @@ public class IoTConfiguration {
 	private Class<?> deviceManagement;
 	private Class<?> dataStore;
 	private Class<?> controlQueue;
+
+	private String activeDataStore = null;
+	private String activeControlQueue = null;
+
 
 	private String CONFIGS_FILE_LOCATION = "/resources/conf/configuration.xml";
 
@@ -86,6 +87,9 @@ public class IoTConfiguration {
 			                                   classTypeToLoad + "']");
 
 			dataStore = IoTConfiguration.class.forName(classNameToLoad);
+			activeDataStore = classTypeToLoad;
+
+			log.info("Active Data-Store: " + activeDataStore);
 			log.info(dataStore);
 
 			// Load class mapped for control-queue from configuration.xml
@@ -95,6 +99,9 @@ public class IoTConfiguration {
 			                                   classTypeToLoad + "']");
 
 			controlQueue = IoTConfiguration.class.forName(classNameToLoad);
+			activeControlQueue = classTypeToLoad;
+
+			log.info("Active Control-Queue: " + activeControlQueue);
 			log.info(controlQueue);
 
 		} catch (ConfigurationException cex) {
@@ -171,6 +178,20 @@ public class IoTConfiguration {
 		log.error(error);
 		throw new InstantiationException(error);
 
+	}
+
+	/**
+	 * @return the activeDataStore
+	 */
+	public String getActiveDataStore() {
+		return activeDataStore;
+	}
+
+	/**
+	 * @return the activeControlQueue
+	 */
+	public String getActiveControlQueue() {
+		return activeControlQueue;
 	}
 
 	// public static void main(String args[]) throws ConfigurationException,

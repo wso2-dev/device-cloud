@@ -23,6 +23,6 @@ import java.util.HashMap;
  *
  */
 public interface DataStoreConnector {
-	public void initDataStore();
+	public String initDataStore();
 	public String publishIoTData( HashMap<String, String> deviceData );
 }

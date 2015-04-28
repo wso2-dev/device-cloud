@@ -18,11 +18,13 @@ package org.wso2.iot.devicecontroller;
 
 import java.util.HashMap;
 
+import org.wso2.iot.devicecontroller.exception.InvalidLengthException;
+
 /**
  * @author smean-MAC
  *
  */
 public interface ControlQueueConnector {
-	public void initControlQueue();
-	public String enqueueControls( HashMap<String, String> deviceControls );
+	public String initControlQueue();
+	public String enqueueControls( HashMap<String, String> deviceControls ) throws InvalidLengthException;
 }

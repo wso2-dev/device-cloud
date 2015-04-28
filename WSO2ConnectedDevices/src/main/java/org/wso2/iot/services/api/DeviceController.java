@@ -1,155 +1,148 @@
+/*
+ * Copyright (c) 2014, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package org.wso2.iot.services.api;
 
 import java.io.File;
-import java.io.IOException;
-import java.net.MalformedURLException;
+import java.util.HashMap;
 
-import javax.ws.rs.*;
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.xpath.XPathExpressionException;
+import javax.ws.rs.HeaderParam;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.commons.configuration.ConfigurationException;
+import org.apache.commons.httpclient.HttpStatus;
 import org.apache.log4j.Logger;
-import org.eclipse.paho.client.mqttv3.MqttClient;
-import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
-import org.wso2.carbon.databridge.agent.thrift.DataPublisher;
-import org.wso2.carbon.databridge.agent.thrift.exception.AgentException;
-import org.wso2.carbon.databridge.commons.exception.AuthenticationException;
-import org.wso2.carbon.databridge.commons.exception.DifferentStreamDefinitionAlreadyDefinedException;
-import org.wso2.carbon.databridge.commons.exception.MalformedStreamDefinitionException;
-import org.wso2.carbon.databridge.commons.exception.StreamDefinitionException;
-import org.wso2.carbon.databridge.commons.exception.TransportException;
+import org.wso2.iot.devicecontroller.ControlQueueConnector;
+import org.wso2.iot.devicecontroller.DataStoreConnector;
+import org.wso2.iot.devicecontroller.exception.InvalidLengthException;
+import org.wso2.iot.utils.DefaultDeviceControlConfigs;
+import org.wso2.iot.utils.IoTConfiguration;
 import org.wso2.iot.utils.ResourceFileLoader;
-import org.wso2.iot.utils.XmlParser;
-import org.xml.sax.SAXException;
 
-@Path("/DeviceController")
+/**
+ * @author smean-MAC
+ * 
+ */
+@Path(value = "/DeviceController")
 public class DeviceController {
-	static Logger log = Logger.getLogger("org.wso2.iot.services.api");
+	private static Logger log = Logger.getLogger(DeviceController.class);
 
-	MqttClient client;
-	MqttConnectOptions options;
-
-	static final String mqttEndpoint = "tcp://192.168.1.216:1883";
-	static String dataStoreEndpoint = "tcp://localhost:7613";
-	static String dataStoreUsername = "admin";
-	static String dataStorePassword = "admin";
+	private static DataStoreConnector iotDataStore = null;
+	private static ControlQueueConnector iotControlQueue = null;
 
 	static {
 
-		File file = new ResourceFileLoader("/resources/conf/configuration.xml").getFile();
-		if (file.exists()) {
-			XmlParser xml;
-			try {
-				xml = new XmlParser(file);
-				dataStoreEndpoint = xml.getTagValues("IOT/BAM-Endpoint/url")[0];
-				dataStoreUsername = xml.getTagValues("IOT/BAM-Endpoint/username")[0];
-				dataStorePassword = xml.getTagValues("IOT/BAM-Endpoint/password")[0];
+		String trustStoreFile = null;
+		String trustStorePassword = null;
+		File certificateFile = null;
 
-				file =
-				       new ResourceFileLoader("/resources/security/" +
-				                              xml.getTagValues("IOT/Security/client")[0]).getFile();
-				if (file.exists()) {
-					String trustStore = file.getAbsolutePath();
-					System.setProperty("javax.net.ssl.trustStore", trustStore);
-					System.setProperty("javax.net.ssl.trustStorePassword",
-					                   xml.getTagValues("IOT/Security/password")[0]);
-				}
-			} catch (ParserConfigurationException | SAXException | IOException e) {
-				log.error("Error on configuration" + e);
-				
-			} catch (XPathExpressionException e) {
-				log.error("Error on configuration" + e);
+		try {
+			trustStoreFile = DefaultDeviceControlConfigs.getInstance().getTrustStoreFile();
+			trustStorePassword = DefaultDeviceControlConfigs.getInstance().getTrustStorePassword();
+			certificateFile =
+			                  new ResourceFileLoader("/resources/security/" + trustStoreFile).getFile();
+
+			if (certificateFile.exists()) {
+				trustStoreFile = certificateFile.getAbsolutePath();
+				log.info("Trust Store Path : " + trustStoreFile);
+
+				System.setProperty("javax.net.ssl.trustStore", trustStoreFile);
+				System.setProperty("javax.net.ssl.trustStorePassword", trustStorePassword);
+			} else {
+				log.error("Trust Store not found in path : " + trustStoreFile);
 			}
+		} catch (ConfigurationException e1) {
+			log.error("Error occured when trying to retreive Trust-Store-Certificate from path: " +
+			          certificateFile, e1);
+		}
+
+		try {
+			iotDataStore = IoTConfiguration.getInstance().getDataStore();
+			iotControlQueue = IoTConfiguration.getInstance().getControlQueue();
+		} catch (InstantiationException | IllegalAccessException | ConfigurationException e) {
+			log.error("Error creating DataStore or ControlQueue objects");
 		}
 
 	}
 
-	@Path("/pushdata/{ip}/{owner}/{type}/{mac}/{time}/{pin}/{value}")
+	@Path("/pushdata/{ip}/{owner}/{type}/{mac}/{time}/{key}/{value}")
 	@POST
 	// @Produces("application/xml")
 	public String pushData(@PathParam("ip") String ipAdd, @PathParam("type") String deviceType,
 	                       @PathParam("owner") String owner, @PathParam("mac") String macAddress,
-	                       @PathParam("pin") String pin, @PathParam("time") String time,
-	                       @PathParam("value") String pinValue,
+	                       @PathParam("time") Long time, @PathParam("key") String key,
+	                       @PathParam("value") String value,
 	                       @HeaderParam("description") String description) {
 
-		DataPublisher dataPublisher;
-		try {
-			dataPublisher =
-			                new DataPublisher(dataStoreEndpoint, dataStoreUsername,
-			                                  dataStorePassword);
-		} catch (MalformedURLException | AgentException | AuthenticationException
-		        | TransportException e) {
+		HashMap<String, String> deviceDataMap = new HashMap<String, String>();
 
-			log.error("Error creating DataPublisher for Endpoint: " + dataStoreEndpoint +
-			          " with credentials, USERNAME-" + dataStoreUsername + " and PASSWORD-" +
-			          dataStorePassword + ": ", e);
-			return "<connect>" + "<pushdata>" + "<pin>" + pin + "</pin>" + "<value>" + pinValue +
-			       "</value>" + "<result>" + false + "</result>" + "</pushdata>" + "</connect>";
+		deviceDataMap.put("ipAdd", ipAdd);
+		deviceDataMap.put("deviceType", deviceType);
+		deviceDataMap.put("owner", owner);
+		deviceDataMap.put("macAddress", macAddress);
+		deviceDataMap.put("time", "" + time);
+		deviceDataMap.put("key", key);
+		deviceDataMap.put("value", value);
+		deviceDataMap.put("description", description);
 
-		}
-
-		String devicePinDataStream;
-		try {
-			devicePinDataStream =
-			                      dataPublisher.defineStream("{"
-			                                                 + "'name':'org_wso2_iot_statistics_device_pin_data',"
-			                                                 + "'version':'1.0.0',"
-			                                                 + "'nickName': 'IoT Connected Device Pin Data',"
-			                                                 + "'description': 'Pin Data Received',"
-			                                                 + "'tags': ['arduino', 'led13'],"
-			                                                 + "'metaData':["
-			                                                 + "        {'name':'ipAdd','type':'STRING'},"
-			                                                 + "        {'name':'deviceType','type':'STRING'},"
-			                                                 + "        {'name':'owner','type':'STRING'},"
-			                                                 + "		{'name':'requestTime','type':'LONG'}"
-			                                                 + "],"
-			                                                 + "'payloadData':["
-			                                                 + "        {'name':'macAddress','type':'STRING'},"
-			                                                 + "        {'name':'pin','type':'STRING'},"
-			                                                 + "        {'name':'pinValue','type':'STRING'},"
-			                                                 + "        {'name':'description','type':'STRING'}"
-			                                                 + "]" + "}");
-
-			log.info("stream definition ID for data from device pin: " + devicePinDataStream);
-
-		} catch (AgentException | MalformedStreamDefinitionException | StreamDefinitionException
-		        | DifferentStreamDefinitionAlreadyDefinedException e) {
-
-			log.error("Error in defining stream for data publisher: ", e);
-			return "<connect>" + "<pushdata>" + "<pin>" + pin + "</pin>" + "<value>" + pinValue +
-			       "</value>" + "<result>" + false + "</result>" + "</pushdata>" + "</connect>";
-
-		}
-
-		try {
-			dataPublisher.publish(devicePinDataStream, System.currentTimeMillis(),
-			                      new Object[] { ipAdd, deviceType, owner, Long.parseLong(time) },
-			                      null, new Object[] { macAddress, pin, pinValue, description });
-
-			log.info("event published to devicePinDataStream");
-
-		} catch (AgentException e) {
-			log.error("Error while publishing device pin data", e);
-			return "<connect>" + "<pushdata>" + "<pin>" + pin + "</pin>" + "<value>" + pinValue +
-			       "</value>" + "<result>" + false + "</result>" + "</pushdata>" + "</connect>";
-		}
-
-		return "<connect>" + "\n\t<pushdata>" + "\n\t\t<pin>\n\t\t\t" + pin + "\n\t\t</pin>" +
-		       "\n\t\t<value>\n\t\t\t" + pinValue + "\n\t\t</value>" + "\n\t\t<result>\n\t\t\t" +
-		       true + "\n\t\t</result>" + "\n\t</pushdata>" + "\n</connect>";
+		String result = iotDataStore.publishIoTData(deviceDataMap);
+		return result;
 	}
 
-	public static void main(String[] args) {
-		log.info("TEst");
-		DeviceController TestObject = new DeviceController();
+	@Path("/setcontrol/{owner}/{type}/{mac}/{key}/{value}")
+	@POST
+	public String setControl(@PathParam("owner") String owner,
+	                         @PathParam("type") String deviceType,
+	                         @PathParam("mac") String macAddress, @PathParam("key") String key,
+	                         @PathParam("value") String value) {
+		HashMap<String, String> deviceControlsMap = new HashMap<String, String>();
 
-		String out =
-		             TestObject.pushData("localhost", "arduino", "smean", "123456", "Today", "13",
-		                                 "HIGH", "Test");
-		System.out.println("PushData : " + out);
+		deviceControlsMap.put("owner", owner);
+		deviceControlsMap.put("deviceType", deviceType);
+		deviceControlsMap.put("macAddress", macAddress);
+		deviceControlsMap.put("key", key);
+		deviceControlsMap.put("value", value);
 
+		String result = null;
+		try {
+			result = iotControlQueue.enqueueControls(deviceControlsMap);
+		} catch (InvalidLengthException e) {
+			result =
+			         HttpStatus.SC_NOT_ACCEPTABLE + " - " +
+			                 HttpStatus.getStatusText(HttpStatus.SC_NOT_ACCEPTABLE) + "\n" +
+			                 e.getMessage();
+		}
+		return result;
 	}
+
+	// public static void main(String[] args) {
+	//
+	// DeviceController myController = new DeviceController();
+	// String pushOut =
+	// myController.pushData("10.100.7.38", "Arduino", "Shabirmean", "123456",
+	// Long.parseLong("234890"), "Sensor", "23", "Testing");
+	//
+	// String setOut = myController.setControl("Shabirmean", "Arduino",
+	// "123456", "13", "HIGH");
+	//
+	// System.out.println("---------------------------------------");
+	// System.out.println("PUSH : " + pushOut);
+	// System.out.println("---------------------------------------");
+	// System.out.println("SET : " + setOut);
+	// }
 }
