@@ -42,7 +42,7 @@ public class IoTConfiguration {
 
 	private String activeDataStore = null;
 	private String activeControlQueue = null;
-
+	private int deviceCheckerCacheSize=0;
 
 	private String CONFIGS_FILE_LOCATION = "/resources/conf/configuration.xml";
 
@@ -62,6 +62,12 @@ public class IoTConfiguration {
 
 			// read all configurations
 
+			//Read Cache Size of DeviceCheckerCache
+			classTypeToLoad = config.getString("Main/DeviceCheckerCache");
+			deviceCheckerCacheSize=Integer.parseInt(classTypeToLoad);
+			
+			
+			
 			// Load class mapped for device management from configuration.xml
 			classTypeToLoad = config.getString("Main/Enroll/Device-Class-Type");
 			classNameToLoad =
@@ -192,6 +198,11 @@ public class IoTConfiguration {
 	 */
 	public String getActiveControlQueue() {
 		return activeControlQueue;
+	}
+	
+	public int getDeviceCheckerCacheSize(){
+		
+		return deviceCheckerCacheSize;
 	}
 
 	// public static void main(String args[]) throws ConfigurationException,

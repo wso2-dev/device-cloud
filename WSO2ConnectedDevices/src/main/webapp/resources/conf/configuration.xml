@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <IoT>
 	<Main>
+	
+		<DeviceCheckerCache>100</DeviceCheckerCache>
 		<Enroll>
 			<Device-Class-Type> DB-DEVICE </Device-Class-Type>
 			<User-Class-Type> DB-USER </User-Class-Type>

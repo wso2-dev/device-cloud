@@ -19,10 +19,12 @@ package org.wso2.iot.services.api;
 import java.io.File;
 import java.util.HashMap;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.HeaderParam;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
+import javax.ws.rs.core.Context;
 
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.httpclient.HttpStatus;
@@ -30,6 +32,7 @@ import org.apache.log4j.Logger;
 import org.wso2.iot.devicecontroller.ControlQueueConnector;
 import org.wso2.iot.devicecontroller.DataStoreConnector;
 import org.wso2.iot.devicecontroller.exception.InvalidLengthException;
+import org.wso2.iot.enroll.DeviceValidator;
 import org.wso2.iot.utils.DefaultDeviceControlConfigs;
 import org.wso2.iot.utils.IoTConfiguration;
 import org.wso2.iot.utils.ResourceFileLoader;
@@ -87,7 +90,8 @@ public class DeviceController {
 	                       @PathParam("owner") String owner, @PathParam("mac") String macAddress,
 	                       @PathParam("time") Long time, @PathParam("key") String key,
 	                       @PathParam("value") String value,
-	                       @HeaderParam("description") String description) {
+	                       @HeaderParam("description") String description,
+	                       @Context HttpServletResponse response) {
 
 		HashMap<String, String> deviceDataMap = new HashMap<String, String>();
 
@@ -100,8 +104,29 @@ public class DeviceController {
 		deviceDataMap.put("value", value);
 		deviceDataMap.put("description", description);
 
-		String result = iotDataStore.publishIoTData(deviceDataMap);
-		return result;
+		DeviceValidator deviceChecker = new DeviceValidator();
+
+		try {
+			boolean exists = deviceChecker.isExist(owner, macAddress);
+			String result  ="Failed to push";
+			if (exists) {
+				result = iotDataStore.publishIoTData(deviceDataMap);
+
+			} 
+
+			return result;
+
+		} catch (InstantiationException e) {
+			response.setStatus(500);
+			return null;
+		} catch (IllegalAccessException e) {
+			response.setStatus(500);
+			return null;
+		} catch (ConfigurationException e) {
+			response.setStatus(500);
+			return null;
+		}
+
 	}
 
 	@Path("/setcontrol/{owner}/{type}/{mac}/{key}/{value}")

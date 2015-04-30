@@ -31,7 +31,8 @@ public interface DeviceManagement {
 	public boolean removeDevice(String deviceId);
 	public boolean update(Device device);
 	public Device getDevice(String deviceId);
-	public String generateNewToken();
+	//public String generateNewToken();
 	public boolean isExist(String deviceId);
+	public boolean isExist(String owner,String deviceId);
 
 }

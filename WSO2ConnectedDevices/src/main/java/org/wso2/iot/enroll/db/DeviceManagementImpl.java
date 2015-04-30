@@ -43,8 +43,10 @@ public class DeviceManagementImpl implements DeviceManagement {
 		try {
 
 			prepStmt =
-			           dbConnection.prepareStatement("INSERT INTO device (id,name,description,model,owner,token,type) VALUES ('" +
-			                                         device.getDeviceId() +
+			           //dbConnection.prepareStatement("INSERT INTO device (id,name,description,model,owner,token,type) VALUES ('" +
+			        		   dbConnection.prepareStatement("INSERT INTO device (id,name,description,model,owner,type) VALUES ('" +
+
+			        		   device.getDeviceId() +
 			                                         "','" +
 			                                         device.getName() +
 			                                         "','" +
@@ -53,8 +55,8 @@ public class DeviceManagementImpl implements DeviceManagement {
 			                                         device.getModel() +
 			                                         "','" +
 			                                         device.getOwner() +
-			                                         "','" +
-			                                         device.getToken() +
+//			                                         "','" +
+//			                                         device.getToken() +
 			                                         "','" +
 			                                         device.getType() + "')");
 			prepStmt.execute();
@@ -112,20 +114,18 @@ public class DeviceManagementImpl implements DeviceManagement {
 		try {
 
 			prepStmt =
-			           dbConnection.prepareStatement("update device  SET device='" +
-			        		   device.getDeviceId() +
-                               "', name='" +
+			           dbConnection.prepareStatement("update device  SET  name='" +
                                device.getName() +
-                               "',' description=" +
+                               "', description='" +
                                device.getDesciption() +
-                               "',' model=" +
+                               "', model='" +
                                device.getModel() +
-                               "',' owner=" +
+                               "', owner='" +
                                device.getOwner() +
-                               "',' token=" +
-                               device.getToken() +
-                               "',' type=" +
-                               device.getType() + "')");
+//                               "', token='" +
+//                               device.getToken() +
+                               "', type='" +
+                               device.getType() + "' where id='"+device.getDeviceId()+"'");
 			prepStmt.execute();
 
 			
@@ -155,8 +155,11 @@ public class DeviceManagementImpl implements DeviceManagement {
 		ResultSet rs = null;
 		try {
 			prepStmt =
-			           dbConnection.prepareStatement("SELECT id,name,type,model,description,owner,token FROM device where  id='" +
-			                                         deviceId + "'");
+//			           dbConnection.prepareStatement("SELECT id,name,type,model,description,owner,token FROM device where  id='" +
+//			                                         deviceId + "'");			
+	           dbConnection.prepareStatement("SELECT id,name,type,model,description,owner FROM device where  id='" +
+                       deviceId + "'");
+
 			rs = prepStmt.executeQuery();
 
 			if (rs.next()) {
@@ -167,7 +170,7 @@ public class DeviceManagementImpl implements DeviceManagement {
 				result.setModel(rs.getString(4));
 				result.setDesciption(rs.getString(5));
 				result.setOwner(rs.getString(6));
-				result.setToken(rs.getString(7));
+	//			result.setToken(rs.getString(7));
 				
 			}
 		} catch (SQLException e) {
@@ -192,12 +195,12 @@ public class DeviceManagementImpl implements DeviceManagement {
 	 * 
 	 * @see org.wso2.iot.enroll.DeviceManagement#generateNewToken()
 	 */
-	@Override
-	public String generateNewToken() {
-		UUID idOne = UUID.randomUUID();
-
-		return idOne.toString();
-	}
+//	@Override
+//	public String generateNewToken() {
+//		UUID idOne = UUID.randomUUID();
+//
+//		return idOne.toString();
+//	}
 
 	/* (non-Javadoc)
 	 * @see org.wso2.iot.enroll.DeviceManagement#isExist(java.lang.String)
@@ -212,6 +215,40 @@ public class DeviceManagementImpl implements DeviceManagement {
 			prepStmt =
 			           dbConnection.prepareStatement("SELECT * FROM device where  id='" +
 			                                         deviceId + "'");
+			rs = prepStmt.executeQuery();
+
+			if (rs.next()) {
+				return true;
+			}
+		} catch (SQLException e) {
+			log.error("", e);
+		} finally {
+			try {
+				if (prepStmt != null) {
+					prepStmt.close();
+				}
+				if (rs != null) {
+					rs.close();
+				}
+			} catch (SQLException e) {
+				log.error("", e);
+			}
+		}
+		return false;
+    }
+
+	/* (non-Javadoc)
+	 * @see org.wso2.iot.enroll.DeviceManagement#isExist(java.lang.String, java.lang.String)
+	 */
+    @Override
+    public boolean isExist(String owner, String deviceId) {
+    	PreparedStatement prepStmt = null;
+		Connection dbConnection = new DBUtils().getConnection();
+		ResultSet rs = null;
+		try {
+			prepStmt =
+			           dbConnection.prepareStatement("SELECT * FROM device where  id='" +
+			                                         deviceId + "' and owner='"+owner+"'");
 			rs = prepStmt.executeQuery();
 
 			if (rs.next()) {
