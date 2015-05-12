@@ -16,7 +16,10 @@
 
 package org.wso2.carbon.device.mgt.iot.enroll;
 
-import org.wso2.carbon.device.mgt.iot.device.Device;
+import org.wso2.carbon.device.mgt.common.Device;
+import org.wso2.carbon.device.mgt.common.DeviceIdentifier;
+import org.wso2.carbon.device.mgt.core.dto.DeviceType;
+import org.wso2.carbon.device.mgt.iot.common.IOTAPIException;
 import org.wso2.carbon.device.mgt.iot.user.User;
 
 
@@ -27,12 +30,12 @@ import org.wso2.carbon.device.mgt.iot.user.User;
 public interface DeviceManagement {
 	
 	
-	public boolean addNewDevice(Device device);
-	public boolean removeDevice(String deviceId);
-	public boolean update(Device device);
-	public Device getDevice(String deviceId);
-	//public String generateNewToken();
-	public boolean isExist(String deviceId);
-	public boolean isExist(String owner,String deviceId);
+	public boolean addNewDevice(Device device) throws IOTAPIException;
+	public boolean removeDevice(DeviceIdentifier deviceIdentifier) throws IOTAPIException;
+	public boolean update(Device device) throws IOTAPIException;
+	public Device getDevice(DeviceIdentifier deviceIdentifier) throws IOTAPIException;
+	public boolean isExist(DeviceIdentifier deviceIdentifier) throws IOTAPIException;
+	public boolean isExist(String owner,DeviceIdentifier deviceIdentifier) throws IOTAPIException;
 
 }
+

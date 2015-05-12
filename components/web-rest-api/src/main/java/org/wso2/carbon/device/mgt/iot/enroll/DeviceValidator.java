@@ -20,6 +20,8 @@ import org.apache.commons.collections.map.LRUMap;
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.wso2.carbon.device.mgt.common.DeviceIdentifier;
+import org.wso2.carbon.device.mgt.iot.common.IOTAPIException;
 import org.wso2.carbon.device.mgt.iot.utils.IoTConfiguration;
 
 /**
@@ -42,14 +44,14 @@ public class DeviceValidator {
 	}
 	
 	
-	public boolean isExist(String owner, String deviceId) throws InstantiationException, IllegalAccessException, ConfigurationException{
+	public boolean isExist(String owner, DeviceIdentifier deviceId) throws InstantiationException, IllegalAccessException, ConfigurationException, IOTAPIException{
 		boolean status=false;
-		status=cacheCheck(owner, deviceId);
+		status=cacheCheck(owner, deviceId.getId());
 		if(!status){
     		DeviceManagement deviceManagement= IoTConfiguration.getInstance().getDeviceManagementImpl();
     		status =deviceManagement.isExist(owner, deviceId);
     		if(status){
-    			addToCache(owner, deviceId);
+    			addToCache(owner, deviceId.getId());
     			
     		}
 		}

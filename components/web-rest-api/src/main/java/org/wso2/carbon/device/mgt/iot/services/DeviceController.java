@@ -28,6 +28,8 @@ import javax.ws.rs.core.Context;
 
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.log4j.Logger;
+import org.wso2.carbon.device.mgt.common.DeviceIdentifier;
+import org.wso2.carbon.device.mgt.iot.common.IOTAPIException;
 import org.wso2.carbon.device.mgt.iot.devicecontroller.ControlQueueConnector;
 import org.wso2.carbon.device.mgt.iot.devicecontroller.DataStoreConnector;
 import org.wso2.carbon.device.mgt.iot.enroll.DeviceValidator;
@@ -107,9 +109,13 @@ public class DeviceController {
 		deviceDataMap.put("description", description);
 
 		DeviceValidator deviceChecker = new DeviceValidator();
+		
+		DeviceIdentifier dId=new DeviceIdentifier();
+		dId.setId(macAddress);
+		dId.setType(deviceType);
 
 		try {
-			boolean exists = deviceChecker.isExist(owner, macAddress);
+			boolean exists = deviceChecker.isExist(owner, dId);
 			String result  ="Failed to push";
 			if (exists) {
 				result = iotDataStore.publishIoTData(deviceDataMap);
@@ -127,7 +133,10 @@ public class DeviceController {
 		} catch (ConfigurationException e) {
 			response.setStatus(500);
 			return null;
-		}
+		} catch (IOTAPIException e) {
+			response.setStatus(500);
+			return null;
+        }
 
 	}
 

@@ -30,7 +30,9 @@ import javax.ws.rs.core.Context;
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.wso2.carbon.device.mgt.iot.device.Device;
+import org.wso2.carbon.device.mgt.common.Device;
+import org.wso2.carbon.device.mgt.common.DeviceIdentifier;
+import org.wso2.carbon.device.mgt.iot.common.IOTAPIException;
 import org.wso2.carbon.device.mgt.iot.enroll.DeviceManagement;
 import org.wso2.carbon.device.mgt.iot.enroll.UserManagement;
 import org.wso2.carbon.device.mgt.iot.user.User;
@@ -41,43 +43,43 @@ public class DeviceManager {
 
 	private static Log log = LogFactory.getLog(UserManager.class);
 
-	@Path("/DeviceAnonymousRegister")
-	@PUT
-	public void Register(@QueryParam("deviceId") String deviceId,
-	                     @Context HttpServletResponse response) throws InstantiationException,
-	                                                           IllegalAccessException,
-	                                                           ConfigurationException {
-
-		UserManagement userManagement = IoTConfiguration.getInstance().getUserManagementImpl();
-		DeviceManagement deviceManagement =
-		                                    IoTConfiguration.getInstance()
-		                                                    .getDeviceManagementImpl();
-
-		if (deviceManagement.isExist(deviceId)) {
-			response.setStatus(409);
-			return;
-
-		}
-		Device device = new Device();
-		device.setDeviceId(deviceId);
-
-//		String token = deviceManagement.generateNewToken();
-//		device.setToken(token);
-		boolean added = false;
-
-		device.setOwner(userManagement.getAnonymousUserName());
-		log.info("devic add");;
-		added = deviceManagement.addNewDevice(device);
-
-		if (added) {
-
-			response.setStatus(200);
-		} else {
-			response.setStatus(409);
-		}
-		
-
-	}
+//	@Path("/DeviceAnonymousRegister")
+//	@PUT
+//	public void Register(@QueryParam("deviceId") String deviceId,
+//	                     @Context HttpServletResponse response) throws InstantiationException,
+//	                                                           IllegalAccessException,
+//	                                                           ConfigurationException {
+//
+//		UserManagement userManagement = IoTConfiguration.getInstance().getUserManagementImpl();
+//		DeviceManagement deviceManagement =
+//		                                    IoTConfiguration.getInstance()
+//		                                                    .getDeviceManagementImpl();
+//
+//		if (deviceManagement.isExist(deviceId)) {
+//			response.setStatus(409);
+//			return;
+//
+//		}
+//		Device device = new Device();
+//		device.setDeviceIdentificationId(deviceId);
+//
+////		String token = deviceManagement.generateNewToken();
+////		device.setToken(token);
+//		boolean added = false;
+//
+//		device.setOwnerId(userManagement.getAnonymousUserName());
+//		log.info("devic add");;
+//		added = deviceManagement.addNewDevice(device);
+//
+//		if (added) {
+//
+//			response.setStatus(200);
+//		} else {
+//			response.setStatus(409);
+//		}
+//		
+//
+//	}
 
 	@Path("/DeviceRegister")
 	@PUT
@@ -88,21 +90,27 @@ public class DeviceManager {
 	                     @Context HttpServletRequest request, @Context HttpServletResponse response)
 	                                                                                                throws InstantiationException,
 	                                                                                                IllegalAccessException,
-	                                                                                                ConfigurationException {
+	                                                                                                ConfigurationException, IOTAPIException {
 
 		DeviceManagement deviceManagement =
 		                                    IoTConfiguration.getInstance()
 		                                                    .getDeviceManagementImpl();
 
-		if (deviceManagement.isExist(deviceId)) {
+		
+		DeviceIdentifier deviceIdentifier=new DeviceIdentifier();
+		deviceIdentifier.setId(deviceId);
+		deviceIdentifier.setType(type);
+		if (deviceManagement.isExist(deviceIdentifier)) {
 			response.setStatus(409);
 			return;
 
 		}
 		Device device = new Device();
-		device.setDeviceId(deviceId);
-		device.setDesciption(description);
-		device.setModel(model);
+		device.setDeviceIdentifier(deviceId);
+		device.setDescription(description);
+		//device.setDeviceTypeId(deviceTypeId);
+	
+		
 		device.setName(name);
 		device.setType(type);
 
@@ -132,17 +140,21 @@ public class DeviceManager {
 
 	@Path("/RemoveDevice")
 	@DELETE
-	public void removeDevice(@QueryParam("deviceId") String deviceId,
+	public void removeDevice(@QueryParam("deviceId") String deviceId,@QueryParam("deviceType") String type,
 	                         @Context HttpServletRequest request,
 	                         @Context HttpServletResponse response) throws InstantiationException,
 	                                                               IllegalAccessException,
-	                                                               ConfigurationException {
+	                                                               ConfigurationException, IOTAPIException {
 
 		UserManager userManager = new UserManager();
 		DeviceManagement deviceManagement =
 		                                    IoTConfiguration.getInstance()
 		                                                    .getDeviceManagementImpl();
-		Device device = deviceManagement.getDevice(deviceId);
+		DeviceIdentifier deviceIdentifier=new DeviceIdentifier();
+		deviceIdentifier.setId(deviceId);
+		deviceIdentifier.setType(type);
+		
+		Device device = deviceManagement.getDevice(deviceIdentifier);
 		if (device == null) {
 
 			response.setStatus(409);
@@ -151,7 +163,7 @@ public class DeviceManager {
 		boolean status = userManager.authorizedCheck(device.getOwner(), request, response);
 		if (status) {
 
-			boolean removed = deviceManagement.removeDevice(deviceId);
+			boolean removed = deviceManagement.removeDevice(deviceIdentifier);
 			if (removed) {
 
 				response.setStatus(200);
@@ -165,19 +177,24 @@ public class DeviceManager {
 
 	@Path("/UpdateDevice")
 	@POST
-	public void updateUser(@QueryParam("deviceId") String deviceId,
+	public void updateDevice(@QueryParam("deviceId") String deviceId,
 	                       @QueryParam("description") String description,
 	                       @QueryParam("model") String model, @QueryParam("name") String name,
 	                       @QueryParam("type") String type, @QueryParam("owner") String owner,
 	                       @Context HttpServletRequest request,
 	                       @Context HttpServletResponse response) throws InstantiationException,
 	                                                             IllegalAccessException,
-	                                                             ConfigurationException {
+	                                                             ConfigurationException, IOTAPIException {
 		UserManager userManager = new UserManager();
 		DeviceManagement deviceManagement =
 		                                    IoTConfiguration.getInstance()
 		                                                    .getDeviceManagementImpl();
-		Device device = deviceManagement.getDevice(deviceId);
+		
+		DeviceIdentifier deviceIdentifier=new DeviceIdentifier();
+		deviceIdentifier.setId(deviceId);
+		deviceIdentifier.setType(type);
+		
+		Device device = deviceManagement.getDevice(deviceIdentifier);
 		if (device == null) {
 
 			response.setStatus(409);
@@ -186,12 +203,14 @@ public class DeviceManager {
 		boolean status = userManager.authorizedCheck(device.getOwner(), request, response);
 		if (status) {
 
-			//device.setDeviceId(deviceId);
-			device.setDesciption(description);
-			device.setModel(model);
+			
+			device.setDeviceIdentifier(deviceId);
+			device.setDescription(description);
+			//device.setDeviceTypeId(deviceTypeId);
+		
+			
 			device.setName(name);
 			device.setType(type);
-			device.setOwner(owner);
 
 			boolean updated = deviceManagement.update(device);
 			if (updated) {
@@ -207,17 +226,22 @@ public class DeviceManager {
 	@Path("/GetDevice")
 	@GET
 	@Consumes("application/json")
-	public Device getDevice(@QueryParam("deviceId") String deviceId,
+	public Device getDevice(@QueryParam("deviceId") String deviceId, @QueryParam("type") String type,
 	                        @Context HttpServletRequest request,
 	                        @Context HttpServletResponse response) throws InstantiationException,
 	                                                              IllegalAccessException,
-	                                                              ConfigurationException {
+	                                                              ConfigurationException, IOTAPIException {
 
 		UserManager userManager = new UserManager();
 		DeviceManagement deviceManagement =
 		                                    IoTConfiguration.getInstance()
 		                                                    .getDeviceManagementImpl();
-		Device device = deviceManagement.getDevice(deviceId);
+		
+		DeviceIdentifier deviceIdentifier=new DeviceIdentifier();
+		deviceIdentifier.setId(deviceId);
+		deviceIdentifier.setType(type);
+		
+		Device device = deviceManagement.getDevice(deviceIdentifier);
 		if (device == null) {
 
 			response.setStatus(409);
@@ -238,66 +262,6 @@ public class DeviceManager {
 	
 	
 
-//	@Path("/GetDeviceToken")
-//	@GET
-//	@Consumes("application/json")
-//	public String getDeviceToken(@QueryParam("deviceId") String deviceId,
-//	                             @Context HttpServletRequest request,
-//	                             @Context HttpServletResponse response)
-//	                                                                   throws InstantiationException,
-//	                                                                   IllegalAccessException,
-//	                                                                   ConfigurationException {
-//
-//		UserManager userManager = new UserManager();
-//		DeviceManagement deviceManagement =
-//		                                    IoTConfiguration.getInstance()
-//		                                                    .getDeviceManagementImpl();
-//		Device device = deviceManagement.getDevice(deviceId);
-//		if (device == null) {
-//
-//			response.setStatus(409);
-//			return null;
-//		}
-//
-//		boolean status = userManager.authorizedCheck(device.getOwner(), request, response);
-//		if (status) {
-//			
-//			String token=device.getToken();
-//			return token;
-//		}
-//		return null;
-//
-//	}
-//
-//	@Path("/UpdateDeviceToken")
-//	@POST
-//	public void updateDeviceToken(@QueryParam("deviceId") String deviceId,
-//	                              @Context HttpServletRequest request,
-//	                              @Context HttpServletResponse response)
-//	                                                                    throws InstantiationException,
-//	                                                                    IllegalAccessException,
-//	                                                                    ConfigurationException {
-//
-//		UserManager userManager = new UserManager();
-//		DeviceManagement deviceManagement =
-//		                                    IoTConfiguration.getInstance()
-//		                                                    .getDeviceManagementImpl();
-//		Device device = deviceManagement.getDevice(deviceId);
-//		if (device == null) {
-//
-//			response.setStatus(409);
-//			return;
-//		}
-//
-//		boolean status = userManager.authorizedCheck(device.getOwner(), request, response);
-//		if (status) {
-//			device.setToken(deviceManagement.generateNewToken());
-//			deviceManagement.update(device);
-//			response.setStatus(200);
-//
-//		}
-//		return;
-//
-//	}
+
 
 }
