@@ -15,28 +15,28 @@
 	</Main>
 
 	<Device-Enroll-Endpoint>
-		<class type="DB-DEVICE"> org.wso2.iot.enroll.db.DeviceManagementImpl </class>
+		<class type="DB-DEVICE">org.wso2.carbon.device.mgt.iot.enroll.cdm.DeviceManagementImpl </class>
 	</Device-Enroll-Endpoint>
 
 	<User-Enroll-Endpoint>
-		<class type="DB-USER"> org.wso2.iot.enroll.db.UserManagementImpl </class>
+		<class type="DB-USER">org.wso2.carbon.device.mgt.iot.enroll.cdm.UserManagementImpl </class>
 	</User-Enroll-Endpoint>
 	
 	<DataStores>
 		<DataStore>
-			<class type="WSO2-BAM"> org.wso2.iot.devicecontroller.impl.BAMDataStore
+			<class type="WSO2-BAM">org.wso2.carbon.device.mgt.iot.devicecontroller.impl.BAMDataStore
 			</class>
 		</DataStore>
 
 		<DataStore>
-			<class type="WSO2-CEP"> org.wso2.iot.devicecontroller.impl.CEPDataStore
+			<class type="WSO2-CEP">org.wso2.carbon.device.mgt.iot.devicecontroller.impl.CEPDataStore
 			</class>
 		</DataStore>
 	</DataStores>
 
 	<ControlQueues>
 		<ControlQueue>
-			<class type="MQTT"> org.wso2.iot.devicecontroller.impl.MQTTControlQueue
+			<class type="MQTT">org.wso2.carbon.device.mgt.iot.devicecontroller.impl.MQTTControlQueue
 			</class>
 		</ControlQueue>
 	</ControlQueues>

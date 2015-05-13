@@ -18,9 +18,8 @@ package org.wso2.carbon.device.mgt.iot.enroll;
 
 import org.wso2.carbon.device.mgt.common.Device;
 import org.wso2.carbon.device.mgt.common.DeviceIdentifier;
-import org.wso2.carbon.device.mgt.core.dto.DeviceType;
 import org.wso2.carbon.device.mgt.iot.common.IOTAPIException;
-import org.wso2.carbon.device.mgt.iot.user.User;
+
 
 
 /**

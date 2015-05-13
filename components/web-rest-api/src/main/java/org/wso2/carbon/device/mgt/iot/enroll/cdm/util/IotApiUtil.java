@@ -18,6 +18,7 @@ package org.wso2.carbon.device.mgt.iot.enroll.cdm.util;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.wso2.carbon.apimgt.impl.workflow.UserSignUpWorkflowExecutor;
 import org.wso2.carbon.context.PrivilegedCarbonContext;
 import org.wso2.carbon.device.mgt.core.service.DeviceManagementService;
 import org.wso2.carbon.device.mgt.iot.common.IOTAPIException;
@@ -51,6 +52,8 @@ public class IotApiUtil {
 		            (DeviceManagementService) ctx.getOSGiService(DeviceManagementService.class,
 		                                                         null);
 		return dmService;
+		
+	
 	}
 
 	public static DeviceManagementService getDeviceManagementService() throws IOTAPIException {
@@ -77,7 +80,6 @@ public class IotApiUtil {
 		ctx.setTenantDomain(MultitenantConstants.SUPER_TENANT_DOMAIN_NAME);
 		ctx.setTenantId(MultitenantConstants.SUPER_TENANT_ID);
 		umService = (UserManagementService) ctx.getOSGiService(UserManagementService.class, null);
-
 		if (umService == null) {
 			String msg = "user management service not initialized";
 			log.error(msg);

@@ -33,125 +33,128 @@ import javax.ws.rs.core.Context;
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.wso2.carbon.device.mgt.iot.common.IOTAPIException;
 import org.wso2.carbon.device.mgt.iot.enroll.UserManagement;
-import org.wso2.carbon.device.mgt.iot.user.User;
 import org.wso2.carbon.device.mgt.iot.utils.IoTConfiguration;
+import org.wso2.carbon.device.mgt.user.common.User;
 
 @Path("/UserManager")
 public class UserManager {
 	private static Log log = LogFactory.getLog(UserManager.class);
 
-	@Path("/UserRegister")
-	@PUT
-	public void userRegister(@QueryParam("username") String username,
-	                         @QueryParam("password") String password,
-	                         @QueryParam("firstName") String firstName,
-	                         @QueryParam("lastName") String lastName,
-	                         @QueryParam("email") String email,
-	                         @QueryParam("roles") String[] roles,
-	                         @Context HttpServletResponse response) throws ConfigurationException,
-	                                                               InstantiationException,
-	                                                               IllegalAccessException {
+	// @Path("/UserRegister")
+	// @PUT
+	// public void userRegister(@QueryParam("username") String username,
+	// @QueryParam("password") String password,
+	// @QueryParam("firstName") String firstName,
+	// @QueryParam("lastName") String lastName,
+	// @QueryParam("email") String email,
+	// @QueryParam("roles") String[] roles,
+	// @Context HttpServletResponse response) throws ConfigurationException,
+	// InstantiationException,
+	// IllegalAccessException {
+	//
+	//
+	//
+	//
+	// UserManagement userManagement =
+	// IoTConfiguration.getInstance().getUserManagementImpl();
+	// if(userManagement.isExist(username)){
+	// response.setStatus(409);
+	// return;
+	//
+	// }
+	// if(username.equals(userManagement.getAnonymousUserName())){
+	// response.setStatus(400);
+	// return;
+	// }
+	//
+	// User user = new User();
+	// user.setUsername(username);
+	// user.setPassword(password);
+	// user.setFirstname(firstName);
+	// user.setLastname(lastName);
+	// user.setEmail(email);
+	// for (String role : roles) {
+	// user.addRole(role);
+	//
+	// }
+	//
+	//
+	//
+	//
+	// boolean added = userManagement.addNewUser(user);
+	//
+	// if (added) {
+	//
+	// response.setStatus(200);
+	// } else {
+	// response.setStatus(409);
+	//
+	// }
+	// }
 
-		
-		
-		
-		UserManagement userManagement = IoTConfiguration.getInstance().getUserManagementImpl();
-		if(userManagement.isExist(username)){
-			response.setStatus(409);
-			return;
-			
-		}
-		if(username.equals(userManagement.getAnonymousUserName())){
-			response.setStatus(400);
-			return;
-		}
-		
-		User user = new User();
-		user.setUsername(username);
-		user.setPassword(password);
-		user.setFirstname(firstName);
-		user.setLastname(lastName);
-		user.setEmail(email);
-		for (String role : roles) {
-			user.addRole(role);
+	// @Path("/RemoveUser")
+	// @DELETE
+	// public void removeUser(@QueryParam("username") String username,
+	// @Context HttpServletRequest request,
+	// @Context HttpServletResponse response) throws InstantiationException,
+	// IllegalAccessException,
+	// ConfigurationException, IOTAPIException {
+	//
+	// boolean status = authorizedCheck(username, request, response);
+	// if (status) {
+	// UserManagement userManagement =
+	// IoTConfiguration.getInstance().getUserManagementImpl();
+	// boolean removed = userManagement.removeUser(username);
+	// if (removed) {
+	//
+	// response.setStatus(200);
+	// } else {
+	// response.setStatus(409);
+	//
+	// }
+	// }
+	//
+	// }
 
-		}
-
-
-		
-
-		boolean added = userManagement.addNewUser(user);
-
-		if (added) {
-
-			response.setStatus(200);
-		} else {
-			response.setStatus(409);
-
-		}
-	}
-
-	@Path("/RemoveUser")
-	@DELETE
-	public void removeUser(@QueryParam("username") String username,
-	                       @Context HttpServletRequest request,
-	                       @Context HttpServletResponse response) throws InstantiationException,
-	                                                             IllegalAccessException,
-	                                                             ConfigurationException {
-
-		boolean status = authorizedCheck(username, request, response);
-		if (status) {
-			UserManagement userManagement = IoTConfiguration.getInstance().getUserManagementImpl();
-			boolean removed = userManagement.removeUser(username);
-			if (removed) {
-
-				response.setStatus(200);
-			} else {
-				response.setStatus(409);
-
-			}
-		}
-
-	}
-
-	@Path("/UpdateUser")
-	@POST
-	public void updateUser(@QueryParam("username") String username,
-	                       @QueryParam("password") String password,
-	                       @QueryParam("firstName") String firstName,
-	                       @QueryParam("lastName") String lastName,
-	                       @QueryParam("email") String email, @QueryParam("roles") String[] roles,
-	                       @Context HttpServletRequest request,
-	                       @Context HttpServletResponse response) throws InstantiationException,
-	                                                             IllegalAccessException,
-	                                                             ConfigurationException {
-
-		boolean status = authorizedCheck(username, request, response);
-		if (status) {
-			User user = new User();
-
-			user.setUsername(username);
-			user.setPassword(password);
-			user.setFirstname(firstName);
-			user.setEmail(email);
-			user.setLastname(lastName);
-			for (String role : roles) {
-				user.addRole(role);
-
-			}
-
-			UserManagement userManagement = IoTConfiguration.getInstance().getUserManagementImpl();
-			boolean updated = userManagement.updateUser(user);
-			if (updated) {
-				response.setStatus(200);
-			} else {
-				response.setStatus(409);
-			}
-
-		}
-
-	}
+	// @Path("/UpdateUser")
+	// @POST
+	// public void updateUser(@QueryParam("username") String username,
+	// @QueryParam("firstName") String firstName,
+	// @QueryParam("lastName") String lastName,
+	// @QueryParam("email") String email, @QueryParam("roles") String[] roles,
+	// @Context HttpServletRequest request,
+	// @Context HttpServletResponse response) throws InstantiationException,
+	// IllegalAccessException,
+	// ConfigurationException {
+	//
+	// boolean status = authorizedCheck(username, request, response);
+	// if (status) {
+	// User user = new User();
+	//
+	// user.setUserName(username);
+	//
+	// user.setFirstname(firstName);
+	// user.setEmail(email);
+	// user.setLastname(lastName);
+	// for (String role : roles) {
+	// user.addRole(role);
+	//
+	// }
+	//
+	// UserManagement userManagement =
+	// IoTConfiguration.getInstance().getUserManagementImpl();
+	// boolean updated = userManagement.updateUser(user);
+	// if (updated) {
+	// response.setStatus(200);
+	// } else {
+	// response.setStatus(409);
+	// }
+	//
+	// }
+	//
+	// }
 
 	@Path("/GetUser")
 	@GET
@@ -160,7 +163,8 @@ public class UserManager {
 	                    @Context HttpServletRequest request, @Context HttpServletResponse response)
 	                                                                                               throws InstantiationException,
 	                                                                                               IllegalAccessException,
-	                                                                                               ConfigurationException {
+	                                                                                               ConfigurationException,
+	                                                                                               IOTAPIException {
 
 		boolean status = authorizedCheck(username, request, response);
 		if (status) {
@@ -186,7 +190,8 @@ public class UserManager {
 	                     @Context HttpServletRequest request, @Context HttpServletResponse response)
 	                                                                                                throws ConfigurationException,
 	                                                                                                InstantiationException,
-	                                                                                                IllegalAccessException {
+	                                                                                                IllegalAccessException,
+	                                                                                                IOTAPIException {
 
 		UserManagement userManagement = IoTConfiguration.getInstance().getUserManagementImpl();
 
@@ -208,23 +213,25 @@ public class UserManager {
 	}
 
 	public boolean authorizedCheck(String username, HttpServletRequest request,
-	                                @Context HttpServletResponse response) {
+	                               @Context HttpServletResponse response) {
 
 		User loggedInUser = (User) request.getSession().getAttribute("user");
 		if (loggedInUser == null) {
 			response.setStatus(403);
 			return false;
 		}
-		if (!(loggedInUser.getUsername().equals(username))) {
-			List userRoles = loggedInUser.getRoles();
-			boolean authorized = false;
-			for (int i = 0; i < userRoles.size(); i++) {
 
-				if ("admin".equals((String) userRoles.get(i))) {
-					authorized = true;
-					return true;
-				}
+		if (!(loggedInUser.getUserName().equals(username))) {
+			// List userRoles = loggedInUser.getRoles();
+			boolean authorized = false;
+			// for (int i = 0; i < userRoles.size(); i++) {
+
+			// if ("admin".equals((String) userRoles.get(i))) {
+			if ("admin".equals(loggedInUser.getRoleName())) {
+				authorized = true;
+				return true;
 			}
+			// }
 			if (!authorized) {
 				response.setStatus(401);
 				return false;
@@ -232,9 +239,5 @@ public class UserManager {
 		}
 		return true;
 	}
-	
-	
-	
-	
 
 }

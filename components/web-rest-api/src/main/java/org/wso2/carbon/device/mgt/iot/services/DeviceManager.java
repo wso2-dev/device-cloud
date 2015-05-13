@@ -16,6 +16,8 @@
 
 package org.wso2.carbon.device.mgt.iot.services;
 
+import java.util.Date;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.Consumes;
@@ -35,8 +37,8 @@ import org.wso2.carbon.device.mgt.common.DeviceIdentifier;
 import org.wso2.carbon.device.mgt.iot.common.IOTAPIException;
 import org.wso2.carbon.device.mgt.iot.enroll.DeviceManagement;
 import org.wso2.carbon.device.mgt.iot.enroll.UserManagement;
-import org.wso2.carbon.device.mgt.iot.user.User;
 import org.wso2.carbon.device.mgt.iot.utils.IoTConfiguration;
+import org.wso2.carbon.device.mgt.user.common.User;
 
 @Path("/DeviceManager")
 public class DeviceManager {
@@ -92,9 +94,8 @@ public class DeviceManager {
 	                                                                                                IllegalAccessException,
 	                                                                                                ConfigurationException, IOTAPIException {
 
-		DeviceManagement deviceManagement =
-		                                    IoTConfiguration.getInstance()
-		                                                    .getDeviceManagementImpl();
+		DeviceManagement deviceManagement = IoTConfiguration.getInstance()
+				.getDeviceManagementImpl();
 
 		
 		DeviceIdentifier deviceIdentifier=new DeviceIdentifier();
@@ -110,9 +111,16 @@ public class DeviceManager {
 		device.setDescription(description);
 		//device.setDeviceTypeId(deviceTypeId);
 	
+		device.setDateOfEnrolment(new Date().getTime());
+		device.setDateOfLastUpdate(new Date().getTime());
+		//device.setDeviceTypeId(deviceTypeId);
+		//device.setProperties(properties);
+		//device.setStatus(status);
+		
 		
 		device.setName(name);
 		device.setType(type);
+		
 
 //		String token = deviceManagement.generateNewToken();
 //		device.setToken(token);
@@ -125,7 +133,7 @@ public class DeviceManager {
 			return;
 		} else {
 
-			device.setOwner(user.getUsername());
+			device.setOwner(user.getUserName());
 			added = deviceManagement.addNewDevice(device);
 
 		}
@@ -207,7 +215,7 @@ public class DeviceManager {
 			device.setDeviceIdentifier(deviceId);
 			device.setDescription(description);
 			//device.setDeviceTypeId(deviceTypeId);
-		
+			device.setDateOfLastUpdate(new Date().getTime());
 			
 			device.setName(name);
 			device.setType(type);
