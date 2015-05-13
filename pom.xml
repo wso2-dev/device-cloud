@@ -291,7 +291,7 @@
                                 </exclusion>
                             </exclusions>
                         </dependency>-->
-            <dependency>
+            <!--dependency>
                 <groupId>org.wso2.carbon.apimgt</groupId>
                 <artifactId>org.wso2.carbon.apimgt.api</artifactId>
                 <version>${carbon.api.mgt.version}</version>
@@ -301,8 +301,8 @@
                         <artifactId>json-simple</artifactId>
                     </exclusion>
                 </exclusions>
-            </dependency>
-            <dependency>
+            </dependency-->
+            <!--dependency>
                 <groupId>org.wso2.carbon.apimgt</groupId>
                 <artifactId>org.wso2.carbon.apimgt.impl</artifactId>
                 <version>${carbon.api.mgt.version}</version>
@@ -416,7 +416,7 @@
                         <artifactId>bsf-all</artifactId>
                     </exclusion>
                 </exclusions>
-            </dependency>
+            </dependency-->
 
         </dependencies>
     </dependencyManagement>

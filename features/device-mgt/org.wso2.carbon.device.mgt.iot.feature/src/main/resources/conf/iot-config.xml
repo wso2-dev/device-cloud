@@ -22,12 +22,12 @@
     <DataSourceConfigurations>
         <DataSourceConfiguration type="arduino">
             <JndiLookupDefinition>
-                <Name>jdbc/ArduinoDM_DS</Name>
+                <Name>jdbc/ArduinoDM_DB</Name>
             </JndiLookupDefinition>
         </DataSourceConfiguration>
         <DataSourceConfiguration type="raspberry">
             <JndiLookupDefinition>
-                <Name>jdbc/RaspberryDM_DS</Name>
+                <Name>jdbc/RaspberryDM_DB</Name>
             </JndiLookupDefinition>
         </DataSourceConfiguration>
     </DataSourceConfigurations>
