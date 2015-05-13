@@ -25,7 +25,7 @@ import org.apache.commons.logging.LogFactory;
 
 public class ResourceFileLoader {
 	private String filePath;
-	private static Log log = LogFactory.getLog(IoTConfiguration.class);
+	private static Log log = LogFactory.getLog(ResourceFileLoader.class);
 
 	public ResourceFileLoader(String fileName) {
 		String path = ResourceFileLoader.class.getClassLoader().getResource("").getPath();
