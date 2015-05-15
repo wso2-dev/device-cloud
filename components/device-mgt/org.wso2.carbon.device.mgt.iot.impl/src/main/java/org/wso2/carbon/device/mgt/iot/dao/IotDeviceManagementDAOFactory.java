@@ -20,17 +20,12 @@ package org.wso2.carbon.device.mgt.iot.dao;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.wso2.carbon.device.mgt.iot.DataSourceNotAvailableException;
 import org.wso2.carbon.device.mgt.iot.common.IotDeviceMgtPluginException;
 import org.wso2.carbon.device.mgt.iot.config.datasource.JNDILookupDefinition;
 import org.wso2.carbon.device.mgt.iot.config.datasource.IotDataSourceConfig;
 import org.wso2.carbon.device.mgt.iot.dao.util.IotDeviceManagementDAOUtil;
 
-
 import javax.sql.DataSource;
-
-import java.sql.Connection;
-import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.List;
@@ -42,22 +37,26 @@ import java.util.Map;
 public abstract class IotDeviceManagementDAOFactory implements IotDeviceManagementDAOFactoryInterface {
 
     private static final Log log = LogFactory.getLog(IotDeviceManagementDAOFactory.class);
-    private static Map<String, IotDataSourceConfig> iotDataSourceConfigMap;
-    private static Map<String, DataSource> dataSourceMap;
+    private static Map<String, DataSource> dataSourceMap = new HashMap<String, DataSource>();
     private static boolean isInitialized;
-    private static ThreadLocal<Connection> currentConnection = new ThreadLocal<Connection>();
-    protected static DataSource dataSource;
 
-    public static void init() throws IotDeviceMgtPluginException {
-
-        dataSourceMap = new HashMap<String, DataSource>();
+    public static void init(Map<String, IotDataSourceConfig> iotDataSourceConfigMap)
+            throws IotDeviceMgtPluginException {
         DataSource dataSource;
         for (String pluginType : iotDataSourceConfigMap.keySet()) {
-            dataSource = IotDeviceManagementDAOFactory.resolveDataSource(iotDataSourceConfigMap.get
-                    (pluginType));
-            dataSourceMap.put(pluginType, dataSource);
+            if (dataSourceMap.get(pluginType) == null) {
+                dataSource = IotDeviceManagementDAOFactory.resolveDataSource(iotDataSourceConfigMap.get
+                        (pluginType));
+                dataSourceMap.put(pluginType, dataSource);
+            }
         }
         isInitialized = true;
+    }
+
+    public static void init(String key, IotDataSourceConfig iotDataSourceConfig) throws
+            IotDeviceMgtPluginException {
+        DataSource dataSource = IotDeviceManagementDAOFactory.resolveDataSource(iotDataSourceConfig);
+        dataSourceMap.put(key, dataSource);
     }
 
     /**
@@ -66,7 +65,7 @@ public abstract class IotDeviceManagementDAOFactory implements IotDeviceManageme
      * @param config Iot data source configuration
      * @return data source resolved from the data source definition
      */
-    protected static DataSource resolveDataSource(IotDataSourceConfig config) {
+    public static DataSource resolveDataSource(IotDataSourceConfig config) {
         DataSource dataSource = null;
         if (config == null) {
             throw new RuntimeException("Device Management Repository data source configuration " +
@@ -96,95 +95,7 @@ public abstract class IotDeviceManagementDAOFactory implements IotDeviceManageme
         return dataSource;
     }
 
-    public static Map<String, IotDataSourceConfig> getIotDataSourceConfigMap() {
-        return iotDataSourceConfigMap;
-    }
-
-    public static void setIotDataSourceConfigMap(Map<String, IotDataSourceConfig> iotDataSourceConfigMap) {
-        IotDeviceManagementDAOFactory.iotDataSourceConfigMap = iotDataSourceConfigMap;
-    }
-
-    public static DataSource getDataSource(String type) {
-        return dataSourceMap.get(type);
-    }
-
     public static Map<String, DataSource> getDataSourceMap() {
         return dataSourceMap;
     }
-
-    private static void assertDataSourceInitialization() {
-        if (!isInitialized) {
-            throw new DataSourceNotAvailableException("Iot device management metadata repository datasource " +
-                    "is not initialized");
-        }
-    }
-
-    public static void beginTransaction() throws IotDeviceManagementDAOException {
-        try {
-            Connection conn = dataSource.getConnection();
-            conn.setAutoCommit(false);
-            currentConnection.set(conn);
-        } catch (SQLException e) {
-            throw new IotDeviceManagementDAOException("Error occurred while retrieving datasource connection", e);
-        }
-    }
-
-    public static Connection getConnection() throws IotDeviceManagementDAOException {
-        if (currentConnection.get() == null) {
-            try {
-                currentConnection.set(dataSource.getConnection());
-            } catch (SQLException e) {
-                throw new IotDeviceManagementDAOException("Error occurred while retrieving data source connection",
-                        e);
-            }
-        }
-        return currentConnection.get();
-    }
-    public static void commitTransaction() throws IotDeviceManagementDAOException {
-        try {
-            Connection conn = currentConnection.get();
-            if (conn != null) {
-                conn.commit();
-            } else {
-                if (log.isDebugEnabled()) {
-                    log.debug("Datasource connection associated with the current thread is null, hence commit " +
-                            "has not been attempted");
-                }
-            }
-        } catch (SQLException e) {
-            throw new IotDeviceManagementDAOException("Error occurred while committing the transaction", e);
-        } finally {
-          closeConnection();
-        }
-    }
-
-    public static void closeConnection() throws IotDeviceManagementDAOException {
-
-        Connection con = currentConnection.get();
-        try {
-            con.close();
-        } catch (SQLException e) {
-            log.error("Error occurred while close the connection");
-        }
-        currentConnection.remove();
-    }
-
-    public static void rollbackTransaction() throws IotDeviceManagementDAOException {
-        try {
-            Connection conn = currentConnection.get();
-            if (conn != null) {
-                conn.rollback();
-            } else {
-                if (log.isDebugEnabled()) {
-                    log.debug("Datasource connection associated with the current thread is null, hence rollback " +
-                            "has not been attempted");
-                }
-            }
-        } catch (SQLException e) {
-            throw new IotDeviceManagementDAOException("Error occurred while rollbacking the transaction", e);
-        } finally {
-            closeConnection();
-        }
-    }
-
 }

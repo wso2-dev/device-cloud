@@ -101,6 +101,7 @@ public class DeviceManager {
 		DeviceIdentifier deviceIdentifier=new DeviceIdentifier();
 		deviceIdentifier.setId(deviceId);
 		deviceIdentifier.setType(type);
+		
 		if (deviceManagement.isExist(deviceIdentifier)) {
 			response.setStatus(409);
 			return;
@@ -120,6 +121,7 @@ public class DeviceManager {
 		
 		device.setName(name);
 		device.setType(type);
+		device.setDeviceTypeId(1);
 		
 
 //		String token = deviceManagement.generateNewToken();

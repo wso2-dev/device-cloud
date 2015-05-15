@@ -24,10 +24,9 @@ import org.wso2.carbon.device.mgt.iot.dao.IotDeviceDAO;
 import org.wso2.carbon.device.mgt.iot.dao.IotDeviceManagementDAOException;
 import org.wso2.carbon.device.mgt.iot.dao.util.IotDeviceManagementDAOUtil;
 import org.wso2.carbon.device.mgt.iot.dto.IotDevice;
+import org.wso2.carbon.device.mgt.iot.impl.arduino.dao.ArduinoDAOFactory;
 import org.wso2.carbon.device.mgt.iot.impl.arduino.util.ArduinoPluginConstants;
 import org.wso2.carbon.device.mgt.iot.impl.arduino.util.ArduinoUtils;
-
-import javax.sql.DataSource;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -42,241 +41,233 @@ import java.util.Map;
  * Implements IotDeviceDAO for arduino Devices.
  */
 public class ArduinoDeviceDAOImpl implements IotDeviceDAO{
+	
 
-	private DataSource dataSource;
-	private static final Log log = LogFactory.getLog(ArduinoDeviceDAOImpl.class);
+	    private static final Log log = LogFactory.getLog(ArduinoDeviceDAOImpl.class);
 
-	public ArduinoDeviceDAOImpl(DataSource dataSource) {
-		this.dataSource = dataSource;
-	}
+	    @Override
+	    public IotDevice getIotDevice(String iotDeviceId)
+	            throws IotDeviceManagementDAOException {
+	        Connection conn = null;
+	        PreparedStatement stmt = null;
+	        IotDevice iotDevice = null;
+	        ResultSet resultSet = null;
+	        try {
+	            conn = ArduinoDAOFactory.getConnection();
+	            String selectDBQuery =
+						"SELECT ARDUINO_DEVICE_ID,  DEVICE_MODEL, SERIAL, " +
+						"VENDOR, MAC_ADDRESS, DEVICE_NAME, OS_VERSION" +
+						" FROM ARDUINO_DEVICE WHERE ARDUINO_DEVICE_ID = ?";
+	            stmt = conn.prepareStatement(selectDBQuery);
+	            stmt.setString(1, iotDeviceId);
+	            resultSet = stmt.executeQuery();
 
-	@Override
-	public IotDevice getIotDevice(String iotDeviceId)
-			throws IotDeviceManagementDAOException {
-		Connection conn = null;
-		PreparedStatement stmt = null;
-		IotDevice iotDevice = null;
-		try {
-			conn = this.getConnection();
-			String selectDBQuery =
-					"SELECT ARDUINO_DEVICE_ID,  DEVICE_MODEL, SERIAL, " +
-					"VENDOR, MAC_ADDRESS, DEVICE_NAME, OS_VERSION" +
-					" FROM ARDUINO_DEVICE WHERE ARDUINO_DEVICE_ID = ?";
-			stmt = conn.prepareStatement(selectDBQuery);
-			stmt.setString(1, iotDeviceId);
-			ResultSet resultSet = stmt.executeQuery();
+	            if (resultSet.next()) {
+					iotDevice = new IotDevice();
+					iotDevice.setIotDeviceId(resultSet.getString(ArduinoPluginConstants.
+							                                                   ARDUINO_DEVICE_ID));
+					iotDevice.setModel(resultSet.getString(ArduinoPluginConstants.DEVICE_MODEL));
+					iotDevice.setSerial(resultSet.getString(ArduinoPluginConstants.SERIAL));
+					iotDevice.setVendor(resultSet.getString(ArduinoPluginConstants.VENDOR));
+					
 
-			if (resultSet.next()) {
-				iotDevice = new IotDevice();
-				iotDevice.setIotDeviceId(resultSet.getString(ArduinoPluginConstants.
-						                                                   ARDUINO_DEVICE_ID));
-				iotDevice.setModel(resultSet.getString(ArduinoPluginConstants.DEVICE_MODEL));
-				iotDevice.setSerial(resultSet.getString(ArduinoPluginConstants.SERIAL));
-				iotDevice.setVendor(resultSet.getString(ArduinoPluginConstants.VENDOR));
+					Map<String, String> propertyMap = new HashMap<String, String>();
+					
+					propertyMap.put(ArduinoPluginConstants.DEVICE_NAME,
+					             resultSet.getString(ArduinoPluginConstants.DEVICE_NAME));
+
+					iotDevice.setDeviceProperties(propertyMap);
+
+					if (log.isDebugEnabled()) {
+						log.debug("Arduino device " + iotDeviceId + " data has been fetched from " +
+						          "Arduino database.");
+					}
+				}
+	        } catch (SQLException e) {
+	            String msg = "Error occurred while fetching Arduino device : '" + iotDeviceId + "'";
+	            log.error(msg, e);
+	            throw new IotDeviceManagementDAOException(msg, e);
+	        } finally {
+	            IotDeviceManagementDAOUtil.cleanupResources(stmt, resultSet);
+	            ArduinoDAOFactory.closeConnection();
+	        }
+
+	        return iotDevice;
+	    }
+
+	    @Override
+	    public boolean addIotDevice(IotDevice iotDevice)
+	            throws IotDeviceManagementDAOException {
+	        boolean status = false;
+	        Connection conn = null;
+	        PreparedStatement stmt = null;
+	        try {
+	            conn = ArduinoDAOFactory.getConnection();
+	            String createDBQuery =
+						"INSERT INTO ARDUINO_DEVICE(ARDUINO_DEVICE_ID, SERIAL, " +
+						"VENDOR, MAC_ADDRESS, DEVICE_NAME, " +
+						"DEVICE_MODEL) VALUES (?, ?, ?, ?, ?, ?)";
+
+	            stmt = conn.prepareStatement(createDBQuery);
+				stmt.setString(1, iotDevice.getIotDeviceId());
+
+				if (iotDevice.getDeviceProperties() == null) {
+					iotDevice.setDeviceProperties(new HashMap<String, String>());
+				}
+
 				
-
-				Map<String, String> propertyMap = new HashMap<String, String>();
 				
-				propertyMap.put(ArduinoPluginConstants.DEVICE_NAME,
-				             resultSet.getString(ArduinoPluginConstants.DEVICE_NAME));
-
-				iotDevice.setDeviceProperties(propertyMap);
-
-				if (log.isDebugEnabled()) {
-					log.debug("Arduino device " + iotDeviceId + " data has been fetched from " +
-					          "Arduino database.");
+				stmt.setString(2, iotDevice.getSerial());
+				stmt.setString(3, iotDevice.getVendor());
+				stmt.setString(4, iotDevice.getIotDeviceId());
+				stmt.setString(5, ArduinoUtils.getDeviceProperty(iotDevice.getDeviceProperties(),
+				                                             ArduinoPluginConstants.DEVICE_NAME));
+			
+				stmt.setString(6, iotDevice.getModel());
+				int rows = stmt.executeUpdate();
+				if (rows > 0) {
+					status = true;
+					if (log.isDebugEnabled()) {
+						log.debug("Arduino device " + iotDevice.getIotDeviceId() + " data has been" +
+						          " added to the Arduino database.");
+					}
 				}
-			}
-		} catch (SQLException e) {
-			String msg = "Error occurred while fetching Arduino device : '" + iotDeviceId + "'";
-			log.error(msg, e);
-			throw new IotDeviceManagementDAOException(msg, e);
-		} finally {
-			IotDeviceManagementDAOUtil.cleanupResources(conn, stmt, null);
-		}
+	        } catch (SQLException e) {
+	            String msg = "Error occurred while adding the Arduino device '" +
+	                         iotDevice.getIotDeviceId() + "' to the Arduino db.";
+	            log.error(msg, e);
+	            throw new IotDeviceManagementDAOException(msg, e);
+	        } finally {
+	            IotDeviceManagementDAOUtil.cleanupResources(stmt, null);
+	        }
+	        return status;
+	    }
 
-		return iotDevice;
-	}
+	    @Override
+	    public boolean updateIotDevice(IotDevice iotDevice)
+	            throws IotDeviceManagementDAOException {
+	        boolean status = false;
+	        Connection conn = null;
+	        PreparedStatement stmt = null;
+	        try {
+	            conn = ArduinoDAOFactory.getConnection();
+	            String updateDBQuery =
+						"UPDATE ARDUINO_DEVICE SET  SERIAL = ?, VENDOR = ?, " +
+						"MAC_ADDRESS = ?, DEVICE_NAME = ?, " +
+						" DEVICE_MODEL = ? WHERE ARDUINO_DEVICE_ID = ?";
 
-	@Override
-	public boolean addIotDevice(IotDevice iotDevice)
-			throws IotDeviceManagementDAOException {
-		boolean status = false;
-		Connection conn = null;
-		PreparedStatement stmt = null;
-		try {
-			conn = this.getConnection();
-			String createDBQuery =
-					"INSERT INTO ARDUINO_DEVICE(ARDUINO_DEVICE_ID, SERIAL, " +
-					"VENDOR, MAC_ADDRESS, DEVICE_NAME, " +
-					"DEVICE_MODEL) VALUES (?, ?, ?, ?, ?, ?)";
+				stmt = conn.prepareStatement(updateDBQuery);
 
-			stmt = conn.prepareStatement(createDBQuery);
-			stmt.setString(1, iotDevice.getIotDeviceId());
-
-			if (iotDevice.getDeviceProperties() == null) {
-				iotDevice.setDeviceProperties(new HashMap<String, String>());
-			}
-
-			
-			
-			stmt.setString(2, iotDevice.getSerial());
-			stmt.setString(3, iotDevice.getVendor());
-			stmt.setString(4, iotDevice.getIotDeviceId());
-			stmt.setString(5, ArduinoUtils.getDeviceProperty(iotDevice.getDeviceProperties(),
-			                                             ArduinoPluginConstants.DEVICE_NAME));
-		
-			stmt.setString(6, iotDevice.getModel());
-			int rows = stmt.executeUpdate();
-			if (rows > 0) {
-				status = true;
-				if (log.isDebugEnabled()) {
-					log.debug("Arduino device " + iotDevice.getIotDeviceId() + " data has been" +
-					          " added to the Arduino database.");
+				if (iotDevice.getDeviceProperties() == null) {
+					iotDevice.setDeviceProperties(new HashMap<String, String>());
 				}
-			}
-		} catch (SQLException e) {
-			String msg = "Error occurred while adding the Arduino device '" +
-			             iotDevice.getIotDeviceId() + "' to the Arduino db.";
-			log.error(msg, e);
-			throw new IotDeviceManagementDAOException(msg, e);
-		} finally {
-			IotDeviceManagementDAOUtil.cleanupResources(conn, stmt, null);
-		}
-		return status;
-	}
 
-	@Override
-	public boolean updateIotDevice(IotDevice iotDevice)
-			throws IotDeviceManagementDAOException {
-		boolean status = false;
-		Connection conn = null;
-		PreparedStatement stmt = null;
-		try {
-			conn = this.getConnection();
-			String updateDBQuery =
-					"UPDATE ARDUINO_DEVICE SET  SERIAL = ?, VENDOR = ?, " +
-					"MAC_ADDRESS = ?, DEVICE_NAME = ?, " +
-					" DEVICE_MODEL = ? WHERE ARDUINO_DEVICE_ID = ?";
-
-			stmt = conn.prepareStatement(updateDBQuery);
-
-			if (iotDevice.getDeviceProperties() == null) {
-				iotDevice.setDeviceProperties(new HashMap<String, String>());
-			}
-
-			
-			stmt.setString(1, iotDevice.getSerial());
-			stmt.setString(2, iotDevice.getVendor());
-			stmt.setString(3, iotDevice.getIotDeviceId());
-			stmt.setString(4, ArduinoUtils.getDeviceProperty(iotDevice.getDeviceProperties(),
-			                                                 ArduinoPluginConstants.DEVICE_NAME));
-			
-			
-			stmt.setString(5, iotDevice.getModel());
-			stmt.setString(6, iotDevice.getIotDeviceId());
-			int rows = stmt.executeUpdate();
-			if (rows > 0) {
-				status = true;
-				if (log.isDebugEnabled()) {
-					log.debug("Arduino device " + iotDevice.getIotDeviceId() + " data has been" +
-					          " modified.");
-				}
-			}
-		} catch (SQLException e) {
-			String msg = "Error occurred while modifying the Arduino device '" +
-			             iotDevice.getIotDeviceId() + "' data.";
-			log.error(msg, e);
-			throw new IotDeviceManagementDAOException(msg, e);
-		} finally {
-			IotDeviceManagementDAOUtil.cleanupResources(conn, stmt, null);
-		}
-		return status;
-	}
-
-	@Override
-	public boolean deleteIotDevice(String iotDeviceId)
-			throws IotDeviceManagementDAOException {
-		boolean status = false;
-		Connection conn = null;
-		PreparedStatement stmt = null;
-		try {
-			conn = this.getConnection();
-			String deleteDBQuery =
-					"DELETE FROM ARDUINO_DEVICE WHERE ARDUINO_DEVICE_ID = ?";
-			stmt = conn.prepareStatement(deleteDBQuery);
-			stmt.setString(1, iotDeviceId);
-			int rows = stmt.executeUpdate();
-			if (rows > 0) {
-				status = true;
-				if (log.isDebugEnabled()) {
-					log.debug("Arduino device " + iotDeviceId + " data has deleted" +
-					          " from the Arduino database.");
-				}
-			}
-		} catch (SQLException e) {
-			String msg = "Error occurred while deleting arduino device " + iotDeviceId;
-			log.error(msg, e);
-			throw new IotDeviceManagementDAOException(msg, e);
-		} finally {
-			IotDeviceManagementDAOUtil.cleanupResources(conn, stmt, null);
-		}
-		return status;
-	}
-
-	@Override
-	public List<IotDevice> getAllIotDevices()
-			throws IotDeviceManagementDAOException {
-		Connection conn = null;
-		PreparedStatement stmt = null;
-		IotDevice iotDevice;
-		List<IotDevice> iotDevices = new ArrayList<IotDevice>();
-		try {
-			conn = this.getConnection();
-			String selectDBQuery =
-					"SELECT ARDUINO_DEVICE_ID, DEVICE_MODEL, SERIAL, " +
-					"VENDOR, MAC_ADDRESS, DEVICE_NAME " +
-					"FROM ARDUINO_DEVICE";
-			stmt = conn.prepareStatement(selectDBQuery);
-			ResultSet resultSet = stmt.executeQuery();
-			while (resultSet.next()) {
-				iotDevice = new IotDevice();
-				iotDevice.setIotDeviceId(resultSet.getString(ArduinoPluginConstants.
-						                                                   ARDUINO_DEVICE_ID));
-				iotDevice.setModel(resultSet.getString(ArduinoPluginConstants.DEVICE_MODEL));
-				iotDevice.setSerial(resultSet.getString(ArduinoPluginConstants.SERIAL));
-				iotDevice.setVendor(resultSet.getString(ArduinoPluginConstants.VENDOR));
 				
+				stmt.setString(1, iotDevice.getSerial());
+				stmt.setString(2, iotDevice.getVendor());
+				stmt.setString(3, iotDevice.getIotDeviceId());
+				stmt.setString(4, ArduinoUtils.getDeviceProperty(iotDevice.getDeviceProperties(),
+				                                                 ArduinoPluginConstants.DEVICE_NAME));
+				
+				
+				stmt.setString(5, iotDevice.getModel());
+				stmt.setString(6, iotDevice.getIotDeviceId());
+				int rows = stmt.executeUpdate();
+				if (rows > 0) {
+					status = true;
+					if (log.isDebugEnabled()) {
+						log.debug("Arduino device " + iotDevice.getIotDeviceId() + " data has been" +
+						          " modified.");
+					}
+				}
+	        } catch (SQLException e) {
+	            String msg = "Error occurred while modifying the Arduino device '" +
+	                         iotDevice.getIotDeviceId() + "' data.";
+	            log.error(msg, e);
+	            throw new IotDeviceManagementDAOException(msg, e);
+	        } finally {
+	            IotDeviceManagementDAOUtil.cleanupResources(stmt, null);
+	        }
+	        return status;
+	    }
 
-				Map<String, String> propertyMap = new HashMap<String, String>();
-			
-				propertyMap.put(ArduinoPluginConstants.DEVICE_NAME,
-				                resultSet.getString(ArduinoPluginConstants.DEVICE_NAME));
+	    @Override
+	    public boolean deleteIotDevice(String iotDeviceId)
+	            throws IotDeviceManagementDAOException {
+	        boolean status = false;
+	        Connection conn = null;
+	        PreparedStatement stmt = null;
+	        try {
+	            conn = ArduinoDAOFactory.getConnection();
+	            String deleteDBQuery =
+						"DELETE FROM ARDUINO_DEVICE WHERE ARDUINO_DEVICE_ID = ?";
+				stmt = conn.prepareStatement(deleteDBQuery);
+				stmt.setString(1, iotDeviceId);
+				int rows = stmt.executeUpdate();
+				if (rows > 0) {
+					status = true;
+					if (log.isDebugEnabled()) {
+						log.debug("Arduino device " + iotDeviceId + " data has deleted" +
+						          " from the Arduino database.");
+					}
+				}
+	        } catch (SQLException e) {
+	            String msg = "Error occurred while deleting arduino device " + iotDeviceId;
+	            log.error(msg, e);
+	            throw new IotDeviceManagementDAOException(msg, e);
+	        } finally {
+	            IotDeviceManagementDAOUtil.cleanupResources(stmt, null);
+	        }
+	        return status;
+	    }
 
-				iotDevice.setDeviceProperties(propertyMap);
-				iotDevices.add(iotDevice);
-			}
-			if (log.isDebugEnabled()) {
-				log.debug("All Arduino device details have fetched from Arduino database.");
-			}
-			return iotDevices;
-		} catch (SQLException e) {
-			String msg = "Error occurred while fetching all Arduino device data'";
-			log.error(msg, e);
-			throw new IotDeviceManagementDAOException(msg, e);
-		} finally {
-			IotDeviceManagementDAOUtil.cleanupResources(conn, stmt, null);
-		}
+	    @Override
+	    public List<IotDevice> getAllIotDevices()
+	            throws IotDeviceManagementDAOException {
+
+	        Connection conn = null;
+	        PreparedStatement stmt = null;
+	        ResultSet resultSet = null;
+	        IotDevice iotDevice;
+	        List<IotDevice> iotDevices = new ArrayList<IotDevice>();
+
+	        try {
+	            conn = ArduinoDAOFactory.getConnection();
+	            String selectDBQuery =
+						"SELECT ARDUINO_DEVICE_ID, DEVICE_MODEL, SERIAL, " +
+						"VENDOR, MAC_ADDRESS, DEVICE_NAME " +
+						"FROM ARDUINO_DEVICE";
+				stmt = conn.prepareStatement(selectDBQuery);
+				resultSet = stmt.executeQuery();
+				while (resultSet.next()) {
+					iotDevice = new IotDevice();
+					iotDevice.setIotDeviceId(resultSet.getString(ArduinoPluginConstants.
+							                                                   ARDUINO_DEVICE_ID));
+					iotDevice.setModel(resultSet.getString(ArduinoPluginConstants.DEVICE_MODEL));
+					iotDevice.setSerial(resultSet.getString(ArduinoPluginConstants.SERIAL));
+					iotDevice.setVendor(resultSet.getString(ArduinoPluginConstants.VENDOR));
+					
+
+					Map<String, String> propertyMap = new HashMap<String, String>();
+				
+					propertyMap.put(ArduinoPluginConstants.DEVICE_NAME,
+					                resultSet.getString(ArduinoPluginConstants.DEVICE_NAME));
+
+					iotDevice.setDeviceProperties(propertyMap);
+					iotDevices.add(iotDevice);
+				}
+	            if (log.isDebugEnabled()) {
+	                log.debug("All Arduino device details have fetched from Arduino database.");
+	            }
+	            return iotDevices;
+	        } catch (SQLException e) {
+	            String msg = "Error occurred while fetching all Arduino device data'";
+	            log.error(msg, e);
+	            throw new IotDeviceManagementDAOException(msg, e);
+	        } finally {
+	            IotDeviceManagementDAOUtil.cleanupResources(stmt, resultSet);
+	            ArduinoDAOFactory.closeConnection();
+	        }
+	    }
+
 	}
-
-	private Connection getConnection() throws IotDeviceManagementDAOException {
-		try {
-			return dataSource.getConnection();
-		} catch (SQLException e) {
-			String msg = "Error occurred while obtaining a connection from the iot device " +
-			             "management metadata repository datasource";
-			log.error(msg, e);
-			throw new IotDeviceManagementDAOException(msg, e);
-		}
-	}
-}

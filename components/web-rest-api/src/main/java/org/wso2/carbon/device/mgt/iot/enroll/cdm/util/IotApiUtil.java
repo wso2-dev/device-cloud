@@ -48,8 +48,7 @@ public class IotApiUtil {
 		}
 		ctx.setTenantDomain(tenantDomain);
 		ctx.setTenantId(tenantId);
-		dmService =
-		            (DeviceManagementService) ctx.getOSGiService(DeviceManagementService.class,
+		dmService =(DeviceManagementService) ctx.getOSGiService(DeviceManagementService.class,
 		                                                         null);
 		return dmService;
 		

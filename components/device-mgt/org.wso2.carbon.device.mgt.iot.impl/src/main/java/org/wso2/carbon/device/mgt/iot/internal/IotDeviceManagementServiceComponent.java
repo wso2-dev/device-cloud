@@ -35,6 +35,7 @@ import org.wso2.carbon.device.mgt.iot.dao.util.IotDeviceManagementDAOUtil;
 import org.wso2.carbon.device.mgt.iot.impl.arduino.ArduinoDeviceManager;
 import org.wso2.carbon.device.mgt.iot.impl.arduino.dao.ArduinoDAOFactory;
 import org.wso2.carbon.ndatasource.core.DataSourceService;
+import org.wso2.carbon.device.mgt.common.spi.DeviceMgtService;
 
 import javax.sql.DataSource;
 
@@ -64,8 +65,8 @@ public class IotDeviceManagementServiceComponent {
     private static final Log log = LogFactory.getLog(IotDeviceManagementServiceComponent.class);
 
     protected void activate(ComponentContext ctx) {
-        if (log.isDebugEnabled()) {
-            log.debug("Activating IoT Device Management Service Component");
+    	if (log.isDebugEnabled()) {
+            log.debug("Activating Iot Device Management Service Component");
         }
         try {
             BundleContext bundleContext = ctx.getBundleContext();
@@ -76,11 +77,8 @@ public class IotDeviceManagementServiceComponent {
                     .getIotDeviceManagementConfig();
             Map<String, IotDataSourceConfig> dsConfigMap =
                     config.getIotDeviceMgtRepository().getIotDataSourceConfigMap();
-            IotDeviceManagementDAOFactory.setIotDataSourceConfigMap(dsConfigMap);
-  
-            ArduinoDAOFactory
-                    .init(dsConfigMap.get(IoTDeviceManagementConstants.IotDeviceTypes.
-                                                  IOT_DEVICE_TYPE_ARDUINO));
+
+            IotDeviceManagementDAOFactory.init(dsConfigMap);
 
             String setupOption = System.getProperty("setup");
             if (setupOption != null) {
@@ -88,22 +86,22 @@ public class IotDeviceManagementServiceComponent {
                     log.debug(
                             "-Dsetup is enabled. Iot Device management repository schema initialization is about " +
                                     "to begin");
-                } 
+                }
                 try {
-                    Map<String, DataSource> dataSourceMap = IotDeviceManagementDAOFactory.
-                                                                               getDataSourceMap();
-                    for (DataSource dataSource : dataSourceMap.values()) {
+                    for (String pluginType : dsConfigMap.keySet()){
                         IotDeviceManagementDAOUtil
-                                .setupIotDeviceManagementSchema(dataSource);
+                                .setupIotDeviceManagementSchema(IotDeviceManagementDAOFactory.getDataSourceMap
+                                        ().get(pluginType));
                     }
                 } catch (IotDeviceMgtPluginException e) {
-                    log.error("Exception occurred while initializing iot device management database schema", e);
+                    log.error("Exception occurred while initializing mobile device management database schema", e);
                 }
             }
 
             arduinoServiceRegRef =
-                    bundleContext.registerService(DeviceManager.class.getName(), new ArduinoDeviceManager(), null);
-              
+                    bundleContext.registerService(DeviceMgtService.class.getName(), new ArduinoDeviceManager(), null);
+           
+
             if (log.isDebugEnabled()) {
                 log.debug("Iot Device Management Service Component has been successfully activated");
             }
