@@ -16,18 +16,15 @@
 
 package org.wso2.carbon.device.mgt.iot.enroll;
 
-import org.wso2.carbon.device.mgt.iot.common.IOTAPIException;
+import org.wso2.carbon.device.mgt.iot.common.DeviceCloudException;
 import org.wso2.carbon.device.mgt.user.common.User;
 
-
-
-
+/**
+ * @author ayyoobhamza
+ *
+ */
 public interface UserManagement {
-	public boolean addNewUser(User user) throws IOTAPIException;
-	public boolean removeUser(String username) throws IOTAPIException;
-	public boolean updateUser(User user) throws IOTAPIException;
-	public User getUser(String username) throws IOTAPIException;
-	public boolean isAuthenticated(String username,String password) throws IOTAPIException;
-	public String getAnonymousUserName() throws IOTAPIException;
-	public boolean isExist(String username) throws IOTAPIException;
+	public User getUser(String username) throws DeviceCloudException;
+	public String getAnonymousUserName();
+	 public boolean isExist(String username) throws DeviceCloudException;
 }

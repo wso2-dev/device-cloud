@@ -14,23 +14,15 @@
 * limitations under the License.
 */
 
-package org.wso2.carbon.device.mgt.iot.device;
+package org.wso2.carbon.device.mgt.iot.common;
 
-// TODO: Auto-generated Javadoc
 /**
- * The Class DeviceException.
- *
  * @author ayyoobhamza
+ *
  */
-public class DeviceException extends Exception {
-	
-	/**
-	 * Instantiates a new device exception.
-	 *
-	 * @param msg the exception error msg
-	 */
-	public DeviceException(String msg){
-		super(msg);
+public class DeviceCloudConstants {
+	public final class  DeviceType{
 		
+		public static final int ARDUINO_DEVICE_ID=1;
 	}
 }

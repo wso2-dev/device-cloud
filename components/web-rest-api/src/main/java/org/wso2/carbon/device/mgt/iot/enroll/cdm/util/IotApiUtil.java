@@ -21,21 +21,19 @@ import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.apimgt.impl.workflow.UserSignUpWorkflowExecutor;
 import org.wso2.carbon.context.PrivilegedCarbonContext;
 import org.wso2.carbon.device.mgt.core.service.DeviceManagementService;
-import org.wso2.carbon.device.mgt.iot.common.IOTAPIException;
+import org.wso2.carbon.device.mgt.iot.common.DeviceCloudException;
 import org.wso2.carbon.device.mgt.user.core.service.UserManagementService;
 import org.wso2.carbon.user.api.UserStoreException;
+import org.wso2.carbon.user.api.UserStoreManager;
 import org.wso2.carbon.user.core.service.RealmService;
 import org.wso2.carbon.utils.multitenancy.MultitenantConstants;
 
-/**
- * @author ayyoobhamza
- * 
- */
+
 public class IotApiUtil {
 
 	private static Log log = LogFactory.getLog(IotApiUtil.class);
 	
-	public static DeviceManagementService getDeviceManagementService(String tenantDomain) throws IOTAPIException {
+	public static DeviceManagementService getDeviceManagementService(String tenantDomain) throws DeviceCloudException {
 		// until complete login this is use to load super tenant context
 		PrivilegedCarbonContext.startTenantFlow();
 		PrivilegedCarbonContext ctx = PrivilegedCarbonContext.getThreadLocalCarbonContext();
@@ -55,23 +53,26 @@ public class IotApiUtil {
 	
 	}
 
-	public static DeviceManagementService getDeviceManagementService() throws IOTAPIException {
+	public static DeviceManagementService getDeviceManagementService() throws DeviceCloudException {
+		getTenantId(MultitenantConstants.SUPER_TENANT_DOMAIN_NAME);
+		getUserManagementService();
 		return getDeviceManagementService(MultitenantConstants.SUPER_TENANT_DOMAIN_NAME);
 	}
 
-	public static int getTenantId(String tenantDomain) throws IOTAPIException {
+	public static int getTenantId(String tenantDomain) throws DeviceCloudException {
 		PrivilegedCarbonContext ctx = PrivilegedCarbonContext.getThreadLocalCarbonContext();
 		RealmService realmService = (RealmService) ctx.getOSGiService(RealmService.class, null);
+		
 		try {
 			return realmService.getTenantManager().getTenantId(tenantDomain);
 		} catch (UserStoreException e) {
-			throw new IOTAPIException("Error obtaining tenant id from tenant domain " +
+			throw new DeviceCloudException("Error obtaining tenant id from tenant domain " +
 			                          tenantDomain);
 		}
 	}
 	
 
-	public static UserManagementService getUserManagementService() throws IOTAPIException {
+	public static UserManagementService getUserManagementService() throws DeviceCloudException {
 
 		UserManagementService umService;
 		PrivilegedCarbonContext.startTenantFlow();
@@ -82,10 +83,21 @@ public class IotApiUtil {
 		if (umService == null) {
 			String msg = "user management service not initialized";
 			log.error(msg);
-            throw new IOTAPIException(msg);
+            throw new DeviceCloudException(msg);
 		}
 		PrivilegedCarbonContext.endTenantFlow();
 		return umService;
+	}
+	
+	public static UserStoreManager getUserStoreManagerService() throws DeviceCloudException {
+		PrivilegedCarbonContext ctx = PrivilegedCarbonContext.getThreadLocalCarbonContext();
+		RealmService realmService = (RealmService) ctx.getOSGiService(RealmService.class, null);
+		
+		try {
+			return realmService.getTenantUserRealm(MultitenantConstants.SUPER_TENANT_ID).getUserStoreManager();
+		} catch (UserStoreException e) {
+			throw new DeviceCloudException("Error getting user store manager");
+		}
 	}
 
 }

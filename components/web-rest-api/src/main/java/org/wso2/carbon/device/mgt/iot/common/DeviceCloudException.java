@@ -20,7 +20,7 @@ package org.wso2.carbon.device.mgt.iot.common;
  * Custom exception class for handling CDM API related exceptions.
  */
 
-public class IOTAPIException extends Exception {
+public class DeviceCloudException extends Exception {
 
 	
 		/**
@@ -37,26 +37,26 @@ public class IOTAPIException extends Exception {
 			this.errorMessage = errorMessage;
 		}
 
-		public IOTAPIException(String msg, Exception nestedEx) {
+		public DeviceCloudException(String msg, Exception nestedEx) {
 			super(msg, nestedEx);
 			setErrorMessage(msg);
 		}
 
-		public IOTAPIException(String message, Throwable cause) {
+		public DeviceCloudException(String message, Throwable cause) {
 			super(message, cause);
 			setErrorMessage(message);
 		}
 
-		public IOTAPIException(String msg) {
+		public DeviceCloudException(String msg) {
 			super(msg);
 			setErrorMessage(msg);
 		}
 
-		public IOTAPIException() {
+		public DeviceCloudException() {
 			super();
 		}
 
-		public IOTAPIException(Throwable cause) {
+		public DeviceCloudException(Throwable cause) {
 			super(cause);
 		}
 	}

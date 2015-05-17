@@ -16,9 +16,11 @@
 
 package org.wso2.carbon.device.mgt.iot.enroll;
 
+import java.util.List;
+
 import org.wso2.carbon.device.mgt.common.Device;
 import org.wso2.carbon.device.mgt.common.DeviceIdentifier;
-import org.wso2.carbon.device.mgt.iot.common.IOTAPIException;
+import org.wso2.carbon.device.mgt.iot.common.DeviceCloudException;
 
 
 
@@ -29,12 +31,13 @@ import org.wso2.carbon.device.mgt.iot.common.IOTAPIException;
 public interface DeviceManagement {
 	
 	
-	public boolean addNewDevice(Device device) throws IOTAPIException;
-	public boolean removeDevice(DeviceIdentifier deviceIdentifier) throws IOTAPIException;
-	public boolean update(Device device) throws IOTAPIException;
-	public Device getDevice(DeviceIdentifier deviceIdentifier) throws IOTAPIException;
-	public boolean isExist(DeviceIdentifier deviceIdentifier) throws IOTAPIException;
-	public boolean isExist(String owner,DeviceIdentifier deviceIdentifier) throws IOTAPIException;
-
+	public boolean addNewDevice(Device device) throws DeviceCloudException;
+	public boolean removeDevice(DeviceIdentifier deviceIdentifier) throws DeviceCloudException;
+	public boolean update(Device device) throws DeviceCloudException;
+	public Device getDevice(DeviceIdentifier deviceIdentifier) throws DeviceCloudException;
+	public boolean isExist(DeviceIdentifier deviceIdentifier) throws DeviceCloudException;
+	public boolean isExist(String owner,DeviceIdentifier deviceIdentifier) throws DeviceCloudException;
+	public List<Device> getDevices(String user) throws DeviceCloudException;
+	public List<String> getDeviceTypes() throws DeviceCloudException;
 }
 

@@ -29,7 +29,7 @@ import javax.ws.rs.core.Context;
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.log4j.Logger;
 import org.wso2.carbon.device.mgt.common.DeviceIdentifier;
-import org.wso2.carbon.device.mgt.iot.common.IOTAPIException;
+import org.wso2.carbon.device.mgt.iot.common.DeviceCloudException;
 import org.wso2.carbon.device.mgt.iot.devicecontroller.ControlQueueConnector;
 import org.wso2.carbon.device.mgt.iot.devicecontroller.DataStoreConnector;
 import org.wso2.carbon.device.mgt.iot.enroll.DeviceValidator;
@@ -133,7 +133,7 @@ public class DeviceController {
 		} catch (ConfigurationException e) {
 			response.setStatus(500);
 			return null;
-		} catch (IOTAPIException e) {
+		} catch (DeviceCloudException e) {
 			response.setStatus(500);
 			return null;
         }

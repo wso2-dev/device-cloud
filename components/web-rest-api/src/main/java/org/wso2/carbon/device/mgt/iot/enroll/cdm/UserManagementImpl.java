@@ -18,11 +18,12 @@ package org.wso2.carbon.device.mgt.iot.enroll.cdm;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.wso2.carbon.device.mgt.iot.common.IOTAPIException;
+import org.wso2.carbon.device.mgt.iot.common.DeviceCloudException;
 import org.wso2.carbon.device.mgt.iot.enroll.UserManagement;
 import org.wso2.carbon.device.mgt.iot.enroll.cdm.util.IotApiUtil;
 import org.wso2.carbon.device.mgt.user.common.User;
 import org.wso2.carbon.device.mgt.user.common.UserManagementException;
+import org.wso2.carbon.user.api.UserStoreException;
 import org.wso2.carbon.utils.multitenancy.MultitenantConstants;
 
 /**
@@ -33,37 +34,9 @@ public class UserManagementImpl implements UserManagement{
 
 	
 	private static Log log=LogFactory.getLog(UserManagementImpl.class);
-	/* (non-Javadoc)
-	 * @see org.wso2.carbon.device.mgt.iot.enroll.UserManagement#addNewUser(org.wso2.carbon.device.mgt.iot.user.User)
-	 */
+	
     @Override
-    public boolean addNewUser(User user) {
-	    // TODO Auto-generated method stub
-	    return false;
-    }
-
-	/* (non-Javadoc)
-	 * @see org.wso2.carbon.device.mgt.iot.enroll.UserManagement#removeUser(java.lang.String)
-	 */
-    @Override
-    public boolean removeUser(String username) {
-	    return false;
-    }
-
-	/* (non-Javadoc)
-	 * @see org.wso2.carbon.device.mgt.iot.enroll.UserManagement#updateUser(org.wso2.carbon.device.mgt.iot.user.User)
-	 */
-    @Override
-    public boolean updateUser(User user) {
-	    // TODO Auto-generated method stub
-	    return false;
-    }
-
-	/* (non-Javadoc)
-	 * @see org.wso2.carbon.device.mgt.iot.enroll.UserManagement#getUser(java.lang.String)
-	 */
-    @Override
-    public User getUser(String username) throws IOTAPIException{
+    public User getUser(String username) throws DeviceCloudException{
     	try {
     		
 	       return IotApiUtil.getUserManagementService().getUser(username, MultitenantConstants.SUPER_TENANT_ID);
@@ -73,19 +46,11 @@ public class UserManagementImpl implements UserManagement{
 	        	
 	        	log.debug(error+ e);
 	        }
-        	throw new IOTAPIException(error);
+        	throw new DeviceCloudException(error);
         }
 	   
     }
 
-	/* (non-Javadoc)
-	 * @see org.wso2.carbon.device.mgt.iot.enroll.UserManagement#isAuthenticated(java.lang.String, java.lang.String)
-	 */
-    @Override
-    public boolean isAuthenticated(String username, String password) {
-	    
-	    return false;
-    }
 
 	/* (non-Javadoc)
 	 * @see org.wso2.carbon.device.mgt.iot.enroll.UserManagement#getAnonymousUserName()
@@ -96,13 +61,21 @@ public class UserManagementImpl implements UserManagement{
 	    return "org.wso2.iot.anonymous";
     }
 
-	/* (non-Javadoc)
-	 * @see org.wso2.carbon.device.mgt.iot.enroll.UserManagement#isExist(java.lang.String)
-	 */
+	
     @Override
-    public boolean isExist(String username) {
+    public boolean isExist(String username) throws DeviceCloudException {
     	
-	    return false;
+    	try {
+    		
+ 	       return IotApiUtil.getUserStoreManagerService().isExistingUser(username);
+         } catch (UserStoreException e) {
+         	String error="CDM configuration error on retreving user";
+         	if(log.isDebugEnabled()){
+ 	        	
+ 	        	log.debug(error+ e);
+ 	        }
+         	throw new DeviceCloudException(error);
+         }
     }
 
 }
