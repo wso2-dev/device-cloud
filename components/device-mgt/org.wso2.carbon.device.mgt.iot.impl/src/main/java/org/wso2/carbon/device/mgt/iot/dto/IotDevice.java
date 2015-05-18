@@ -21,15 +21,14 @@ package org.wso2.carbon.device.mgt.iot.dto;
 import java.io.Serializable;
 import java.util.Map;
 
-/**
- * DTO of MobileDevice.
- */
+
 public class IotDevice implements Serializable {
 
-    private String iotDeviceId;
-    private String model;
-    private String vendor;
-    private String serial;
+    /**
+	 * 
+	 */
+    private static final long serialVersionUID = 1L;
+	private String iotDeviceId;
     private Map<String, String> deviceProperties;
 
     public String getIotDeviceId() {
@@ -38,30 +37,6 @@ public class IotDevice implements Serializable {
 
     public void setIotDeviceId(String iotDeviceId) {
         this.iotDeviceId = iotDeviceId;
-    }
-
-    public String getModel() {
-        return model;
-    }
-
-    public void setModel(String model) {
-        this.model = model;
-    }
-
-    public String getVendor() {
-        return vendor;
-    }
-
-    public void setVendor(String vendor) {
-        this.vendor = vendor;
-    }
-
-    public String getSerial() {
-        return serial;
-    }
-
-    public void setSerial(String serial) {
-        this.serial = serial;
     }
 
     public Map<String, String> getDeviceProperties() {

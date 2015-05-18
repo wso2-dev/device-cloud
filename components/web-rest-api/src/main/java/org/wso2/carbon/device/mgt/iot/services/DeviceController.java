@@ -29,13 +29,13 @@ import javax.ws.rs.core.Context;
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.log4j.Logger;
 import org.wso2.carbon.device.mgt.common.DeviceIdentifier;
-import org.wso2.carbon.device.mgt.iot.common.DeviceCloudException;
+
 import org.wso2.carbon.device.mgt.iot.devicecontroller.ControlQueueConnector;
 import org.wso2.carbon.device.mgt.iot.devicecontroller.DataStoreConnector;
-import org.wso2.carbon.device.mgt.iot.enroll.DeviceValidator;
 import org.wso2.carbon.device.mgt.iot.utils.DefaultDeviceControlConfigs;
 import org.wso2.carbon.device.mgt.iot.utils.IoTConfiguration;
 import org.wso2.carbon.device.mgt.iot.utils.ResourceFileLoader;
+
 
 /**
  * @author smean-MAC

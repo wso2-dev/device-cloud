@@ -23,16 +23,15 @@ import org.apache.commons.logging.LogFactory;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.component.ComponentContext;
+import org.wso2.carbon.device.mgt.iot.arduino.firealarm.impl.FireAlarmDeviceManager;
 import org.wso2.carbon.device.mgt.iot.common.IotDeviceMgtPluginException;
 import org.wso2.carbon.device.mgt.iot.config.IotDeviceConfigurationManager;
 import org.wso2.carbon.device.mgt.iot.config.IotDeviceManagementConfig;
 import org.wso2.carbon.device.mgt.iot.config.datasource.IotDataSourceConfig;
 import org.wso2.carbon.device.mgt.iot.dao.IotDeviceManagementDAOFactory;
 import org.wso2.carbon.device.mgt.iot.dao.util.IotDeviceManagementDAOUtil;
-import org.wso2.carbon.device.mgt.iot.impl.arduino.ArduinoDeviceManager;
 import org.wso2.carbon.ndatasource.core.DataSourceService;
 import org.wso2.carbon.device.mgt.common.spi.DeviceMgtService;
-
 
 import javax.sql.DataSource;
 
@@ -97,7 +96,7 @@ public class IotDeviceManagementServiceComponent {
             }
 
             arduinoServiceRegRef =
-                    bundleContext.registerService(DeviceMgtService.class.getName(), new ArduinoDeviceManager(), null);
+                    bundleContext.registerService(DeviceMgtService.class.getName(), new FireAlarmDeviceManager(), null);
            
 
             if (log.isDebugEnabled()) {

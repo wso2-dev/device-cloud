@@ -39,9 +39,7 @@ import java.util.*;
 public class IotDeviceManagementUtil {
 
 	private static final Log log = LogFactory.getLog(IotDeviceManagementUtil.class);
-	private static final String IOT_DEVICE_VENDOR = "vendor";
-	private static final String IOT_DEVICE_MODEL = "model";
-	private static final String IOT_DEVICE_SERIAL = "serial";
+
 
 	public static Document convertToDocument(File file) throws DeviceManagementException {
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
@@ -55,14 +53,7 @@ public class IotDeviceManagementUtil {
 		}
 	}
 
-	private static String getPropertyValue(Device device, String property) {
-		for (Device.Property prop : device.getProperties()) {
-			if (property.equals(prop.getName())) {
-				return prop.getValue();
-			}
-		}
-		return null;
-	}
+
 
 	private static Device.Property getProperty(String property, String value) {
 		if (property != null) {
@@ -78,11 +69,6 @@ public class IotDeviceManagementUtil {
 		IotDevice iotDevice = null;
 		if (device != null) {
 			iotDevice = new IotDevice();
-			iotDevice.setIotDeviceId(device.getDeviceIdentifier());
-			
-			iotDevice.setModel(getPropertyValue(device, IOT_DEVICE_MODEL));
-			
-			iotDevice.setVendor(getPropertyValue(device, IOT_DEVICE_VENDOR));
 			
 
             if (device.getProperties() != null) {
@@ -99,66 +85,27 @@ public class IotDeviceManagementUtil {
 		return iotDevice;
 	}
 
-	public static Device convertToDevice(IotDevice mobileDevice) {
+	public static Device convertToDevice(IotDevice iotDevice) {
 		Device device = null;
-		if (mobileDevice != null) {
+		if (iotDevice != null) {
 			device = new Device();
 			List<Device.Property> propertyList = new ArrayList<Device.Property>();
 			
-			propertyList.add(getProperty(IOT_DEVICE_MODEL, mobileDevice.getModel()));
-			
-			propertyList.add(getProperty(IOT_DEVICE_VENDOR, mobileDevice.getVendor()));
-			
-			propertyList.add(getProperty(IOT_DEVICE_SERIAL, mobileDevice.getSerial()));
-
-            if (mobileDevice.getDeviceProperties() != null) {
-                for (Map.Entry<String, String> deviceProperty : mobileDevice.getDeviceProperties().entrySet()) {
+            if (iotDevice.getDeviceProperties() != null) {
+                for (Map.Entry<String, String> deviceProperty : iotDevice.getDeviceProperties().entrySet()) {
                     propertyList.add(getProperty(deviceProperty.getKey(), deviceProperty.getValue()));
                 }
             }
 
             device.setProperties(propertyList);
-			device.setDeviceIdentifier(mobileDevice.getIotDeviceId());
+			device.setDeviceIdentifier(iotDevice.getIotDeviceId());
 		}
 		return device;
 	}
 
-	public static IotOperation convertToMobileOperation(Operation operation) {
-		IotOperation iotOperation = new IotOperation();
-		IotOperationProperty operationProperty;
-		List<IotOperationProperty> properties = new LinkedList<IotOperationProperty>();
-		iotOperation.setFeatureCode(operation.getCode());
-		iotOperation.setCreatedDate(new Date().getTime());
-		Properties operationProperties = operation.getProperties();
-		for (String key : operationProperties.stringPropertyNames()) {
-			operationProperty = new IotOperationProperty();
-			operationProperty.setProperty(key);
-			operationProperty.setValue(operationProperties.getProperty(key));
-			properties.add(operationProperty);
-		}
-		iotOperation.setProperties(properties);
-		return iotOperation;
-	}
 
-	public static List<Integer> getIotOperationIdsFromMobileDeviceOperations(
-			List<IotDeviceOperationMapping> mobileDeviceOperationMappings) {
-		List<Integer> mobileOperationIds = new ArrayList<Integer>();
-		for (IotDeviceOperationMapping mobileDeviceOperationMapping : mobileDeviceOperationMappings) {
-			mobileOperationIds.add(mobileDeviceOperationMapping.getOperationId());
-		}
-		return mobileOperationIds;
-	}
 
-	public static Operation convertIotOperationToOperation(IotOperation iotOperation) {
-		Operation operation = new Operation();
-		Properties properties = new Properties();
-		operation.setCode(iotOperation.getFeatureCode());
-		for (IotOperationProperty iotOperationProperty : iotOperation.getProperties()) {
-			properties.put(iotOperationProperty.getProperty(), iotOperationProperty.getValue());
-		}
-		operation.setProperties(properties);
-		return operation;
-	}
+	
 
     
 }

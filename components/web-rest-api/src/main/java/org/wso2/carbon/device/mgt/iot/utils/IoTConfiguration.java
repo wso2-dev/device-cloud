@@ -23,13 +23,9 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.device.mgt.iot.devicecontroller.ControlQueueConnector;
 import org.wso2.carbon.device.mgt.iot.devicecontroller.DataStoreConnector;
-import org.wso2.carbon.device.mgt.iot.enroll.DeviceManagement;
-import org.wso2.carbon.device.mgt.iot.enroll.UserManagement;
 
-/**
- * @author ayyoobhamza
- * 
- */
+
+
 public class IoTConfiguration {
 	private static Log log = LogFactory.getLog(IoTConfiguration.class);
 	private static IoTConfiguration iotConfigurationInstance = null;
@@ -130,32 +126,7 @@ public class IoTConfiguration {
 		return iotConfigurationInstance;
 	}
 
-	public UserManagement getUserManagementImpl() throws InstantiationException,
-	                                             IllegalAccessException {
-
-		if (UserManagement.class.isAssignableFrom(userManagement)) {
-			return (UserManagement) userManagement.newInstance();
-		}
-
-		String error =
-		               "Invalid class format for <User-Enroll-Endpoint>, Make sure it has implemented UserManagment Interface correctly";
-		log.error(error);
-		throw new InstantiationException(error);
-
-	}
-
-	public DeviceManagement getDeviceManagementImpl() throws InstantiationException,
-	                                                 IllegalAccessException {
-
-		if (DeviceManagement.class.isAssignableFrom(deviceManagement)) {
-			return (DeviceManagement) deviceManagement.newInstance();
-		}
-
-		String error =
-		               "Invalid class format for <Device-Enroll-Endpoint>, Make sure it has implemented DeviceManagement Interface correctly";
-		log.error(error);
-		throw new InstantiationException(error);
-	}
+	
 
 	public DataStoreConnector getDataStore() throws InstantiationException, IllegalAccessException {
 
@@ -184,9 +155,7 @@ public class IoTConfiguration {
 
 	}
 
-	/**
-	 * @return the activeDataStore
-	 */
+
 	public String getActiveDataStore() {
 		return activeDataStore;
 	}
@@ -203,13 +172,6 @@ public class IoTConfiguration {
 		return deviceCheckerCacheSize;
 	}
 
-	// public static void main(String args[]) throws ConfigurationException,
-	// InstantiationException,
-	// IllegalAccessException {
-	//
-	// DataStoreConnector BAMDataStore =
-	// IoTConfiguration.getInstance().getDataStore();
-	// BAMDataStore.initDataStore();
-	// }
+
 
 }

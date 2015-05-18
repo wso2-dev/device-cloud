@@ -20,9 +20,9 @@
 <IotDeviceMgtConfiguration>
     <ManagementRepository>
     <DataSourceConfigurations>
-        <DataSourceConfiguration type="arduino">
+        <DataSourceConfiguration type="firealarm">
             <JndiLookupDefinition>
-                <Name>jdbc/ArduinoDM_DB</Name>
+                <Name>jdbc/FireAlarmDM_DB</Name>
             </JndiLookupDefinition>
         </DataSourceConfiguration>
         
