@@ -195,33 +195,33 @@ public class ArduinoDeviceManager implements DeviceMgtService {
         return true;
     }
 
-//    @Override
-//    public boolean updateDeviceInfo(Device device) throws DeviceManagementException {
-//        boolean status;
-//        IotDevice iotDevice = IotDeviceManagementUtil.convertToIotDevice(device);
-//        try {
-//            if (log.isDebugEnabled()) {
-//                log.debug(
-//                        "updating the details of Arduino device : " + device.getDeviceIdentifier());
-//            }
-//            ArduinoDAOFactory.beginTransaction();
-//            status = iotDeviceManagementDAOFactory.getIotDeviceDAO()
-//                    .updateIotDevice(iotDevice);
-//            ArduinoDAOFactory.commitTransaction();
-//        } catch (IotDeviceManagementDAOException e) {
-//            try {
-//                ArduinoDAOFactory.rollbackTransaction();
-//            } catch (IotDeviceManagementDAOException iotDAOEx) {
-//                String msg = "Error occurred while roll back the update device info transaction :" + device.toString();
-//                log.warn(msg, iotDAOEx);
-//            }
-//            String msg =
-//                    "Error while updating the Arduino device : " + device.getDeviceIdentifier();
-//            log.error(msg, e);
-//            throw new DeviceManagementException(msg, e);
-//        }
-//        return status;
-//    }
+    @Override
+    public boolean updateDeviceInfo(Device device) throws DeviceManagementException {
+        boolean status;
+        IotDevice iotDevice = IotDeviceManagementUtil.convertToIotDevice(device);
+        try {
+            if (log.isDebugEnabled()) {
+                log.debug(
+                        "updating the details of Arduino device : " + device.getDeviceIdentifier());
+            }
+            ArduinoDAOFactory.beginTransaction();
+            status = iotDeviceManagementDAOFactory.getIotDeviceDAO()
+                    .updateIotDevice(iotDevice);
+            ArduinoDAOFactory.commitTransaction();
+        } catch (IotDeviceManagementDAOException e) {
+            try {
+                ArduinoDAOFactory.rollbackTransaction();
+            } catch (IotDeviceManagementDAOException iotDAOEx) {
+                String msg = "Error occurred while roll back the update device info transaction :" + device.toString();
+                log.warn(msg, iotDAOEx);
+            }
+            String msg =
+                    "Error while updating the Arduino device : " + device.getDeviceIdentifier();
+            log.error(msg, e);
+            throw new DeviceManagementException(msg, e);
+        }
+        return status;
+    }
 
     @Override
     public List<Device> getAllDevices() throws DeviceManagementException {
@@ -246,16 +246,7 @@ public class ArduinoDeviceManager implements DeviceMgtService {
         }
         return devices;
     }
-
-	
-    @Override
-    public boolean updateDeviceInfo(Device device, List<Application> applicationList)
-                                                                                     throws DeviceManagementException {
-	    // TODO Auto-generated method stub
-	    return true;
-    }
-
-	
+    
     @Override
     public void installApplication(Operation operation, List<DeviceIdentifier> deviceIdentifiers)
                                                                                                  throws AppManagerConnectorException {
