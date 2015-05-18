@@ -95,7 +95,7 @@ public class MQTTControlQueue implements ControlQueueConnector, MqttCallback {
 
 			log.info("CONTROL_QUEUE_ENDPOINT : " + CONTROL_QUEUE_ENDPOINT);
 		} catch (ConfigurationException e) {
-			log.error("Error occured when retreiving configs for DataStore - " + controlQueue +
+			log.error("Error occured when retreiving configs for ControlQueue - " + controlQueue +
 			          " from controller.xml" + ": ", e);
 			return String.format(httpReply, HttpStatus.SC_INTERNAL_SERVER_ERROR,
 			                     HttpStatus.getStatusText(HttpStatus.SC_INTERNAL_SERVER_ERROR), e);
@@ -162,10 +162,16 @@ public class MQTTControlQueue implements ControlQueueConnector, MqttCallback {
 			client.disconnect();
 
 			log.info("MQTT Client disconnected from MQTT broker");
-		} catch (MqttException e) {
-			log.error("MQTT Client Error", e);
+		} catch (MqttException me) {
+			log.error("MQTT Client Error");
+			log.error("Reason:  " + me.getReasonCode());
+			log.error("Message: " + me.getMessage());
+			log.error("LocalMsg: " + me.getLocalizedMessage());
+			log.error("Cause: " + me.getCause());
+			log.error("Exception: " + me);
+			me.printStackTrace();
 			return String.format(httpReply, HttpStatus.SC_INTERNAL_SERVER_ERROR,
-			                     HttpStatus.getStatusText(HttpStatus.SC_INTERNAL_SERVER_ERROR), e);
+			                     HttpStatus.getStatusText(HttpStatus.SC_INTERNAL_SERVER_ERROR), me);
 		}
 		return String.format(httpReply, HttpStatus.SC_ACCEPTED,
 		                     HttpStatus.getStatusText(HttpStatus.SC_ACCEPTED), "");
