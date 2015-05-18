@@ -87,70 +87,68 @@ public class DeviceController {
 
 	}
 
-	@Path("/pushdata/{ip}/{owner}/{type}/{mac}/{time}/{key}/{value}")
+	@Path("/pushdata/{owner}/{type}/{id}/{time}/{key}/{value}")
 	@POST
 	// @Produces("application/xml")
-	public String pushData(@PathParam("ip") String ipAdd, @PathParam("type") String deviceType,
-	                       @PathParam("owner") String owner, @PathParam("mac") String macAddress,
-	                       @PathParam("time") Long time, @PathParam("key") String key,
-	                       @PathParam("value") String value,
+	public static String pushData(@PathParam("owner") String owner, @PathParam("type") String deviceType,
+	                       @PathParam("id") String deviceId, @PathParam("time") Long time,
+	                       @PathParam("key") String key, @PathParam("value") String value,
 	                       @HeaderParam("description") String description,
 	                       @Context HttpServletResponse response) {
 
 		HashMap<String, String> deviceDataMap = new HashMap<String, String>();
 
-		deviceDataMap.put("ipAdd", ipAdd);
-		deviceDataMap.put("deviceType", deviceType);
 		deviceDataMap.put("owner", owner);
-		deviceDataMap.put("macAddress", macAddress);
+		deviceDataMap.put("deviceType", deviceType);
+		deviceDataMap.put("deviceId", deviceId);
 		deviceDataMap.put("time", "" + time);
 		deviceDataMap.put("key", key);
 		deviceDataMap.put("value", value);
 		deviceDataMap.put("description", description);
 
-		DeviceValidator deviceChecker = new DeviceValidator();
-		
-		DeviceIdentifier dId=new DeviceIdentifier();
-		dId.setId(macAddress);
-		dId.setType(deviceType);
+		//DeviceValidator deviceChecker = new DeviceValidator();
 
-		try {
-			boolean exists = deviceChecker.isExist(owner, dId);
-			String result  ="Failed to push";
-			if (exists) {
+		//DeviceIdentifier dId = new DeviceIdentifier();
+		//dId.setId(deviceId);
+		//dId.setType(deviceType);
+
+//		try {
+//			boolean exists = deviceChecker.isExist(owner, dId);
+			String result = "Failed to push";
+//			if (exists) {
 				result = iotDataStore.publishIoTData(deviceDataMap);
-
-			} 
-
+//
+//			}
+//
 			return result;
-
-		} catch (InstantiationException e) {
-			response.setStatus(500);
-			return null;
-		} catch (IllegalAccessException e) {
-			response.setStatus(500);
-			return null;
-		} catch (ConfigurationException e) {
-			response.setStatus(500);
-			return null;
-		} catch (DeviceCloudException e) {
-			response.setStatus(500);
-			return null;
-        }
+//
+//		} catch (InstantiationException e) {
+//			response.setStatus(500);
+//			return null;
+//		} catch (IllegalAccessException e) {
+//			response.setStatus(500);
+//			return null;
+//		} catch (ConfigurationException e) {
+//			response.setStatus(500);
+//			return null;
+//		} catch (DeviceCloudException e) {
+//			response.setStatus(500);
+//			return null;
+//		}
 
 	}
 
-	@Path("/setcontrol/{owner}/{type}/{mac}/{key}/{value}")
+	@Path("/setcontrol/{owner}/{type}/{id}/{key}/{value}")
 	@POST
-	public String setControl(@PathParam("owner") String owner,
+	public static String setControl(@PathParam("owner") String owner,
 	                         @PathParam("type") String deviceType,
-	                         @PathParam("mac") String macAddress, @PathParam("key") String key,
+	                         @PathParam("id") String deviceId, @PathParam("key") String key,
 	                         @PathParam("value") String value) {
 		HashMap<String, String> deviceControlsMap = new HashMap<String, String>();
 
 		deviceControlsMap.put("owner", owner);
 		deviceControlsMap.put("deviceType", deviceType);
-		deviceControlsMap.put("macAddress", macAddress);
+		deviceControlsMap.put("deviceId", deviceId);
 		deviceControlsMap.put("key", key);
 		deviceControlsMap.put("value", value);
 

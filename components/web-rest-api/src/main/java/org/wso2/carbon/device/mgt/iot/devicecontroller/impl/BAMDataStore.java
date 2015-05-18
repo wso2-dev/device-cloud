@@ -96,19 +96,18 @@ public class BAMDataStore implements DataStoreConnector {
 		try {
 			DEVICE_DATA_STREAM =
 			                     BAM_DATA_PUBLISHER.defineStream("{"
-			                                                     + "'name':'org_wso2_iot_statistics_device_data',"
+			                                                     + "'name':'org_wso2_iot_devices_data',"
 			                                                     + "'version':'1.0.0',"
-			                                                     + "'nickName': 'IoT Connected Device Pin Data',"
-			                                                     + "'description': 'Pin Data Received',"
-			                                                     + "'tags': ['arduino', 'led13'],"
+			                                                     + "'nickName': 'IoT Connected Device Data',"
+			                                                     + "'description': 'Data Received from Device',"
+			                                                     + "'tags': ['iot', 'embeddedDevice'],"
 			                                                     + "'metaData':["
-			                                                     + "        {'name':'ipAdd','type':'STRING'},"
-			                                                     + "        {'name':'deviceType','type':'STRING'},"
 			                                                     + "        {'name':'owner','type':'STRING'},"
+			                                                     + "        {'name':'deviceType','type':'STRING'},"
+			                                                     + "        {'name':'deviceId','type':'STRING'},"
 			                                                     + "		{'name':'requestTime','type':'LONG'}"
 			                                                     + "],"
 			                                                     + "'payloadData':["
-			                                                     + "        {'name':'macAddress','type':'STRING'},"
 			                                                     + "        {'name':'key','type':'STRING'},"
 			                                                     + "        {'name':'value','type':'STRING'},"
 			                                                     + "        {'name':'description','type':'STRING'}"
@@ -140,10 +139,9 @@ public class BAMDataStore implements DataStoreConnector {
 	@Override
 	public String publishIoTData(HashMap<String, String> deviceData) {
 
-		String ipAdd = deviceData.get("ipAdd");
-		String deviceType = deviceData.get("deviceType");
 		String owner = deviceData.get("owner");
-		String macAddress = deviceData.get("macAddress");
+		String deviceType = deviceData.get("deviceType");
+		String deviceId = deviceData.get("deviceId");
 		String time = deviceData.get("time");
 		String key = deviceData.get("key");
 		String value = deviceData.get("value");
@@ -152,9 +150,9 @@ public class BAMDataStore implements DataStoreConnector {
 		try {
 			BAM_DATA_PUBLISHER.publish(DEVICE_DATA_STREAM,
 			                           System.currentTimeMillis(),
-			                           new Object[] { ipAdd, deviceType, owner,
+			                           new Object[] { owner, deviceType, deviceId,
 			                                         Long.parseLong(time) }, null,
-			                           new Object[] { macAddress, key, value, description });
+			                           new Object[] { key, value, description });
 
 			log.info("event published to devicePinDataStream");
 
@@ -176,32 +174,32 @@ public class BAMDataStore implements DataStoreConnector {
 	 * ==========================================================
 	 */
 
-//	public static void main(String[] args) {
-//
-//		File file =
-//		            new File(
-//		                     "/Users/smean-MAC/Documents/WSO2Git/device-cloud/WSO2ConnectedDevices/src/main/webapp/resources/security/client-truststore.jks");
-//		System.out.println(file);
-//
-//		if (file.exists()) {
-//			String trustStore = file.getAbsolutePath();
-//			System.out.println(trustStore);
-//			System.setProperty("javax.net.ssl.trustStore", trustStore);
-//			System.setProperty("javax.net.ssl.trustStorePassword", "wso2carbon");
-//		}
-//
-//		HashMap<String, String> myMap = new HashMap<String, String>();
-//		myMap.put("ipAdd", "192.168.1.216");
-//		myMap.put("deviceType", "Arduino");
-//		myMap.put("owner", "Smeansbeer");
-//		myMap.put("macAddress", "123456");
-//		myMap.put("time", "" + System.nanoTime());
-//		myMap.put("key", "TempSensor");
-//		myMap.put("value", "123");
-//		myMap.put("description", "TetsCase");
-//
-//		BAMDataStore newinst = new BAMDataStore();
-//		System.out.println(newinst.initDataStore());
-//		System.out.println(newinst.publishIoTData(myMap));
-//	}
+	// public static void main(String[] args) {
+	//
+	// File file =
+	// new File(
+	// "/Users/smean-MAC/Documents/WSO2Git/device-cloud/WSO2ConnectedDevices/src/main/webapp/resources/security/client-truststore.jks");
+	// System.out.println(file);
+	//
+	// if (file.exists()) {
+	// String trustStore = file.getAbsolutePath();
+	// System.out.println(trustStore);
+	// System.setProperty("javax.net.ssl.trustStore", trustStore);
+	// System.setProperty("javax.net.ssl.trustStorePassword", "wso2carbon");
+	// }
+	//
+	// HashMap<String, String> myMap = new HashMap<String, String>();
+	// myMap.put("ipAdd", "192.168.1.216");
+	// myMap.put("deviceType", "Arduino");
+	// myMap.put("owner", "Smeansbeer");
+	// myMap.put("macAddress", "123456");
+	// myMap.put("time", "" + System.nanoTime());
+	// myMap.put("key", "TempSensor");
+	// myMap.put("value", "123");
+	// myMap.put("description", "TetsCase");
+	//
+	// BAMDataStore newinst = new BAMDataStore();
+	// System.out.println(newinst.initDataStore());
+	// System.out.println(newinst.publishIoTData(myMap));
+	// }
 }

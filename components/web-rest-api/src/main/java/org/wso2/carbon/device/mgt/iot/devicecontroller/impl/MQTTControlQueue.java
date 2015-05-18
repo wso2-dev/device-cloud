@@ -120,11 +120,11 @@ public class MQTTControlQueue implements ControlQueueConnector, MqttCallback {
 
 		String owner = deviceControls.get("owner");
 		String deviceType = deviceControls.get("deviceType");
-		String macAddress = deviceControls.get("macAddress");
+		String deviceId = deviceControls.get("deviceId");
 		String key = deviceControls.get("key");
 		String value = deviceControls.get("value");
 
-		String clientId = owner + "." + macAddress;
+		String clientId = owner + "." + deviceId;
 
 		if (clientId.length() > 24) {
 			String errorString =
@@ -139,7 +139,7 @@ public class MQTTControlQueue implements ControlQueueConnector, MqttCallback {
 			log.info("No of Characters in ClientID : '" + clientId + "' is " + clientId.length());
 		}
 
-		String publishTopic = "wso2/iot/" + owner + "/" + deviceType + "/" + macAddress;
+		String publishTopic = "wso2/iot/" + owner + "/" + deviceType + "/" + deviceId;
 		String payLoad = key + ":" + value;
 
 		try {
