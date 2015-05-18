@@ -20,21 +20,13 @@ package org.wso2.carbon.device.mgt.iot.impl.arduino.dao;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.wso2.carbon.device.mgt.iot.config.datasource.IotDataSourceConfig;
+import org.wso2.carbon.device.mgt.iot.common.IoTDeviceManagementConstants;
 import org.wso2.carbon.device.mgt.iot.dao.*;
 import org.wso2.carbon.device.mgt.iot.impl.arduino.dao.impl.ArduinoDeviceDAOImpl;
 
 import javax.sql.DataSource;
 
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.wso2.carbon.device.mgt.common.DeviceManagementConstants;
-import org.wso2.carbon.device.mgt.iot.config.datasource.IotDataSourceConfig;
-import org.wso2.carbon.device.mgt.iot.dao.*;
-import org.wso2.carbon.device.mgt.iot.impl.arduino.dao.impl.ArduinoDeviceDAOImpl;
-
-import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.SQLException;
 
@@ -46,7 +38,7 @@ public class ArduinoDAOFactory extends IotDeviceManagementDAOFactory
     private static ThreadLocal<Connection> currentConnection = new ThreadLocal<Connection>();
 
     public ArduinoDAOFactory() {
-        this.dataSource = getDataSourceMap().get(DeviceManagementConstants.IotDeviceTypes.IOT_DEVICE_TYPE_ARDUINO);
+        this.dataSource = getDataSourceMap().get(IoTDeviceManagementConstants.IotDeviceTypes.IOT_DEVICE_TYPE_ARDUINO);
     }
 
     @Override

@@ -16,10 +16,7 @@
 
 package org.wso2.carbon.device.mgt.iot.common;
 
-/**
- * @author ayyoobhamza
- *
- */
+
 public class IoTDeviceManagementConstants {
 	public static final class IotDeviceTypes {
         private IotDeviceTypes() {
@@ -27,7 +24,7 @@ public class IoTDeviceManagementConstants {
         }
 
         public final static String IOT_DEVICE_TYPE_ARDUINO = "arduino";
-        public final static String IOT_DEVICE_TYPE_RASPBERRY = "raspberry";
+        
 
     }
 }
