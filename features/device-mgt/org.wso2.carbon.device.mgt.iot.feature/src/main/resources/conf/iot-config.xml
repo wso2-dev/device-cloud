@@ -25,11 +25,7 @@
                 <Name>jdbc/ArduinoDM_DB</Name>
             </JndiLookupDefinition>
         </DataSourceConfiguration>
-        <DataSourceConfiguration type="raspberry">
-            <JndiLookupDefinition>
-                <Name>jdbc/RaspberryDM_DB</Name>
-            </JndiLookupDefinition>
-        </DataSourceConfiguration>
+        
     </DataSourceConfigurations>
     </ManagementRepository>
 
