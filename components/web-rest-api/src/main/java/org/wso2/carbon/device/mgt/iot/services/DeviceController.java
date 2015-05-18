@@ -78,7 +78,7 @@ public class DeviceController {
 			iotDataStore = IoTConfiguration.getInstance().getDataStore();
 			iotControlQueue = IoTConfiguration.getInstance().getControlQueue();
 
-			iotDataStore.initDataStore();
+//			iotDataStore.initDataStore();
 			iotControlQueue.initControlQueue();
 
 		} catch (InstantiationException | IllegalAccessException | ConfigurationException e) {

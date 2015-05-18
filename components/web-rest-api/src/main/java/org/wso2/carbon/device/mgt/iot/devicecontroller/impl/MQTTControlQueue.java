@@ -124,7 +124,7 @@ public class MQTTControlQueue implements ControlQueueConnector, MqttCallback {
 		String key = deviceControls.get("key");
 		String value = deviceControls.get("value");
 
-		String clientId = owner + "." + deviceId;
+		String clientId = "in:" + owner + "." + deviceId;
 
 		if (clientId.length() > 24) {
 			String errorString =
@@ -154,7 +154,7 @@ public class MQTTControlQueue implements ControlQueueConnector, MqttCallback {
 
 			MqttMessage message = new MqttMessage();
 			message.setPayload(payLoad.getBytes());
-			client.publish(publishTopic, payLoad.getBytes(), 2, true);
+			client.publish(publishTopic, payLoad.getBytes(), 0, true);
 
 			log.info("MQTT Client successfully published to topic: " + publishTopic +
 			         ", with payload - " + payLoad);

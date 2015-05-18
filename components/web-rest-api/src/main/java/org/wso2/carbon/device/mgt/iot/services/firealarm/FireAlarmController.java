@@ -41,28 +41,10 @@ import org.wso2.carbon.device.mgt.iot.utils.DefaultDeviceControlConfigs;
  * 
  */
 @Path(value = "/FireAlarmController")
-public class FireAlarmController implements MqttCallback {
+public class FireAlarmController {
 	private static Logger log = Logger.getLogger(FireAlarmController.class);
-	private static String CONTROL_QUEUE_ENDPOINT = null;
-
-	static {
-		try {
-			String mqttUrl = DefaultDeviceControlConfigs.getInstance().getControlQueueUrl();
-			String mqttPort = DefaultDeviceControlConfigs.getInstance().getControlQueuePort();
-
-			CONTROL_QUEUE_ENDPOINT = mqttUrl + ":" + mqttPort;
-
-			log.info("CONTROL_QUEUE_ENDPOINT : " + CONTROL_QUEUE_ENDPOINT);
-		} catch (ConfigurationException e) {
-			log.error("Error occured when retreiving configs for ControlQueue from controller.xml"
-			          + ": ", e);
-		}
-	}
-
-	private MqttClient client;
-	private MqttConnectOptions options;
-	private MqttDefaultFilePersistence persistence = new MqttDefaultFilePersistence();
-
+	
+	
 	@Path("/switchBulb")
 	@POST
 	public String setControl(@HeaderParam("owner") String owner, @HeaderParam("id") String deviceId) {
@@ -91,77 +73,23 @@ public class FireAlarmController implements MqttCallback {
 		return result;
 	}
 
-	@Path("/readControls/{owner}/{id}")
+	@Path("/subscribe/{owner}/{id}")
 	@POST
-	public String readControls(@PathParam("owner") String owner, @PathParam("id") String deviceId) {
-
-		String clientId = owner + ":" + deviceId;
-		String subscribeTopic = "wso2/iot/" + owner + "/" + "FireAlarm" + "/" + deviceId;
-
-		try {
-			client = new MqttClient(CONTROL_QUEUE_ENDPOINT, clientId);
-			options = new MqttConnectOptions();
-			options.setWill("iotDevice/clienterrors", "crashed".getBytes(), 2, true);
-			options.setCleanSession(false);
-			client.setCallback(this);
-			client.connect(options);
-			client.subscribe(subscribeTopic);
-			// Thread.sleep(1000000);
-			// System.exit(1);
-			// client.disconnect();
-		} catch (MqttException me) {
-			log.error("MQTT Client Error");
-			log.error("Reason:  " + me.getReasonCode());
-			log.error("Message: " + me.getMessage());
-			log.error("LocalMsg: " + me.getLocalizedMessage());
-			log.error("Cause: " + me.getCause());
-			log.error("Exception: " + me);
-			me.printStackTrace();
-		}
-
-		return "True";
+	public String subscribe(@PathParam("owner") String owner, @PathParam("id") String deviceId) {
+		
+//		Runnable r = new MQTTSubscriber(owner, deviceId);
+//		new Thread(r).start();
+		
+		
+		MQTTSubscriber mySubscriber = new MQTTSubscriber(owner, deviceId);
+		
+		return "Subscribed";
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * org.eclipse.paho.client.mqttv3.MqttCallback#connectionLost(java.lang.
-	 * Throwable)
-	 */
-	@Override
-	public void connectionLost(Throwable arg0) {
-		// TODO Auto-generated method stub
+	
+	
+	
+	
 
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * org.eclipse.paho.client.mqttv3.MqttCallback#deliveryComplete(org.eclipse
-	 * .paho.client.mqttv3.IMqttDeliveryToken)
-	 */
-	@Override
-	public void deliveryComplete(IMqttDeliveryToken arg0) {
-		// TODO Auto-generated method stub
-
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * org.eclipse.paho.client.mqttv3.MqttCallback#messageArrived(java.lang.
-	 * String, org.eclipse.paho.client.mqttv3.MqttMessage)
-	 */
-	@Override
-	public void messageArrived(String arg0, MqttMessage arg1) throws Exception {
-		// TODO Auto-generated method stub
-		log.info("Got Something: ");
-		log.info("Arg0: " + arg0);
-		log.info("Arg1: " + arg1.getPayload().toString());
-
-	}
 
 }
