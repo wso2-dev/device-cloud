@@ -89,7 +89,7 @@ public class DeviceManagementImpl implements DeviceManagement {
 
 		try {
 			DeviceManagementService dmService = IotApiUtil.getDeviceManagementService();
-			status = dmService.updateDeviceInfo(device);
+			status = dmService.modifyEnrollment(device);
 		} catch (DeviceManagementException e) {
 			String error = "CDM Configuration Error on Update";
 			if (log.isDebugEnabled()) {

@@ -18,7 +18,6 @@ package org.wso2.carbon.device.mgt.iot.enroll.cdm.util;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.wso2.carbon.apimgt.impl.workflow.UserSignUpWorkflowExecutor;
 import org.wso2.carbon.context.PrivilegedCarbonContext;
 import org.wso2.carbon.device.mgt.core.service.DeviceManagementService;
 import org.wso2.carbon.device.mgt.iot.common.DeviceCloudException;
@@ -27,7 +26,7 @@ import org.wso2.carbon.user.api.UserStoreException;
 import org.wso2.carbon.user.api.UserStoreManager;
 import org.wso2.carbon.user.core.service.RealmService;
 import org.wso2.carbon.utils.multitenancy.MultitenantConstants;
-
+import org.wso2.carbon.device.mgt.user.core.service.UserManagementService;
 
 public class IotApiUtil {
 

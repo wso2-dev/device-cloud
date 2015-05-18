@@ -21,7 +21,6 @@ http://cxf.apache.org/schemas/jaxrs.xsd">
 	<jaxrs:server id="IoTService" address="">
 		<jaxrs:serviceBeans>
 			<bean class="org.wso2.carbon.device.mgt.iot.services.DeviceController" />		
-			<bean class="org.wso2.carbon.device.mgt.iot.services.UserManager" />
 			<bean class="org.wso2.carbon.device.mgt.iot.services.DeviceManager" />
 		</jaxrs:serviceBeans>
 		<jaxrs:providers>
