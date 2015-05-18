@@ -37,6 +37,7 @@
 
     <modules>
         <module>components/device-mgt</module>
+        <module>components/web-rest-api</module>
         <module>features/device-mgt</module>
     </modules>
 
