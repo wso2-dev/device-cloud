@@ -27,7 +27,7 @@ import org.wso2.carbon.device.mgt.core.dto.DeviceType;
 import org.wso2.carbon.device.mgt.iot.web.register.util.DeviceManagement;
 
 
-public class IoTDeviceManagementService {
+public class FireAlarmManagementService {
 
 	public boolean deviceEnroll(String deviceId, String type, String name, String owner)
 	                                                                                    throws DeviceManagementException {

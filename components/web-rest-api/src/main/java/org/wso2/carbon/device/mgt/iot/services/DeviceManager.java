@@ -34,7 +34,7 @@ import org.wso2.carbon.device.mgt.common.Device;
 import org.wso2.carbon.device.mgt.common.DeviceManagementException;
 import org.wso2.carbon.device.mgt.core.dao.DeviceManagementDAOException;
 import org.wso2.carbon.device.mgt.core.dto.DeviceType;
-import org.wso2.carbon.device.mgt.iot.web.register.IoTDeviceManagementService;
+import org.wso2.carbon.device.mgt.iot.web.register.FireAlarmManagementService;
 
 
 @Path("/DeviceManager")
@@ -50,7 +50,7 @@ public class DeviceManager {
 	                     @Context HttpServletResponse response) throws DeviceManagementException
 	                                                                                                 {
 
-		IoTDeviceManagementService iotDeviceService = new IoTDeviceManagementService();
+		FireAlarmManagementService iotDeviceService = new FireAlarmManagementService();
 		boolean added=iotDeviceService.deviceEnroll(deviceId, type, name, owner);
 		if (added) {
 
@@ -67,7 +67,7 @@ public class DeviceManager {
 	                         @QueryParam("deviceType") String type,
 	                         @Context HttpServletResponse response) throws DeviceManagementException {
 		
-		IoTDeviceManagementService iotDeviceService = new IoTDeviceManagementService();
+		FireAlarmManagementService iotDeviceService = new FireAlarmManagementService();
 		boolean removed = iotDeviceService.removeDevice(deviceId, type);
 		if (removed) {
 
@@ -86,7 +86,7 @@ public class DeviceManager {
 	                         @Context HttpServletResponse response) throws DeviceManagementException {
 
 		
-		IoTDeviceManagementService iotDeviceService = new IoTDeviceManagementService();
+		FireAlarmManagementService iotDeviceService = new FireAlarmManagementService();
 		boolean updated = iotDeviceService.updateDevice(deviceId, name, type);
 		if (updated) {
 			response.setStatus(200);
@@ -105,7 +105,7 @@ public class DeviceManager {
 
 		
 
-		IoTDeviceManagementService iotDeviceService = new IoTDeviceManagementService();
+		FireAlarmManagementService iotDeviceService = new FireAlarmManagementService();
 		Device device = iotDeviceService.getDevice(deviceId, type);
 		if (device == null) {
 
@@ -125,7 +125,7 @@ public class DeviceManager {
 	                                 @Context HttpServletRequest request,
 	                                 @Context HttpServletResponse response) throws DeviceManagementException {
 
-		IoTDeviceManagementService iotDeviceService = new IoTDeviceManagementService();
+		FireAlarmManagementService iotDeviceService = new FireAlarmManagementService();
 
 		List<Device> devices = iotDeviceService.getAllDevice(username);
 		if (devices == null) {
@@ -146,7 +146,7 @@ public class DeviceManager {
 	                                 @Context HttpServletRequest request,
 	                                 @Context HttpServletResponse response) throws DeviceManagementDAOException {
 
-		IoTDeviceManagementService iotDeviceService = new IoTDeviceManagementService();
+		FireAlarmManagementService iotDeviceService = new FireAlarmManagementService();
 
 		List<DeviceType> deviceTypes = iotDeviceService.getDeviceTypes();
 		if (deviceTypes == null) {

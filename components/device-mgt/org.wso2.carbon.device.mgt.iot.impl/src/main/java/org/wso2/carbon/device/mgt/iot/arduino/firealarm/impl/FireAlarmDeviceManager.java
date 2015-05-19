@@ -18,16 +18,19 @@
 
 package org.wso2.carbon.device.mgt.iot.arduino.firealarm.impl;
 
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.device.mgt.common.*;
 import org.wso2.carbon.device.mgt.iot.arduino.firealarm.constants.FireAlarmConstants;
 import org.wso2.carbon.device.mgt.iot.arduino.firealarm.impl.dao.FireAlarmDAO;
+import org.wso2.carbon.device.mgt.iot.arduino.firealarm.impl.util.FireAlarmUtils;
 import org.wso2.carbon.device.mgt.iot.dao.IotDeviceManagementDAOException;
 import org.wso2.carbon.device.mgt.iot.dao.IotDeviceManagementDAOFactory;
 import org.wso2.carbon.device.mgt.iot.dto.IotDevice;
 import org.wso2.carbon.device.mgt.iot.util.IotDeviceManagementUtil;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -231,8 +234,7 @@ public class FireAlarmDeviceManager implements DeviceMgtService {
                 log.debug("Fetching the details of all Arduino devices");
             }
             List<IotDevice> iotDevices =
-                    iotDeviceManagementDAOFactory.getIotDeviceDAO().
-                            getAllIotDevices();
+                    iotDeviceManagementDAOFactory.getIotDeviceDAO().getAllIotDevices();
             if (iotDevices != null) {
                 devices = new ArrayList<Device>();
                 for (IotDevice iotDevice : iotDevices) {
@@ -246,10 +248,19 @@ public class FireAlarmDeviceManager implements DeviceMgtService {
         }
         return devices;
     }
+
+    /**
+     * Create and returns a zip archive given a directory/file.
+     * @param filePath directory/file to zip
+     * @return Zip archive file
+     * @throws DeviceManagementException
+     */
+    public File downloadSketch(String filePath) throws DeviceManagementException{
+        return FireAlarmUtils.createZipArchive(filePath);
+    }
     
     @Override
-    public void installApplication(Operation operation, List<DeviceIdentifier> deviceIdentifiers)
-                                                                                                 throws AppManagerConnectorException {
+    public void installApplication(Operation operation, List<DeviceIdentifier> deviceIdentifiers) throws AppManagerConnectorException {
 	    // TODO Auto-generated method stub
 	    
     }

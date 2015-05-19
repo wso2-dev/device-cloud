@@ -17,56 +17,55 @@
 package org.wso2.carbon.device.mgt.iot.web.register.util;
 
 import org.apache.commons.collections.map.LRUMap;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.device.mgt.common.DeviceIdentifier;
 import org.wso2.carbon.device.mgt.common.DeviceManagementException;
 
 public class DeviceValidator {
-	private static LRUMap cache;
-	// private static Log log = LogFactory.getLog(DeviceValidator.class);
-	static {
 
-		// TODO: add LRU CacheSize from configuration
-		cache = new LRUMap(10000);
+    private static LRUMap cache;
 
-	}
+    // private static Log log = LogFactory.getLog(DeviceValidator.class);
+    static {
 
-	public boolean isExist(String owner, DeviceIdentifier deviceId) throws InstantiationException,
-	                                                               IllegalAccessException,
-	                                                               DeviceManagementException {
-		boolean status = false;
+        // TODO: add LRU CacheSize from configuration
+        cache = new LRUMap(10000);
 
-		// ADD DeviceIdentifier
-		// TODO add deviceType
-		status = cacheCheck(owner, deviceId.getId());
-		if (!status) {
-			DeviceManagement deviceManagement = new DeviceManagement();
-			status = deviceManagement.isExist(owner, deviceId);
-			if (status) {
-				addToCache(owner, deviceId.getId());
+    }
 
-			}
-		}
+    public boolean isExist(String owner, DeviceIdentifier deviceId)
+            throws InstantiationException, IllegalAccessException, DeviceManagementException {
+        boolean status = false;
 
-		return status;
+        // ADD DeviceIdentifier
+        // TODO add deviceType
+        status = cacheCheck(owner, deviceId.getId());
+        if (!status) {
+            DeviceManagement deviceManagement = new DeviceManagement();
+            status = deviceManagement.isExist(owner, deviceId);
+            if (status) {
+                addToCache(owner, deviceId.getId());
 
-	}
+            }
+        }
 
-	private boolean cacheCheck(String owner, String deviceId) {
+        return status;
 
-		String value = (String) cache.get(deviceId);
+    }
 
-		if (value != null && value.equals(owner)) {
-			return true;
+    private boolean cacheCheck(String owner, String deviceId) {
 
-		}
-		return false;
+        String value = (String) cache.get(deviceId);
 
-	}
+        if (value != null && value.equals(owner)) {
+            return true;
 
-	private void addToCache(String owner, String deviceId) {
+        }
+        return false;
 
-		cache.put(deviceId, owner);
-	}
+    }
+
+    private void addToCache(String owner, String deviceId) {
+
+        cache.put(deviceId, owner);
+    }
 }
