@@ -28,7 +28,6 @@ import javax.ws.rs.core.Context;
 
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.log4j.Logger;
-import org.wso2.carbon.device.mgt.common.DeviceIdentifier;
 
 import org.wso2.carbon.device.mgt.iot.devicecontroller.ControlQueueConnector;
 import org.wso2.carbon.device.mgt.iot.devicecontroller.DataStoreConnector;
@@ -78,7 +77,7 @@ public class DeviceController {
 			iotDataStore = IoTConfiguration.getInstance().getDataStore();
 			iotControlQueue = IoTConfiguration.getInstance().getControlQueue();
 
-//			iotDataStore.initDataStore();
+			iotDataStore.initDataStore();
 			iotControlQueue.initControlQueue();
 
 		} catch (InstantiationException | IllegalAccessException | ConfigurationException e) {
