@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.wso2.carbon.device.mgt.iot.web.register.util;
+package org.wso2.carbon.device.mgt.iot.web.register;
 
 import org.apache.commons.collections.map.LRUMap;
 import org.wso2.carbon.device.mgt.common.DeviceIdentifier;

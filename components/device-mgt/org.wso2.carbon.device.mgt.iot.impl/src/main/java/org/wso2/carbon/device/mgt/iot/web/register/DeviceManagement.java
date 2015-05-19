@@ -14,7 +14,7 @@ c * Copyright (c) 2014, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
  * limitations under the License.
  */
 
-package org.wso2.carbon.device.mgt.iot.web.register.util;
+package org.wso2.carbon.device.mgt.iot.web.register;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -110,6 +110,7 @@ public class DeviceManagement {
 
         return DeviceManagementDAOFactory.getDeviceTypeDAO().getDeviceTypes();
 
-    }
+}
+
 
 }
