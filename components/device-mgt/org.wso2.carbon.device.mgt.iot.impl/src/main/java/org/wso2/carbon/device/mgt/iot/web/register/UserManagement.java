@@ -22,7 +22,6 @@ import org.wso2.carbon.device.mgt.user.common.User;
 import org.wso2.carbon.device.mgt.user.common.UserManagementException;
 import org.wso2.carbon.device.mgt.user.core.UserManager;
 import org.wso2.carbon.device.mgt.user.core.UserManagerImpl;
-import org.wso2.carbon.device.mgt.user.core.internal.DeviceMgtUserDataHolder;
 import org.wso2.carbon.user.api.UserStoreException;
 import org.wso2.carbon.user.api.UserStoreManager;
 
@@ -38,15 +37,15 @@ public class UserManagement {
 	}
 
 	public boolean isExist(String username, int tenantId) throws UserStoreException {
-		UserStoreManager userStoreManager;
-		userStoreManager =
-		                   DeviceMgtUserDataHolder.getInstance().getRealmService()
-		                                          .getTenantUserRealm(tenantId)
-		                                          .getUserStoreManager();
-
-		if (userStoreManager.isExistingUser(username)) {
-			return true;
-		}
+//		UserStoreManager userStoreManager;
+//		userStoreManager =
+//		                   DeviceMgtUserDataHolder.getInstance().getRealmService()
+//		                                          .getTenantUserRealm(tenantId)
+//		                                          .getUserStoreManager();
+//
+//		if (userStoreManager.isExistingUser(username)) {
+//			return true;
+//		}
 		return false;
 
 	}

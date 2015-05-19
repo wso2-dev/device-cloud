@@ -18,11 +18,9 @@
 
 package org.wso2.carbon.device.mgt.iot.arduino.firealarm.impl.util;
 
-;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.device.mgt.common.DeviceManagementException;
-import org.wso2.carbon.utils.FileUtil;
 
 import java.io.*;
 import java.util.Map;
