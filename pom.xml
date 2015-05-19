@@ -225,6 +225,11 @@
                 <artifactId>org.wso2.carbon.policy.mgt.core</artifactId>
                 <version>${carbon.device.mgt.version}</version>
             </dependency>
+            <dependency>
+                <groupId>org.wso2.carbon.devicemgt</groupId>
+                <artifactId>org.wso2.carbon.device.mgt.user.core</artifactId>
+                <version>${carbon.device.mgt.version}</version>
+            </dependency>
 
             <!--IOT dependency-->
             <dependency>
