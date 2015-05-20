@@ -38,9 +38,9 @@ public class FireAlarmController {
 	private static Logger log = Logger.getLogger(FireAlarmController.class);
 
 	public static final String CONTROL_QUEUE_ENDPOINT;
+	public static final HashMap<String, LinkedList<String>> replyMsgQueue;
+	public static final HashMap<String, LinkedList<String>> internalControlsQueue;
 	private static MQTTSubscriber mqttSubscriber;
-	public static HashMap<String, LinkedList<String>> internalControlsQueue =
-	                                                                          new HashMap<String, LinkedList<String>>();
 
 	static {
 		String tmp = null;
@@ -55,6 +55,8 @@ public class FireAlarmController {
 		} finally {
 			CONTROL_QUEUE_ENDPOINT = tmp;
 		}
+		replyMsgQueue = new HashMap<String, LinkedList<String>>();
+		internalControlsQueue = new HashMap<String, LinkedList<String>>();
 	}
 
 	/**
@@ -113,20 +115,23 @@ public class FireAlarmController {
 				result = deviceControlList.remove();
 				response.setStatus(HttpStatus.SC_ACCEPTED);
 			} catch (NoSuchElementException ex) {
-				result = "There are no more controls for device " + deviceUuid + " of owner " + owner;
+				result =
+				         "There are no more controls for device " + deviceUuid + " of owner " +
+				                 owner;
 				response.setStatus(HttpStatus.SC_NO_CONTENT);
 			}
 		}
 		log.info(result);
 		return result;
 	}
-	
-	
-	@Path("/reply/{owner}/{uuid}")
+
+	@Path("/reply/{owner}/{uuid}/{reply}")
 	@POST
-	public String reply(@PathParam("owner") String owner,
-	                           @PathParam("uuid") String deviceUuid,
-	                           @Context HttpServletResponse response) {
-		return "True";
+	public String reply(@PathParam("owner") String owner, @PathParam("uuid") String deviceUuid,
+	                    @PathParam("reply") String replyMessage,
+	                    @Context HttpServletResponse response) {
+		String result = null;
+		result = DeviceController.setControl(owner, "FireAlarm", deviceUuid, replyMessage, "OUT");
+		return result;
 	}
 }
