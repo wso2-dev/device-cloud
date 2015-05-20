@@ -22,42 +22,28 @@ import org.eclipse.paho.client.mqttv3.*;
 import org.eclipse.paho.client.mqttv3.persist.MqttDefaultFilePersistence;
 import org.wso2.carbon.device.mgt.iot.utils.DefaultDeviceControlConfigs;
 
-public class MQTTSubscriber implements MqttCallback, Runnable {
+public class MQTTSubscriber implements MqttCallback {
 
 	private static Logger log = Logger.getLogger(MQTTSubscriber.class);
-	private static String CONTROL_QUEUE_ENDPOINT = null;
-	private MqttDefaultFilePersistence persistance = new MqttDefaultFilePersistence("MQTTQueue");
-	private MqttClient client = null;
+
+	private MqttClient client;
 	private MqttConnectOptions options;
+	private int msgCounter = 0;
 	private String clientId = "out:";
-	private String subscribeTopic = "wso2/iot/";
+	private String subscribeTopic = "wso2/iot/+/FireAlarm/#";
 
-	static {
-		try {
-			String mqttUrl = DefaultDeviceControlConfigs.getInstance().getControlQueueUrl();
-			String mqttPort = DefaultDeviceControlConfigs.getInstance().getControlQueuePort();
-
-			CONTROL_QUEUE_ENDPOINT = mqttUrl + ":" + mqttPort;
-
-			log.info("CONTROL_QUEUE_ENDPOINT : " + CONTROL_QUEUE_ENDPOINT);
-		} catch (ConfigurationException e) {
-			log.error("Error occured when retreiving configs for ControlQueue from controller.xml"
-							  + ": ", e);
-		}
-	}
-
-	public MQTTSubscriber(String owner, String deviceId) {
-		this.clientId += owner + ":" + deviceId;
-		this.subscribeTopic += owner + "/" + "FireAlarm" + "/" + deviceId;
+	public MQTTSubscriber(String owner, String deviceUuid) {
+		this.clientId += owner + ":" + deviceUuid;
+		// this.subscribeTopic += owner + "/" + "FireAlarm" + "/" + deviceUuid;
 		this.subscribe();
 	}
 
 	private void subscribe() {
 		try {
-			this.client = new MqttClient(CONTROL_QUEUE_ENDPOINT, clientId, persistance);
-			this.options = new MqttConnectOptions();
+			client = new MqttClient(FireAlarmController.CONTROL_QUEUE_ENDPOINT, clientId, null);
+			options = new MqttConnectOptions();
 			options.setCleanSession(false);
-			options.setWill("iotDevice/clienterrors", "crashed".getBytes(), 2, true);
+			options.setWill("fireAlarm/disconnection", "crashed".getBytes(), 2, true);
 			client.setCallback(this);
 			if (!client.isConnected()) {
 				log.info("SUBSCRIBING WITH ID : " + clientId);
@@ -65,14 +51,13 @@ public class MQTTSubscriber implements MqttCallback, Runnable {
 				client.subscribe(subscribeTopic, 0);
 			}
 
-		} catch (MqttException me) {
-			log.error("MQTT Client Error");
-			log.error("Reason:  " + me.getReasonCode());
-			log.error("Message: " + me.getMessage());
-			log.error("LocalMsg: " + me.getLocalizedMessage());
-			log.error("Cause: " + me.getCause());
-			log.error("Exception: " + me);
-			me.printStackTrace();
+		} catch (MqttException ex) {
+			String errorMsg =
+			                  "MQTT Client Error\n" + "\tReason:  " + ex.getReasonCode() +
+			                          "\n\tMessage: " + ex.getMessage() + "\n\tLocalMsg: " +
+			                          ex.getLocalizedMessage() + "\n\tCause: " + ex.getCause() +
+			                          "\n\tException: " + ex;
+			log.error(errorMsg);
 		}
 	}
 
@@ -85,8 +70,7 @@ public class MQTTSubscriber implements MqttCallback, Runnable {
 	 */
 	@Override
 	public void connectionLost(Throwable arg0) {
-		// TODO Auto-generated method stub
-
+		log.info("Lost Connection for client: " + this.clientId);
 	}
 
 	/*
@@ -98,7 +82,7 @@ public class MQTTSubscriber implements MqttCallback, Runnable {
 	 */
 	@Override
 	public void deliveryComplete(IMqttDeliveryToken arg0) {
-		// TODO Auto-generated method stub
+		log.info("Message for client " + this.clientId + "delivered successfully.");
 
 	}
 
@@ -110,23 +94,34 @@ public class MQTTSubscriber implements MqttCallback, Runnable {
 	 * String, org.eclipse.paho.client.mqttv3.MqttMessage)
 	 */
 	@Override
-	public void messageArrived(String arg0, MqttMessage arg1) throws Exception {
+	public void messageArrived(String arg0, MqttMessage arg1) {
 		log.info("Got Something: ");
 		log.info("Arg0: " + arg0);
 		log.info("Arg1: " + arg1);
 
-		persistance.open(this.clientId, CONTROL_QUEUE_ENDPOINT);
-		persistance.put("" + arg1, null);
-
-	}
-
-	/* (non-Javadoc)
-	 * @see java.lang.Runnable#run()
-	 */
-	@Override
-	public void run() {
-		// TODO Auto-generated method stub
-
+//		Thread thread = new Thread() {
+//			public void run() {
+//				try {
+//					FireAlarmController.persistance.open(clientId,
+//					                                     FireAlarmController.CONTROL_QUEUE_ENDPOINT);
+//					FireAlarmController.persistance.put("" + msgCounter++,
+//					                                    new MqttPersistentData(
+//					                                                           "TEST",
+//					                                                           "".getBytes(),
+//					                                                           0,
+//					                                                           0,
+//					                                                           "PAYLOAD".getBytes(),
+//					                                                           0, 0));
+//					FireAlarmController.persistance.close();
+//					log.info("Closed File");
+//				} catch (MqttPersistenceException e) {
+//					log.info("Exception: " + e);
+//
+//				}
+//			}
+//		};
+//
+//		thread.start();
 	}
 
 }
