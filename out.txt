@@ -1,572 +1,0 @@
-[INFO] Scanning for projects...
-[INFO] ------------------------------------------------------------------------
-[INFO] Reactor Build Order:
-[INFO] 
-[INFO] WSO2 Carbon - Device Management Plugins Parent
-[INFO] WSO2 Carbon - IoT Device Management Component
-[INFO] WSO2 Carbon - IoT Device Management Impl
-[INFO] WSO2-IOT-Rest-APi
-[INFO] WSO2 Carbon - Device Management Feature
-[INFO] WSO2 Carbon - IOT Implementation of Device Management
-[INFO]                                                                         
-[INFO] ------------------------------------------------------------------------
-[INFO] Building WSO2 Carbon - Device Management Plugins Parent 1.9.2-SNAPSHOT
-[INFO] ------------------------------------------------------------------------
-[INFO] 
-[INFO] --- maven-dependency-plugin:2.9:tree (default-cli) @ carbon-device-mgt-plugins-parent ---
-[INFO] org.wso2.carbon.devicemgt-plugins:carbon-device-mgt-plugins-parent:pom:1.9.2-SNAPSHOT
-[INFO]                                                                         
-[INFO] ------------------------------------------------------------------------
-[INFO] Building WSO2 Carbon - IoT Device Management Component 1.9.2-SNAPSHOT
-[INFO] ------------------------------------------------------------------------
-[INFO] 
-[INFO] --- maven-dependency-plugin:2.9:tree (default-cli) @ device-mgt ---
-[INFO] org.wso2.carbon.devicemgt-plugins:device-mgt:pom:1.9.2-SNAPSHOT
-[INFO]                                                                         
-[INFO] ------------------------------------------------------------------------
-[INFO] Building WSO2 Carbon - IoT Device Management Impl 1.9.2-SNAPSHOT
-[INFO] ------------------------------------------------------------------------
-Downloading: http://maven.wso2.org/nexus/content/repositories/releases/org/wso2/carbon/devicemgt/org.wso2.carbon.device.mgt.common/0.9.2-SNAPSHOT/maven-metadata.xml
-Downloading: http://maven.wso2.org/nexus/content/groups/wso2-public/org/wso2/carbon/devicemgt/org.wso2.carbon.device.mgt.common/0.9.2-SNAPSHOT/maven-metadata.xml
-Downloading: http://maven.wso2.org/nexus/content/repositories/snapshots/org/wso2/carbon/devicemgt/org.wso2.carbon.device.mgt.common/0.9.2-SNAPSHOT/maven-metadata.xml
-814/814 B               Downloaded: http://maven.wso2.org/nexus/content/repositories/snapshots/org/wso2/carbon/devicemgt/org.wso2.carbon.device.mgt.common/0.9.2-SNAPSHOT/maven-metadata.xml (814 B at 4.4 KB/sec)
-            Downloading: http://maven.wso2.org/nexus/content/groups/wso2-public/org/wso2/carbon/devicemgt/org.wso2.carbon.device.mgt.common/0.9.2-SNAPSHOT/org.wso2.carbon.device.mgt.common-0.9.2-20150519.200050-202.pom
-            Downloading: http://maven.wso2.org/nexus/content/repositories/releases/org/wso2/carbon/devicemgt/org.wso2.carbon.device.mgt.common/0.9.2-SNAPSHOT/org.wso2.carbon.device.mgt.common-0.9.2-20150519.200050-202.pom
-            Downloading: http://maven.wso2.org/nexus/content/repositories/snapshots/org/wso2/carbon/devicemgt/org.wso2.carbon.device.mgt.common/0.9.2-SNAPSHOT/org.wso2.carbon.device.mgt.common-0.9.2-20150519.200050-202.pom
-3/3 KB               Downloaded: http://maven.wso2.org/nexus/content/repositories/snapshots/org/wso2/carbon/devicemgt/org.wso2.carbon.device.mgt.common/0.9.2-SNAPSHOT/org.wso2.carbon.device.mgt.common-0.9.2-20150519.200050-202.pom (3 KB at 49.4 KB/sec)
-Downloading: http://maven.wso2.org/nexus/content/repositories/releases/org/wso2/carbon/devicemgt/device-mgt/0.9.2-SNAPSHOT/maven-metadata.xml
-Downloading: http://maven.wso2.org/nexus/content/repositories/snapshots/org/wso2/carbon/devicemgt/device-mgt/0.9.2-SNAPSHOT/maven-metadata.xml
-Downloading: http://maven.wso2.org/nexus/content/groups/wso2-public/org/wso2/carbon/devicemgt/device-mgt/0.9.2-SNAPSHOT/maven-metadata.xml
-         616/616 B               Downloaded: http://maven.wso2.org/nexus/content/repositories/snapshots/org/wso2/carbon/devicemgt/device-mgt/0.9.2-SNAPSHOT/maven-metadata.xml (616 B at 18.8 KB/sec)
-            Downloading: http://maven.wso2.org/nexus/content/repositories/snapshots/org/wso2/carbon/devicemgt/device-mgt/0.9.2-SNAPSHOT/device-mgt-0.9.2-20150519.200044-202.pom
-3/3 KB               Downloaded: http://maven.wso2.org/nexus/content/repositories/snapshots/org/wso2/carbon/devicemgt/device-mgt/0.9.2-SNAPSHOT/device-mgt-0.9.2-20150519.200044-202.pom (3 KB at 42.9 KB/sec)
-Downloading: http://maven.wso2.org/nexus/content/repositories/releases/org/wso2/carbon/devicemgt/carbon-devicemgt/0.9.2-SNAPSHOT/maven-metadata.xml
-Downloading: http://maven.wso2.org/nexus/content/groups/wso2-public/org/wso2/carbon/devicemgt/carbon-devicemgt/0.9.2-SNAPSHOT/maven-metadata.xml
-Downloading: http://maven.wso2.org/nexus/content/repositories/snapshots/org/wso2/carbon/devicemgt/carbon-devicemgt/0.9.2-SNAPSHOT/maven-metadata.xml
-622/622 B                           Downloaded: http://maven.wso2.org/nexus/content/repositories/snapshots/org/wso2/carbon/devicemgt/carbon-devicemgt/0.9.2-SNAPSHOT/maven-metadata.xml (622 B at 12.1 KB/sec)
-            Downloading: http://maven.wso2.org/nexus/content/repositories/snapshots/org/wso2/carbon/devicemgt/carbon-devicemgt/0.9.2-SNAPSHOT/carbon-devicemgt-0.9.2-20150519.200043-202.pom
-3/52 KB     7/52 KB   11/52 KB   15/52 KB   19/52 KB   23/52 KB   27/52 KB   31/52 KB   35/52 KB   39/52 KB   43/52 KB   47/52 KB   51/52 KB   52/52 KB              Downloaded: http://maven.wso2.org/nexus/content/repositories/snapshots/org/wso2/carbon/devicemgt/carbon-devicemgt/0.9.2-SNAPSHOT/carbon-devicemgt-0.9.2-20150519.200043-202.pom (52 KB at 1111.4 KB/sec)
-Downloading: http://maven.wso2.org/nexus/content/groups/wso2-public/org/wso2/carbon/devicemgt/org.wso2.carbon.device.mgt.user.core/0.9.2-SNAPSHOT/maven-metadata.xml
-Downloading: http://maven.wso2.org/nexus/content/repositories/releases/org/wso2/carbon/devicemgt/org.wso2.carbon.device.mgt.user.core/0.9.2-SNAPSHOT/maven-metadata.xml
-Downloading: http://maven.wso2.org/nexus/content/repositories/snapshots/org/wso2/carbon/devicemgt/org.wso2.carbon.device.mgt.user.core/0.9.2-SNAPSHOT/maven-metadata.xml
-817/817 B                           Downloaded: http://maven.wso2.org/nexus/content/repositories/snapshots/org/wso2/carbon/devicemgt/org.wso2.carbon.device.mgt.user.core/0.9.2-SNAPSHOT/maven-metadata.xml (817 B at 20.5 KB/sec)
-            Downloading: http://maven.wso2.org/nexus/content/groups/wso2-public/org/wso2/carbon/devicemgt/org.wso2.carbon.device.mgt.user.core/0.9.2-SNAPSHOT/org.wso2.carbon.device.mgt.user.core-0.9.2-20150519.200058-165.pom
-            Downloading: http://maven.wso2.org/nexus/content/repositories/releases/org/wso2/carbon/devicemgt/org.wso2.carbon.device.mgt.user.core/0.9.2-SNAPSHOT/org.wso2.carbon.device.mgt.user.core-0.9.2-20150519.200058-165.pom
-            Downloading: http://maven.wso2.org/nexus/content/repositories/snapshots/org/wso2/carbon/devicemgt/org.wso2.carbon.device.mgt.user.core/0.9.2-SNAPSHOT/org.wso2.carbon.device.mgt.user.core-0.9.2-20150519.200058-165.pom
-3/5 KB      5/5 KB            Downloaded: http://maven.wso2.org/nexus/content/repositories/snapshots/org/wso2/carbon/devicemgt/org.wso2.carbon.device.mgt.user.core/0.9.2-SNAPSHOT/org.wso2.carbon.device.mgt.user.core-0.9.2-20150519.200058-165.pom (5 KB at 116.3 KB/sec)
-Downloading: http://maven.wso2.org/nexus/content/groups/wso2-public/org/wso2/carbon/devicemgt/user-mgt/0.9.2-SNAPSHOT/maven-metadata.xml
-Downloading: http://maven.wso2.org/nexus/content/repositories/releases/org/wso2/carbon/devicemgt/user-mgt/0.9.2-SNAPSHOT/maven-metadata.xml
-Downloading: http://maven.wso2.org/nexus/content/repositories/snapshots/org/wso2/carbon/devicemgt/user-mgt/0.9.2-SNAPSHOT/maven-metadata.xml
-         614/614 B               Downloaded: http://maven.wso2.org/nexus/content/repositories/snapshots/org/wso2/carbon/devicemgt/user-mgt/0.9.2-SNAPSHOT/maven-metadata.xml (614 B at 10.5 KB/sec)
-            Downloading: http://maven.wso2.org/nexus/content/repositories/snapshots/org/wso2/carbon/devicemgt/user-mgt/0.9.2-SNAPSHOT/user-mgt-0.9.2-20150519.200118-165.pom
-1/3 KB      3/3 KB            Downloaded: http://maven.wso2.org/nexus/content/repositories/snapshots/org/wso2/carbon/devicemgt/user-mgt/0.9.2-SNAPSHOT/user-mgt-0.9.2-20150519.200118-165.pom (3 KB at 63.3 KB/sec)
-Downloading: http://maven.wso2.org/nexus/content/groups/wso2-public/org/wso2/carbon/devicemgt/org.wso2.carbon.device.mgt.user.common/0.9.2-SNAPSHOT/maven-metadata.xml
-Downloading: http://maven.wso2.org/nexus/content/repositories/snapshots/org/wso2/carbon/devicemgt/org.wso2.carbon.device.mgt.user.common/0.9.2-SNAPSHOT/maven-metadata.xml
-Downloading: http://maven.wso2.org/nexus/content/repositories/releases/org/wso2/carbon/devicemgt/org.wso2.carbon.device.mgt.user.common/0.9.2-SNAPSHOT/maven-metadata.xml
-819/819 B                           Downloaded: http://maven.wso2.org/nexus/content/repositories/snapshots/org/wso2/carbon/devicemgt/org.wso2.carbon.device.mgt.user.common/0.9.2-SNAPSHOT/maven-metadata.xml (819 B at 24.2 KB/sec)
-            Downloading: http://maven.wso2.org/nexus/content/groups/wso2-public/org/wso2/carbon/devicemgt/org.wso2.carbon.device.mgt.user.common/0.9.2-SNAPSHOT/org.wso2.carbon.device.mgt.user.common-0.9.2-20150519.200057-165.pom
-            Downloading: http://maven.wso2.org/nexus/content/repositories/releases/org/wso2/carbon/devicemgt/org.wso2.carbon.device.mgt.user.common/0.9.2-SNAPSHOT/org.wso2.carbon.device.mgt.user.common-0.9.2-20150519.200057-165.pom
-            Downloading: http://maven.wso2.org/nexus/content/repositories/snapshots/org/wso2/carbon/devicemgt/org.wso2.carbon.device.mgt.user.common/0.9.2-SNAPSHOT/org.wso2.carbon.device.mgt.user.common-0.9.2-20150519.200057-165.pom
-3/3 KB               Downloaded: http://maven.wso2.org/nexus/content/repositories/snapshots/org/wso2/carbon/devicemgt/org.wso2.carbon.device.mgt.user.common/0.9.2-SNAPSHOT/org.wso2.carbon.device.mgt.user.common-0.9.2-20150519.200057-165.pom (3 KB at 53.9 KB/sec)
-Downloading: http://maven.wso2.org/nexus/content/groups/wso2-public/org/wso2/carbon/devicemgt/org.wso2.carbon.device.mgt.core/0.9.2-SNAPSHOT/maven-metadata.xml
-Downloading: http://maven.wso2.org/nexus/content/repositories/releases/org/wso2/carbon/devicemgt/org.wso2.carbon.device.mgt.core/0.9.2-SNAPSHOT/maven-metadata.xml
-Downloading: http://maven.wso2.org/nexus/content/repositories/snapshots/org/wso2/carbon/devicemgt/org.wso2.carbon.device.mgt.core/0.9.2-SNAPSHOT/maven-metadata.xml
-812/812 B                           Downloaded: http://maven.wso2.org/nexus/content/repositories/snapshots/org/wso2/carbon/devicemgt/org.wso2.carbon.device.mgt.core/0.9.2-SNAPSHOT/maven-metadata.xml (812 B at 20.3 KB/sec)
-            Downloading: http://maven.wso2.org/nexus/content/groups/wso2-public/org/wso2/carbon/devicemgt/org.wso2.carbon.device.mgt.core/0.9.2-SNAPSHOT/org.wso2.carbon.device.mgt.core-0.9.2-20150519.200051-202.pom
-            Downloading: http://maven.wso2.org/nexus/content/repositories/releases/org/wso2/carbon/devicemgt/org.wso2.carbon.device.mgt.core/0.9.2-SNAPSHOT/org.wso2.carbon.device.mgt.core-0.9.2-20150519.200051-202.pom
-            Downloading: http://maven.wso2.org/nexus/content/repositories/snapshots/org/wso2/carbon/devicemgt/org.wso2.carbon.device.mgt.core/0.9.2-SNAPSHOT/org.wso2.carbon.device.mgt.core-0.9.2-20150519.200051-202.pom
-4/10 KB     8/10 KB   10/10 KB              Downloaded: http://maven.wso2.org/nexus/content/repositories/snapshots/org/wso2/carbon/devicemgt/org.wso2.carbon.device.mgt.core/0.9.2-SNAPSHOT/org.wso2.carbon.device.mgt.core-0.9.2-20150519.200051-202.pom (10 KB at 142.2 KB/sec)
-Downloading: http://maven.wso2.org/nexus/content/repositories/snapshots/org/wso2/carbon/devicemgt/org.wso2.carbon.device.mgt.common/0.9.2-SNAPSHOT/org.wso2.carbon.device.mgt.common-0.9.2-20150519.200050-202.jar
-Downloading: http://maven.wso2.org/nexus/content/repositories/snapshots/org/wso2/carbon/devicemgt/org.wso2.carbon.device.mgt.user.core/0.9.2-SNAPSHOT/org.wso2.carbon.device.mgt.user.core-0.9.2-20150519.200058-165.jar
-Downloading: http://maven.wso2.org/nexus/content/repositories/snapshots/org/wso2/carbon/devicemgt/org.wso2.carbon.device.mgt.user.common/0.9.2-SNAPSHOT/org.wso2.carbon.device.mgt.user.common-0.9.2-20150519.200057-165.jar
-Downloading: http://maven.wso2.org/nexus/content/repositories/snapshots/org/wso2/carbon/devicemgt/org.wso2.carbon.device.mgt.core/0.9.2-SNAPSHOT/org.wso2.carbon.device.mgt.core-0.9.2-20150519.200051-202.jar
-4/35 KB    4/35 KB   4/12 KB   8/35 KB   4/12 KB   4/20 KB   8/35 KB   4/12 KB   4/20 KB   8/35 KB   6/12 KB   4/20 KB   12/35 KB   6/12 KB   4/20 KB   12/35 KB   10/12 KB   6/20 KB   12/35 KB   10/12 KB   6/20 KB   16/35 KB   10/12 KB   6/20 KB   16/35 KB   12/12 KB   10/20 KB   16/35 KB   12/12 KB   10/20 KB   20/35 KB   12/12 KB   14/20 KB   20/35 KB   12/12 KB   14/20 KB   24/35 KB   12/12 KB   14/20 KB   28/35 KB   12/12 KB   18/20 KB   28/35 KB   12/12 KB   18/20 KB   30/35 KB   12/12 KB   20/20 KB   30/35 KB   12/12 KB   20/20 KB   33/35 KB   12/12 KB   20/20 KB   35/35 KB   12/12 KB   20/20 KB   35/35 KB   12/12 KB   4/155 KB   20/20 KB   35/35 KB   12/12 KB   7/155 KB   20/20 KB   35/35 KB   12/12 KB   11/155 KB   20/20 KB   35/35 KB   12/12 KB   15/155 KB   20/20 KB   35/35 KB   12/12 KB   19/155 KB   20/20 KB   35/35 KB   12/12 KB   23/155 KB   20/20 KB   35/35 KB   12/12 KB   27/155 KB   20/20 KB   35/35 KB   12/12 KB   31/155 KB   20/20 KB   35/35 KB   12/12 KB   32/155 KB   20/20 KB   35/35 KB   12/12 KB   36/155 KB   20/20 KB   35/35 KB   12/12 KB   40/155 KB   20/20 KB   35/35 KB   12/12 KB   44/155 KB   20/20 KB   35/35 KB   12/12 KB   48/155 KB   20/20 KB   35/35 KB   12/12 KB   52/155 KB   20/20 KB   35/35 KB   12/12 KB   56/155 KB   20/20 KB   35/35 KB   12/12 KB   60/155 KB   20/20 KB   35/35 KB   12/12 KB   64/155 KB                                                Downloaded: http://maven.wso2.org/nexus/content/repositories/snapshots/org/wso2/carbon/devicemgt/org.wso2.carbon.device.mgt.user.core/0.9.2-SNAPSHOT/org.wso2.carbon.device.mgt.user.core-0.9.2-20150519.200058-165.jar (20 KB at 313.9 KB/sec)
-35/35 KB   12/12 KB   68/155 KB              35/35 KB   12/12 KB   72/155 KB   35/35 KB   12/12 KB   76/155 KB   35/35 KB   12/12 KB   80/155 KB   35/35 KB   12/12 KB   84/155 KB   35/35 KB   12/12 KB   88/155 KB   35/35 KB   12/12 KB   92/155 KB   35/35 KB   12/12 KB   96/155 KB   35/35 KB   12/12 KB   100/155 KB   35/35 KB   12/12 KB   104/155 KB   35/35 KB   12/12 KB   108/155 KB   35/35 KB   12/12 KB   112/155 KB   35/35 KB   12/12 KB   116/155 KB   35/35 KB   12/12 KB   120/155 KB   35/35 KB   12/12 KB   124/155 KB   35/35 KB   12/12 KB   127/155 KB                                      Downloaded: http://maven.wso2.org/nexus/content/repositories/snapshots/org/wso2/carbon/devicemgt/org.wso2.carbon.device.mgt.user.common/0.9.2-SNAPSHOT/org.wso2.carbon.device.mgt.user.common-0.9.2-20150519.200057-165.jar (12 KB at 174.4 KB/sec)
-35/35 KB   131/155 KB              35/35 KB   132/155 KB   35/35 KB   136/155 KB   35/35 KB   140/155 KB   35/35 KB   144/155 KB   35/35 KB   148/155 KB   35/35 KB   152/155 KB                           Downloaded: http://maven.wso2.org/nexus/content/repositories/snapshots/org/wso2/carbon/devicemgt/org.wso2.carbon.device.mgt.common/0.9.2-SNAPSHOT/org.wso2.carbon.device.mgt.common-0.9.2-20150519.200050-202.jar (35 KB at 492.3 KB/sec)
-155/155 KB                           Downloaded: http://maven.wso2.org/nexus/content/repositories/snapshots/org/wso2/carbon/devicemgt/org.wso2.carbon.device.mgt.core/0.9.2-SNAPSHOT/org.wso2.carbon.device.mgt.core-0.9.2-20150519.200051-202.jar (155 KB at 1684.4 KB/sec)
-[INFO] 
-[INFO] --- maven-dependency-plugin:2.9:tree (default-cli) @ org.wso2.carbon.device.mgt.iot.impl ---
-[INFO] org.wso2.carbon.devicemgt-plugins:org.wso2.carbon.device.mgt.iot.impl:bundle:1.9.2-SNAPSHOT
-[INFO] +- org.eclipse.osgi:org.eclipse.osgi:jar:3.8.1.v20120830-144521:compile
-[INFO] +- org.eclipse.osgi:org.eclipse.osgi.services:jar:3.3.100.v20120522-1822:compile
-[INFO] +- org.wso2.carbon:org.wso2.carbon.core:jar:4.4.0:compile
-[INFO] +- org.wso2.carbon:org.wso2.carbon.logging:jar:4.4.0:compile
-[INFO] +- org.wso2.carbon:org.wso2.carbon.utils:jar:4.4.0:compile
-[INFO] +- org.wso2.carbon.devicemgt:org.wso2.carbon.device.mgt.common:jar:0.9.2-SNAPSHOT:compile
-[INFO] +- org.wso2.carbon.devicemgt:org.wso2.carbon.device.mgt.user.core:jar:0.9.2-SNAPSHOT:compile
-[INFO] |  +- org.wso2.carbon.devicemgt:org.wso2.carbon.device.mgt.user.common:jar:0.9.2-SNAPSHOT:compile
-[INFO] |  +- org.wso2.carbon:org.wso2.carbon.user.core:jar:4.4.0:compile
-[INFO] |  +- org.wso2.carbon:org.wso2.carbon.user.api:jar:4.4.0:compile
-[INFO] |  \- org.wso2.carbon:org.wso2.carbon.base:jar:4.4.0:compile
-[INFO] +- org.wso2.carbon.devicemgt:org.wso2.carbon.device.mgt.core:jar:0.9.2-SNAPSHOT:compile
-[INFO] |  +- org.wso2.carbon.governance:org.wso2.carbon.governance.api:jar:4.4.1:compile
-[INFO] |  +- org.apache.axis2.transport:axis2-transport-mail:jar:1.1.0-wso2v10:compile
-[INFO] |  +- org.apache.ws.commons.axiom:axiom-api:jar:1.2.11-wso2v5:compile
-[INFO] |  |  +- org.apache.geronimo.specs:geronimo-activation_1.1_spec:jar:1.0.2:compile
-[INFO] |  |  +- org.apache.geronimo.specs:geronimo-javamail_1.4_spec:jar:1.6:compile
-[INFO] |  |  +- commons-logging:commons-logging:jar:1.1.1:compile
-[INFO] |  |  +- jaxen:jaxen:jar:1.1.1:compile
-[INFO] |  |  \- org.apache.geronimo.specs:geronimo-stax-api_1.0_spec:jar:1.0.1:compile
-[INFO] |  +- org.apache.ws.commons.axiom:axiom-impl:jar:1.2.11-wso2v5:compile
-[INFO] |  |  \- org.codehaus.woodstox:wstx-asl:jar:3.2.9:compile
-[INFO] |  +- org.apache.ws.commons.axiom.wso2:axiom:jar:1.2.11.wso2v5:compile
-[INFO] |  |  +- org.apache.geronimo.specs.wso2:geronimo-stax-api_1.0_spec:jar:1.0.1.wso2v2:compile
-[INFO] |  |  +- org.codehaus.woodstox:woodstox-core-asl:jar:4.2.0:compile
-[INFO] |  |  \- org.codehaus.woodstox:stax2-api:jar:3.1.1:compile
-[INFO] |  |     \- javax.xml.stream:stax-api:jar:1.0-2:compile
-[INFO] |  +- org.wso2.carbon.apimgt:org.wso2.carbon.apimgt.api:jar:1.4.0:compile
-[INFO] |  +- org.wso2.carbon.apimgt:org.wso2.carbon.apimgt.impl:jar:1.4.0:compile
-[INFO] |  +- org.apache.axis2.wso2:axis2:jar:1.6.1.wso2v11:compile
-[INFO] |  \- org.wso2.carbon.identity:org.wso2.carbon.identity.oauth.stub:jar:4.4.0:compile
-[INFO] |     \- org.apache.axis2.wso2:axis2-client:jar:1.6.1.wso2v12:compile
-[INFO] |        +- org.apache.neethi.wso2:neethi:jar:2.0.4.wso2v4:compile
-[INFO] |        +- org.apache.axis2.wso2:axis2-json:jar:1.6.1.wso2v12:compile
-[INFO] |        +- org.apache.woden.wso2:woden:jar:1.0.0.M8-wso2v1:compile
-[INFO] |        +- wsdl4j.wso2:wsdl4j:jar:1.6.2.wso2v2:compile
-[INFO] |        |  \- wsdl4j:wsdl4j:jar:1.6.2:compile
-[INFO] |        +- org.apache.httpcomponents.wso2:httpcore:jar:4.3.0.wso2v1:compile
-[INFO] |        +- commons-fileupload.wso2:commons-fileupload:jar:1.2.0.wso2v1:compile
-[INFO] |        \- commons-codec.wso2:commons-codec:jar:1.3.0.wso2v1:compile
-[INFO] +- org.wso2.carbon:org.wso2.carbon.ndatasource.core:jar:4.4.0:compile
-[INFO] |  +- org.wso2.carbon:org.wso2.carbon.ndatasource.common:jar:4.4.0:compile
-[INFO] |  \- org.wso2.carbon:org.wso2.carbon.securevault:jar:4.4.0:compile
-[INFO] +- org.testng:testng:jar:6.8:compile
-[INFO] |  \- com.beust:jcommander:jar:1.27:compile
-[INFO] +- org.apache.tomcat.wso2:jdbc-pool:jar:7.0.34.wso2v2:compile
-[INFO] |  \- org.apache.tomcat:tomcat-jdbc:jar:7.0.47:compile
-[INFO] |     \- org.apache.tomcat:tomcat-juli:jar:7.0.47:compile
-[INFO] +- com.h2database.wso2:h2-database-engine:jar:1.2.140.wso2v3:test
-[INFO] +- org.wso2.carbon:org.wso2.carbon.registry.api:jar:4.3.0:compile
-[INFO] +- org.wso2.carbon:org.wso2.carbon.registry.core:jar:4.3.0:compile
-[INFO] |  +- commons-io.wso2:commons-io:jar:2.0.0.wso2v2:compile
-[INFO] |  +- net.sourceforge.findbugs:annotations:jar:1.3.2:compile
-[INFO] |  +- org.apache.ws.commons.schema.wso2:XmlSchema:jar:1.4.7.wso2v3:compile
-[INFO] |  +- org.wso2.carbon:javax.cache.wso2:jar:4.3.0:compile
-[INFO] |  |  \- org.apache.geronimo.specs:geronimo-jta_1.1_spec:jar:1.1:compile
-[INFO] |  +- org.wso2.carbon:org.wso2.carbon.registry.xboot:jar:4.3.0:compile
-[INFO] |  +- org.wso2.securevault:org.wso2.securevault:jar:1.0.0-wso2v2:compile
-[INFO] |  |  +- log4j:log4j:jar:1.2.14:compile
-[INFO] |  |  +- jline:jline:jar:0.9.94:compile
-[INFO] |  |  |  \- junit:junit:jar:3.8.1:compile
-[INFO] |  |  +- commons-cli:commons-cli:jar:1.0:compile
-[INFO] |  |  +- commons-io:commons-io:jar:2.0:compile
-[INFO] |  |  \- commons-codec:commons-codec:jar:1.2:compile
-[INFO] |  +- org.compass-project.wso2:compass:jar:2.0.1.wso2v2:compile
-[INFO] |  +- org.apache.abdera.wso2:abdera:jar:1.0.0.wso2v3:compile
-[INFO] |  +- org.wso2.carbon:org.wso2.carbon.ndatasource.rdbms:jar:4.3.0:compile
-[INFO] |  +- org.apache.poi.wso2:poi-scratchpad:jar:3.9.0.wso2v1:compile
-[INFO] |  |  \- org.apache.poi:poi-scratchpad:jar:3.9:compile
-[INFO] |  |     \- org.apache.poi:poi:jar:3.9:compile
-[INFO] |  +- commons-httpclient.wso2:commons-httpclient:jar:3.1.0.wso2v2:compile
-[INFO] |  |  +- commons-httpclient:commons-httpclient:jar:3.1:compile
-[INFO] |  |  \- org.apache.commons.ssl:not-yet-commons-ssl:jar:0.3.9:compile
-[INFO] |  \- commons-pool.wso2:commons-pool:jar:1.5.6.wso2v1:compile
-[INFO] |     \- commons-pool:commons-pool:jar:1.5.6:compile
-[INFO] \- commons-collections:commons-collections:jar:3.0:compile
-[INFO]                                                                         
-[INFO] ------------------------------------------------------------------------
-[INFO] Building WSO2-IOT-Rest-APi 1.0.0
-[INFO] ------------------------------------------------------------------------
-Downloading: http://repo.maven.apache.org/maven2/org/apache/maven/plugins/maven-antrun-plugin/1.3/maven-antrun-plugin-1.3.pom
-3/5 KB       5/5 KB            Downloaded: http://repo.maven.apache.org/maven2/org/apache/maven/plugins/maven-antrun-plugin/1.3/maven-antrun-plugin-1.3.pom (5 KB at 3.4 KB/sec)
-Downloading: http://repo.maven.apache.org/maven2/org/apache/maven/plugins/maven-plugins/12/maven-plugins-12.pom
-3/12 KB   7/12 KB   11/12 KB   12/12 KB              Downloaded: http://repo.maven.apache.org/maven2/org/apache/maven/plugins/maven-plugins/12/maven-plugins-12.pom (12 KB at 18.4 KB/sec)
-Downloading: http://repo.maven.apache.org/maven2/org/apache/maven/plugins/maven-antrun-plugin/1.3/maven-antrun-plugin-1.3.jar
-4/24 KB    5/24 KB   7/24 KB   8/24 KB   9/24 KB   11/24 KB   15/24 KB   19/24 KB   23/24 KB   24/24 KB              Downloaded: http://repo.maven.apache.org/maven2/org/apache/maven/plugins/maven-antrun-plugin/1.3/maven-antrun-plugin-1.3.jar (24 KB at 11.0 KB/sec)
-Downloading: http://repo.maven.apache.org/maven2/org/apache/maven/plugins/maven-assembly-plugin/2.2-beta-5/maven-assembly-plugin-2.2-beta-5.pom
-4/15 KB    8/15 KB   11/15 KB   15/15 KB   15/15 KB              Downloaded: http://repo.maven.apache.org/maven2/org/apache/maven/plugins/maven-assembly-plugin/2.2-beta-5/maven-assembly-plugin-2.2-beta-5.pom (15 KB at 11.9 KB/sec)
-Downloading: http://repo.maven.apache.org/maven2/org/apache/maven/plugins/maven-plugins/16/maven-plugins-16.pom
-3/13 KB    7/13 KB   11/13 KB   11/13 KB   13/13 KB              Downloaded: http://repo.maven.apache.org/maven2/org/apache/maven/plugins/maven-plugins/16/maven-plugins-16.pom (13 KB at 13.5 KB/sec)
-Downloading: http://repo.maven.apache.org/maven2/org/apache/maven/plugins/maven-assembly-plugin/2.2-beta-5/maven-assembly-plugin-2.2-beta-5.jar
-1/204 KB   5/204 KB   9/204 KB   13/204 KB   13/204 KB   16/204 KB   20/204 KB   24/204 KB   27/204 KB   29/204 KB   33/204 KB   37/204 KB   41/204 KB   41/204 KB   44/204 KB   48/204 KB   52/204 KB   56/204 KB   56/204 KB   59/204 KB   63/204 KB   67/204 KB   71/204 KB   72/204 KB   75/204 KB   78/204 KB   82/204 KB   86/204 KB   88/204 KB   91/204 KB   94/204 KB   95/204 KB   96/204 KB   98/204 KB   99/204 KB   102/204 KB   104/204 KB   106/204 KB   107/204 KB   108/204 KB   111/204 KB   112/204 KB   115/204 KB   118/204 KB   122/204 KB   122/204 KB   124/204 KB   127/204 KB   131/204 KB   135/204 KB   139/204 KB   143/204 KB   144/204 KB   147/204 KB   150/204 KB   151/204 KB   154/204 KB   155/204 KB   156/204 KB   158/204 KB   159/204 KB   160/204 KB   162/204 KB   164/204 KB   166/204 KB   168/204 KB   171/204 KB   172/204 KB   175/204 KB   179/204 KB   179/204 KB   182/204 KB   186/204 KB   186/204 KB   187/204 KB   190/204 KB   191/204 KB   194/204 KB   196/204 KB   199/204 KB   203/204 KB   204/204 KB                Downloaded: http://repo.maven.apache.org/maven2/org/apache/maven/plugins/maven-assembly-plugin/2.2-beta-5/maven-assembly-plugin-2.2-beta-5.jar (204 KB at 53.0 KB/sec)
-Downloading: http://repo.maven.apache.org/maven2/org/apache/maven/plugins/maven-dependency-plugin/2.1/maven-dependency-plugin-2.1.pom
-1/8 KB       5/8 KB   8/8 KB            Downloaded: http://repo.maven.apache.org/maven2/org/apache/maven/plugins/maven-dependency-plugin/2.1/maven-dependency-plugin-2.1.pom (8 KB at 15.4 KB/sec)
-Downloading: http://repo.maven.apache.org/maven2/org/apache/maven/plugins/maven-dependency-plugin/2.1/maven-dependency-plugin-2.1.jar
-3/104 KB   7/104 KB   11/104 KB   15/104 KB   19/104 KB   23/104 KB   27/104 KB   28/104 KB   31/104 KB   33/104 KB   36/104 KB   37/104 KB   41/104 KB   45/104 KB   49/104 KB   53/104 KB   57/104 KB   58/104 KB   59/104 KB   63/104 KB   67/104 KB   71/104 KB   75/104 KB   79/104 KB   83/104 KB   87/104 KB   91/104 KB   95/104 KB   99/104 KB   103/104 KB   104/104 KB                Downloaded: http://repo.maven.apache.org/maven2/org/apache/maven/plugins/maven-dependency-plugin/2.1/maven-dependency-plugin-2.1.jar (104 KB at 66.4 KB/sec)
-Downloading: http://maven.wso2.org/nexus/content/groups/wso2-public/org/wso2/carbon/devicemgt-plugins/org.wso2.carbon.device.mgt.iot.impl/1.9.2-SNAPSHOT/maven-metadata.xml
-Downloading: http://repo.spring.io/plugins-release/org/wso2/carbon/devicemgt-plugins/org.wso2.carbon.device.mgt.iot.impl/1.9.2-SNAPSHOT/maven-metadata.xml
-                          [WARNING] The POM for org.eclipse.osgi:org.eclipse.osgi.services:jar:3.2.0.v20090520-1800 is invalid, transitive dependencies (if any) will not be available, enable debug logging for more details
-Downloading: http://repo.spring.io/plugins-release/org/wso2/carbon/devicemgt/org.wso2.carbon.device.mgt.common/0.9.2-SNAPSHOT/maven-metadata.xml
-             Downloading: http://repo.spring.io/plugins-release/org/wso2/carbon/devicemgt/org.wso2.carbon.device.mgt.core/0.9.2-SNAPSHOT/maven-metadata.xml
-             Downloading: http://repo.spring.io/plugins-release/org/wso2/carbon/devicemgt/org.wso2.carbon.device.mgt.user.common/0.9.2-SNAPSHOT/maven-metadata.xml
-             Downloading: http://repo.spring.io/plugins-release/org/wso2/carbon/devicemgt/org.wso2.carbon.device.mgt.user.core/0.9.2-SNAPSHOT/maven-metadata.xml
-             [INFO] 
-[INFO] --- maven-dependency-plugin:2.1:tree (default-cli) @ WSO2ConnectedDevices ---
-Downloading: http://repo.maven.apache.org/maven2/org/apache/maven/doxia/doxia-sink-api/1.0-alpha-10/doxia-sink-api-1.0-alpha-10.pom
-2/2 KB                Downloaded: http://repo.maven.apache.org/maven2/org/apache/maven/doxia/doxia-sink-api/1.0-alpha-10/doxia-sink-api-1.0-alpha-10.pom (2 KB at 2.3 KB/sec)
-Downloading: http://repo.maven.apache.org/maven2/org/apache/maven/doxia/doxia/1.0-alpha-10/doxia-1.0-alpha-10.pom
-3/9 KB   7/9 KB   9/9 KB            Downloaded: http://repo.maven.apache.org/maven2/org/apache/maven/doxia/doxia/1.0-alpha-10/doxia-1.0-alpha-10.pom (9 KB at 14.4 KB/sec)
-Downloading: http://repo.maven.apache.org/maven2/org/codehaus/plexus/plexus-archiver/1.0-alpha-9/plexus-archiver-1.0-alpha-9.pom
-2/2 KB            Downloaded: http://repo.maven.apache.org/maven2/org/codehaus/plexus/plexus-archiver/1.0-alpha-9/plexus-archiver-1.0-alpha-9.pom (2 KB at 2.9 KB/sec)
-Downloading: http://repo.maven.apache.org/maven2/org/codehaus/plexus/plexus-io/1.0-alpha-1/plexus-io-1.0-alpha-1.pom
-2/2 KB            Downloaded: http://repo.maven.apache.org/maven2/org/codehaus/plexus/plexus-io/1.0-alpha-1/plexus-io-1.0-alpha-1.pom (2 KB at 2.0 KB/sec)
-Downloading: http://repo.maven.apache.org/maven2/org/apache/maven/shared/file-management/1.1/file-management-1.1.pom
-         Downloaded: http://repo.maven.apache.org/maven2/org/apache/maven/shared/file-management/1.1/file-management-1.1.pom (0 B at 0.0 KB/sec)
-Downloading: http://repo.maven.apache.org/maven2/org/apache/maven/shared/maven-shared-components/4/maven-shared-components-4.pom
-         Downloaded: http://repo.maven.apache.org/maven2/org/apache/maven/shared/maven-shared-components/4/maven-shared-components-4.pom (0 B at 0.0 KB/sec)
-Downloading: http://repo.maven.apache.org/maven2/org/apache/maven/maven-plugin-api/2.0/maven-plugin-api-2.0.pom
-         Downloaded: http://repo.maven.apache.org/maven2/org/apache/maven/maven-plugin-api/2.0/maven-plugin-api-2.0.pom (0 B at 0.0 KB/sec)
-Downloading: http://repo.maven.apache.org/maven2/org/apache/maven/shared/maven-shared-io/1.0/maven-shared-io-1.0.pom
-         Downloaded: http://repo.maven.apache.org/maven2/org/apache/maven/shared/maven-shared-io/1.0/maven-shared-io-1.0.pom (0 B at 0.0 KB/sec)
-Downloading: http://repo.maven.apache.org/maven2/org/apache/maven/shared/maven-dependency-analyzer/1.1/maven-dependency-analyzer-1.1.pom
-4/5 KB   5/5 KB            Downloaded: http://repo.maven.apache.org/maven2/org/apache/maven/shared/maven-dependency-analyzer/1.1/maven-dependency-analyzer-1.1.pom (5 KB at 7.6 KB/sec)
-Downloading: http://repo.maven.apache.org/maven2/asm/asm/3.0/asm-3.0.pom
-360/360 B               Downloaded: http://repo.maven.apache.org/maven2/asm/asm/3.0/asm-3.0.pom (360 B at 0.6 KB/sec)
-Downloading: http://repo.maven.apache.org/maven2/asm/asm-parent/3.0/asm-parent-3.0.pom
-3/3 KB               Downloaded: http://repo.maven.apache.org/maven2/asm/asm-parent/3.0/asm-parent-3.0.pom (3 KB at 4.0 KB/sec)
-Downloading: http://repo.maven.apache.org/maven2/org/apache/maven/shared/maven-dependency-tree/1.2/maven-dependency-tree-1.2.pom
-         Downloaded: http://repo.maven.apache.org/maven2/org/apache/maven/shared/maven-dependency-tree/1.2/maven-dependency-tree-1.2.pom (0 B at 0.0 KB/sec)
-Downloading: http://repo.maven.apache.org/maven2/org/apache/maven/shared/maven-shared-components/9/maven-shared-components-9.pom
-         Downloaded: http://repo.maven.apache.org/maven2/org/apache/maven/shared/maven-shared-components/9/maven-shared-components-9.pom (0 B at 0.0 KB/sec)
-Downloading: http://repo.maven.apache.org/maven2/org/apache/maven/shared/maven-common-artifact-filters/1.0/maven-common-artifact-filters-1.0.pom
-         Downloaded: http://repo.maven.apache.org/maven2/org/apache/maven/shared/maven-common-artifact-filters/1.0/maven-common-artifact-filters-1.0.pom (0 B at 0.0 KB/sec)
-Downloading: http://repo.maven.apache.org/maven2/org/apache/maven/shared/maven-plugin-testing-harness/1.1/maven-plugin-testing-harness-1.1.pom
-         Downloaded: http://repo.maven.apache.org/maven2/org/apache/maven/shared/maven-plugin-testing-harness/1.1/maven-plugin-testing-harness-1.1.pom (0 B at 0.0 KB/sec)
-Downloading: http://repo.maven.apache.org/maven2/org/apache/maven/shared/maven-shared-components/7/maven-shared-components-7.pom
-         Downloaded: http://repo.maven.apache.org/maven2/org/apache/maven/shared/maven-shared-components/7/maven-shared-components-7.pom (0 B at 0.0 KB/sec)
-Downloading: http://repo.maven.apache.org/maven2/org/apache/maven/maven-core/2.0/maven-core-2.0.pom
-         Downloaded: http://repo.maven.apache.org/maven2/org/apache/maven/maven-core/2.0/maven-core-2.0.pom (0 B at 0.0 KB/sec)
-Downloading: http://repo.maven.apache.org/maven2/org/apache/maven/maven-settings/2.0/maven-settings-2.0.pom
-         Downloaded: http://repo.maven.apache.org/maven2/org/apache/maven/maven-settings/2.0/maven-settings-2.0.pom (0 B at 0.0 KB/sec)
-Downloading: http://repo.maven.apache.org/maven2/org/apache/maven/maven-plugin-parameter-documenter/2.0/maven-plugin-parameter-documenter-2.0.pom
-         Downloaded: http://repo.maven.apache.org/maven2/org/apache/maven/maven-plugin-parameter-documenter/2.0/maven-plugin-parameter-documenter-2.0.pom (0 B at 0.0 KB/sec)
-Downloading: http://repo.maven.apache.org/maven2/org/apache/maven/reporting/maven-reporting-api/2.0/maven-reporting-api-2.0.pom
-         Downloaded: http://repo.maven.apache.org/maven2/org/apache/maven/reporting/maven-reporting-api/2.0/maven-reporting-api-2.0.pom (0 B at 0.0 KB/sec)
-Downloading: http://repo.maven.apache.org/maven2/org/apache/maven/reporting/maven-reporting/2.0/maven-reporting-2.0.pom
-         Downloaded: http://repo.maven.apache.org/maven2/org/apache/maven/reporting/maven-reporting/2.0/maven-reporting-2.0.pom (0 B at 0.0 KB/sec)
-Downloading: http://repo.maven.apache.org/maven2/doxia/doxia-sink-api/1.0-alpha-4/doxia-sink-api-1.0-alpha-4.pom
-         Downloaded: http://repo.maven.apache.org/maven2/doxia/doxia-sink-api/1.0-alpha-4/doxia-sink-api-1.0-alpha-4.pom (0 B at 0.0 KB/sec)
-Downloading: http://repo.maven.apache.org/maven2/org/apache/maven/maven-error-diagnostics/2.0/maven-error-diagnostics-2.0.pom
-         Downloaded: http://repo.maven.apache.org/maven2/org/apache/maven/maven-error-diagnostics/2.0/maven-error-diagnostics-2.0.pom (0 B at 0.0 KB/sec)
-Downloading: http://repo.maven.apache.org/maven2/org/apache/maven/maven-plugin-registry/2.0/maven-plugin-registry-2.0.pom
-         Downloaded: http://repo.maven.apache.org/maven2/org/apache/maven/maven-plugin-registry/2.0/maven-plugin-registry-2.0.pom (0 B at 0.0 KB/sec)
-Downloading: http://repo.maven.apache.org/maven2/org/apache/maven/maven-plugin-descriptor/2.0/maven-plugin-descriptor-2.0.pom
-         Downloaded: http://repo.maven.apache.org/maven2/org/apache/maven/maven-plugin-descriptor/2.0/maven-plugin-descriptor-2.0.pom (0 B at 0.0 KB/sec)
-Downloading: http://repo.maven.apache.org/maven2/org/apache/maven/maven-monitor/2.0/maven-monitor-2.0.pom
-         Downloaded: http://repo.maven.apache.org/maven2/org/apache/maven/maven-monitor/2.0/maven-monitor-2.0.pom (0 B at 0.0 KB/sec)
-Downloading: http://repo.maven.apache.org/maven2/org/apache/maven/reporting/maven-reporting-impl/2.0.4/maven-reporting-impl-2.0.4.pom
-2/2 KB            Downloaded: http://repo.maven.apache.org/maven2/org/apache/maven/reporting/maven-reporting-impl/2.0.4/maven-reporting-impl-2.0.4.pom (2 KB at 3.1 KB/sec)
-Downloading: http://repo.maven.apache.org/maven2/org/apache/maven/reporting/maven-reporting/2.0.4/maven-reporting-2.0.4.pom
-700/700 B               Downloaded: http://repo.maven.apache.org/maven2/org/apache/maven/reporting/maven-reporting/2.0.4/maven-reporting-2.0.4.pom (700 B at 1.1 KB/sec)
-Downloading: http://repo.maven.apache.org/maven2/org/apache/maven/maven/2.0.4/maven-2.0.4.pom
-            Downloaded: http://repo.maven.apache.org/maven2/org/apache/maven/maven/2.0.4/maven-2.0.4.pom (0 B at 0.0 KB/sec)
-Downloading: http://repo.maven.apache.org/maven2/org/apache/maven/maven-project/2.0.4/maven-project-2.0.4.pom
-            Downloaded: http://repo.maven.apache.org/maven2/org/apache/maven/maven-project/2.0.4/maven-project-2.0.4.pom (0 B at 0.0 KB/sec)
-Downloading: http://repo.maven.apache.org/maven2/org/apache/maven/maven-settings/2.0.4/maven-settings-2.0.4.pom
-            Downloaded: http://repo.maven.apache.org/maven2/org/apache/maven/maven-settings/2.0.4/maven-settings-2.0.4.pom (0 B at 0.0 KB/sec)
-Downloading: http://repo.maven.apache.org/maven2/org/apache/maven/maven-model/2.0.4/maven-model-2.0.4.pom
-            Downloaded: http://repo.maven.apache.org/maven2/org/apache/maven/maven-model/2.0.4/maven-model-2.0.4.pom (0 B at 0.0 KB/sec)
-Downloading: http://repo.maven.apache.org/maven2/org/apache/maven/maven-profile/2.0.4/maven-profile-2.0.4.pom
-            Downloaded: http://repo.maven.apache.org/maven2/org/apache/maven/maven-profile/2.0.4/maven-profile-2.0.4.pom (0 B at 0.0 KB/sec)
-Downloading: http://repo.maven.apache.org/maven2/org/apache/maven/maven-artifact-manager/2.0.4/maven-artifact-manager-2.0.4.pom
-            Downloaded: http://repo.maven.apache.org/maven2/org/apache/maven/maven-artifact-manager/2.0.4/maven-artifact-manager-2.0.4.pom (0 B at 0.0 KB/sec)
-Downloading: http://repo.maven.apache.org/maven2/org/apache/maven/maven-repository-metadata/2.0.4/maven-repository-metadata-2.0.4.pom
-            Downloaded: http://repo.maven.apache.org/maven2/org/apache/maven/maven-repository-metadata/2.0.4/maven-repository-metadata-2.0.4.pom (0 B at 0.0 KB/sec)
-Downloading: http://repo.maven.apache.org/maven2/org/apache/maven/maven-artifact/2.0.4/maven-artifact-2.0.4.pom
-            Downloaded: http://repo.maven.apache.org/maven2/org/apache/maven/maven-artifact/2.0.4/maven-artifact-2.0.4.pom (0 B at 0.0 KB/sec)
-Downloading: http://repo.maven.apache.org/maven2/commons-validator/commons-validator/1.2.0/commons-validator-1.2.0.pom
-4/9 KB      8/9 KB   9/9 KB            Downloaded: http://repo.maven.apache.org/maven2/commons-validator/commons-validator/1.2.0/commons-validator-1.2.0.pom (9 KB at 15.3 KB/sec)
-Downloading: http://repo.maven.apache.org/maven2/org/apache/maven/doxia/doxia-core/1.0-alpha-7/doxia-core-1.0-alpha-7.pom
-2/2 KB            Downloaded: http://repo.maven.apache.org/maven2/org/apache/maven/doxia/doxia-core/1.0-alpha-7/doxia-core-1.0-alpha-7.pom (2 KB at 2.5 KB/sec)
-Downloading: http://repo.maven.apache.org/maven2/oro/oro/2.0.7/oro-2.0.7.pom
-141/141 B               Downloaded: http://repo.maven.apache.org/maven2/oro/oro/2.0.7/oro-2.0.7.pom (141 B at 0.3 KB/sec)
-Downloading: http://repo.maven.apache.org/maven2/org/apache/maven/maven-plugin-api/2.0.4/maven-plugin-api-2.0.4.pom
-            Downloaded: http://repo.maven.apache.org/maven2/org/apache/maven/maven-plugin-api/2.0.4/maven-plugin-api-2.0.4.pom (0 B at 0.0 KB/sec)
-Downloading: http://repo.maven.apache.org/maven2/org/apache/maven/reporting/maven-reporting-api/2.0.4/maven-reporting-api-2.0.4.pom
-902/902 B               Downloaded: http://repo.maven.apache.org/maven2/org/apache/maven/reporting/maven-reporting-api/2.0.4/maven-reporting-api-2.0.4.pom (902 B at 1.4 KB/sec)
-Downloading: http://repo.maven.apache.org/maven2/org/apache/maven/doxia/doxia-site-renderer/1.0-alpha-7/doxia-site-renderer-1.0-alpha-7.pom
-2/2 KB               Downloaded: http://repo.maven.apache.org/maven2/org/apache/maven/doxia/doxia-site-renderer/1.0-alpha-7/doxia-site-renderer-1.0-alpha-7.pom (2 KB at 2.3 KB/sec)
-Downloading: http://repo.maven.apache.org/maven2/org/codehaus/plexus/plexus-i18n/1.0-beta-6/plexus-i18n-1.0-beta-6.pom
-771/771 B               Downloaded: http://repo.maven.apache.org/maven2/org/codehaus/plexus/plexus-i18n/1.0-beta-6/plexus-i18n-1.0-beta-6.pom (771 B at 1.3 KB/sec)
-Downloading: http://repo.maven.apache.org/maven2/org/codehaus/plexus/plexus-components/1.1.4/plexus-components-1.1.4.pom
-3/3 KB               Downloaded: http://repo.maven.apache.org/maven2/org/codehaus/plexus/plexus-components/1.1.4/plexus-components-1.1.4.pom (3 KB at 3.6 KB/sec)
-Downloading: http://repo.maven.apache.org/maven2/org/codehaus/plexus/plexus-velocity/1.1.2/plexus-velocity-1.1.2.pom
-4/8 KB   8/8 KB            Downloaded: http://repo.maven.apache.org/maven2/org/codehaus/plexus/plexus-velocity/1.1.2/plexus-velocity-1.1.2.pom (8 KB at 11.9 KB/sec)
-Downloading: http://repo.maven.apache.org/maven2/org/codehaus/plexus/plexus-container-default/1.0-alpha-7/plexus-container-default-1.0-alpha-7.pom
-2/2 KB            Downloaded: http://repo.maven.apache.org/maven2/org/codehaus/plexus/plexus-container-default/1.0-alpha-7/plexus-container-default-1.0-alpha-7.pom (2 KB at 2.0 KB/sec)
-Downloading: http://repo.maven.apache.org/maven2/plexus/plexus-containers/1.0.2/plexus-containers-1.0.2.pom
-471/471 B               Downloaded: http://repo.maven.apache.org/maven2/plexus/plexus-containers/1.0.2/plexus-containers-1.0.2.pom (471 B at 0.7 KB/sec)
-Downloading: http://repo.maven.apache.org/maven2/plexus/plexus-root/1.0.3/plexus-root-1.0.3.pom
-4/6 KB      5/6 KB   6/6 KB            Downloaded: http://repo.maven.apache.org/maven2/plexus/plexus-root/1.0.3/plexus-root-1.0.3.pom (6 KB at 9.4 KB/sec)
-Downloading: http://repo.maven.apache.org/maven2/plexus/plexus-utils/1.0.2/plexus-utils-1.0.2.pom
-740/740 B               Downloaded: http://repo.maven.apache.org/maven2/plexus/plexus-utils/1.0.2/plexus-utils-1.0.2.pom (740 B at 1.2 KB/sec)
-Downloading: http://repo.maven.apache.org/maven2/commons-logging/commons-logging-api/1.0.4/commons-logging-api-1.0.4.pom
-168/168 B               Downloaded: http://repo.maven.apache.org/maven2/commons-logging/commons-logging-api/1.0.4/commons-logging-api-1.0.4.pom (168 B at 0.3 KB/sec)
-Downloading: http://repo.maven.apache.org/maven2/velocity/velocity/1.4/velocity-1.4.pom
-3/3 KB               Downloaded: http://repo.maven.apache.org/maven2/velocity/velocity/1.4/velocity-1.4.pom (3 KB at 3.9 KB/sec)
-Downloading: http://repo.maven.apache.org/maven2/velocity/velocity-dep/1.4/velocity-dep-1.4.pom
-2/2 KB            Downloaded: http://repo.maven.apache.org/maven2/velocity/velocity-dep/1.4/velocity-dep-1.4.pom (2 KB at 3.0 KB/sec)
-Downloading: http://repo.maven.apache.org/maven2/org/apache/maven/doxia/doxia-decoration-model/1.0-alpha-7/doxia-decoration-model-1.0-alpha-7.pom
-2/2 KB            Downloaded: http://repo.maven.apache.org/maven2/org/apache/maven/doxia/doxia-decoration-model/1.0-alpha-7/doxia-decoration-model-1.0-alpha-7.pom (2 KB at 2.2 KB/sec)
-Downloading: http://repo.maven.apache.org/maven2/org/codehaus/plexus/plexus-archiver/1.0-alpha-9/plexus-archiver-1.0-alpha-9.jar
-Downloading: http://repo.maven.apache.org/maven2/org/codehaus/plexus/plexus-utils/1.4.6/plexus-utils-1.4.6.jar
-Downloading: http://repo.maven.apache.org/maven2/org/apache/maven/shared/file-management/1.1/file-management-1.1.jar
-Downloading: http://repo.maven.apache.org/maven2/org/apache/maven/shared/maven-shared-io/1.0/maven-shared-io-1.0.jar
-Downloading: http://repo.maven.apache.org/maven2/org/apache/maven/shared/maven-dependency-analyzer/1.1/maven-dependency-analyzer-1.1.jar
-4/200 KB   8/200 KB   12/200 KB   16/200 KB   20/200 KB   24/200 KB   24/200 KB   27/200 KB   28/200 KB   31/200 KB   32/200 KB   33/200 KB   35/200 KB   37/200 KB   39/200 KB   40/200 KB   41/200 KB   44/200 KB   47/200 KB   51/200 KB   51/200 KB   55/200 KB   55/200 KB   56/200 KB   59/200 KB   1/33 KB   59/200 KB   5/33 KB   59/200 KB   7/33 KB   59/200 KB   9/33 KB   59/200 KB   11/33 KB   59/200 KB   4/27 KB   11/33 KB   59/200 KB   8/27 KB   11/33 KB   59/200 KB   9/27 KB   11/33 KB   59/200 KB   12/27 KB   11/33 KB   59/200 KB   12/27 KB   12/33 KB   59/200 KB   13/27 KB   13/33 KB   59/200 KB   13/27 KB   13/33 KB   59/200 KB   13/27 KB   13/33 KB   63/200 KB   13/27 KB   13/33 KB   67/200 KB   13/27 KB   13/33 KB   67/200 KB   13/27 KB   13/33 KB   68/200 KB   13/27 KB   13/33 KB   71/200 KB   13/27 KB   13/33 KB   75/200 KB   13/27 KB   13/33 KB   76/200 KB   13/27 KB   13/33 KB   80/200 KB   13/27 KB   13/33 KB   80/200 KB   13/27 KB   4/154 KB   13/33 KB   80/200 KB   13/27 KB   8/154 KB   13/33 KB   80/200 KB   13/27 KB   12/154 KB   13/33 KB   80/200 KB   13/27 KB   13/154 KB   13/33 KB   80/200 KB                                                 Downloaded: http://repo.maven.apache.org/maven2/org/apache/maven/shared/file-management/1.1/file-management-1.1.jar (0 B at 0.0 KB/sec)
-Downloading: http://repo.maven.apache.org/maven2/asm/asm/3.0/asm-3.0.jar
-13/27 KB   13/154 KB   13/33 KB   82/200 KB   13/27 KB   13/154 KB   15/33 KB   82/200 KB   13/27 KB   13/154 KB   17/33 KB   82/200 KB   13/27 KB   13/154 KB   21/33 KB   82/200 KB   13/27 KB   13/154 KB   21/33 KB   82/200 KB   13/27 KB   13/154 KB   25/33 KB   82/200 KB   13/27 KB   13/154 KB   28/33 KB   82/200 KB   17/27 KB   13/154 KB   28/33 KB   82/200 KB   17/27 KB   13/154 KB   28/33 KB   86/200 KB   17/27 KB   13/154 KB   29/33 KB   86/200 KB   21/27 KB   13/154 KB   29/33 KB   86/200 KB   21/27 KB   13/154 KB   29/33 KB   86/200 KB   21/27 KB   13/154 KB   31/33 KB   86/200 KB   25/27 KB   13/154 KB   31/33 KB   86/200 KB   27/27 KB   13/154 KB   31/33 KB   86/200 KB   27/27 KB   13/154 KB   33/33 KB   88/200 KB   27/27 KB   13/154 KB   33/33 KB   88/200 KB   27/27 KB   13/154 KB   33/33 KB   90/200 KB   27/27 KB   13/154 KB   33/33 KB   91/200 KB   27/27 KB   13/154 KB   33/33 KB   94/200 KB   27/27 KB   13/154 KB   33/33 KB   98/200 KB   27/27 KB   13/154 KB   33/33 KB   99/200 KB   27/27 KB   13/154 KB   33/33 KB   102/200 KB   27/27 KB   13/154 KB   33/33 KB   103/200 KB   27/27 KB   16/154 KB   33/33 KB   103/200 KB   27/27 KB   17/154 KB   33/33 KB   103/200 KB   27/27 KB   20/154 KB   33/33 KB   103/200 KB   27/27 KB   21/154 KB   33/33 KB   103/200 KB   27/27 KB   25/154 KB   33/33 KB   103/200 KB   27/27 KB   25/154 KB   33/33 KB   103/200 KB   27/27 KB   28/154 KB   33/33 KB   103/200 KB   27/27 KB   32/154 KB   33/33 KB   103/200 KB   27/27 KB   33/154 KB   33/33 KB   103/200 KB   27/27 KB   35/154 KB   33/33 KB   103/200 KB   27/27 KB   35/154 KB   33/33 KB   104/200 KB   27/27 KB   35/154 KB   33/33 KB   106/200 KB   27/27 KB   35/154 KB   33/33 KB   108/200 KB   27/27 KB   35/154 KB   33/33 KB   112/200 KB   27/27 KB   35/154 KB   33/33 KB   112/200 KB   1/42 KB   27/27 KB   35/154 KB   33/33 KB   112/200 KB   5/42 KB   27/27 KB   35/154 KB   33/33 KB   112/200 KB   9/42 KB   27/27 KB   35/154 KB   33/33 KB   112/200 KB   13/42 KB   27/27 KB   35/154 KB   33/33 KB   112/200 KB   13/42 KB   27/27 KB   35/154 KB   33/33 KB   112/200 KB   13/42 KB   27/27 KB   35/154 KB   33/33 KB   115/200 KB                                                             13/42 KB   27/27 KB   35/154 KB   116/200 KB              Downloaded: http://repo.maven.apache.org/maven2/org/apache/maven/shared/maven-shared-io/1.0/maven-shared-io-1.0.jar (33 KB at 23.9 KB/sec)
-Downloading: http://repo.maven.apache.org/maven2/org/apache/maven/shared/maven-dependency-tree/1.2/maven-dependency-tree-1.2.jar
-13/42 KB   27/27 KB   35/154 KB   119/200 KB   13/42 KB   27/27 KB   35/154 KB   122/200 KB   13/42 KB   27/27 KB   35/154 KB   124/200 KB   13/42 KB   27/27 KB   35/154 KB   127/200 KB   13/42 KB   27/27 KB   35/154 KB   131/200 KB   13/42 KB   27/27 KB   35/154 KB   131/200 KB   13/42 KB   27/27 KB   35/154 KB   135/200 KB   13/42 KB   27/27 KB   35/154 KB   135/200 KB   13/42 KB   27/27 KB   36/154 KB   135/200 KB   13/42 KB   27/27 KB   37/154 KB   135/200 KB   13/42 KB   27/27 KB   39/154 KB   135/200 KB   13/42 KB   27/27 KB   40/154 KB   135/200 KB   13/42 KB   27/27 KB   41/154 KB   135/200 KB   13/42 KB   27/27 KB   45/154 KB   135/200 KB   13/42 KB   27/27 KB   46/154 KB   135/200 KB   13/42 KB   27/27 KB   47/154 KB   135/200 KB   13/42 KB   27/27 KB   50/154 KB   135/200 KB   13/42 KB   27/27 KB   54/154 KB   135/200 KB   13/42 KB   27/27 KB   54/154 KB   135/200 KB   13/42 KB   27/27 KB   55/154 KB   135/200 KB   13/42 KB   27/27 KB   59/154 KB   135/200 KB   13/42 KB   27/27 KB   62/154 KB   135/200 KB   13/42 KB   27/27 KB   66/154 KB   135/200 KB   13/42 KB   27/27 KB   68/154 KB   135/200 KB   13/42 KB   27/27 KB   68/154 KB   139/200 KB   13/42 KB   27/27 KB   68/154 KB   139/200 KB   13/42 KB   27/27 KB   68/154 KB   142/200 KB   13/42 KB   27/27 KB   68/154 KB   146/200 KB   13/42 KB   27/27 KB   68/154 KB   147/200 KB                                                  Downloaded: http://repo.maven.apache.org/maven2/org/apache/maven/shared/maven-dependency-analyzer/1.1/maven-dependency-analyzer-1.1.jar (27 KB at 19.0 KB/sec)
-Downloading: http://repo.maven.apache.org/maven2/org/apache/maven/shared/maven-common-artifact-filters/1.0/maven-common-artifact-filters-1.0.jar
-15/42 KB   68/154 KB   147/200 KB              16/42 KB   68/154 KB   147/200 KB   17/42 KB   68/154 KB   147/200 KB   21/42 KB   68/154 KB   147/200 KB   23/42 KB   68/154 KB   147/200 KB   27/42 KB   68/154 KB   147/200 KB   29/42 KB   68/154 KB   147/200 KB   33/42 KB   68/154 KB   147/200 KB   33/42 KB   68/154 KB   147/200 KB   33/42 KB   68/154 KB   150/200 KB   33/42 KB   68/154 KB   151/200 KB   33/42 KB   68/154 KB   154/200 KB   33/42 KB   68/154 KB   155/200 KB   33/42 KB   68/154 KB   156/200 KB   33/42 KB   68/154 KB   158/200 KB   33/42 KB   68/154 KB   159/200 KB   33/42 KB   68/154 KB   162/200 KB   33/42 KB   68/154 KB   163/200 KB   33/42 KB   68/154 KB   164/200 KB   33/42 KB   68/154 KB   166/200 KB   33/42 KB   68/154 KB   167/200 KB   33/42 KB   68/154 KB   168/200 KB   33/42 KB   71/154 KB   168/200 KB   33/42 KB   71/154 KB   170/200 KB   33/42 KB   75/154 KB   170/200 KB   33/42 KB   76/154 KB   170/200 KB   33/42 KB   80/154 KB   170/200 KB   33/42 KB   84/154 KB   170/200 KB   33/42 KB   86/154 KB   170/200 KB   33/42 KB   88/154 KB   170/200 KB   33/42 KB   90/154 KB   170/200 KB   33/42 KB   91/154 KB   170/200 KB   33/42 KB   95/154 KB   170/200 KB   33/42 KB   95/154 KB   170/200 KB   33/42 KB   99/154 KB   170/200 KB   33/42 KB   102/154 KB   170/200 KB   33/42 KB   106/154 KB   170/200 KB   33/42 KB   108/154 KB   170/200 KB   33/42 KB   112/154 KB   170/200 KB   33/42 KB   116/154 KB   170/200 KB   33/42 KB   118/154 KB   170/200 KB   33/42 KB   122/154 KB   170/200 KB   33/42 KB   123/154 KB   170/200 KB   33/42 KB   123/154 KB   171/200 KB   33/42 KB   123/154 KB   174/200 KB   33/42 KB   123/154 KB   176/200 KB   33/42 KB   123/154 KB   180/200 KB   33/42 KB   123/154 KB   180/200 KB                                        Downloaded: http://repo.maven.apache.org/maven2/org/apache/maven/shared/maven-dependency-tree/1.2/maven-dependency-tree-1.2.jar (0 B at 0.0 KB/sec)
-Downloading: http://repo.maven.apache.org/maven2/org/apache/maven/shared/maven-plugin-testing-harness/1.1/maven-plugin-testing-harness-1.1.jar
-37/42 KB   123/154 KB   180/200 KB   39/42 KB   123/154 KB   180/200 KB   42/42 KB   123/154 KB   180/200 KB                                        Downloaded: http://repo.maven.apache.org/maven2/org/apache/maven/shared/maven-common-artifact-filters/1.0/maven-common-artifact-filters-1.0.jar (0 B at 0.0 KB/sec)
-Downloading: http://repo.maven.apache.org/maven2/org/codehaus/plexus/plexus-io/1.0-alpha-1/plexus-io-1.0-alpha-1.jar
-42/42 KB   123/154 KB   183/200 KB   42/42 KB   123/154 KB   186/200 KB   42/42 KB   123/154 KB   190/200 KB   42/42 KB   123/154 KB   190/200 KB   42/42 KB   123/154 KB   191/200 KB   42/42 KB   123/154 KB   192/200 KB   42/42 KB   123/154 KB   194/200 KB   42/42 KB   123/154 KB   195/200 KB   42/42 KB   123/154 KB   196/200 KB   42/42 KB   123/154 KB   198/200 KB   42/42 KB   123/154 KB   200/200 KB   42/42 KB   126/154 KB   200/200 KB   42/42 KB   128/154 KB   200/200 KB   42/42 KB   132/154 KB   200/200 KB   42/42 KB   134/154 KB   200/200 KB   42/42 KB   136/154 KB   200/200 KB   42/42 KB   140/154 KB   200/200 KB   42/42 KB   140/154 KB   200/200 KB   42/42 KB   144/154 KB   200/200 KB   42/42 KB   147/154 KB   200/200 KB   42/42 KB   151/154 KB   200/200 KB   42/42 KB   154/154 KB   200/200 KB                                        Downloaded: http://repo.maven.apache.org/maven2/asm/asm/3.0/asm-3.0.jar (42 KB at 40.8 KB/sec)
-Downloading: http://repo.maven.apache.org/maven2/org/apache/maven/reporting/maven-reporting-impl/2.0.4/maven-reporting-impl-2.0.4.jar
-154/154 KB   3/12 KB   200/200 KB    154/154 KB   7/12 KB   200/200 KB   154/154 KB   11/12 KB   200/200 KB   154/154 KB   12/12 KB   200/200 KB                                        Downloaded: http://repo.maven.apache.org/maven2/org/apache/maven/shared/maven-plugin-testing-harness/1.1/maven-plugin-testing-harness-1.1.jar (0 B at 0.0 KB/sec)
-Downloading: http://repo.maven.apache.org/maven2/commons-validator/commons-validator/1.2.0/commons-validator-1.2.0.jar
-                                     Downloaded: http://repo.maven.apache.org/maven2/org/codehaus/plexus/plexus-utils/1.4.6/plexus-utils-1.4.6.jar (200 KB at 93.7 KB/sec)
-Downloading: http://repo.maven.apache.org/maven2/commons-beanutils/commons-beanutils/1.7.0/commons-beanutils-1.7.0.jar
-                                     Downloaded: http://repo.maven.apache.org/maven2/org/codehaus/plexus/plexus-archiver/1.0-alpha-9/plexus-archiver-1.0-alpha-9.jar (154 KB at 72.0 KB/sec)
-Downloading: http://repo.maven.apache.org/maven2/commons-digester/commons-digester/1.6/commons-digester-1.6.jar
-1/14 KB   12/12 KB                   5/14 KB   12/12 KB   9/14 KB   12/12 KB   13/14 KB   12/12 KB   14/14 KB   12/12 KB                         Downloaded: http://repo.maven.apache.org/maven2/org/codehaus/plexus/plexus-io/1.0-alpha-1/plexus-io-1.0-alpha-1.jar (12 KB at 23.8 KB/sec)
-Downloading: http://repo.maven.apache.org/maven2/commons-collections/commons-collections/2.1/commons-collections-2.1.jar
-14/14 KB   1/89 KB    14/14 KB   5/89 KB   14/14 KB   8/89 KB   14/14 KB   12/89 KB   14/14 KB   13/89 KB   14/14 KB   15/89 KB   14/14 KB   19/89 KB   14/14 KB   21/89 KB                         Downloaded: http://repo.maven.apache.org/maven2/commons-digester/commons-digester/1.6/commons-digester-1.6.jar (0 B at 0.0 KB/sec)
-Downloading: http://repo.maven.apache.org/maven2/commons-logging/commons-logging/1.0.4/commons-logging-1.0.4.jar
-3/162 KB   14/14 KB   21/89 KB   7/162 KB   14/14 KB   21/89 KB   11/162 KB   14/14 KB   21/89 KB   11/162 KB   14/14 KB   21/89 KB   15/162 KB   14/14 KB   21/89 KB   16/162 KB   14/14 KB   21/89 KB   19/162 KB   14/14 KB   21/89 KB   21/162 KB   14/14 KB   21/89 KB   23/162 KB   14/14 KB   21/89 KB                                     Downloaded: http://repo.maven.apache.org/maven2/org/apache/maven/reporting/maven-reporting-impl/2.0.4/maven-reporting-impl-2.0.4.jar (14 KB at 25.7 KB/sec)
-Downloading: http://repo.maven.apache.org/maven2/xml-apis/xml-apis/1.0.b2/xml-apis-1.0.b2.jar
-                                  Downloaded: http://repo.maven.apache.org/maven2/commons-beanutils/commons-beanutils/1.7.0/commons-beanutils-1.7.0.jar (0 B at 0.0 KB/sec)
-Downloading: http://repo.maven.apache.org/maven2/org/apache/maven/doxia/doxia-core/1.0-alpha-7/doxia-core-1.0-alpha-7.jar
-23/162 KB   23/89 KB              23/162 KB   24/89 KB   25/162 KB   24/89 KB   27/162 KB   24/89 KB   29/162 KB   24/89 KB   33/162 KB   24/89 KB   36/162 KB   24/89 KB   37/162 KB   24/89 KB   41/162 KB   24/89 KB   45/162 KB   24/89 KB   49/162 KB   24/89 KB   53/162 KB   24/89 KB   56/162 KB   24/89 KB   1/226 KB   56/162 KB   24/89 KB   5/226 KB   56/162 KB   24/89 KB   9/226 KB   56/162 KB   24/89 KB   9/226 KB   56/162 KB   24/89 KB   12/226 KB   56/162 KB   24/89 KB   13/226 KB   56/162 KB   24/89 KB   17/226 KB   56/162 KB   24/89 KB   21/226 KB   56/162 KB   24/89 KB   25/226 KB   56/162 KB   24/89 KB   29/226 KB   56/162 KB   24/89 KB   32/226 KB   56/162 KB   24/89 KB   36/226 KB   56/162 KB   24/89 KB   36/226 KB   56/162 KB   24/89 KB   36/226 KB   56/162 KB   25/89 KB   36/226 KB   56/162 KB   28/89 KB   36/226 KB   56/162 KB   32/89 KB   36/226 KB   56/162 KB   36/89 KB   36/226 KB   56/162 KB   40/89 KB   36/226 KB   56/162 KB   44/89 KB   36/226 KB   56/162 KB   48/89 KB   36/226 KB   56/162 KB   52/89 KB   36/226 KB   56/162 KB   52/89 KB                                      Downloaded: http://repo.maven.apache.org/maven2/commons-logging/commons-logging/1.0.4/commons-logging-1.0.4.jar (0 B at 0.0 KB/sec)
-Downloading: http://repo.maven.apache.org/maven2/oro/oro/2.0.7/oro-2.0.7.jar
-                                   Downloaded: http://repo.maven.apache.org/maven2/xml-apis/xml-apis/1.0.b2/xml-apis-1.0.b2.jar (0 B at 0.0 KB/sec)
-Downloading: http://repo.maven.apache.org/maven2/org/apache/maven/doxia/doxia-site-renderer/1.0-alpha-7/doxia-site-renderer-1.0-alpha-7.jar
-36/226 KB   59/162 KB   52/89 KB   36/226 KB   63/162 KB   52/89 KB   36/226 KB   63/162 KB   52/89 KB   36/226 KB   67/162 KB   52/89 KB   36/226 KB   71/162 KB   52/89 KB   36/226 KB   75/162 KB   52/89 KB   36/226 KB   79/162 KB   52/89 KB   36/226 KB   79/162 KB   52/89 KB   36/226 KB   80/162 KB   52/89 KB   36/226 KB   84/162 KB   52/89 KB   36/226 KB   88/162 KB   52/89 KB   36/226 KB   92/162 KB   52/89 KB   36/226 KB   96/162 KB   52/89 KB   36/226 KB   100/162 KB   52/89 KB   36/226 KB   104/162 KB   52/89 KB   36/226 KB   108/162 KB   52/89 KB   36/226 KB   111/162 KB   52/89 KB   36/226 KB   112/162 KB   52/89 KB   39/226 KB   112/162 KB   52/89 KB   43/226 KB   112/162 KB   52/89 KB   46/226 KB   112/162 KB   52/89 KB   50/226 KB   112/162 KB   52/89 KB   54/226 KB   112/162 KB   52/89 KB   58/226 KB   112/162 KB   52/89 KB   62/226 KB   112/162 KB   52/89 KB   66/226 KB   112/162 KB   52/89 KB   70/226 KB   112/162 KB   52/89 KB   72/226 KB   112/162 KB   52/89 KB   72/226 KB   112/162 KB   56/89 KB   72/226 KB   112/162 KB   60/89 KB   72/226 KB   112/162 KB   64/89 KB   72/226 KB   112/162 KB   68/89 KB   72/226 KB   112/162 KB   72/89 KB   72/226 KB   112/162 KB   76/89 KB   72/226 KB   112/162 KB   79/89 KB   72/226 KB   112/162 KB   83/89 KB   72/226 KB   112/162 KB   83/89 KB   72/226 KB   112/162 KB   86/89 KB   72/226 KB   112/162 KB   3/64 KB   86/89 KB   72/226 KB   112/162 KB   7/64 KB   86/89 KB   72/226 KB   112/162 KB   11/64 KB   86/89 KB   72/226 KB   112/162 KB   15/64 KB   86/89 KB   72/226 KB   112/162 KB   19/64 KB   86/89 KB   72/226 KB   112/162 KB   23/64 KB   86/89 KB   72/226 KB   112/162 KB   27/64 KB   86/89 KB   72/226 KB   112/162 KB   28/64 KB   86/89 KB   72/226 KB   112/162 KB   32/64 KB   86/89 KB   72/226 KB   112/162 KB   36/64 KB   86/89 KB   72/226 KB   112/162 KB   40/64 KB   86/89 KB   72/226 KB   112/162 KB   44/64 KB   86/89 KB   72/226 KB   112/162 KB   48/64 KB   86/89 KB   72/226 KB   112/162 KB   52/64 KB   86/89 KB   72/226 KB   112/162 KB   56/64 KB   86/89 KB   72/226 KB   112/162 KB   60/64 KB   86/89 KB   72/226 KB   112/162 KB   64/64 KB   86/89 KB   72/226 KB   112/162 KB   64/64 KB   86/89 KB   72/226 KB   3/13 KB   112/162 KB   64/64 KB   86/89 KB   72/226 KB   7/13 KB   112/162 KB   64/64 KB   86/89 KB   72/226 KB   11/13 KB   112/162 KB   64/64 KB   86/89 KB   72/226 KB   13/13 KB   112/162 KB   64/64 KB   86/89 KB   72/226 KB   13/13 KB   115/162 KB   64/64 KB   86/89 KB   72/226 KB   13/13 KB   116/162 KB   64/64 KB   86/89 KB   72/226 KB   13/13 KB   120/162 KB   64/64 KB   86/89 KB   72/226 KB   13/13 KB   120/162 KB   64/64 KB   86/89 KB   72/226 KB   13/13 KB   123/162 KB   64/64 KB   86/89 KB   72/226 KB   13/13 KB   127/162 KB   64/64 KB   86/89 KB   72/226 KB   13/13 KB   127/162 KB   64/64 KB   86/89 KB   72/226 KB   13/13 KB   131/162 KB   64/64 KB   86/89 KB   72/226 KB   13/13 KB   132/162 KB   64/64 KB   86/89 KB   72/226 KB   13/13 KB   136/162 KB   64/64 KB   86/89 KB   72/226 KB   13/13 KB   138/162 KB   64/64 KB   86/89 KB   72/226 KB   13/13 KB   139/162 KB   64/64 KB   86/89 KB   72/226 KB   13/13 KB   142/162 KB   64/64 KB   86/89 KB   72/226 KB   13/13 KB   146/162 KB   64/64 KB   86/89 KB   72/226 KB   13/13 KB   148/162 KB   64/64 KB   86/89 KB   72/226 KB   13/13 KB   151/162 KB   64/64 KB   86/89 KB   72/226 KB   13/13 KB   152/162 KB   64/64 KB   86/89 KB   72/226 KB   13/13 KB   156/162 KB   64/64 KB   86/89 KB   72/226 KB   13/13 KB   158/162 KB   64/64 KB   86/89 KB   72/226 KB   13/13 KB   162/162 KB   64/64 KB   86/89 KB   72/226 KB   13/13 KB   162/162 KB   64/64 KB   86/89 KB   76/226 KB   13/13 KB   162/162 KB   64/64 KB   86/89 KB   76/226 KB   13/13 KB   162/162 KB   64/64 KB   86/89 KB   80/226 KB   13/13 KB   162/162 KB   64/64 KB   86/89 KB   80/226 KB   13/13 KB   162/162 KB   64/64 KB   86/89 KB   82/226 KB   13/13 KB   162/162 KB   64/64 KB   86/89 KB   84/226 KB   13/13 KB   162/162 KB   64/64 KB   86/89 KB   86/226 KB   13/13 KB   162/162 KB   64/64 KB   86/89 KB   88/226 KB   13/13 KB   162/162 KB   64/64 KB   86/89 KB   91/226 KB   13/13 KB   162/162 KB   64/64 KB   86/89 KB   94/226 KB   13/13 KB   162/162 KB   64/64 KB   86/89 KB   98/226 KB   13/13 KB   162/162 KB   64/64 KB   86/89 KB   100/226 KB   13/13 KB   162/162 KB   64/64 KB   86/89 KB   104/226 KB   13/13 KB   162/162 KB   64/64 KB   86/89 KB   107/226 KB   13/13 KB   162/162 KB   64/64 KB   86/89 KB   108/226 KB   13/13 KB   162/162 KB   64/64 KB   86/89 KB   108/226 KB   13/13 KB   162/162 KB   64/64 KB   88/89 KB   108/226 KB   13/13 KB   162/162 KB   64/64 KB   89/89 KB                                                              Downloaded: http://repo.maven.apache.org/maven2/oro/oro/2.0.7/oro-2.0.7.jar (64 KB at 121.7 KB/sec)
-Downloading: http://repo.maven.apache.org/maven2/org/codehaus/plexus/plexus-i18n/1.0-beta-6/plexus-i18n-1.0-beta-6.jar
-                                                           Downloaded: http://repo.maven.apache.org/maven2/org/apache/maven/doxia/doxia-site-renderer/1.0-alpha-7/doxia-site-renderer-1.0-alpha-7.jar (13 KB at 23.8 KB/sec)
-Downloading: http://repo.maven.apache.org/maven2/org/codehaus/plexus/plexus-velocity/1.1.2/plexus-velocity-1.1.2.jar
-                                                           Downloaded: http://repo.maven.apache.org/maven2/commons-collections/commons-collections/2.1/commons-collections-2.1.jar (162 KB at 129.1 KB/sec)
-Downloading: http://repo.maven.apache.org/maven2/plexus/plexus-utils/1.0.2/plexus-utils-1.0.2.jar
-111/226 KB   89/89 KB                                      112/226 KB   89/89 KB   116/226 KB   89/89 KB   116/226 KB   89/89 KB   119/226 KB   89/89 KB   120/226 KB   89/89 KB   122/226 KB   89/89 KB   124/226 KB   89/89 KB   126/226 KB   89/89 KB   127/226 KB   89/89 KB   128/226 KB   89/89 KB   130/226 KB   89/89 KB   131/226 KB   89/89 KB   135/226 KB   89/89 KB   135/226 KB   89/89 KB   139/226 KB   89/89 KB   140/226 KB   89/89 KB                           142/226 KB              Downloaded: http://repo.maven.apache.org/maven2/commons-validator/commons-validator/1.2.0/commons-validator-1.2.0.jar (89 KB at 59.4 KB/sec)
-Downloading: http://repo.maven.apache.org/maven2/commons-logging/commons-logging-api/1.0.4/commons-logging-api-1.0.4.jar
-143/226 KB   4/12 KB   143/226 KB   8/12 KB   143/226 KB   9/12 KB   143/226 KB   12/12 KB   143/226 KB   12/12 KB   143/226 KB   3/8 KB   12/12 KB   143/226 KB   7/8 KB   12/12 KB   143/226 KB   8/8 KB   12/12 KB   144/226 KB   8/8 KB   12/12 KB   144/226 KB   8/8 KB   1/157 KB   12/12 KB   144/226 KB   8/8 KB   5/157 KB   12/12 KB   144/226 KB   8/8 KB   9/157 KB   12/12 KB   144/226 KB   8/8 KB   11/157 KB   12/12 KB   144/226 KB   8/8 KB   15/157 KB   12/12 KB   144/226 KB   8/8 KB   16/157 KB   12/12 KB   144/226 KB   8/8 KB   19/157 KB   12/12 KB   144/226 KB   8/8 KB   23/157 KB   12/12 KB   144/226 KB   8/8 KB   24/157 KB   12/12 KB   147/226 KB   8/8 KB   24/157 KB   12/12 KB   148/226 KB   8/8 KB   24/157 KB   12/12 KB   152/226 KB   8/8 KB   24/157 KB   12/12 KB   152/226 KB   8/8 KB   24/157 KB   12/12 KB   154/226 KB   8/8 KB   24/157 KB   12/12 KB   155/226 KB   8/8 KB   24/157 KB   12/12 KB   158/226 KB   8/8 KB   24/157 KB   12/12 KB   160/226 KB   8/8 KB   24/157 KB   12/12 KB   163/226 KB   8/8 KB   24/157 KB   12/12 KB   163/226 KB   1/26 KB   8/8 KB   24/157 KB   12/12 KB   163/226 KB   5/26 KB   8/8 KB   24/157 KB   12/12 KB   163/226 KB   9/26 KB   8/8 KB   24/157 KB   12/12 KB   163/226 KB   13/26 KB   8/8 KB   24/157 KB   12/12 KB   163/226 KB   17/26 KB   8/8 KB   24/157 KB   12/12 KB   163/226 KB   20/26 KB   8/8 KB   24/157 KB   12/12 KB   166/226 KB   24/26 KB   8/8 KB   24/157 KB   12/12 KB   166/226 KB   24/26 KB   8/8 KB   24/157 KB   12/12 KB   170/226 KB   24/26 KB   8/8 KB   24/157 KB   12/12 KB   170/226 KB   24/26 KB   8/8 KB   24/157 KB   12/12 KB   170/226 KB   24/26 KB   8/8 KB   24/157 KB   12/12 KB   171/226 KB   24/26 KB   8/8 KB   24/157 KB   12/12 KB   175/226 KB   24/26 KB   8/8 KB   24/157 KB   12/12 KB   178/226 KB   24/26 KB   8/8 KB   24/157 KB                                                           Downloaded: http://repo.maven.apache.org/maven2/org/codehaus/plexus/plexus-i18n/1.0-beta-6/plexus-i18n-1.0-beta-6.jar (12 KB at 23.1 KB/sec)
-Downloading: http://repo.maven.apache.org/maven2/velocity/velocity/1.4/velocity-1.4.jar
-                                                        Downloaded: http://repo.maven.apache.org/maven2/org/codehaus/plexus/plexus-velocity/1.1.2/plexus-velocity-1.1.2.jar (8 KB at 15.0 KB/sec)
-Downloading: http://repo.maven.apache.org/maven2/velocity/velocity-dep/1.4/velocity-dep-1.4.jar
-179/226 KB   24/26 KB   24/157 KB                       180/226 KB   24/26 KB   24/157 KB   180/226 KB   24/26 KB   25/157 KB   180/226 KB   24/26 KB   28/157 KB   180/226 KB   24/26 KB   29/157 KB   180/226 KB   24/26 KB   33/157 KB   180/226 KB   24/26 KB   37/157 KB   180/226 KB   24/26 KB   41/157 KB   180/226 KB   24/26 KB   43/157 KB   183/226 KB   24/26 KB   43/157 KB   184/226 KB   24/26 KB   43/157 KB   187/226 KB   24/26 KB   43/157 KB   188/226 KB   24/26 KB   43/157 KB   192/226 KB   24/26 KB   43/157 KB   192/226 KB   24/26 KB   43/157 KB   192/226 KB   26/26 KB   43/157 KB   194/226 KB   26/26 KB   43/157 KB   195/226 KB   26/26 KB   43/157 KB   196/226 KB   26/26 KB   43/157 KB   198/226 KB   26/26 KB   43/157 KB   199/226 KB   26/26 KB   43/157 KB   202/226 KB   26/26 KB   43/157 KB   203/226 KB   26/26 KB   43/157 KB   206/226 KB   26/26 KB   43/157 KB   210/226 KB   26/26 KB   43/157 KB   211/226 KB   26/26 KB   43/157 KB   214/226 KB   26/26 KB   43/157 KB   214/226 KB   26/26 KB   1/353 KB   43/157 KB   214/226 KB   26/26 KB   5/353 KB   43/157 KB   214/226 KB   26/26 KB   9/353 KB   43/157 KB   214/226 KB   26/26 KB   11/353 KB   43/157 KB   214/226 KB   26/26 KB   15/353 KB   43/157 KB   214/226 KB   26/26 KB   19/353 KB   43/157 KB   214/226 KB   26/26 KB   23/353 KB   43/157 KB   214/226 KB   26/26 KB   24/353 KB   43/157 KB   214/226 KB   26/26 KB   28/353 KB   43/157 KB   214/226 KB   26/26 KB   32/353 KB   43/157 KB   214/226 KB   26/26 KB   35/353 KB   43/157 KB   214/226 KB   26/26 KB   36/353 KB   43/157 KB   214/226 KB   26/26 KB   40/353 KB   43/157 KB   214/226 KB   26/26 KB   44/353 KB   43/157 KB   214/226 KB   26/26 KB   48/353 KB   43/157 KB   214/226 KB   26/26 KB   52/353 KB   43/157 KB   214/226 KB   26/26 KB   56/353 KB   43/157 KB   214/226 KB   26/26 KB   60/353 KB   43/157 KB   214/226 KB   26/26 KB   63/353 KB   43/157 KB   214/226 KB   26/26 KB   63/353 KB   43/157 KB   4/506 KB   214/226 KB   26/26 KB   63/353 KB   43/157 KB   8/506 KB   214/226 KB   26/26 KB   63/353 KB   43/157 KB   9/506 KB   214/226 KB   26/26 KB   63/353 KB   43/157 KB   13/506 KB   214/226 KB   26/26 KB   63/353 KB   43/157 KB   15/506 KB   214/226 KB   26/26 KB   63/353 KB   43/157 KB   19/506 KB   214/226 KB   26/26 KB   63/353 KB   43/157 KB   23/506 KB   214/226 KB   26/26 KB   63/353 KB   43/157 KB   25/506 KB   215/226 KB   26/26 KB   63/353 KB   43/157 KB   25/506 KB   217/226 KB   26/26 KB   63/353 KB   43/157 KB   25/506 KB   217/226 KB   26/26 KB   63/353 KB   46/157 KB   25/506 KB   217/226 KB   26/26 KB   63/353 KB   48/157 KB   25/506 KB   217/226 KB   26/26 KB   63/353 KB   52/157 KB   25/506 KB   217/226 KB   26/26 KB   63/353 KB   54/157 KB   25/506 KB   217/226 KB   26/26 KB   63/353 KB   55/157 KB   25/506 KB   217/226 KB   26/26 KB   63/353 KB   59/157 KB   25/506 KB   217/226 KB   26/26 KB   63/353 KB   63/157 KB   25/506 KB   217/226 KB   26/26 KB   63/353 KB   67/157 KB   25/506 KB   217/226 KB   26/26 KB   63/353 KB   71/157 KB   25/506 KB   217/226 KB   26/26 KB   63/353 KB   74/157 KB   25/506 KB   217/226 KB   26/26 KB   63/353 KB   78/157 KB   25/506 KB   217/226 KB   26/26 KB   63/353 KB   82/157 KB   25/506 KB   217/226 KB   26/26 KB   63/353 KB   86/157 KB   25/506 KB   217/226 KB   26/26 KB   63/353 KB   90/157 KB   25/506 KB   217/226 KB   26/26 KB   63/353 KB   94/157 KB   25/506 KB   217/226 KB   26/26 KB   63/353 KB   98/157 KB   25/506 KB   217/226 KB   26/26 KB   63/353 KB   102/157 KB   25/506 KB   217/226 KB   26/26 KB   63/353 KB   106/157 KB   25/506 KB   217/226 KB   26/26 KB   63/353 KB   110/157 KB   25/506 KB   217/226 KB   26/26 KB   63/353 KB   114/157 KB   25/506 KB   217/226 KB   26/26 KB   63/353 KB   118/157 KB   25/506 KB   217/226 KB   26/26 KB   63/353 KB   118/157 KB   25/506 KB   217/226 KB   26/26 KB   63/353 KB   119/157 KB   25/506 KB   217/226 KB   26/26 KB   63/353 KB   123/157 KB   25/506 KB   217/226 KB   26/26 KB   63/353 KB   123/157 KB   25/506 KB   217/226 KB   26/26 KB   63/353 KB   126/157 KB   25/506 KB   217/226 KB   26/26 KB   63/353 KB   127/157 KB   25/506 KB   217/226 KB   26/26 KB   63/353 KB   131/157 KB   25/506 KB   217/226 KB   26/26 KB   63/353 KB   132/157 KB   25/506 KB   217/226 KB   26/26 KB   63/353 KB   136/157 KB   25/506 KB   217/226 KB   26/26 KB   63/353 KB   136/157 KB   25/506 KB   217/226 KB   26/26 KB   63/353 KB   140/157 KB   25/506 KB   217/226 KB   26/26 KB   63/353 KB   142/157 KB   25/506 KB   218/226 KB   26/26 KB   63/353 KB   142/157 KB   25/506 KB   219/226 KB   26/26 KB   63/353 KB   142/157 KB   25/506 KB   221/226 KB   26/26 KB   63/353 KB   142/157 KB   25/506 KB   223/226 KB   26/26 KB   63/353 KB   142/157 KB   25/506 KB   226/226 KB   26/26 KB   63/353 KB   142/157 KB   25/506 KB                                                                Downloaded: http://repo.maven.apache.org/maven2/commons-logging/commons-logging-api/1.0.4/commons-logging-api-1.0.4.jar (26 KB at 34.2 KB/sec)
-Downloading: http://repo.maven.apache.org/maven2/org/apache/maven/doxia/doxia-decoration-model/1.0-alpha-7/doxia-decoration-model-1.0-alpha-7.jar
-226/226 KB   63/353 KB   142/157 KB   29/506 KB              226/226 KB   63/353 KB   142/157 KB   29/506 KB   226/226 KB   63/353 KB   142/157 KB   32/506 KB   226/226 KB   63/353 KB   142/157 KB   35/506 KB   226/226 KB   63/353 KB   142/157 KB   39/506 KB   226/226 KB   63/353 KB   142/157 KB   39/506 KB   226/226 KB   63/353 KB   142/157 KB   40/506 KB   226/226 KB   63/353 KB   142/157 KB   44/506 KB   226/226 KB   63/353 KB   142/157 KB   44/506 KB   226/226 KB   63/353 KB   142/157 KB   48/506 KB   226/226 KB   63/353 KB   142/157 KB   52/506 KB   226/226 KB   63/353 KB   142/157 KB   52/506 KB   226/226 KB   63/353 KB   142/157 KB   56/506 KB   226/226 KB   63/353 KB   142/157 KB   60/506 KB   226/226 KB   63/353 KB   142/157 KB   63/506 KB   226/226 KB   63/353 KB   142/157 KB   66/506 KB   226/226 KB   63/353 KB   143/157 KB   66/506 KB   226/226 KB   63/353 KB   146/157 KB   66/506 KB   226/226 KB   63/353 KB   148/157 KB   66/506 KB   226/226 KB   63/353 KB   150/157 KB   66/506 KB   226/226 KB   63/353 KB   151/157 KB   66/506 KB   226/226 KB   63/353 KB   152/157 KB   66/506 KB   226/226 KB   63/353 KB   154/157 KB   66/506 KB   226/226 KB   63/353 KB   157/157 KB   66/506 KB   226/226 KB   63/353 KB   157/157 KB   66/506 KB   1/38 KB   226/226 KB   63/353 KB   157/157 KB   66/506 KB   5/38 KB   226/226 KB   63/353 KB   157/157 KB   66/506 KB   5/38 KB   226/226 KB   63/353 KB   157/157 KB   66/506 KB   8/38 KB   226/226 KB   63/353 KB   157/157 KB   66/506 KB   12/38 KB   226/226 KB   63/353 KB   157/157 KB   66/506 KB   16/38 KB   226/226 KB   63/353 KB   157/157 KB   66/506 KB   17/38 KB                                                                Downloaded: http://repo.maven.apache.org/maven2/org/apache/maven/doxia/doxia-core/1.0-alpha-7/doxia-core-1.0-alpha-7.jar (226 KB at 111.4 KB/sec)
-66/353 KB   157/157 KB   66/506 KB   17/38 KB                67/353 KB   157/157 KB   66/506 KB   17/38 KB   68/353 KB   157/157 KB   66/506 KB   17/38 KB   72/353 KB   157/157 KB   66/506 KB   17/38 KB   76/353 KB   157/157 KB   66/506 KB   17/38 KB   80/353 KB   157/157 KB   66/506 KB   17/38 KB   84/353 KB   157/157 KB   66/506 KB   17/38 KB   88/353 KB   157/157 KB   66/506 KB   17/38 KB   92/353 KB   157/157 KB   66/506 KB   17/38 KB   96/353 KB   157/157 KB   66/506 KB   17/38 KB   100/353 KB   157/157 KB   66/506 KB   17/38 KB   104/353 KB   157/157 KB   66/506 KB   17/38 KB   108/353 KB   157/157 KB   66/506 KB   17/38 KB   112/353 KB   157/157 KB   66/506 KB   17/38 KB   116/353 KB   157/157 KB   66/506 KB   17/38 KB   120/353 KB   157/157 KB   66/506 KB   17/38 KB   124/353 KB   157/157 KB   66/506 KB   17/38 KB   128/353 KB   157/157 KB   66/506 KB   17/38 KB   132/353 KB   157/157 KB   66/506 KB   17/38 KB   136/353 KB   157/157 KB   66/506 KB   17/38 KB   140/353 KB   157/157 KB   66/506 KB   17/38 KB   144/353 KB   157/157 KB   66/506 KB   17/38 KB   148/353 KB   157/157 KB   66/506 KB   17/38 KB   152/353 KB   157/157 KB   66/506 KB   17/38 KB   156/353 KB   157/157 KB   66/506 KB   17/38 KB   158/353 KB   157/157 KB   66/506 KB   17/38 KB   159/353 KB   157/157 KB   66/506 KB   17/38 KB   162/353 KB   157/157 KB   66/506 KB   17/38 KB   163/353 KB   157/157 KB   66/506 KB   17/38 KB   167/353 KB   157/157 KB   66/506 KB   17/38 KB   171/353 KB   157/157 KB   66/506 KB   17/38 KB   175/353 KB   157/157 KB   66/506 KB   17/38 KB   179/353 KB   157/157 KB   66/506 KB   17/38 KB   183/353 KB   157/157 KB   66/506 KB   17/38 KB   187/353 KB   157/157 KB   66/506 KB   17/38 KB   190/353 KB   157/157 KB   66/506 KB   17/38 KB   190/353 KB   157/157 KB   68/506 KB   17/38 KB   190/353 KB   157/157 KB   71/506 KB   17/38 KB   190/353 KB   157/157 KB   74/506 KB   17/38 KB   190/353 KB   157/157 KB   75/506 KB   17/38 KB   190/353 KB   157/157 KB   79/506 KB   17/38 KB   190/353 KB   157/157 KB   79/506 KB   17/38 KB   190/353 KB   157/157 KB   83/506 KB   17/38 KB   190/353 KB   157/157 KB   87/506 KB   17/38 KB   190/353 KB   157/157 KB   87/506 KB   17/38 KB   190/353 KB   157/157 KB   91/506 KB   17/38 KB   190/353 KB   157/157 KB   95/506 KB   17/38 KB   190/353 KB   157/157 KB   96/506 KB   17/38 KB   190/353 KB   157/157 KB   98/506 KB   17/38 KB   190/353 KB   157/157 KB   102/506 KB   17/38 KB   190/353 KB   157/157 KB   104/506 KB   17/38 KB   190/353 KB   157/157 KB   108/506 KB   17/38 KB   190/353 KB   157/157 KB   112/506 KB   17/38 KB   190/353 KB   157/157 KB   115/506 KB   17/38 KB   190/353 KB   157/157 KB   118/506 KB   17/38 KB   190/353 KB   157/157 KB   122/506 KB   17/38 KB   190/353 KB   157/157 KB   126/506 KB   17/38 KB   190/353 KB   157/157 KB   128/506 KB   17/38 KB   190/353 KB   157/157 KB   130/506 KB   17/38 KB                                                     Downloaded: http://repo.maven.apache.org/maven2/plexus/plexus-utils/1.0.2/plexus-utils-1.0.2.jar (157 KB at 126.1 KB/sec)
-191/353 KB   130/506 KB   17/38 KB                192/353 KB   130/506 KB   17/38 KB   194/353 KB   130/506 KB   17/38 KB   195/353 KB   130/506 KB   17/38 KB   198/353 KB   130/506 KB   17/38 KB   200/353 KB   130/506 KB   17/38 KB   202/353 KB   130/506 KB   17/38 KB   204/353 KB   130/506 KB   17/38 KB   208/353 KB   130/506 KB   17/38 KB   208/353 KB   130/506 KB   17/38 KB   212/353 KB   130/506 KB   17/38 KB   215/353 KB   130/506 KB   17/38 KB   219/353 KB   130/506 KB   17/38 KB   221/353 KB   130/506 KB   17/38 KB   223/353 KB   130/506 KB   17/38 KB   226/353 KB   130/506 KB   17/38 KB   229/353 KB   130/506 KB   17/38 KB   233/353 KB   130/506 KB   17/38 KB   234/353 KB   130/506 KB   17/38 KB   238/353 KB   130/506 KB   17/38 KB   241/353 KB   130/506 KB   17/38 KB   243/353 KB   130/506 KB   17/38 KB   246/353 KB   130/506 KB   17/38 KB   247/353 KB   130/506 KB   17/38 KB   249/353 KB   130/506 KB   17/38 KB   253/353 KB   130/506 KB   17/38 KB   255/353 KB   130/506 KB   17/38 KB   259/353 KB   130/506 KB   17/38 KB   261/353 KB   130/506 KB   17/38 KB   261/353 KB   132/506 KB   17/38 KB   261/353 KB   134/506 KB   17/38 KB   261/353 KB   135/506 KB   17/38 KB   261/353 KB   138/506 KB   17/38 KB   261/353 KB   139/506 KB   17/38 KB   261/353 KB   142/506 KB   17/38 KB   261/353 KB   146/506 KB   17/38 KB   261/353 KB   146/506 KB   17/38 KB   261/353 KB   148/506 KB   17/38 KB   261/353 KB   151/506 KB   17/38 KB   261/353 KB   154/506 KB   17/38 KB   261/353 KB   155/506 KB   17/38 KB   261/353 KB   159/506 KB   17/38 KB   261/353 KB   160/506 KB   17/38 KB   261/353 KB   164/506 KB   17/38 KB   261/353 KB   166/506 KB   17/38 KB   261/353 KB   167/506 KB   17/38 KB   261/353 KB   171/506 KB   17/38 KB   261/353 KB   175/506 KB   17/38 KB   261/353 KB   176/506 KB   17/38 KB   261/353 KB   180/506 KB   17/38 KB   261/353 KB   184/506 KB   17/38 KB   261/353 KB   188/506 KB   17/38 KB   261/353 KB   188/506 KB   17/38 KB   261/353 KB   192/506 KB   17/38 KB   261/353 KB   196/506 KB   17/38 KB   261/353 KB   200/506 KB   17/38 KB   261/353 KB   204/506 KB   17/38 KB   261/353 KB   208/506 KB   17/38 KB   261/353 KB   210/506 KB   17/38 KB   261/353 KB   214/506 KB   17/38 KB   261/353 KB   218/506 KB   17/38 KB   261/353 KB   222/506 KB   17/38 KB   261/353 KB   223/506 KB   17/38 KB   261/353 KB   227/506 KB   17/38 KB   261/353 KB   230/506 KB   17/38 KB   261/353 KB   231/506 KB   17/38 KB   261/353 KB   233/506 KB   17/38 KB   261/353 KB   233/506 KB   20/38 KB   261/353 KB   233/506 KB   24/38 KB   261/353 KB   233/506 KB   24/38 KB   261/353 KB   233/506 KB   25/38 KB   261/353 KB   233/506 KB   29/38 KB   261/353 KB   233/506 KB   33/38 KB   261/353 KB   233/506 KB   37/38 KB   261/353 KB   233/506 KB   38/38 KB   263/353 KB   233/506 KB   38/38 KB   265/353 KB   233/506 KB   38/38 KB   266/353 KB   233/506 KB   38/38 KB   269/353 KB   233/506 KB   38/38 KB   270/353 KB   233/506 KB   38/38 KB   273/353 KB   233/506 KB   38/38 KB   274/353 KB   233/506 KB   38/38 KB   277/353 KB   233/506 KB   38/38 KB   281/353 KB   233/506 KB   38/38 KB   281/353 KB   233/506 KB   38/38 KB   283/353 KB   233/506 KB   38/38 KB   285/353 KB   233/506 KB   38/38 KB   287/353 KB   233/506 KB   38/38 KB   289/353 KB   233/506 KB   38/38 KB   290/353 KB   233/506 KB   38/38 KB   294/353 KB   233/506 KB   38/38 KB   294/353 KB   233/506 KB   38/38 KB   298/353 KB   233/506 KB   38/38 KB   299/353 KB   233/506 KB   38/38 KB   301/353 KB   233/506 KB   38/38 KB   302/353 KB   233/506 KB   38/38 KB   303/353 KB   233/506 KB   38/38 KB   307/353 KB   233/506 KB   38/38 KB   309/353 KB   233/506 KB   38/38 KB   311/353 KB   233/506 KB   38/38 KB   313/353 KB   233/506 KB   38/38 KB   314/353 KB   233/506 KB   38/38 KB   318/353 KB   233/506 KB   38/38 KB   319/353 KB   233/506 KB   38/38 KB   322/353 KB   233/506 KB   38/38 KB   325/353 KB   233/506 KB   38/38 KB   329/353 KB   233/506 KB   38/38 KB   330/353 KB   233/506 KB   38/38 KB   334/353 KB   233/506 KB   38/38 KB   335/353 KB   233/506 KB   38/38 KB   335/353 KB   235/506 KB   38/38 KB   335/353 KB   237/506 KB   38/38 KB   335/353 KB   238/506 KB   38/38 KB   335/353 KB   239/506 KB   38/38 KB   335/353 KB   243/506 KB   38/38 KB   335/353 KB   245/506 KB   38/38 KB   335/353 KB   249/506 KB   38/38 KB   335/353 KB   253/506 KB   38/38 KB   335/353 KB   253/506 KB   38/38 KB   335/353 KB   257/506 KB   38/38 KB   335/353 KB   258/506 KB   38/38 KB   335/353 KB   259/506 KB   38/38 KB   335/353 KB   262/506 KB   38/38 KB   335/353 KB   266/506 KB   38/38 KB   335/353 KB   267/506 KB   38/38 KB   335/353 KB   270/506 KB   38/38 KB   335/353 KB   274/506 KB   38/38 KB   335/353 KB   275/506 KB   38/38 KB   335/353 KB   279/506 KB   38/38 KB   335/353 KB   283/506 KB   38/38 KB   335/353 KB   285/506 KB   38/38 KB   335/353 KB   287/506 KB   38/38 KB   335/353 KB   291/506 KB   38/38 KB   335/353 KB   295/506 KB   38/38 KB   335/353 KB   297/506 KB   38/38 KB   335/353 KB   299/506 KB   38/38 KB   335/353 KB   303/506 KB   38/38 KB   335/353 KB   306/506 KB   38/38 KB   335/353 KB   310/506 KB   38/38 KB   335/353 KB   314/506 KB   38/38 KB   335/353 KB   317/506 KB   38/38 KB   335/353 KB   321/506 KB   38/38 KB   335/353 KB   325/506 KB   38/38 KB   335/353 KB   329/506 KB   38/38 KB   335/353 KB   331/506 KB   38/38 KB   337/353 KB   331/506 KB   38/38 KB                                        Downloaded: http://repo.maven.apache.org/maven2/org/apache/maven/doxia/doxia-decoration-model/1.0-alpha-7/doxia-decoration-model-1.0-alpha-7.jar (38 KB at 37.5 KB/sec)
-339/353 KB   331/506 KB              342/353 KB   331/506 KB   343/353 KB   331/506 KB   345/353 KB   331/506 KB   346/353 KB   331/506 KB   349/353 KB   331/506 KB   353/353 KB   331/506 KB   353/353 KB   331/506 KB   353/353 KB   335/506 KB   353/353 KB   339/506 KB   353/353 KB   343/506 KB   353/353 KB   347/506 KB   353/353 KB   351/506 KB   353/353 KB   355/506 KB   353/353 KB   359/506 KB   353/353 KB   363/506 KB   353/353 KB   367/506 KB   353/353 KB   371/506 KB   353/353 KB   375/506 KB   353/353 KB   379/506 KB   353/353 KB   383/506 KB   353/353 KB   387/506 KB   353/353 KB   391/506 KB   353/353 KB   395/506 KB   353/353 KB   399/506 KB   353/353 KB   403/506 KB   353/353 KB   407/506 KB   353/353 KB   411/506 KB   353/353 KB   415/506 KB   353/353 KB   419/506 KB   353/353 KB   423/506 KB   353/353 KB   427/506 KB   353/353 KB   431/506 KB   353/353 KB   435/506 KB   353/353 KB   439/506 KB   353/353 KB   443/506 KB   353/353 KB   447/506 KB   353/353 KB   451/506 KB   353/353 KB   455/506 KB   353/353 KB   459/506 KB   353/353 KB   463/506 KB   353/353 KB   467/506 KB   353/353 KB   471/506 KB   353/353 KB   475/506 KB   353/353 KB   479/506 KB   353/353 KB   483/506 KB   353/353 KB   487/506 KB   353/353 KB   491/506 KB   353/353 KB   495/506 KB   353/353 KB   499/506 KB   353/353 KB   503/506 KB   353/353 KB   506/506 KB                             Downloaded: http://repo.maven.apache.org/maven2/velocity/velocity/1.4/velocity-1.4.jar (353 KB at 200.2 KB/sec)
-                          Downloaded: http://repo.maven.apache.org/maven2/velocity/velocity-dep/1.4/velocity-dep-1.4.jar (506 KB at 279.8 KB/sec)
-Downloading: http://repo.spring.io/plugins-release/org/wso2/carbon/devicemgt/device-mgt/0.9.2-SNAPSHOT/maven-metadata.xml
-                          Downloading: http://repo.spring.io/plugins-release/org/wso2/carbon/devicemgt/carbon-devicemgt/0.9.2-SNAPSHOT/maven-metadata.xml
-                          Downloading: http://repo.spring.io/plugins-release/org/wso2/carbon/devicemgt/user-mgt/0.9.2-SNAPSHOT/maven-metadata.xml
-                          [WARNING] Invalid POM for org.eclipse.osgi:org.eclipse.osgi.services:jar:3.2.0.v20090520-1800, transitive dependencies (if any) will not be available, enable debug logging for more details
-[INFO] org.wso2.carbon.device.mgt.iot:WSO2ConnectedDevices:war:1.0.0
-[INFO] +- org.wso2.carbon.devicemgt:org.wso2.carbon.device.mgt.common:jar:0.9.2-SNAPSHOT:compile
-[INFO] +- org.wso2.carbon.devicemgt:org.wso2.carbon.device.mgt.core:jar:0.9.2-SNAPSHOT:compile
-[INFO] |  +- org.eclipse.osgi:org.eclipse.osgi:jar:3.8.1.v20120830-144521:compile
-[INFO] |  +- org.eclipse.osgi:org.eclipse.osgi.services:jar:3.3.100.v20120522-1822:compile
-[INFO] |  +- org.wso2.carbon:org.wso2.carbon.utils:jar:4.4.0:compile
-[INFO] |  +- org.wso2.carbon:org.wso2.carbon.core:jar:4.4.0:compile
-[INFO] |  +- org.wso2.carbon:org.wso2.carbon.ndatasource.core:jar:4.4.0:compile
-[INFO] |  |  +- org.wso2.carbon:org.wso2.carbon.ndatasource.common:jar:4.4.0:compile
-[INFO] |  |  \- org.wso2.carbon:org.wso2.carbon.securevault:jar:4.4.0:compile
-[INFO] |  |     \- org.wso2.securevault:org.wso2.securevault:jar:1.0.0-wso2v2:compile
-[INFO] |  |        +- jline:jline:jar:0.9.94:compile
-[INFO] |  |        |  \- junit:junit:jar:3.8.1:compile
-[INFO] |  |        +- commons-cli:commons-cli:jar:1.0:compile
-[INFO] |  |        +- commons-io:commons-io:jar:2.0:compile
-[INFO] |  |        \- commons-codec:commons-codec:jar:1.2:compile
-[INFO] |  +- org.wso2.carbon:org.wso2.carbon.user.core:jar:4.4.0:compile
-[INFO] |  +- org.wso2.carbon:org.wso2.carbon.user.api:jar:4.4.0:compile
-[INFO] |  +- org.wso2.carbon:org.wso2.carbon.registry.api:jar:4.4.0:compile
-[INFO] |  +- org.wso2.carbon:org.wso2.carbon.registry.core:jar:4.4.0:compile
-[INFO] |  +- org.apache.tomcat.wso2:jdbc-pool:jar:7.0.34.wso2v2:compile
-[INFO] |  |  \- org.apache.tomcat:tomcat-jdbc:jar:7.0.47:compile
-[INFO] |  |     \- org.apache.tomcat:tomcat-juli:jar:7.0.47:compile
-[INFO] |  +- org.wso2.carbon:org.wso2.carbon.base:jar:4.4.0:compile
-[INFO] |  +- org.wso2.carbon.governance:org.wso2.carbon.governance.api:jar:4.4.1:compile
-[INFO] |  +- org.apache.axis2.transport:axis2-transport-mail:jar:1.1.0-wso2v10:compile
-[INFO] |  +- org.apache.ws.commons.axiom:axiom-api:jar:1.2.11-wso2v5:compile
-[INFO] |  |  +- org.apache.geronimo.specs:geronimo-activation_1.1_spec:jar:1.0.2:compile
-[INFO] |  |  +- jaxen:jaxen:jar:1.1.1:compile
-[INFO] |  |  \- org.apache.geronimo.specs:geronimo-stax-api_1.0_spec:jar:1.0.1:compile
-[INFO] |  +- org.apache.ws.commons.axiom:axiom-impl:jar:1.2.11-wso2v5:compile
-[INFO] |  |  \- org.codehaus.woodstox:wstx-asl:jar:3.2.9:compile
-[INFO] |  +- org.apache.ws.commons.axiom.wso2:axiom:jar:1.2.11.wso2v5:compile
-[INFO] |  |  +- org.apache.geronimo.specs.wso2:geronimo-stax-api_1.0_spec:jar:1.0.1.wso2v2:compile
-[INFO] |  |  +- org.codehaus.woodstox:woodstox-core-asl:jar:4.1.4:compile
-[INFO] |  |  \- org.codehaus.woodstox:stax2-api:jar:3.1.1:compile
-[INFO] |  |     \- javax.xml.stream:stax-api:jar:1.0-2:compile
-[INFO] |  +- org.wso2.carbon.apimgt:org.wso2.carbon.apimgt.api:jar:1.4.0:compile
-[INFO] |  +- org.wso2.carbon.apimgt:org.wso2.carbon.apimgt.impl:jar:1.4.0:compile
-[INFO] |  +- org.apache.axis2.wso2:axis2:jar:1.6.1.wso2v11:compile
-[INFO] |  \- org.wso2.carbon.identity:org.wso2.carbon.identity.oauth.stub:jar:4.4.0:compile
-[INFO] |     \- org.apache.axis2.wso2:axis2-client:jar:1.6.1.wso2v12:compile
-[INFO] |        +- org.apache.ws.commons.schema.wso2:XmlSchema:jar:1.4.7.wso2v3:compile
-[INFO] |        +- org.apache.neethi.wso2:neethi:jar:2.0.4.wso2v4:compile
-[INFO] |        +- org.apache.axis2.wso2:axis2-json:jar:1.6.1.wso2v12:compile
-[INFO] |        +- org.apache.woden.wso2:woden:jar:1.0.0.M8-wso2v1:compile
-[INFO] |        +- wsdl4j.wso2:wsdl4j:jar:1.6.2.wso2v2:compile
-[INFO] |        +- org.apache.httpcomponents.wso2:httpcore:jar:4.3.0.wso2v1:compile
-[INFO] |        +- commons-fileupload.wso2:commons-fileupload:jar:1.2.0.wso2v1:compile
-[INFO] |        +- commons-codec.wso2:commons-codec:jar:1.3.0.wso2v1:compile
-[INFO] |        \- commons-httpclient.wso2:commons-httpclient:jar:3.1.0.wso2v1:compile
-[INFO] |           \- org.apache.commons.ssl:not-yet-commons-ssl:jar:0.3.9:compile
-[INFO] +- org.wso2.carbon.devicemgt:org.wso2.carbon.device.mgt.user.common:jar:0.9.2-SNAPSHOT:compile
-[INFO] +- org.wso2.carbon.devicemgt:org.wso2.carbon.device.mgt.user.core:jar:0.9.2-SNAPSHOT:compile
-[INFO] +- org.wso2.carbon.devicemgt-plugins:org.wso2.carbon.device.mgt.iot.impl:jar:1.9.2-SNAPSHOT:compile
-[INFO] |  +- org.testng:testng:jar:6.8:compile
-[INFO] |  |  \- com.beust:jcommander:jar:1.27:compile
-[INFO] |  \- commons-collections:commons-collections:jar:3.0:compile
-[INFO] +- org.apache.cxf:cxf-rt-frontend-jaxrs:jar:2.7.3:compile
-[INFO] +- org.codehaus.jackson:jackson-core-asl:jar:1.8.6:compile
-[INFO] +- org.codehaus.jackson:jackson-mapper-asl:jar:1.8.6:compile
-[INFO] +- org.codehaus.jackson:jackson-jaxrs:jar:1.8.6:compile
-[INFO] +- org.springframework:spring-web:jar:3.0.7.RELEASE:compile
-[INFO] |  +- aopalliance:aopalliance:jar:1.0:compile
-[INFO] |  +- org.springframework:spring-beans:jar:3.0.7.RELEASE:compile
-[INFO] |  +- org.springframework:spring-context:jar:3.0.7.RELEASE:compile
-[INFO] |  |  +- org.springframework:spring-aop:jar:3.0.7.RELEASE:compile
-[INFO] |  |  +- org.springframework:spring-expression:jar:3.0.7.RELEASE:compile
-[INFO] |  |  \- org.springframework:spring-asm:jar:3.0.7.RELEASE:compile
-[INFO] |  \- org.springframework:spring-core:jar:3.0.7.RELEASE:compile
-[INFO] +- org.json:json:jar:20140107:compile
-[INFO] +- mysql:mysql-connector-java:jar:5.1.6:compile
-[INFO] +- org.eclipse.paho:mqtt-client:jar:0.4.0:compile
-[INFO] +- org.slf4j:slf4j-log4j12:jar:1.6.2:compile
-[INFO] |  \- org.slf4j:slf4j-api:jar:1.6.2:compile
-[INFO] +- log4j:log4j:jar:1.2.16:compile
-[INFO] +- com.google.code.gson:gson:jar:2.1:compile
-[INFO] +- commons-pool:commons-pool:jar:1.5.6:compile
-[INFO] +- org.wso2.carbon:org.wso2.carbon.databridge.agent.thrift:jar:4.0.0:compile
-[INFO] |  +- org.wso2.carbon:org.wso2.carbon.core.common:jar:4.0.0:compile
-[INFO] |  \- commons-pool.wso2:commons-pool:jar:1.5.0.wso2v1:compile
-[INFO] +- org.wso2.carbon:org.wso2.carbon.databridge.commons:jar:4.0.0:compile
-[INFO] |  \- org.json.wso2:json:jar:2.0.0.wso2v1:compile
-[INFO] +- org.wso2.carbon:org.wso2.carbon.databridge.commons.thrift:jar:4.0.0:compile
-[INFO] |  +- libthrift.wso2:libthrift:jar:0.7.wso2v1:compile
-[INFO] |  \- slf4j.wso2:slf4j:jar:1.5.10.wso2v1:compile
-[INFO] +- org.wso2.carbon:org.wso2.carbon.logging:jar:4.0.0:compile
-[INFO] |  \- org.eclipse.equinox:org.apache.log4j:jar:1.2.13.v200706111418:compile
-[INFO] +- org.apache.thrift:libthrift:jar:0.7.0:compile
-[INFO] |  \- javax.servlet:servlet-api:jar:2.5:compile
-[INFO] +- org.apache.cxf:cxf-rt-core:jar:2.7.3:compile
-[INFO] |  \- com.sun.xml.bind:jaxb-impl:jar:2.2.6:compile
-[INFO] +- org.apache.cxf:cxf-rt-transports-http:jar:2.7.3:compile
-[INFO] +- org.apache.ws.xmlschema:xmlschema-core:jar:2.0.3:compile
-[INFO] +- org.apache.cxf:cxf-rt-bindings-xml:jar:2.7.3:compile
-[INFO] +- org.apache.cxf:cxf-api:jar:2.7.3:compile
-[INFO] |  \- wsdl4j:wsdl4j:jar:1.6.2:compile
-[INFO] +- org.apache.geronimo.specs:geronimo-javamail_1.4_spec:jar:1.7.1:compile
-[INFO] +- commons-logging:commons-logging:jar:1.1.1:compile
-[INFO] +- javax.ws.rs:javax.ws.rs-api:jar:2.0-m10:compile
-[INFO] +- commons-lang:commons-lang:jar:2.5:compile
-[INFO] +- org.apache.commons:commons-dbcp2:jar:2.1:compile
-[INFO] |  \- org.apache.commons:commons-pool2:jar:2.3:compile
-[INFO] +- commons-configuration:commons-configuration:jar:1.8:compile
-[INFO] +- commons-beanutils:commons-beanutils:jar:1.8.0:compile
-[INFO] \- commons-jxpath:commons-jxpath:jar:1.3:compile
-[INFO]                                                                         
-[INFO] ------------------------------------------------------------------------
-[INFO] Building WSO2 Carbon - Device Management Feature 1.9.2-SNAPSHOT
-[INFO] ------------------------------------------------------------------------
-[INFO] 
-[INFO] --- maven-dependency-plugin:2.9:tree (default-cli) @ device-mgt-feature ---
-[INFO] org.wso2.carbon.devicemgt-plugins:device-mgt-feature:pom:1.9.2-SNAPSHOT
-[INFO]                                                                         
-[INFO] ------------------------------------------------------------------------
-[INFO] Building WSO2 Carbon - IOT Implementation of Device Management 1.9.2-SNAPSHOT
-[INFO] ------------------------------------------------------------------------
-Downloading: http://maven.wso2.org/nexus/content/repositories/snapshots/org/wso2/carbon/devicemgt-plugins/org.wso2.carbon.device.mgt.iot.impl/1.9.2-SNAPSHOT/maven-metadata.xml
-Downloading: http://maven.wso2.org/nexus/content/repositories/releases/org/wso2/carbon/devicemgt-plugins/org.wso2.carbon.device.mgt.iot.impl/1.9.2-SNAPSHOT/maven-metadata.xml
-                                                    [INFO] 
-[INFO] --- maven-dependency-plugin:2.9:tree (default-cli) @ org.wso2.carbon.device.mgt.iot.feature ---
-[INFO] org.wso2.carbon.devicemgt-plugins:org.wso2.carbon.device.mgt.iot.feature:pom:1.9.2-SNAPSHOT
-[INFO] +- org.wso2.carbon.devicemgt-plugins:org.wso2.carbon.device.mgt.iot.impl:jar:1.9.2-SNAPSHOT:compile
-[INFO] |  +- org.eclipse.osgi:org.eclipse.osgi:jar:3.8.1.v20120830-144521:compile
-[INFO] |  +- org.eclipse.osgi:org.eclipse.osgi.services:jar:3.3.100.v20120522-1822:compile
-[INFO] |  +- org.wso2.carbon:org.wso2.carbon.core:jar:4.4.0:compile
-[INFO] |  +- org.wso2.carbon:org.wso2.carbon.logging:jar:4.4.0:compile
-[INFO] |  +- org.wso2.carbon:org.wso2.carbon.utils:jar:4.4.0:compile
-[INFO] |  +- org.wso2.carbon.devicemgt:org.wso2.carbon.device.mgt.user.core:jar:0.9.2-SNAPSHOT:compile
-[INFO] |  |  +- org.wso2.carbon.devicemgt:org.wso2.carbon.device.mgt.user.common:jar:0.9.2-SNAPSHOT:compile
-[INFO] |  |  +- org.wso2.carbon:org.wso2.carbon.user.core:jar:4.4.0:compile
-[INFO] |  |  +- org.wso2.carbon:org.wso2.carbon.user.api:jar:4.4.0:compile
-[INFO] |  |  \- org.wso2.carbon:org.wso2.carbon.base:jar:4.4.0:compile
-[INFO] |  +- org.wso2.carbon.devicemgt:org.wso2.carbon.device.mgt.core:jar:0.9.2-SNAPSHOT:compile
-[INFO] |  |  +- org.wso2.carbon.governance:org.wso2.carbon.governance.api:jar:4.4.1:compile
-[INFO] |  |  +- org.apache.axis2.transport:axis2-transport-mail:jar:1.1.0-wso2v10:compile
-[INFO] |  |  +- org.apache.ws.commons.axiom:axiom-api:jar:1.2.11-wso2v5:compile
-[INFO] |  |  |  +- org.apache.geronimo.specs:geronimo-activation_1.1_spec:jar:1.0.2:compile
-[INFO] |  |  |  +- org.apache.geronimo.specs:geronimo-javamail_1.4_spec:jar:1.6:compile
-[INFO] |  |  |  +- commons-logging:commons-logging:jar:1.1.1:compile
-[INFO] |  |  |  +- jaxen:jaxen:jar:1.1.1:compile
-[INFO] |  |  |  \- org.apache.geronimo.specs:geronimo-stax-api_1.0_spec:jar:1.0.1:compile
-[INFO] |  |  +- org.apache.ws.commons.axiom:axiom-impl:jar:1.2.11-wso2v5:compile
-[INFO] |  |  |  \- org.codehaus.woodstox:wstx-asl:jar:3.2.9:compile
-[INFO] |  |  +- org.apache.ws.commons.axiom.wso2:axiom:jar:1.2.11.wso2v5:compile
-[INFO] |  |  |  +- org.apache.geronimo.specs.wso2:geronimo-stax-api_1.0_spec:jar:1.0.1.wso2v2:compile
-[INFO] |  |  |  +- org.codehaus.woodstox:woodstox-core-asl:jar:4.2.0:compile
-[INFO] |  |  |  \- org.codehaus.woodstox:stax2-api:jar:3.1.1:compile
-[INFO] |  |  |     \- javax.xml.stream:stax-api:jar:1.0-2:compile
-[INFO] |  |  +- org.wso2.carbon.apimgt:org.wso2.carbon.apimgt.api:jar:1.4.0:compile
-[INFO] |  |  +- org.wso2.carbon.apimgt:org.wso2.carbon.apimgt.impl:jar:1.4.0:compile
-[INFO] |  |  +- org.apache.axis2.wso2:axis2:jar:1.6.1.wso2v11:compile
-[INFO] |  |  \- org.wso2.carbon.identity:org.wso2.carbon.identity.oauth.stub:jar:4.4.0:compile
-[INFO] |  |     \- org.apache.axis2.wso2:axis2-client:jar:1.6.1.wso2v12:compile
-[INFO] |  |        +- org.apache.neethi.wso2:neethi:jar:2.0.4.wso2v4:compile
-[INFO] |  |        +- org.apache.axis2.wso2:axis2-json:jar:1.6.1.wso2v12:compile
-[INFO] |  |        +- org.apache.woden.wso2:woden:jar:1.0.0.M8-wso2v1:compile
-[INFO] |  |        +- wsdl4j.wso2:wsdl4j:jar:1.6.2.wso2v2:compile
-[INFO] |  |        |  \- wsdl4j:wsdl4j:jar:1.6.2:compile
-[INFO] |  |        +- org.apache.httpcomponents.wso2:httpcore:jar:4.3.0.wso2v1:compile
-[INFO] |  |        +- commons-fileupload.wso2:commons-fileupload:jar:1.2.0.wso2v1:compile
-[INFO] |  |        \- commons-codec.wso2:commons-codec:jar:1.3.0.wso2v1:compile
-[INFO] |  +- org.wso2.carbon:org.wso2.carbon.ndatasource.core:jar:4.4.0:compile
-[INFO] |  |  +- org.wso2.carbon:org.wso2.carbon.ndatasource.common:jar:4.4.0:compile
-[INFO] |  |  \- org.wso2.carbon:org.wso2.carbon.securevault:jar:4.4.0:compile
-[INFO] |  +- org.testng:testng:jar:6.8:compile
-[INFO] |  |  \- com.beust:jcommander:jar:1.27:compile
-[INFO] |  +- org.apache.tomcat.wso2:jdbc-pool:jar:7.0.34.wso2v2:compile
-[INFO] |  |  \- org.apache.tomcat:tomcat-jdbc:jar:7.0.47:compile
-[INFO] |  |     \- org.apache.tomcat:tomcat-juli:jar:7.0.47:compile
-[INFO] |  +- org.wso2.carbon:org.wso2.carbon.registry.api:jar:4.3.0:compile
-[INFO] |  +- org.wso2.carbon:org.wso2.carbon.registry.core:jar:4.3.0:compile
-[INFO] |  |  +- commons-io.wso2:commons-io:jar:2.0.0.wso2v2:compile
-[INFO] |  |  +- net.sourceforge.findbugs:annotations:jar:1.3.2:compile
-[INFO] |  |  +- org.apache.ws.commons.schema.wso2:XmlSchema:jar:1.4.7.wso2v3:compile
-[INFO] |  |  +- org.wso2.carbon:javax.cache.wso2:jar:4.3.0:compile
-[INFO] |  |  |  \- org.apache.geronimo.specs:geronimo-jta_1.1_spec:jar:1.1:compile
-[INFO] |  |  +- org.wso2.carbon:org.wso2.carbon.registry.xboot:jar:4.3.0:compile
-[INFO] |  |  +- org.wso2.securevault:org.wso2.securevault:jar:1.0.0-wso2v2:compile
-[INFO] |  |  |  +- log4j:log4j:jar:1.2.14:compile
-[INFO] |  |  |  +- jline:jline:jar:0.9.94:compile
-[INFO] |  |  |  |  \- junit:junit:jar:3.8.1:compile
-[INFO] |  |  |  +- commons-cli:commons-cli:jar:1.0:compile
-[INFO] |  |  |  +- commons-io:commons-io:jar:2.0:compile
-[INFO] |  |  |  \- commons-codec:commons-codec:jar:1.2:compile
-[INFO] |  |  +- org.compass-project.wso2:compass:jar:2.0.1.wso2v2:compile
-[INFO] |  |  +- org.apache.abdera.wso2:abdera:jar:1.0.0.wso2v3:compile
-[INFO] |  |  +- org.wso2.carbon:org.wso2.carbon.ndatasource.rdbms:jar:4.3.0:compile
-[INFO] |  |  +- org.apache.poi.wso2:poi-scratchpad:jar:3.9.0.wso2v1:compile
-[INFO] |  |  |  \- org.apache.poi:poi-scratchpad:jar:3.9:compile
-[INFO] |  |  |     \- org.apache.poi:poi:jar:3.9:compile
-[INFO] |  |  +- commons-httpclient.wso2:commons-httpclient:jar:3.1.0.wso2v2:compile
-[INFO] |  |  |  +- commons-httpclient:commons-httpclient:jar:3.1:compile
-[INFO] |  |  |  \- org.apache.commons.ssl:not-yet-commons-ssl:jar:0.3.9:compile
-[INFO] |  |  \- commons-pool.wso2:commons-pool:jar:1.5.6.wso2v1:compile
-[INFO] |  |     \- commons-pool:commons-pool:jar:1.5.6:compile
-[INFO] |  \- commons-collections:commons-collections:jar:3.0:compile
-[INFO] \- org.wso2.carbon.devicemgt:org.wso2.carbon.device.mgt.common:jar:0.9.2-SNAPSHOT:compile
-[INFO] ------------------------------------------------------------------------
-[INFO] Reactor Summary:
-[INFO] 
-[INFO] WSO2 Carbon - Device Management Plugins Parent .... SUCCESS [0.833s]
-[INFO] WSO2 Carbon - IoT Device Management Component ..... SUCCESS [0.004s]
-[INFO] WSO2 Carbon - IoT Device Management Impl .......... SUCCESS [31.352s]
-[INFO] WSO2-IOT-Rest-APi ................................. SUCCESS [52.770s]
-[INFO] WSO2 Carbon - Device Management Feature ........... SUCCESS [0.002s]
-[INFO] WSO2 Carbon - IOT Implementation of Device Management  SUCCESS [0.134s]
-[INFO] ------------------------------------------------------------------------
-[INFO] BUILD SUCCESS
-[INFO] ------------------------------------------------------------------------
-[INFO] Total time: 1:26.007s
-[INFO] Finished at: Wed May 20 09:32:52 IST 2015
-[INFO] Final Memory: 25M/277M
-[INFO] ------------------------------------------------------------------------
