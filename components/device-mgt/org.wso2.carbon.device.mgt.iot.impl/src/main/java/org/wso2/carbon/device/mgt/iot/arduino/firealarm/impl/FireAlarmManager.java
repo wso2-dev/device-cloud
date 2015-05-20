@@ -199,13 +199,13 @@ public class FireAlarmManager implements DeviceMgtService {
     }
 
     @Override
-    public boolean updateDeviceInfo(Device device) throws DeviceManagementException {
+    public boolean updateDeviceInfo(DeviceIdentifier deviceIdentifier, Device device) throws DeviceManagementException {
         boolean status;
         IotDevice iotDevice = IotDeviceManagementUtil.convertToIotDevice(device);
         try {
             if (log.isDebugEnabled()) {
                 log.debug(
-                        "updating the details of Arduino device : " + device.getDeviceIdentifier());
+                        "updating the details of Arduino device : " + deviceIdentifier);
             }
             FireAlarmDAO.beginTransaction();
             status = iotDeviceManagementDAOFactory.getIotDeviceDAO()
@@ -219,7 +219,7 @@ public class FireAlarmManager implements DeviceMgtService {
                 log.warn(msg, iotDAOEx);
             }
             String msg =
-                    "Error while updating the Arduino device : " + device.getDeviceIdentifier();
+                    "Error while updating the Arduino device : " + deviceIdentifier;
             log.error(msg, e);
             throw new DeviceManagementException(msg, e);
         }
