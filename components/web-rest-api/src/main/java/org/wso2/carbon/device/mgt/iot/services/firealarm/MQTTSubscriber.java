@@ -16,11 +16,10 @@
 
 package org.wso2.carbon.device.mgt.iot.services.firealarm;
 
-import org.apache.commons.configuration.ConfigurationException;
+import java.util.LinkedList;
+
 import org.apache.log4j.Logger;
 import org.eclipse.paho.client.mqttv3.*;
-import org.eclipse.paho.client.mqttv3.persist.MqttDefaultFilePersistence;
-import org.wso2.carbon.device.mgt.iot.utils.DefaultDeviceControlConfigs;
 
 public class MQTTSubscriber implements MqttCallback {
 
@@ -28,29 +27,19 @@ public class MQTTSubscriber implements MqttCallback {
 
 	private MqttClient client;
 	private MqttConnectOptions options;
-	private int msgCounter = 0;
 	private String clientId = "out:";
 	private String subscribeTopic = "wso2/iot/+/FireAlarm/#";
 
 	public MQTTSubscriber(String owner, String deviceUuid) {
 		this.clientId += owner + ":" + deviceUuid;
-		// this.subscribeTopic += owner + "/" + "FireAlarm" + "/" + deviceUuid;
-		this.subscribe();
+		this.initSubscriber();
+		// this.subscribe();
 	}
 
-	private void subscribe() {
+	private void initSubscriber() {
 		try {
 			client = new MqttClient(FireAlarmController.CONTROL_QUEUE_ENDPOINT, clientId, null);
-			options = new MqttConnectOptions();
-			options.setCleanSession(false);
-			options.setWill("fireAlarm/disconnection", "crashed".getBytes(), 2, true);
-			client.setCallback(this);
-			if (!client.isConnected()) {
-				log.info("SUBSCRIBING WITH ID : " + clientId);
-				client.connect(options);
-				client.subscribe(subscribeTopic, 0);
-			}
-
+			log.info("MQTT subscriber was created with ClientID : " + clientId);
 		} catch (MqttException ex) {
 			String errorMsg =
 			                  "MQTT Client Error\n" + "\tReason:  " + ex.getReasonCode() +
@@ -59,6 +48,54 @@ public class MQTTSubscriber implements MqttCallback {
 			                          "\n\tException: " + ex;
 			log.error(errorMsg);
 		}
+
+		options = new MqttConnectOptions();
+		options.setCleanSession(false);
+		options.setWill("fireAlarm/disconnection", "crashed".getBytes(), 2, true);
+		client.setCallback(this);
+	}
+
+	public void subscribe() {
+		if (!client.isConnected()) {
+			try {
+				client.connect(options);
+				log.info("Subscriber connected to queue at: " +
+				         FireAlarmController.CONTROL_QUEUE_ENDPOINT);
+			} catch (MqttSecurityException ex) {
+				String errorMsg =
+				                  "MQTT Security Exception when connecting to queue\n" +
+				                          "\tReason:  " + ex.getReasonCode() + "\n\tMessage: " +
+				                          ex.getMessage() + "\n\tLocalMsg: " +
+				                          ex.getLocalizedMessage() + "\n\tCause: " + ex.getCause() +
+				                          "\n\tException: " + ex;
+				log.error(errorMsg);
+			} catch (MqttException ex) {
+				String errorMsg =
+				                  "MQTT Exception when connecting to queue\n" + "\tReason:  " +
+				                          ex.getReasonCode() + "\n\tMessage: " + ex.getMessage() +
+				                          "\n\tLocalMsg: " + ex.getLocalizedMessage() +
+				                          "\n\tCause: " + ex.getCause() + "\n\tException: " + ex;
+				log.error(errorMsg);
+			}
+
+			try {
+				client.subscribe(subscribeTopic, 0);
+
+				log.info("Subscribing with client id: " + clientId);
+				log.info("Subscribing to topic: " + subscribeTopic);
+			} catch (MqttException ex) {
+				String errorMsg =
+				                  "MQTT Exception when trying to subscribe to topic: " +
+				                          subscribeTopic + "\n\tReason:  " + ex.getReasonCode() +
+				                          "\n\tMessage: " + ex.getMessage() + "\n\tLocalMsg: " +
+				                          ex.getLocalizedMessage() + "\n\tCause: " + ex.getCause() +
+				                          "\n\tException: " + ex;
+				log.error(errorMsg);
+			}
+		} else {
+			log.info("Client already connected & subscribed with Id: " + clientId);
+		}
+
 	}
 
 	/*
@@ -94,34 +131,29 @@ public class MQTTSubscriber implements MqttCallback {
 	 * String, org.eclipse.paho.client.mqttv3.MqttMessage)
 	 */
 	@Override
-	public void messageArrived(String arg0, MqttMessage arg1) {
-		log.info("Got Something: ");
-		log.info("Arg0: " + arg0);
-		log.info("Arg1: " + arg1);
+	public void messageArrived(final String arg0, final MqttMessage arg1) {
+		Thread thread = new Thread() {
+			public void run() {
+				log.info("Recieved a control message: ");
+				log.info("Control message topic: " + arg0);
+				log.info("Control message: " + arg1.toString());
+				int lastIndex = arg0.lastIndexOf("/");
+				String deviceId = arg0.substring(++lastIndex);
 
-//		Thread thread = new Thread() {
-//			public void run() {
-//				try {
-//					FireAlarmController.persistance.open(clientId,
-//					                                     FireAlarmController.CONTROL_QUEUE_ENDPOINT);
-//					FireAlarmController.persistance.put("" + msgCounter++,
-//					                                    new MqttPersistentData(
-//					                                                           "TEST",
-//					                                                           "".getBytes(),
-//					                                                           0,
-//					                                                           0,
-//					                                                           "PAYLOAD".getBytes(),
-//					                                                           0, 0));
-//					FireAlarmController.persistance.close();
-//					log.info("Closed File");
-//				} catch (MqttPersistenceException e) {
-//					log.info("Exception: " + e);
-//
-//				}
-//			}
-//		};
-//
-//		thread.start();
+				LinkedList<String> deviceControlList =
+				                                       FireAlarmController.internalControlsQueue.get(deviceId);
+
+				if (deviceControlList == null) {
+					FireAlarmController.internalControlsQueue.put(deviceId,
+					                                              deviceControlList =
+					                                                                  new LinkedList<String>());
+				}
+
+				deviceControlList.add(arg1.toString());
+			}
+		};
+
+		thread.start();
+
 	}
-
 }
