@@ -24,9 +24,8 @@ import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.device.mgt.iot.devicecontroller.ControlQueueConnector;
 import org.wso2.carbon.device.mgt.iot.devicecontroller.DataStoreConnector;
 
-
-
 public class IoTConfiguration {
+
 	private static Log log = LogFactory.getLog(IoTConfiguration.class);
 	private static IoTConfiguration iotConfigurationInstance = null;
 
@@ -64,27 +63,24 @@ public class IoTConfiguration {
 
 			// Load class mapped for device management from configuration.xml
 			classTypeToLoad = config.getString("Main/Enroll/Device-Class-Type");
-			classNameToLoad =
-			                  config.getString("Device-Enroll-Endpoint/class[@type='" +
-			                                   classTypeToLoad + "']");
+			classNameToLoad = config.getString("Device-Enroll-Endpoint/class[@type='" +
+													   classTypeToLoad + "']");
 
 			deviceManagement = IoTConfiguration.class.forName(classNameToLoad);
 			log.info(deviceManagement);
 
 			// Load class mapped for user management from configuration.xml
 			classTypeToLoad = config.getString("Main/Enroll/User-Class-Type");
-			classNameToLoad =
-			                  config.getString("User-Enroll-Endpoint/class[@type='" +
-			                                   classTypeToLoad + "']");
+			classNameToLoad = config.getString("User-Enroll-Endpoint/class[@type='" +
+													   classTypeToLoad + "']");
 
 			userManagement = IoTConfiguration.class.forName(classNameToLoad);
 			log.info(userManagement);
 
 			// Load class mapped for data-store from configuration.xml
 			classTypeToLoad = config.getString("Main/DeviceController/DeviceDataStore");
-			classNameToLoad =
-			                  config.getString("DataStores/DataStore/class[@type='" +
-			                                   classTypeToLoad + "']");
+			classNameToLoad = config.getString("DataStores/DataStore/class[@type='" +
+													   classTypeToLoad + "']");
 
 			dataStore = IoTConfiguration.class.forName(classNameToLoad);
 			activeDataStore = classTypeToLoad;
@@ -94,9 +90,8 @@ public class IoTConfiguration {
 
 			// Load class mapped for control-queue from configuration.xml
 			classTypeToLoad = config.getString("Main/DeviceController/DeviceControlQueue");
-			classNameToLoad =
-			                  config.getString("ControlQueues/ControlQueue/class[@type='" +
-			                                   classTypeToLoad + "']");
+			classNameToLoad = config.getString("ControlQueues/ControlQueue/class[@type='" +
+													   classTypeToLoad + "']");
 
 			controlQueue = IoTConfiguration.class.forName(classNameToLoad);
 			activeControlQueue = classTypeToLoad;
@@ -126,35 +121,32 @@ public class IoTConfiguration {
 		return iotConfigurationInstance;
 	}
 
-	
-
 	public DataStoreConnector getDataStore() throws InstantiationException, IllegalAccessException {
 
 		if (DataStoreConnector.class.isAssignableFrom(dataStore)) {
 			return (DataStoreConnector) dataStore.newInstance();
 		}
 
-		String error =
-		               "Invalid class format for <DataStore>, Make sure it has implemented DataStoreConnector Interface correctly";
+		String error
+				= "Invalid class format for <DataStore>, Make sure it has implemented DataStoreConnector Interface correctly";
 		log.error(error);
 		throw new InstantiationException(error);
 
 	}
 
-	public ControlQueueConnector getControlQueue() throws InstantiationException,
-	                                              IllegalAccessException {
+	public ControlQueueConnector getControlQueue()
+			throws InstantiationException, IllegalAccessException {
 
 		if (ControlQueueConnector.class.isAssignableFrom(controlQueue)) {
 			return (ControlQueueConnector) controlQueue.newInstance();
 		}
 
-		String error =
-		               "Invalid class format for <ControlQueue>, Make sure it has implemented ControlQueueConnector Interface correctly";
+		String error
+				= "Invalid class format for <ControlQueue>, Make sure it has implemented ControlQueueConnector Interface correctly";
 		log.error(error);
 		throw new InstantiationException(error);
 
 	}
-
 
 	public String getActiveDataStore() {
 		return activeDataStore;
@@ -171,7 +163,5 @@ public class IoTConfiguration {
 
 		return deviceCheckerCacheSize;
 	}
-
-
 
 }

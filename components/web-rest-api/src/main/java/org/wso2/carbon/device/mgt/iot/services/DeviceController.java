@@ -16,8 +16,13 @@
 
 package org.wso2.carbon.device.mgt.iot.services;
 
-import java.io.File;
-import java.util.HashMap;
+import org.apache.commons.configuration.ConfigurationException;
+import org.apache.log4j.Logger;
+import org.wso2.carbon.device.mgt.iot.devicecontroller.ControlQueueConnector;
+import org.wso2.carbon.device.mgt.iot.devicecontroller.DataStoreConnector;
+import org.wso2.carbon.device.mgt.iot.utils.DefaultDeviceControlConfigs;
+import org.wso2.carbon.device.mgt.iot.utils.IoTConfiguration;
+import org.wso2.carbon.device.mgt.iot.utils.ResourceFileLoader;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.HeaderParam;
@@ -25,23 +30,12 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.core.Context;
+import java.io.File;
+import java.util.HashMap;
 
-import org.apache.commons.configuration.ConfigurationException;
-import org.apache.log4j.Logger;
-
-import org.wso2.carbon.device.mgt.iot.devicecontroller.ControlQueueConnector;
-import org.wso2.carbon.device.mgt.iot.devicecontroller.DataStoreConnector;
-import org.wso2.carbon.device.mgt.iot.utils.DefaultDeviceControlConfigs;
-import org.wso2.carbon.device.mgt.iot.utils.IoTConfiguration;
-import org.wso2.carbon.device.mgt.iot.utils.ResourceFileLoader;
-
-
-/**
- * @author smean-MAC
- * 
- */
 @Path(value = "/DeviceController")
 public class DeviceController {
+
 	private static Logger log = Logger.getLogger(DeviceController.class);
 
 	private static DataStoreConnector iotDataStore = null;
@@ -56,8 +50,8 @@ public class DeviceController {
 		try {
 			trustStoreFile = DefaultDeviceControlConfigs.getInstance().getTrustStoreFile();
 			trustStorePassword = DefaultDeviceControlConfigs.getInstance().getTrustStorePassword();
-			certificateFile =
-			                  new ResourceFileLoader("/resources/security/" + trustStoreFile).getFile();
+			certificateFile = new ResourceFileLoader("/resources/security/" + trustStoreFile)
+					.getFile();
 
 			if (certificateFile.exists()) {
 				trustStoreFile = certificateFile.getAbsolutePath();
@@ -69,8 +63,8 @@ public class DeviceController {
 				log.error("Trust Store not found in path : " + trustStoreFile);
 			}
 		} catch (ConfigurationException e1) {
-			log.error("Error occured when trying to retreive Trust-Store-Certificate from path: " +
-			          certificateFile, e1);
+			log.error("Error occured when trying to retreive Trust-Store-Certificate from path: "
+							  + certificateFile, e1);
 		}
 
 		try {
@@ -89,11 +83,12 @@ public class DeviceController {
 	@Path("/pushdata/{owner}/{type}/{id}/{time}/{key}/{value}")
 	@POST
 	// @Produces("application/xml")
-	public static String pushData(@PathParam("owner") String owner, @PathParam("type") String deviceType,
-	                       @PathParam("id") String deviceId, @PathParam("time") Long time,
-	                       @PathParam("key") String key, @PathParam("value") String value,
-	                       @HeaderParam("description") String description,
-	                       @Context HttpServletResponse response) {
+	public static String pushData(@PathParam("owner") String owner,
+								  @PathParam("type") String deviceType,
+								  @PathParam("id") String deviceId, @PathParam("time") Long time,
+								  @PathParam("key") String key, @PathParam("value") String value,
+								  @HeaderParam("description") String description,
+								  @Context HttpServletResponse response) {
 
 		HashMap<String, String> deviceDataMap = new HashMap<String, String>();
 
@@ -111,38 +106,38 @@ public class DeviceController {
 		//dId.setId(deviceId);
 		//dId.setType(deviceType);
 
-//		try {
-//			boolean exists = deviceChecker.isExist(owner, dId);
-			String result = "Failed to push";
-//			if (exists) {
-				result = iotDataStore.publishIoTData(deviceDataMap);
-//
-//			}
-//
-			return result;
-//
-//		} catch (InstantiationException e) {
-//			response.setStatus(500);
-//			return null;
-//		} catch (IllegalAccessException e) {
-//			response.setStatus(500);
-//			return null;
-//		} catch (ConfigurationException e) {
-//			response.setStatus(500);
-//			return null;
-//		} catch (DeviceCloudException e) {
-//			response.setStatus(500);
-//			return null;
-//		}
+		//		try {
+		//			boolean exists = deviceChecker.isExist(owner, dId);
+		String result = "Failed to push";
+		//			if (exists) {
+		result = iotDataStore.publishIoTData(deviceDataMap);
+		//
+		//			}
+		//
+		return result;
+		//
+		//		} catch (InstantiationException e) {
+		//			response.setStatus(500);
+		//			return null;
+		//		} catch (IllegalAccessException e) {
+		//			response.setStatus(500);
+		//			return null;
+		//		} catch (ConfigurationException e) {
+		//			response.setStatus(500);
+		//			return null;
+		//		} catch (DeviceCloudException e) {
+		//			response.setStatus(500);
+		//			return null;
+		//		}
 
 	}
 
 	@Path("/setcontrol/{owner}/{type}/{id}/{key}/{value}")
 	@POST
 	public static String setControl(@PathParam("owner") String owner,
-	                         @PathParam("type") String deviceType,
-	                         @PathParam("id") String deviceId, @PathParam("key") String key,
-	                         @PathParam("value") String value) {
+									@PathParam("type") String deviceType,
+									@PathParam("id") String deviceId, @PathParam("key") String key,
+									@PathParam("value") String value) {
 		HashMap<String, String> deviceControlsMap = new HashMap<String, String>();
 
 		deviceControlsMap.put("owner", owner);

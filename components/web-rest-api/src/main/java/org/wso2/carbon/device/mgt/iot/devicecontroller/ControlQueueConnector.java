@@ -19,10 +19,10 @@ package org.wso2.carbon.device.mgt.iot.devicecontroller;
 import java.util.HashMap;
 
 // TODO: Auto-generated Javadoc
+
 /**
  * The Interface ControlQueueConnector.
- * 
- * @author smean-MAC
+ *
  */
 public interface ControlQueueConnector {
 
@@ -30,7 +30,7 @@ public interface ControlQueueConnector {
 	 * Initializes the control queue.
 	 * This method loads the initial configurations relevant to the
 	 * Control-Queue implementation
-	 * 
+	 *
 	 * @return A status message according to the outcome of the
 	 *         method execution.
 	 */
@@ -38,7 +38,7 @@ public interface ControlQueueConnector {
 
 	/**
 	 * Pushes the control messages received to the implemented queue
-	 * 
+	 *
 	 * @param deviceControls
 	 *            A Hash Map which contains the parameters relevant to the
 	 *            control message and the actual control message to be pushed to

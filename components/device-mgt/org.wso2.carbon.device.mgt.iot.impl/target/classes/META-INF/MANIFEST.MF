@@ -5,44 +5,40 @@ Export-Package: org.wso2.carbon.device.mgt.iot.arduino.firealarm.impl;
  n.device.mgt.iot.dto,org.wso2.carbon.device.mgt.iot.arduino.firealarm
  .impl.util,org.wso2.carbon.device.mgt.iot.dao,org.wso2.carbon.device.
  mgt.common,org.wso2.carbon.device.mgt.common.spi,org.wso2.carbon.devi
- ce.mgt.iot.util,org.wso2.carbon.device.mgt.iot.arduino.firealarm.impl
- .dao",org.wso2.carbon.device.mgt.iot.common,org.wso2.carbon.device.mg
- t.iot.dto,org.wso2.carbon.device.mgt.iot.web.register.util;uses:="org
- .wso2.carbon.device.mgt.user.core,org.apache.commons.logging,org.wso2
- .carbon.user.core.service,org.wso2.carbon.user.api,org.apache.commons
- .collections.map,org.wso2.carbon.device.mgt.core.service,org.wso2.car
- bon.device.mgt.core.dao,org.wso2.carbon.device.mgt.user.core.internal
- ,org.wso2.carbon.device.mgt.common,org.wso2.carbon.device.mgt.user.co
- mmon",org.wso2.carbon.device.mgt.iot.config.datasource;uses:="javax.x
- ml.bind.annotation,javax.xml.bind.annotation.adapters",org.wso2.carbo
- n.device.mgt.iot.arduino.firealarm.impl.util;uses:="org.apache.common
- s.logging,org.wso2.carbon.device.mgt.common",org.wso2.carbon.device.m
- gt.iot.dao;uses:="org.wso2.carbon.device.mgt.iot.common,org.apache.co
- mmons.logging,org.wso2.carbon.device.mgt.iot.dto,javax.sql,org.wso2.c
- arbon.device.mgt.iot.config.datasource,org.wso2.carbon.device.mgt.iot
- .dao.util",org.wso2.carbon.device.mgt.iot.arduino.firealarm.exception
- ,org.wso2.carbon.device.mgt.iot.arduino.firealarm.constants,org.wso2.
- carbon.device.mgt.iot.arduino.firealarm.impl.dao.impl;uses:="org.apac
- he.commons.logging,org.wso2.carbon.device.mgt.iot.dto,org.wso2.carbon
- .device.mgt.iot.arduino.firealarm.impl.util,org.wso2.carbon.device.mg
- t.iot.dao,org.wso2.carbon.device.mgt.iot.arduino.firealarm.impl.dao,o
- rg.wso2.carbon.device.mgt.iot.dao.util",org.wso2.carbon.device.mgt.io
- t.config;uses:="org.wso2.carbon.device.mgt.iot.config.datasource,java
- x.xml.bind.annotation,javax.xml.bind.annotation.adapters,org.wso2.car
- bon.utils,javax.xml.bind,org.wso2.carbon.device.mgt.common,org.w3c.do
- m,org.wso2.carbon.device.mgt.iot.util",org.wso2.carbon.device.mgt.iot
- .web.register;uses:="org.wso2.carbon.device.mgt.iot.web.register.util
- ,org.wso2.carbon.device.mgt.core.dao,org.wso2.carbon.device.mgt.commo
- n",org.wso2.carbon.device.mgt.iot.util;uses:="org.apache.commons.logg
- ing,org.wso2.carbon.device.mgt.iot.dto,javax.sql,org.wso2.carbon.util
- s.dbcreator,javax.xml.parsers,org.wso2.carbon.utils,org.wso2.carbon.d
- evice.mgt.common,org.w3c.dom",org.wso2.carbon.device.mgt.iot.arduino.
- firealarm.impl.dao;uses:="org.apache.commons.logging,org.wso2.carbon.
- device.mgt.iot.arduino.firealarm.impl.dao.impl,javax.sql,org.wso2.car
- bon.device.mgt.iot.dao",org.wso2.carbon.device.mgt.iot.dao.util;uses:
- ="javax.naming,org.apache.commons.logging,org.wso2.carbon.device.mgt.
- iot.common,javax.sql,org.wso2.carbon.device.mgt.iot.config.datasource
- ,org.wso2.carbon.device.mgt.iot.util"
+ ce.mgt.iot.arduino.firealarm.impl.dao,org.wso2.carbon.device.mgt.iot.
+ util",org.wso2.carbon.device.mgt.iot.common,org.wso2.carbon.device.mg
+ t.iot.dto,org.wso2.carbon.device.mgt.iot.config.datasource;uses:="jav
+ ax.xml.bind.annotation,javax.xml.bind.annotation.adapters",org.wso2.c
+ arbon.device.mgt.iot.arduino.firealarm.impl.util;uses:="org.apache.co
+ mmons.logging,org.wso2.carbon.device.mgt.common",org.wso2.carbon.devi
+ ce.mgt.iot.dao;uses:="org.wso2.carbon.device.mgt.iot.common,org.apach
+ e.commons.logging,org.wso2.carbon.device.mgt.iot.dto,javax.sql,org.ws
+ o2.carbon.device.mgt.iot.config.datasource,org.wso2.carbon.device.mgt
+ .iot.dao.util",org.wso2.carbon.device.mgt.iot.arduino.firealarm.excep
+ tion,org.wso2.carbon.device.mgt.iot.arduino.firealarm.constants,org.w
+ so2.carbon.device.mgt.iot.arduino.firealarm.impl.dao.impl;uses:="org.
+ apache.commons.logging,org.wso2.carbon.device.mgt.iot.dto,org.wso2.ca
+ rbon.device.mgt.iot.arduino.firealarm.impl.util,org.wso2.carbon.devic
+ e.mgt.iot.dao,org.wso2.carbon.device.mgt.iot.arduino.firealarm.impl.d
+ ao,org.wso2.carbon.device.mgt.iot.dao.util",org.wso2.carbon.device.mg
+ t.iot.config;uses:="org.wso2.carbon.device.mgt.iot.config.datasource,
+ javax.xml.bind.annotation,javax.xml.bind.annotation.adapters,org.wso2
+ .carbon.utils,javax.xml.bind,org.wso2.carbon.device.mgt.common,org.w3
+ c.dom,org.wso2.carbon.device.mgt.iot.util",org.wso2.carbon.device.mgt
+ .iot.web.register;uses:="org.wso2.carbon.device.mgt.user.core,org.apa
+ che.commons.logging,org.wso2.carbon.user.api,org.apache.commons.colle
+ ctions.map,org.wso2.carbon.device.mgt.core.service,org.wso2.carbon.de
+ vice.mgt.core.dao,org.wso2.carbon.device.mgt.common,org.wso2.carbon.d
+ evice.mgt.user.common",org.wso2.carbon.device.mgt.iot.util;uses:="org
+ .apache.commons.logging,org.wso2.carbon.device.mgt.iot.dto,javax.sql,
+ org.wso2.carbon.utils.dbcreator,javax.xml.parsers,org.wso2.carbon.uti
+ ls,org.wso2.carbon.device.mgt.common,org.w3c.dom",org.wso2.carbon.dev
+ ice.mgt.iot.arduino.firealarm.impl.dao;uses:="org.apache.commons.logg
+ ing,org.wso2.carbon.device.mgt.iot.arduino.firealarm.impl.dao.impl,ja
+ vax.sql,org.wso2.carbon.device.mgt.iot.dao",org.wso2.carbon.device.mg
+ t.iot.dao.util;uses:="javax.naming,org.apache.commons.logging,org.wso
+ 2.carbon.device.mgt.iot.common,javax.sql,org.wso2.carbon.device.mgt.i
+ ot.config.datasource,org.wso2.carbon.device.mgt.iot.util"
 Service-Component: OSGI-INF/serviceComponents.xml
 Private-Package: org.wso2.carbon.device.mgt.iot.internal
 Ignore-Package: org.wso2.carbon.device.mgt.iot.internal
@@ -53,7 +49,7 @@ Created-By: Apache Maven Bundle Plugin
 Bundle-Vendor: WSO2
 Build-Jdk: 1.7.0_75
 Bundle-Version: 1.9.2.SNAPSHOT
-Bnd-LastModified: 1432014186918
+Bnd-LastModified: 1432099410907
 Bundle-ManifestVersion: 2
 Bundle-Description: Device Management IoT Impl Bundle
 Bundle-License: http://www.apache.org/licenses/LICENSE-2.0.txt
@@ -67,10 +63,9 @@ Import-Package: javax.naming,javax.sql,javax.xml.bind,javax.xml.bind.a
  carbon.device.mgt.common.operation.mgt,org.wso2.carbon.device.mgt.com
  mon.spi,org.wso2.carbon.device.mgt.core.dao,org.wso2.carbon.device.mg
  t.core.service,org.wso2.carbon.device.mgt.user.common,org.wso2.carbon
- .device.mgt.user.core,org.wso2.carbon.device.mgt.user.core.internal,o
- rg.wso2.carbon.ndatasource.core;version="4.4",org.wso2.carbon.user.ap
- i;version="1.0",org.wso2.carbon.user.core.service;version="4.4",org.w
- so2.carbon.utils;version="4.4",org.wso2.carbon.utils.dbcreator;versio
- n="4.4"
+ .device.mgt.user.core,org.wso2.carbon.ndatasource.core;version="4.4",
+ org.wso2.carbon.user.api;version="1.0",org.wso2.carbon.user.core.serv
+ ice;version="4.4",org.wso2.carbon.utils;version="4.4",org.wso2.carbon
+ .utils.dbcreator;version="4.4"
 Bundle-SymbolicName: org.wso2.carbon.device.mgt.iot.impl
 

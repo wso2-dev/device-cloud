@@ -16,38 +16,23 @@
 
 package org.wso2.carbon.device.mgt.iot.services.firealarm;
 
-import java.util.HashMap;
+import org.apache.log4j.Logger;
+import org.wso2.carbon.device.mgt.iot.services.DeviceController;
 
 import javax.ws.rs.HeaderParam;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 
-import org.apache.commons.configuration.ConfigurationException;
-import org.apache.commons.httpclient.HttpStatus;
-import org.apache.log4j.Logger;
-import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
-import org.eclipse.paho.client.mqttv3.MqttCallback;
-import org.eclipse.paho.client.mqttv3.MqttClient;
-import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
-import org.eclipse.paho.client.mqttv3.MqttException;
-import org.eclipse.paho.client.mqttv3.MqttMessage;
-import org.eclipse.paho.client.mqttv3.persist.MqttDefaultFilePersistence;
-import org.wso2.carbon.device.mgt.iot.services.DeviceController;
-import org.wso2.carbon.device.mgt.iot.utils.DefaultDeviceControlConfigs;
-
-/**
- * @author smean-MAC
- * 
- */
 @Path(value = "/FireAlarmController")
 public class FireAlarmController {
+
 	private static Logger log = Logger.getLogger(FireAlarmController.class);
-	
-	
+
 	@Path("/switchBulb")
 	@POST
-	public String setControl(@HeaderParam("owner") String owner, @HeaderParam("id") String deviceId) {
+	public String setControl(@HeaderParam("owner") String owner,
+							 @HeaderParam("id") String deviceId) {
 
 		String result = null;
 		result = DeviceController.setControl(owner, "FireAlarm", deviceId, "BULB", "IN");
@@ -57,7 +42,7 @@ public class FireAlarmController {
 	@Path("/readTemperature")
 	@POST
 	public String readTempearature(@HeaderParam("owner") String owner,
-	                               @HeaderParam("id") String deviceId) {
+								   @HeaderParam("id") String deviceId) {
 
 		String result = null;
 		result = DeviceController.setControl(owner, "FireAlarm", deviceId, "TEMPERATURE", "IN");
@@ -66,7 +51,8 @@ public class FireAlarmController {
 
 	@Path("/switchFan")
 	@POST
-	public String switchFan(@HeaderParam("owner") String owner, @HeaderParam("id") String deviceId) {
+	public String switchFan(@HeaderParam("owner") String owner,
+							@HeaderParam("id") String deviceId) {
 
 		String result = null;
 		result = DeviceController.setControl(owner, "FireAlarm", deviceId, "FAN", "IN");
@@ -76,20 +62,13 @@ public class FireAlarmController {
 	@Path("/subscribe/{owner}/{id}")
 	@POST
 	public String subscribe(@PathParam("owner") String owner, @PathParam("id") String deviceId) {
-		
-//		Runnable r = new MQTTSubscriber(owner, deviceId);
-//		new Thread(r).start();
-		
-		
+
+		//		Runnable r = new MQTTSubscriber(owner, deviceId);
+		//		new Thread(r).start();
+
 		MQTTSubscriber mySubscriber = new MQTTSubscriber(owner, deviceId);
-		
+
 		return "Subscribed";
 	}
-
-	
-	
-	
-	
-
 
 }

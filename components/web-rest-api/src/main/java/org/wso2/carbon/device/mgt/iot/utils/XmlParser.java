@@ -16,8 +16,9 @@
 
 package org.wso2.carbon.device.mgt.iot.utils;
 
-import java.io.File;
-import java.io.IOException;
+import org.w3c.dom.Document;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -26,12 +27,11 @@ import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
-
-import org.w3c.dom.Document;
-import org.w3c.dom.NodeList;
-import org.xml.sax.SAXException;
+import java.io.File;
+import java.io.IOException;
 
 public class XmlParser {
+
 	private Document doc;
 
 	public XmlParser(File file) throws ParserConfigurationException, SAXException, IOException {
@@ -47,9 +47,8 @@ public class XmlParser {
 
 	public String[] getTagValues(String xPathExpression) throws XPathExpressionException {
 		XPath xPath = XPathFactory.newInstance().newXPath();
-		NodeList nodeList =
-		                    (NodeList) xPath.compile(xPathExpression)
-		                                    .evaluate(doc, XPathConstants.NODESET);
+		NodeList nodeList = (NodeList) xPath.compile(xPathExpression).evaluate(doc,
+																			   XPathConstants.NODESET);
 		String nodes[] = new String[nodeList.getLength()];
 		for (int i = 0; i < nodeList.getLength(); i++) {
 			nodes[i] = nodeList.item(i).getFirstChild().getNodeValue();

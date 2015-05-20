@@ -18,28 +18,15 @@ package org.wso2.carbon.device.mgt.iot.services.firealarm;
 
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.log4j.Logger;
-import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
-import org.eclipse.paho.client.mqttv3.MqttCallback;
-import org.eclipse.paho.client.mqttv3.MqttClient;
-import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
-import org.eclipse.paho.client.mqttv3.MqttException;
-import org.eclipse.paho.client.mqttv3.MqttMessage;
-import org.eclipse.paho.client.mqttv3.internal.MqttPersistentData;
+import org.eclipse.paho.client.mqttv3.*;
 import org.eclipse.paho.client.mqttv3.persist.MqttDefaultFilePersistence;
 import org.wso2.carbon.device.mgt.iot.utils.DefaultDeviceControlConfigs;
 
-/**
- * @author smean-MAC
- * 
- */
-public class MQTTSubscriber implements MqttCallback, Runnable{
-	private static Logger log = Logger.getLogger(MQTTSubscriber.class);
+public class MQTTSubscriber implements MqttCallback, Runnable {
 
-	private MqttDefaultFilePersistence persistance =
-	                                                        new MqttDefaultFilePersistence(
-	                                                                                       "MQTTQueue");
-	
+	private static Logger log = Logger.getLogger(MQTTSubscriber.class);
 	private static String CONTROL_QUEUE_ENDPOINT = null;
+	private MqttDefaultFilePersistence persistance = new MqttDefaultFilePersistence("MQTTQueue");
 	private MqttClient client = null;
 	private MqttConnectOptions options;
 	private String clientId = "out:";
@@ -55,7 +42,7 @@ public class MQTTSubscriber implements MqttCallback, Runnable{
 			log.info("CONTROL_QUEUE_ENDPOINT : " + CONTROL_QUEUE_ENDPOINT);
 		} catch (ConfigurationException e) {
 			log.error("Error occured when retreiving configs for ControlQueue from controller.xml"
-			          + ": ", e);
+							  + ": ", e);
 		}
 	}
 
@@ -77,7 +64,7 @@ public class MQTTSubscriber implements MqttCallback, Runnable{
 				client.connect(options);
 				client.subscribe(subscribeTopic, 0);
 			}
-			
+
 		} catch (MqttException me) {
 			log.error("MQTT Client Error");
 			log.error("Reason:  " + me.getReasonCode());
@@ -86,9 +73,8 @@ public class MQTTSubscriber implements MqttCallback, Runnable{
 			log.error("Cause: " + me.getCause());
 			log.error("Exception: " + me);
 			me.printStackTrace();
-		} 
+		}
 	}
-	
 
 	/*
 	 * (non-Javadoc)
@@ -130,17 +116,17 @@ public class MQTTSubscriber implements MqttCallback, Runnable{
 		log.info("Arg1: " + arg1);
 
 		persistance.open(this.clientId, CONTROL_QUEUE_ENDPOINT);
-		persistance.put(""+arg1, null);
+		persistance.put("" + arg1, null);
 
 	}
 
 	/* (non-Javadoc)
 	 * @see java.lang.Runnable#run()
 	 */
-    @Override
-    public void run() {
-	    // TODO Auto-generated method stub
-    	
-    }
+	@Override
+	public void run() {
+		// TODO Auto-generated method stub
+
+	}
 
 }

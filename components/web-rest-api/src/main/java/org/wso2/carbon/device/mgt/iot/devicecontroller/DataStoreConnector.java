@@ -19,10 +19,10 @@ package org.wso2.carbon.device.mgt.iot.devicecontroller;
 import java.util.HashMap;
 
 // TODO: Auto-generated Javadoc
+
 /**
  * The Interface DataStoreConnector.
- * 
- * @author smean-MAC
+ *
  */
 public interface DataStoreConnector {
 
@@ -30,7 +30,7 @@ public interface DataStoreConnector {
 	 * Initializes the data store.
 	 * This method loads the initial configurations relevant to the
 	 * Data-Store implementation where the sensor data will pushed into
-	 * 
+	 *
 	 * @return A status message according to the outcome of the
 	 *         method execution.
 	 */
@@ -39,7 +39,7 @@ public interface DataStoreConnector {
 	/**
 	 * Pushes the device/sensor data received from the devices into the
 	 * implemented data-store
-	 * 
+	 *
 	 * @param deviceData
 	 *            A Hash Map which contains the parameters relevant to the
 	 *            device and the actual device-data to be pushed into

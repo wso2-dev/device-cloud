@@ -16,20 +16,21 @@
 
 package org.wso2.carbon.device.mgt.iot.utils;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
 public class ResourceFileLoader {
-	private String filePath;
+
 	private static Log log = LogFactory.getLog(ResourceFileLoader.class);
+	private String filePath;
 
 	public ResourceFileLoader(String fileName) {
 		String path = ResourceFileLoader.class.getClassLoader().getResource("").getPath();
-		
+
 		String fullPath = path;
 		try {
 			fullPath = URLDecoder.decode(path, "UTF-8");
@@ -44,7 +45,6 @@ public class ResourceFileLoader {
 
 	public String getPath() {
 		return filePath;
-
 	}
 
 	public File getFile() {
