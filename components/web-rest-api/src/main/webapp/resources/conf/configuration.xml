@@ -14,13 +14,13 @@
 		</DeviceController>
 	</Main>
 
-	<Device-Enroll-Endpoint>
+<!-- 	<Device-Enroll-Endpoint>
 		<class type="DB-DEVICE">org.wso2.carbon.device.mgt.iot.enroll.cdm.DeviceManagementImpl </class>
 	</Device-Enroll-Endpoint>
 
 	<User-Enroll-Endpoint>
 		<class type="DB-USER">org.wso2.carbon.device.mgt.iot.enroll.cdm.UserManagementImpl </class>
-	</User-Enroll-Endpoint>
+	</User-Enroll-Endpoint> -->
 	
 	<DataStores>
 		<DataStore>

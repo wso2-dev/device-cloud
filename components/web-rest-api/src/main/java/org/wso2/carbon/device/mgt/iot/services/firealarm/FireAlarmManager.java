@@ -18,6 +18,8 @@ package org.wso2.carbon.device.mgt.iot.services.firealarm;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.wso2.carbon.device.mgt.common.Device;
 import org.wso2.carbon.device.mgt.common.DeviceIdentifier;
 import org.wso2.carbon.device.mgt.common.DeviceManagementException;
@@ -27,6 +29,7 @@ import org.wso2.carbon.device.mgt.iot.web.register.DeviceManagement;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
+
 import java.util.Date;
 
 @Path("/FireAlarmDeviceManager")

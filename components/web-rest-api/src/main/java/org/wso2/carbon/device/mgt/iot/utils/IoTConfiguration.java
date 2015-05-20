@@ -23,6 +23,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.device.mgt.iot.devicecontroller.ControlQueueConnector;
 import org.wso2.carbon.device.mgt.iot.devicecontroller.DataStoreConnector;
+import org.wso2.carbon.utils.CarbonUtils;
 
 public class IoTConfiguration {
 
@@ -30,8 +31,8 @@ public class IoTConfiguration {
 	private static IoTConfiguration iotConfigurationInstance = null;
 
 	// configuration variablesss
-	private Class<?> userManagement;
-	private Class<?> deviceManagement;
+//	private Class<?> userManagement;
+//	private Class<?> deviceManagement;
 	private Class<?> dataStore;
 	private Class<?> controlQueue;
 
@@ -62,20 +63,20 @@ public class IoTConfiguration {
 			deviceCheckerCacheSize = Integer.parseInt(classTypeToLoad);
 
 			// Load class mapped for device management from configuration.xml
-			classTypeToLoad = config.getString("Main/Enroll/Device-Class-Type");
-			classNameToLoad = config.getString("Device-Enroll-Endpoint/class[@type='" +
-													   classTypeToLoad + "']");
-
-			deviceManagement = IoTConfiguration.class.forName(classNameToLoad);
-			log.info(deviceManagement);
-
-			// Load class mapped for user management from configuration.xml
-			classTypeToLoad = config.getString("Main/Enroll/User-Class-Type");
-			classNameToLoad = config.getString("User-Enroll-Endpoint/class[@type='" +
-													   classTypeToLoad + "']");
-
-			userManagement = IoTConfiguration.class.forName(classNameToLoad);
-			log.info(userManagement);
+//			classTypeToLoad = config.getString("Main/Enroll/Device-Class-Type");
+//			classNameToLoad = config.getString("Device-Enroll-Endpoint/class[@type='" +
+//													   classTypeToLoad + "']");
+//
+//			deviceManagement = IoTConfiguration.class.forName(classNameToLoad);
+//			log.info(deviceManagement);
+//
+//			// Load class mapped for user management from configuration.xml
+//			classTypeToLoad = config.getString("Main/Enroll/User-Class-Type");
+//			classNameToLoad = config.getString("User-Enroll-Endpoint/class[@type='" +
+//													   classTypeToLoad + "']");
+//
+//			userManagement = IoTConfiguration.class.forName(classNameToLoad);
+//			log.info(userManagement);
 
 			// Load class mapped for data-store from configuration.xml
 			classTypeToLoad = config.getString("Main/DeviceController/DeviceDataStore");

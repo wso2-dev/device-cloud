@@ -18,6 +18,8 @@ package org.wso2.carbon.device.mgt.iot.services;
 
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.log4j.Logger;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.wso2.carbon.device.mgt.iot.devicecontroller.ControlQueueConnector;
 import org.wso2.carbon.device.mgt.iot.devicecontroller.DataStoreConnector;
 import org.wso2.carbon.device.mgt.iot.utils.DefaultDeviceControlConfigs;
@@ -30,6 +32,7 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.core.Context;
+
 import java.io.File;
 import java.util.HashMap;
 

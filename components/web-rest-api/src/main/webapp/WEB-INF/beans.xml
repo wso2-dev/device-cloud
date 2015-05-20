@@ -20,7 +20,6 @@ http://cxf.apache.org/schemas/jaxrs.xsd">
 
 	<jaxrs:server id="IoTService" address="">
 		<jaxrs:serviceBeans>
-			<!-- <bean class="org.wso2.carbon.device.mgt.iot.services.DeviceController" /> -->
 			<bean class="org.wso2.carbon.device.mgt.iot.services.firealarm.FireAlarmController">
 				<property name="mqttSubscriber" ref="mqttSubscriber"/>
 			</bean>
