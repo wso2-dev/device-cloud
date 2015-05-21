@@ -18,8 +18,11 @@ package org.wso2.carbon.device.mgt.iot.services.firealarm;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
+import org.apache.velocity.Template;
+import org.apache.velocity.VelocityContext;
+import org.apache.velocity.app.VelocityEngine;
+import org.apache.velocity.exception.ParseErrorException;
+import org.apache.velocity.exception.ResourceNotFoundException;
 import org.wso2.carbon.device.mgt.common.Device;
 import org.wso2.carbon.device.mgt.common.DeviceIdentifier;
 import org.wso2.carbon.device.mgt.common.DeviceManagementException;
@@ -29,7 +32,9 @@ import org.wso2.carbon.device.mgt.iot.web.register.DeviceManagement;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
-
+import java.io.File;
+import java.io.IOException;
+import java.io.Writer;
 import java.util.Date;
 
 @Path("/FireAlarmDeviceManager")
@@ -151,6 +156,55 @@ public class FireAlarmManager {
 		response.setStatus(200);
 		return device;
 
+	}
+
+	@Path("/DownloadSketch")
+	@GET
+	@Produces("application/octet-stream")
+	public HttpServletResponse downloadSketch(@QueryParam("type") String type,
+											  @Context HttpServletResponse response)
+			throws DeviceManagementException {
+
+		DeviceManagement deviceManagement = new DeviceManagement();
+		String a = FireAlarmConstants.DEVICE_TYPE;
+		String fileName = "README.txt";
+
+		/*  first, get and initialize an engine  */
+		VelocityEngine ve = new VelocityEngine();
+		ve.init();
+		/*  next, get the Template  */
+		Template t = ve.getTemplate("repository" + File.separator +
+											"resources" + File.separator + fileName);
+		/*  create a context and add data */
+		VelocityContext context = new VelocityContext();
+		context.put("name", "World");
+
+		/* now render the template into a StringWriter */
+		Writer writer = null;
+		try {
+			writer = response.getWriter();
+			t.merge(context, writer);
+			response.addHeader("Content-Disposition", "attachment; filename=\"" + fileName +
+					"\"");
+			writer.flush();
+			return response;
+		} catch (ResourceNotFoundException ex) {
+			String msg = "Resource `" + fileName + "` not found";
+			log.error(msg);
+			throw new DeviceManagementException(msg, ex);
+		} catch (ParseErrorException ex) {
+			String msg = "Resource parsing error for `" + fileName + "`";
+			log.error(msg);
+			throw new DeviceManagementException(msg, ex);
+		} catch (IOException ex) {
+			String msg = "Error occurred while reading `" + fileName + "`";
+			log.error(msg);
+			throw new DeviceManagementException(msg, ex);
+		} catch (RuntimeException ex) {
+			String msg = "Resource merging error for `" + fileName + "`";
+			log.error(msg);
+			throw new DeviceManagementException(msg, ex);
+		}
 	}
 
 }
