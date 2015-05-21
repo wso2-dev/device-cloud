@@ -65,6 +65,7 @@
 							org.wso2.carbon.device.mgt.user.core,
 							org.wso2.carbon.device.mgt.user.common,
 							org.apache.commons.collections.map,
+                            org.apache.velocity.*,
 							org.wso2.carbon.ndatasource.core
 						</Import-Package>
 						<Export-Package>
@@ -158,5 +159,11 @@
 			<artifactId>commons-collections</artifactId>
 			<version>3.0</version>
 		</dependency>
+
+        <dependency>
+            <groupId>org.apache.velocity</groupId>
+            <artifactId>velocity</artifactId>
+            <version>1.7</version>
+        </dependency>
 	</dependencies>
 </project>

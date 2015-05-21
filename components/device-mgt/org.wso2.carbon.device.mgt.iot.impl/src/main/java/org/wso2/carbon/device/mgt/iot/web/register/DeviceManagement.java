@@ -26,91 +26,103 @@ import org.wso2.carbon.device.mgt.core.dao.DeviceManagementDAOFactory;
 import org.wso2.carbon.device.mgt.core.dto.DeviceType;
 import org.wso2.carbon.device.mgt.core.service.DeviceManagementService;
 import org.wso2.carbon.device.mgt.core.service.DeviceManagementServiceImpl;
+import org.wso2.carbon.device.mgt.iot.util.IotDeviceManagementUtil;
 
+import java.io.File;
 import java.util.List;
+import java.util.Map;
 
 public class DeviceManagement {
 
-    private static Log log = LogFactory.getLog(DeviceManagement.class);
+	private static Log log = LogFactory.getLog(DeviceManagement.class);
 
-    public boolean addNewDevice(Device device) throws DeviceManagementException {
-        DeviceManagementService dmService = new DeviceManagementServiceImpl();
+	public boolean addNewDevice(Device device) throws DeviceManagementException {
+		DeviceManagementService dmService = new DeviceManagementServiceImpl();
 
-        boolean status;
+		boolean status;
 
-        status = dmService.enrollDevice(device);
+		status = dmService.enrollDevice(device);
 
-        return status;
+		return status;
 
-    }
+	}
 
-    public boolean removeDevice(DeviceIdentifier deviceIdentifier) throws DeviceManagementException {
+	public boolean removeDevice(DeviceIdentifier deviceIdentifier)
+			throws DeviceManagementException {
 
-        boolean status = false;
+		boolean status = false;
 
-        DeviceManagementService dmService = new DeviceManagementServiceImpl();
-        status = dmService.disenrollDevice(deviceIdentifier);
+		DeviceManagementService dmService = new DeviceManagementServiceImpl();
+		status = dmService.disenrollDevice(deviceIdentifier);
 
-        return status;
-    }
+		return status;
+	}
 
-    public boolean update(Device device) throws DeviceManagementException {
+	public boolean update(Device device) throws DeviceManagementException {
 
-        boolean status = false;
+		boolean status = false;
 
-        DeviceManagementService dmService = new DeviceManagementServiceImpl();
-        status = dmService.modifyEnrollment(device);
+		DeviceManagementService dmService = new DeviceManagementServiceImpl();
+		status = dmService.modifyEnrollment(device);
 
-        return status;
-    }
+		return status;
+	}
 
-    public Device getDevice(DeviceIdentifier deviceIdentifier) throws DeviceManagementException {
+	public Device getDevice(DeviceIdentifier deviceIdentifier) throws DeviceManagementException {
 
-        DeviceManagementService dmService = new DeviceManagementServiceImpl();
+		DeviceManagementService dmService = new DeviceManagementServiceImpl();
 
-        return dmService.getDevice(deviceIdentifier);
+		return dmService.getDevice(deviceIdentifier);
 
-    }
+	}
 
-    public boolean isExist(DeviceIdentifier deviceIdentifier) throws DeviceManagementException {
+	public boolean isExist(DeviceIdentifier deviceIdentifier) throws DeviceManagementException {
 
-        DeviceManagementService dmService = new DeviceManagementServiceImpl();
+		DeviceManagementService dmService = new DeviceManagementServiceImpl();
 
-        return dmService.isEnrolled(deviceIdentifier);
+		return dmService.isEnrolled(deviceIdentifier);
 
-    }
+	}
 
-    public boolean isExist(String owner, DeviceIdentifier deviceIdentifier) throws DeviceManagementException {
+	public boolean isExist(String owner, DeviceIdentifier deviceIdentifier)
+			throws DeviceManagementException {
 
-        DeviceManagementService dmService = new DeviceManagementServiceImpl();
+		DeviceManagementService dmService = new DeviceManagementServiceImpl();
 
-        if (dmService.isEnrolled(deviceIdentifier)) {
-            List<Device> deviceList = dmService.getDeviceListOfUser(owner);
-            for (Device device : deviceList) {
-                if (device.getDeviceIdentifier().equals(deviceIdentifier.getId())) {
-                    return true;
+		if (dmService.isEnrolled(deviceIdentifier)) {
+			List<Device> deviceList = dmService.getDeviceListOfUser(owner);
+			for (Device device : deviceList) {
+				if (device.getDeviceIdentifier().equals(deviceIdentifier.getId())) {
+					return true;
 
-                }
+				}
 
-            }
+			}
 
-        }
+		}
 
-        return false;
-    }
+		return false;
+	}
 
-    public List<Device> getDevices(String user) throws DeviceManagementException {
-        DeviceManagementService dmService = new DeviceManagementServiceImpl();
+	public List<Device> getDevices(String user) throws DeviceManagementException {
+		DeviceManagementService dmService = new DeviceManagementServiceImpl();
 
-        return dmService.getAllDevicesOfUser(user);
+		return dmService.getAllDevicesOfUser(user);
 
-    }
+	}
 
-    public List<DeviceType> getDeviceTypes() throws DeviceManagementDAOException {
+	public List<DeviceType> getDeviceTypes() throws DeviceManagementDAOException {
 
-        return DeviceManagementDAOFactory.getDeviceTypeDAO().getDeviceTypes();
+		return DeviceManagementDAOFactory.getDeviceTypeDAO().getDeviceTypes();
 
-}
+	}
 
+	public File getSketchArchive(String archivesPath, String templateSketchPath, Map contextParams)
+			throws DeviceManagementException {
+		/*  create a context and add data */
+
+		return IotDeviceManagementUtil.getSketchArchive(archivesPath, templateSketchPath,
+														contextParams);
+	}
 
 }
