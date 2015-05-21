@@ -24,14 +24,19 @@ import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.log4j.Logger;
 import org.wso2.carbon.device.mgt.iot.services.DeviceController;
+import org.wso2.carbon.device.mgt.iot.services.DeviceDataJSON;
+import org.wso2.carbon.device.mgt.iot.services.DeviceReplyJSON;
 import org.wso2.carbon.device.mgt.iot.utils.DefaultDeviceControlConfigs;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
 import javax.ws.rs.HeaderParam;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.core.Context;
+import javax.ws.rs.core.MediaType;
 
 @Path(value = "/FireAlarmController")
 public class FireAlarmController {
@@ -40,7 +45,7 @@ public class FireAlarmController {
 	public static final String CONTROL_QUEUE_ENDPOINT;
 	public static final HashMap<String, LinkedList<String>> replyMsgQueue;
 	public static final HashMap<String, LinkedList<String>> internalControlsQueue;
-	private static MQTTSubscriber mqttSubscriber;
+	public static MQTTSubscriber mqttSubscriber;
 
 	static {
 		String tmp = null;
@@ -63,68 +68,69 @@ public class FireAlarmController {
 	 * @param mqttSubscriber
 	 *            the mqttSubscriber to set
 	 */
-	public void setMqttSubscriber(final MQTTSubscriber mqttSubscriber) {
+	public void setMqttSubscriber(MQTTSubscriber mqttSubscriber) {
 		this.mqttSubscriber = mqttSubscriber;
 		mqttSubscriber.subscribe();
+		Thread subscriberDaemon = new Thread() {
+			public void run() {
+				while (true) {
+					if (!FireAlarmController.mqttSubscriber.isConnected()) {
+						log.info("Subscriber reconnecting to queue........");
+						FireAlarmController.mqttSubscriber.subscribe();
+					}
+				}
+			}
+
+		};
+		subscriberDaemon.setDaemon(true);
+		subscriberDaemon.start();
 	}
 
+	
 	@Path("/switchbulb")
 	@POST
 	public String switchBulb(@HeaderParam("owner") String owner,
-	                         @HeaderParam("uuid") String deviceUuid) {
-		
-		if (!mqttSubscriber.isSubscribed()) {
-			mqttSubscriber.subscribe();
-		}
-		
+	                         @HeaderParam("deviceId") String deviceId) {
 		String result = null;
-		result = DeviceController.setControl(owner, "FireAlarm", deviceUuid, "BULB", "IN");
+		result = DeviceController.setControl(owner, "FireAlarm", deviceId, "BULB", "IN");
 		return result;
 	}
 
 	@Path("/readtemperature")
-	@POST
+	@GET
 	public String readTempearature(@HeaderParam("owner") String owner,
-	                               @HeaderParam("uuid") String deviceUuid) {
-		if (!mqttSubscriber.isSubscribed()) {
-			mqttSubscriber.subscribe();
-		}
+	                               @HeaderParam("deviceId") String deviceId) {
 		String result = null;
-		result = DeviceController.setControl(owner, "FireAlarm", deviceUuid, "TEMPERATURE", "IN");
+		result = DeviceController.setControl(owner, "FireAlarm", deviceId, "TEMPERATURE", "IN");
 		return result;
 	}
 
 	@Path("/switchfan")
 	@POST
 	public String switchFan(@HeaderParam("owner") String owner,
-	                        @HeaderParam("uuid") String deviceUuid) {
-		if (!mqttSubscriber.isSubscribed()) {
-			mqttSubscriber.subscribe();
-		}
+	                        @HeaderParam("deviceId") String deviceId) {
 		String result = null;
-		result = DeviceController.setControl(owner, "FireAlarm", deviceUuid, "FAN", "IN");
+		result = DeviceController.setControl(owner, "FireAlarm", deviceId, "FAN", "IN");
 		return result;
 	}
 
-	@Path("/readcontrols/{owner}/{uuid}")
-	@POST
+	@Path("/readcontrols/{owner}/{deviceId}")
+	@GET
 	public String readControls(@PathParam("owner") String owner,
-	                           @PathParam("uuid") String deviceUuid,
+	                           @PathParam("deviceId") String deviceId,
 	                           @Context HttpServletResponse response) {
 		String result = null;
-		LinkedList<String> deviceControlList = internalControlsQueue.get(deviceUuid);
+		LinkedList<String> deviceControlList = internalControlsQueue.get(deviceId);
 
 		if (deviceControlList == null) {
-			result = "No controls have been set for device " + deviceUuid + " of owner " + owner;
+			result = "No controls have been set for device " + deviceId + " of owner " + owner;
 			response.setStatus(HttpStatus.SC_NOT_MODIFIED);
 		} else {
 			try {
 				result = deviceControlList.remove();
 				response.setStatus(HttpStatus.SC_ACCEPTED);
 			} catch (NoSuchElementException ex) {
-				result =
-				         "There are no more controls for device " + deviceUuid + " of owner " +
-				                 owner;
+				result = "There are no more controls for device " + deviceId + " of owner " + owner;
 				response.setStatus(HttpStatus.SC_NO_CONTENT);
 			}
 		}
@@ -132,25 +138,26 @@ public class FireAlarmController {
 		return result;
 	}
 
-	@Path("/reply/{owner}/{uuid}/{reply}")
+	@Path("/reply")
 	@POST
-	public String reply(@PathParam("owner") String owner, @PathParam("uuid") String deviceUuid,
-	                    @PathParam("reply") String replyMessage) {
+	@Consumes(MediaType.APPLICATION_JSON)
+	public String reply(final DeviceReplyJSON replyMsg) {
 		String result = null;
-		result = DeviceController.setControl(owner, "FireAlarm", deviceUuid, replyMessage, "OUT");
+		result =
+		         DeviceController.setControl(replyMsg.owner, "FireAlarm", replyMsg.deviceId,
+		                                     replyMsg.replyMessage, "OUT");
 		return result;
 	}
 
-	@Path("/pushalarmdata/{owner}/{uuid}/{time}/{key}/{value}")
+	@Path("/pushalarmdata")
 	@POST
-	public String pushAlarmData(@PathParam("owner") String owner,
-	                            @PathParam("uuid") String deviceUuid,
-	                            @PathParam("time") Long time,
-	                            @PathParam("key") String key,
-	                            @PathParam("value") String value,
-	                            @Context HttpServletResponse response) {
+	@Consumes(MediaType.APPLICATION_JSON)
+	public String pushAlarmData(final DeviceDataJSON dataMsg, @Context HttpServletResponse response) {
 		String result = null;
-		result = DeviceController.pushData(owner, "FireAlarm", deviceUuid, time, key, value, "", response);
+		result =
+		         DeviceController.pushData(dataMsg.owner, "FireAlarm", dataMsg.deviceId,
+		                                   dataMsg.time, dataMsg.key, dataMsg.value,
+		                                   dataMsg.replyMessage, response);
 		return result;
 	}
 }
