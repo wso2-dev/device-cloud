@@ -72,7 +72,11 @@ public class FireAlarmController {
 	@POST
 	public String switchBulb(@HeaderParam("owner") String owner,
 	                         @HeaderParam("uuid") String deviceUuid) {
-		mqttSubscriber.subscribe();
+		
+		if (!mqttSubscriber.isSubscribed()) {
+			mqttSubscriber.subscribe();
+		}
+		
 		String result = null;
 		result = DeviceController.setControl(owner, "FireAlarm", deviceUuid, "BULB", "IN");
 		return result;
@@ -82,7 +86,9 @@ public class FireAlarmController {
 	@POST
 	public String readTempearature(@HeaderParam("owner") String owner,
 	                               @HeaderParam("uuid") String deviceUuid) {
-		mqttSubscriber.subscribe();
+		if (!mqttSubscriber.isSubscribed()) {
+			mqttSubscriber.subscribe();
+		}
 		String result = null;
 		result = DeviceController.setControl(owner, "FireAlarm", deviceUuid, "TEMPERATURE", "IN");
 		return result;
@@ -92,7 +98,9 @@ public class FireAlarmController {
 	@POST
 	public String switchFan(@HeaderParam("owner") String owner,
 	                        @HeaderParam("uuid") String deviceUuid) {
-		mqttSubscriber.subscribe();
+		if (!mqttSubscriber.isSubscribed()) {
+			mqttSubscriber.subscribe();
+		}
 		String result = null;
 		result = DeviceController.setControl(owner, "FireAlarm", deviceUuid, "FAN", "IN");
 		return result;

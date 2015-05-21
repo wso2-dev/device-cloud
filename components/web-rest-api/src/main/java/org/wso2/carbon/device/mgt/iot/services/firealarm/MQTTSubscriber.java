@@ -29,12 +29,11 @@ public class MQTTSubscriber implements MqttCallback {
 	private MqttConnectOptions options;
 	private String clientId = "out:";
 	private String subscribeTopic = "wso2/iot/+/FireAlarm/#";
-	
+	private boolean isSubscribed = false;
 
 	public MQTTSubscriber(String owner, String deviceUuid) {
 		this.clientId += owner + ":" + deviceUuid;
 		this.initSubscriber();
-		// this.subscribe();
 	}
 
 	private void initSubscriber() {
@@ -54,6 +53,13 @@ public class MQTTSubscriber implements MqttCallback {
 		options.setCleanSession(false);
 		options.setWill("fireAlarm/disconnection", "crashed".getBytes(), 2, true);
 		client.setCallback(this);
+	}
+
+	/**
+	 * @return the isSubscribed
+	 */
+	public boolean isSubscribed() {
+		return isSubscribed;
 	}
 
 	public void subscribe() {
@@ -78,23 +84,25 @@ public class MQTTSubscriber implements MqttCallback {
 				                          "\n\tCause: " + ex.getCause() + "\n\tException: " + ex;
 				log.error(errorMsg);
 			}
-
-			try {
-				client.subscribe(subscribeTopic, 0);
-
-				log.info("Subscribing with client id: " + clientId);
-				log.info("Subscribing to topic: " + subscribeTopic);
-			} catch (MqttException ex) {
-				String errorMsg =
-				                  "MQTT Exception when trying to subscribe to topic: " +
-				                          subscribeTopic + "\n\tReason:  " + ex.getReasonCode() +
-				                          "\n\tMessage: " + ex.getMessage() + "\n\tLocalMsg: " +
-				                          ex.getLocalizedMessage() + "\n\tCause: " + ex.getCause() +
-				                          "\n\tException: " + ex;
-				log.error(errorMsg);
-			}
 		} else {
-			log.info("Client already connected & subscribed with Id: " + clientId);
+			log.info("Client " + clientId + " is already connected queue at : " +
+			         FireAlarmController.CONTROL_QUEUE_ENDPOINT);
+		}
+
+		try {
+			client.subscribe(subscribeTopic, 0);
+			this.isSubscribed = true;
+			
+			log.info("Subscribing with client id: " + clientId);
+			log.info("Subscribing to topic: " + subscribeTopic);
+		} catch (MqttException ex) {
+			String errorMsg =
+			                  "MQTT Exception when trying to subscribe to topic: " +
+			                          subscribeTopic + "\n\tReason:  " + ex.getReasonCode() +
+			                          "\n\tMessage: " + ex.getMessage() + "\n\tLocalMsg: " +
+			                          ex.getLocalizedMessage() + "\n\tCause: " + ex.getCause() +
+			                          "\n\tException: " + ex;
+			log.error(errorMsg);
 		}
 
 	}
@@ -108,6 +116,7 @@ public class MQTTSubscriber implements MqttCallback {
 	 */
 	@Override
 	public void connectionLost(Throwable arg0) {
+		this.isSubscribed = false;
 		log.info("Lost Connection for client: " + this.clientId);
 	}
 
@@ -144,7 +153,7 @@ public class MQTTSubscriber implements MqttCallback {
 
 				LinkedList<String> deviceControlList = null;
 				LinkedList<String> replyMessageList = null;
-				
+
 				if (msgContext.equals("IN")) {
 					log.info("Recieved a control message: ");
 					log.info("Control message topic: " + arg0);
@@ -166,8 +175,8 @@ public class MQTTSubscriber implements MqttCallback {
 						replyMessageList = FireAlarmController.replyMsgQueue.get(deviceId);
 						if (replyMessageList == null) {
 							FireAlarmController.replyMsgQueue.put(deviceId,
-							                                              replyMessageList =
-							                                                                  new LinkedList<String>());
+							                                      replyMessageList =
+							                                                         new LinkedList<String>());
 						}
 					}
 					replyMessageList.add(arg1.toString());
