@@ -124,7 +124,7 @@ public class FireAlarmController {
 
 		if (deviceControlList == null) {
 			result = "No controls have been set for device " + deviceId + " of owner " + owner;
-			response.setStatus(HttpStatus.SC_NOT_MODIFIED);
+			response.setStatus(HttpStatus.SC_NO_CONTENT);
 		} else {
 			try {
 				result = deviceControlList.remove();

@@ -124,7 +124,7 @@ public class MQTTControlQueue implements ControlQueueConnector, MqttCallback {
 		String key = deviceControls.get("key");
 		String value = deviceControls.get("value");
 
-		String clientId = "in:" + owner + "." + deviceId;
+		String clientId = owner + "." + deviceId;
 
 		if (clientId.length() > 24) {
 			String errorString =
