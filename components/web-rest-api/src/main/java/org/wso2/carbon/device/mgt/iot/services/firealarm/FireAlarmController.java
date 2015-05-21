@@ -17,10 +17,12 @@
 package org.wso2.carbon.device.mgt.iot.services.firealarm;
 
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.NoSuchElementException;
 
 import org.apache.commons.configuration.ConfigurationException;
+import org.apache.commons.httpclient.HttpStatus;
 import org.apache.log4j.Logger;
-import org.eclipse.paho.client.mqttv3.persist.MqttDefaultFilePersistence;
 import org.wso2.carbon.device.mgt.iot.services.DeviceController;
 import org.wso2.carbon.device.mgt.iot.utils.DefaultDeviceControlConfigs;
 
@@ -33,41 +35,44 @@ import javax.ws.rs.core.Context;
 
 @Path(value = "/FireAlarmController")
 public class FireAlarmController {
+	private static Logger log = Logger.getLogger(FireAlarmController.class);
 
-private static Logger log = Logger.getLogger(FireAlarmController.class);
-	
-	private HashMap<String, MQTTSubscriber> subscriptions = new HashMap<String, MQTTSubscriber>();
-	static final MqttDefaultFilePersistence persistance = new MqttDefaultFilePersistence("MQTTQueue");
-	static String CONTROL_QUEUE_ENDPOINT = null;
-	
-	private MQTTSubscriber mqttSubscriber;
-	
-	/**
-	 * @param mqttSubscriber the mqttSubscriber to set
-	 */
-	public void setMqttSubscriber(MQTTSubscriber mqttSubscriber) {
-		this.mqttSubscriber = mqttSubscriber;
-	}
+	public static final String CONTROL_QUEUE_ENDPOINT;
+	public static final HashMap<String, LinkedList<String>> replyMsgQueue;
+	public static final HashMap<String, LinkedList<String>> internalControlsQueue;
+	private static MQTTSubscriber mqttSubscriber;
 
 	static {
+		String tmp = null;
 		try {
 			String mqttUrl = DefaultDeviceControlConfigs.getInstance().getControlQueueUrl();
 			String mqttPort = DefaultDeviceControlConfigs.getInstance().getControlQueuePort();
-
-			CONTROL_QUEUE_ENDPOINT = mqttUrl + ":" + mqttPort;
-
-			log.info("CONTROL_QUEUE_ENDPOINT : " + CONTROL_QUEUE_ENDPOINT);
+			tmp = mqttUrl + ":" + mqttPort;
+			log.info("CONTROL_QUEUE_ENDPOINT Successfully initialized.");
 		} catch (ConfigurationException e) {
-			log.error("Error occured when retreiving configs for ControlQueue from controller.xml"
+			log.error("Error occurred when retreiving configs for ControlQueue from controller.xml"
 			          + ": ", e);
+		} finally {
+			CONTROL_QUEUE_ENDPOINT = tmp;
 		}
+		replyMsgQueue = new HashMap<String, LinkedList<String>>();
+		internalControlsQueue = new HashMap<String, LinkedList<String>>();
 	}
-	
+
+	/**
+	 * @param mqttSubscriber
+	 *            the mqttSubscriber to set
+	 */
+	public void setMqttSubscriber(final MQTTSubscriber mqttSubscriber) {
+		this.mqttSubscriber = mqttSubscriber;
+		mqttSubscriber.subscribe();
+	}
+
 	@Path("/switchBulb")
 	@POST
-	public String setControl(@HeaderParam("owner") String owner,
+	public String switchBulb(@HeaderParam("owner") String owner,
 	                         @HeaderParam("uuid") String deviceUuid) {
-
+		mqttSubscriber.subscribe();
 		String result = null;
 		result = DeviceController.setControl(owner, "FireAlarm", deviceUuid, "BULB", "IN");
 		return result;
@@ -77,7 +82,7 @@ private static Logger log = Logger.getLogger(FireAlarmController.class);
 	@POST
 	public String readTempearature(@HeaderParam("owner") String owner,
 	                               @HeaderParam("uuid") String deviceUuid) {
-
+		mqttSubscriber.subscribe();
 		String result = null;
 		result = DeviceController.setControl(owner, "FireAlarm", deviceUuid, "TEMPERATURE", "IN");
 		return result;
@@ -86,30 +91,12 @@ private static Logger log = Logger.getLogger(FireAlarmController.class);
 	@Path("/switchFan")
 	@POST
 	public String switchFan(@HeaderParam("owner") String owner,
-	                        @HeaderParam("uuid") String deviceUuid) {
-
+	                        @HeaderParam("uuid") String deviceUuid,
+	                        @Context HttpServletResponse response) {
+		mqttSubscriber.subscribe();
 		String result = null;
 		result = DeviceController.setControl(owner, "FireAlarm", deviceUuid, "FAN", "IN");
 		return result;
-	}
-
-	@Path("/subscribe/{owner}/{uuid}")
-	@POST
-	public String subscribe(@PathParam("owner") String owner, @PathParam("uuid") String deviceUuid,
-	                        @Context HttpServletResponse response) {
-
-//		MQTTSubscriber subscriber = subscriptions.get(deviceUuid);
-//
-//		if (subscriber != null) {
-//			response.setStatus(HttpStatus.SC_CONFLICT);
-//			return "Already subscribed";
-//		}
-//
-//		subscriber = new MQTTSubscriber(owner, deviceUuid);
-//		subscriber.subscribe();
-//		subscriptions.put(deviceUuid, subscriber);
-//		response.setStatus(HttpStatus.SC_CREATED);
-		return "Successfully subscribed";
 	}
 
 	@Path("/readControls/{owner}/{uuid}")
@@ -117,11 +104,34 @@ private static Logger log = Logger.getLogger(FireAlarmController.class);
 	public String readControls(@PathParam("owner") String owner,
 	                           @PathParam("uuid") String deviceUuid,
 	                           @Context HttpServletResponse response) {
+		String result = null;
+		LinkedList<String> deviceControlList = internalControlsQueue.get(deviceUuid);
 
-		String clientId = "out:" + owner + ":" + deviceUuid;
-
-		return "True";
-
+		if (deviceControlList == null) {
+			result = "No controls have been set for device " + deviceUuid + " of owner " + owner;
+			response.setStatus(HttpStatus.SC_NOT_MODIFIED);
+		} else {
+			try {
+				result = deviceControlList.remove();
+				response.setStatus(HttpStatus.SC_ACCEPTED);
+			} catch (NoSuchElementException ex) {
+				result =
+				         "There are no more controls for device " + deviceUuid + " of owner " +
+				                 owner;
+				response.setStatus(HttpStatus.SC_NO_CONTENT);
+			}
+		}
+		log.info(result);
+		return result;
 	}
 
+	@Path("/reply/{owner}/{uuid}/{reply}")
+	@POST
+	public String reply(@PathParam("owner") String owner, @PathParam("uuid") String deviceUuid,
+	                    @PathParam("reply") String replyMessage,
+	                    @Context HttpServletResponse response) {
+		String result = null;
+		result = DeviceController.setControl(owner, "FireAlarm", deviceUuid, replyMessage, "OUT");
+		return result;
+	}
 }
