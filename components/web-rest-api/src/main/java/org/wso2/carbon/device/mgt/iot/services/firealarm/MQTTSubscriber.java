@@ -29,6 +29,7 @@ public class MQTTSubscriber implements MqttCallback {
 	private MqttConnectOptions options;
 	private String clientId = "out:";
 	private String subscribeTopic = "wso2/iot/+/FireAlarm/#";
+	
 
 	public MQTTSubscriber(String owner, String deviceUuid) {
 		this.clientId += owner + ":" + deviceUuid;

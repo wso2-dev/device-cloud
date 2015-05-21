@@ -68,7 +68,7 @@ public class FireAlarmController {
 		mqttSubscriber.subscribe();
 	}
 
-	@Path("/switchBulb")
+	@Path("/switchbulb")
 	@POST
 	public String switchBulb(@HeaderParam("owner") String owner,
 	                         @HeaderParam("uuid") String deviceUuid) {
@@ -78,7 +78,7 @@ public class FireAlarmController {
 		return result;
 	}
 
-	@Path("/readTemperature")
+	@Path("/readtemperature")
 	@POST
 	public String readTempearature(@HeaderParam("owner") String owner,
 	                               @HeaderParam("uuid") String deviceUuid) {
@@ -88,18 +88,17 @@ public class FireAlarmController {
 		return result;
 	}
 
-	@Path("/switchFan")
+	@Path("/switchfan")
 	@POST
 	public String switchFan(@HeaderParam("owner") String owner,
-	                        @HeaderParam("uuid") String deviceUuid,
-	                        @Context HttpServletResponse response) {
+	                        @HeaderParam("uuid") String deviceUuid) {
 		mqttSubscriber.subscribe();
 		String result = null;
 		result = DeviceController.setControl(owner, "FireAlarm", deviceUuid, "FAN", "IN");
 		return result;
 	}
 
-	@Path("/readControls/{owner}/{uuid}")
+	@Path("/readcontrols/{owner}/{uuid}")
 	@POST
 	public String readControls(@PathParam("owner") String owner,
 	                           @PathParam("uuid") String deviceUuid,
@@ -128,10 +127,22 @@ public class FireAlarmController {
 	@Path("/reply/{owner}/{uuid}/{reply}")
 	@POST
 	public String reply(@PathParam("owner") String owner, @PathParam("uuid") String deviceUuid,
-	                    @PathParam("reply") String replyMessage,
-	                    @Context HttpServletResponse response) {
+	                    @PathParam("reply") String replyMessage) {
 		String result = null;
 		result = DeviceController.setControl(owner, "FireAlarm", deviceUuid, replyMessage, "OUT");
+		return result;
+	}
+
+	@Path("/pushalarmdata/{owner}/{uuid}/{time}/{key}/{value}")
+	@POST
+	public String pushAlarmData(@PathParam("owner") String owner,
+	                            @PathParam("uuid") String deviceUuid,
+	                            @PathParam("time") Long time,
+	                            @PathParam("key") String key,
+	                            @PathParam("value") String value,
+	                            @Context HttpServletResponse response) {
+		String result = null;
+		result = DeviceController.pushData(owner, "FireAlarm", deviceUuid, time, key, value, "", response);
 		return result;
 	}
 }
