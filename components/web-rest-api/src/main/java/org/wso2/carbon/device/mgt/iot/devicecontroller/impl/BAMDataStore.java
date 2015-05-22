@@ -154,7 +154,13 @@ public class BAMDataStore implements DataStoreConnector {
 			                                         Long.parseLong(time) }, null,
 			                           new Object[] { key, value, description });
 
-			log.info("event published to devicePinDataStream");
+			String logMsg =
+			                "event published to devicePinDataStream\n"
+			                		+ "\tOwner: " + owner + "\tDeviceType: " + deviceType + "\n"
+			                        + "\tDeviceId: " + deviceId + "\tTime: " + time + "\n"
+			                        + "\tDescription: " + description + "\n"
+			                        + "\tKey: " + key + "\tValue: " + value + "\n";
+			log.info(logMsg);
 
 		} catch (AgentException e) {
 			log.error("Error while publishing device pin data", e);

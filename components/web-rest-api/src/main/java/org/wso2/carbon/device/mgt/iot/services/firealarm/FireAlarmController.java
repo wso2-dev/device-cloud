@@ -45,7 +45,7 @@ public class FireAlarmController {
 	public static final String CONTROL_QUEUE_ENDPOINT;
 	public static final HashMap<String, LinkedList<String>> replyMsgQueue;
 	public static final HashMap<String, LinkedList<String>> internalControlsQueue;
-	public static MQTTSubscriber mqttSubscriber;
+	 public static MQTTSubscriber mqttSubscriber;
 
 	static {
 		String tmp = null;
@@ -86,7 +86,6 @@ public class FireAlarmController {
 		subscriberDaemon.start();
 	}
 
-	
 	@Path("/switchbulb")
 	@POST
 	public String switchBulb(@HeaderParam("owner") String owner,

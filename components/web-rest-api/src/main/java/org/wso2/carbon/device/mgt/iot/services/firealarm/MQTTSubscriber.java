@@ -18,22 +18,25 @@ package org.wso2.carbon.device.mgt.iot.services.firealarm;
 
 import java.util.LinkedList;
 
+import org.apache.commons.configuration.ConfigurationException;
 import org.apache.log4j.Logger;
 import org.eclipse.paho.client.mqttv3.*;
+import org.wso2.carbon.device.mgt.iot.utils.IoTConfiguration;
 
 public class MQTTSubscriber implements MqttCallback {
 
 	private static Logger log = Logger.getLogger(MQTTSubscriber.class);
-
+	
 	private MqttClient client;
 	private MqttConnectOptions options;
 	private String clientId = "out:";
 	private String subscribeTopic = "wso2/iot/+/FireAlarm/#";
 
-	public MQTTSubscriber(String owner, String deviceUuid) {
+	private MQTTSubscriber(String owner, String deviceUuid) {
 		this.clientId += owner + ":" + deviceUuid;
 		this.initSubscriber();
 	}
+	
 
 	private void initSubscriber() {
 		try {
