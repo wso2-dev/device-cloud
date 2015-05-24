@@ -26,12 +26,13 @@
     <jaxrs:server id="FireAlarmManager" address="/">
         <jaxrs:serviceBeans>
             <ref bean="FireAlarmManagerService"/>
-			<ref bean="FireAlarmController"/>
+			<ref bean="FireAlarmControllerService"/>
         </jaxrs:serviceBeans>
     </jaxrs:server>
 
 	<bean id="FireAlarmManagerService" class="org.wso2.carbon.device.mgt.iot.services.firealarm.FireAlarmManagerService"/>
-	<bean id="FireAlarmController" class="org.wso2.carbon.device.mgt.iot.services.firealarm.FireAlarmController"/>
+	<bean id="FireAlarmController" class="org.wso2.carbon.device.mgt.iot.services.firealarm
+	.FireAlarmControllerService"/>
 
 </beans>
 

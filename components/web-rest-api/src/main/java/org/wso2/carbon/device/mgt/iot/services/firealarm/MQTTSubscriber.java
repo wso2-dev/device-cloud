@@ -37,7 +37,7 @@ public class MQTTSubscriber implements MqttCallback {
 
 	private void initSubscriber() {
 		try {
-			client = new MqttClient(FireAlarmController.CONTROL_QUEUE_ENDPOINT, clientId, null);
+			client = new MqttClient(FireAlarmControllerService.CONTROL_QUEUE_ENDPOINT, clientId, null);
 			log.info("MQTT subscriber was created with ClientID : " + clientId);
 		} catch (MqttException ex) {
 			String errorMsg = "MQTT Client Error\n" + "\tReason:  " + ex.getReasonCode() +
@@ -64,7 +64,7 @@ public class MQTTSubscriber implements MqttCallback {
 		try {
 			client.connect(options);
 			log.info("Subscriber connected to queue at: "
-							 + FireAlarmController.CONTROL_QUEUE_ENDPOINT);
+							 + FireAlarmControllerService.CONTROL_QUEUE_ENDPOINT);
 		} catch (MqttSecurityException ex) {
 			String errorMsg = "MQTT Security Exception when connecting to queue\n" + "\tReason:  " +
 					ex.getReasonCode() + "\n\tMessage: " + ex.getMessage() +
@@ -147,10 +147,10 @@ public class MQTTSubscriber implements MqttCallback {
 					log.info("Recieved a control message: ");
 					log.info("Control message topic: " + arg0);
 					log.info("Control message: " + arg1.toString());
-					synchronized (FireAlarmController.internalControlsQueue) {
-						deviceControlList = FireAlarmController.internalControlsQueue.get(deviceId);
+					synchronized (FireAlarmControllerService.internalControlsQueue) {
+						deviceControlList = FireAlarmControllerService.internalControlsQueue.get(deviceId);
 						if (deviceControlList == null) {
-							FireAlarmController.internalControlsQueue.put(deviceId,
+							FireAlarmControllerService.internalControlsQueue.put(deviceId,
 																		  deviceControlList
 																				  = new LinkedList<String>());
 						}
@@ -160,10 +160,10 @@ public class MQTTSubscriber implements MqttCallback {
 					log.info("Recieved reply from a device: ");
 					log.info("Reply message topic: " + arg0);
 					log.info("Reply message: " + arg1.toString().substring(0, lastIndex));
-					synchronized (FireAlarmController.replyMsgQueue) {
-						replyMessageList = FireAlarmController.replyMsgQueue.get(deviceId);
+					synchronized (FireAlarmControllerService.replyMsgQueue) {
+						replyMessageList = FireAlarmControllerService.replyMsgQueue.get(deviceId);
 						if (replyMessageList == null) {
-							FireAlarmController.replyMsgQueue.put(deviceId, replyMessageList
+							FireAlarmControllerService.replyMsgQueue.put(deviceId, replyMessageList
 																		  = new LinkedList<String>());
 						}
 					}
