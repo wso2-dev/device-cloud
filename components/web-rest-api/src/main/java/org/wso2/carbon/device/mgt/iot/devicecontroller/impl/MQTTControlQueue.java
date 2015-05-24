@@ -16,21 +16,20 @@
 
 package org.wso2.carbon.device.mgt.iot.devicecontroller.impl;
 
-import java.util.HashMap;
-
-import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.log4j.Logger;
-import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
-import org.eclipse.paho.client.mqttv3.MqttCallback;
-import org.eclipse.paho.client.mqttv3.MqttClient;
-import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
-import org.eclipse.paho.client.mqttv3.MqttException;
-import org.eclipse.paho.client.mqttv3.MqttMessage;
+import org.eclipse.paho.client.mqttv3.*;
+import org.wso2.carbon.device.mgt.common.DeviceManagementException;
+import org.wso2.carbon.device.mgt.iot.config.FireAlarmConfigurationManager;
+import org.wso2.carbon.device.mgt.iot.config.FireAlarmManagementConfig;
+import org.wso2.carbon.device.mgt.iot.config.FireAlarmManagementControllerConfig;
+import org.wso2.carbon.device.mgt.iot.config.controlqueue.FireAlarmControlQueueConfig;
 import org.wso2.carbon.device.mgt.iot.devicecontroller.ControlQueueConnector;
-import org.wso2.carbon.device.mgt.iot.utils.DefaultDeviceControlConfigs;
+
+import java.util.HashMap;
 
 // TODO: Auto-generated Javadoc
+
 /**
  * The Class MQTTControlQueue. It is an implementation of the interface
  * ControlQueueConnector.
@@ -41,7 +40,7 @@ import org.wso2.carbon.device.mgt.iot.utils.DefaultDeviceControlConfigs;
  * This is done using the class 'DefaultDeviceControlConfigs.java' which loads
  * the settings from the default xml configs file -
  * /resources/conf/device-controls/controller.xml
- * 
+ *
  * @author smean-MAC
  */
 public class MQTTControlQueue implements ControlQueueConnector, MqttCallback {
@@ -79,30 +78,36 @@ public class MQTTControlQueue implements ControlQueueConnector, MqttCallback {
 		String mqttUrl = "";
 		String mqttPort = "";
 
-		try {
-			controlQueue = DefaultDeviceControlConfigs.getInstance().getControlQueue();
+		FireAlarmManagementConfig config = null;
 
-			mqttUrl = DefaultDeviceControlConfigs.getInstance().getControlQueueUrl();
-			mqttPort = DefaultDeviceControlConfigs.getInstance().getControlQueuePort();
+		try {
+			config = FireAlarmConfigurationManager.getInstance().getFireAlarmMgtConfig();
+
+			// controller configurations
+			FireAlarmManagementControllerConfig controllerConfig = config
+					.getFireAlarmManagementControllerConfig();
+
+			controlQueue = controllerConfig.getDeviceControlQueue();
+
+			FireAlarmControlQueueConfig controlQueueConfig = config.getControlQueuesMap().get(
+					controlQueue);
+
+			mqttUrl = controlQueueConfig.getEndPoint();
+			mqttPort = controlQueueConfig.getPort();
 
 			CONTROL_QUEUE_ENDPOINT = mqttUrl + ":" + mqttPort;
-			CONTROL_QUEUE_USERNAME =
-			                         DefaultDeviceControlConfigs.getInstance()
-			                                                    .getControlQueueUsername();
-			CONTROL_QUEUE_PASSWORD =
-			                         DefaultDeviceControlConfigs.getInstance()
-			                                                    .getControlQueuePassword();
+			CONTROL_QUEUE_USERNAME = controlQueueConfig.getUserName();
+			CONTROL_QUEUE_PASSWORD = controlQueueConfig.getPassword();
 
 			log.info("CONTROL_QUEUE_ENDPOINT : " + CONTROL_QUEUE_ENDPOINT);
-		} catch (ConfigurationException e) {
-			log.error("Error occured when retreiving configs for ControlQueue - " + controlQueue +
-			          " from controller.xml" + ": ", e);
+			return String.format(httpReply, HttpStatus.SC_OK, HttpStatus.getStatusText(
+					HttpStatus.SC_OK), "");
+		} catch (DeviceManagementException ex) {
+			log.error("Error occurred when trying to read configurations file: firealarm-config"
+							  + ".xml", ex);
 			return String.format(httpReply, HttpStatus.SC_INTERNAL_SERVER_ERROR,
-			                     HttpStatus.getStatusText(HttpStatus.SC_INTERNAL_SERVER_ERROR), e);
+								 HttpStatus.getStatusText(HttpStatus.SC_INTERNAL_SERVER_ERROR), ex);
 		}
-
-		return String.format(httpReply, HttpStatus.SC_OK,
-		                     HttpStatus.getStatusText(HttpStatus.SC_OK), "");
 	}
 
 	/*
@@ -127,14 +132,12 @@ public class MQTTControlQueue implements ControlQueueConnector, MqttCallback {
 		String clientId = owner + "." + deviceId;
 
 		if (clientId.length() > 24) {
-			String errorString =
-			                     "No of characters '" + clientId.length() + "' for ClientID: '" +
-			                             clientId +
-			                             "' is invalid (should be less than 24, hence please provide a simple 'owner' tag)";
+			String errorString = "No of characters '" + clientId.length() + "' for ClientID: '" +
+					clientId +
+					"' is invalid (should be less than 24, hence please provide a simple 'owner' tag)";
 			log.error(errorString);
-			return String.format(httpReply, HttpStatus.SC_NOT_ACCEPTABLE,
-			                     HttpStatus.getStatusText(HttpStatus.SC_NOT_ACCEPTABLE),
-			                     errorString);
+			return String.format(httpReply, HttpStatus.SC_NOT_ACCEPTABLE, HttpStatus.getStatusText(
+					HttpStatus.SC_NOT_ACCEPTABLE), errorString);
 		} else {
 			log.info("No of Characters in ClientID : '" + clientId + "' is " + clientId.length());
 		}
@@ -150,14 +153,14 @@ public class MQTTControlQueue implements ControlQueueConnector, MqttCallback {
 			client.connect(options);
 
 			log.info("MQTT Client successfully connected to: " + CONTROL_QUEUE_ENDPOINT +
-			         ", with client ID - " + clientId);
+							 ", with client ID - " + clientId);
 
 			MqttMessage message = new MqttMessage();
 			message.setPayload(payLoad.getBytes());
 			client.publish(publishTopic, payLoad.getBytes(), 0, true);
 
 			log.info("MQTT Client successfully published to topic: " + publishTopic +
-			         ", with payload - " + payLoad);
+							 ", with payload - " + payLoad);
 
 			client.disconnect();
 
@@ -171,10 +174,10 @@ public class MQTTControlQueue implements ControlQueueConnector, MqttCallback {
 			log.error("Exception: " + me);
 			me.printStackTrace();
 			return String.format(httpReply, HttpStatus.SC_INTERNAL_SERVER_ERROR,
-			                     HttpStatus.getStatusText(HttpStatus.SC_INTERNAL_SERVER_ERROR), me);
+								 HttpStatus.getStatusText(HttpStatus.SC_INTERNAL_SERVER_ERROR), me);
 		}
-		return String.format(httpReply, HttpStatus.SC_ACCEPTED,
-		                     HttpStatus.getStatusText(HttpStatus.SC_ACCEPTED), "");
+		return String.format(httpReply, HttpStatus.SC_ACCEPTED, HttpStatus.getStatusText(
+				HttpStatus.SC_ACCEPTED), "");
 	}
 
 	/*
@@ -199,7 +202,7 @@ public class MQTTControlQueue implements ControlQueueConnector, MqttCallback {
 	@Override
 	public void deliveryComplete(IMqttDeliveryToken arg0) {
 		log.info("Published topic: '" + arg0.getTopics()[0] + "' successfully to client: '" +
-		         arg0.getClient().getClientId() + "'");
+						 arg0.getClient().getClientId() + "'");
 	}
 
 	/*

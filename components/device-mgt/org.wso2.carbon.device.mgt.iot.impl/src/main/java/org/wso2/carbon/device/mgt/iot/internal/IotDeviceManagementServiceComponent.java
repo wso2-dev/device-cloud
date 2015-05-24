@@ -96,7 +96,9 @@ public class IotDeviceManagementServiceComponent {
             }
 
             arduinoServiceRegRef =
-                    bundleContext.registerService(DeviceMgtService.class.getName(), new FireAlarmManager(), null);
+                    bundleContext.registerService(DeviceMgtService.class.getName(), new
+					FireAlarmManager(),
+												  null);
            
 
             if (log.isDebugEnabled()) {

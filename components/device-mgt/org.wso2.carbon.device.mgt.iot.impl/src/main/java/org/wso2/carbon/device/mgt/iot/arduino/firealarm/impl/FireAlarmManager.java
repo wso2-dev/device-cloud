@@ -43,14 +43,14 @@ import org.wso2.carbon.device.mgt.common.spi.DeviceMgtService;
  * This represents the Arduino implementation of DeviceManagerService.
  */
 public class FireAlarmManager implements DeviceMgtService {
-	
-	
 
-    private IotDeviceManagementDAOFactory iotDeviceManagementDAOFactory;
+    private static IotDeviceManagementDAOFactory iotDeviceManagementDAOFactory;
     private static final Log log = LogFactory.getLog(FireAlarmManager.class);
 
     public FireAlarmManager() {
-        iotDeviceManagementDAOFactory = new FireAlarmDAO();
+		if(iotDeviceManagementDAOFactory==null) {
+			iotDeviceManagementDAOFactory = new FireAlarmDAO();
+		}
     }
 
     @Override

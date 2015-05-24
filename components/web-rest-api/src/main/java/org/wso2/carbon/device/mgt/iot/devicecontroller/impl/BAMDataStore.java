@@ -16,27 +16,27 @@
 
 package org.wso2.carbon.device.mgt.iot.devicecontroller.impl;
 
-import java.net.MalformedURLException;
-import java.util.HashMap;
-
-import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.log4j.Logger;
 import org.wso2.carbon.databridge.agent.thrift.DataPublisher;
 import org.wso2.carbon.databridge.agent.thrift.exception.AgentException;
-import org.wso2.carbon.databridge.commons.exception.AuthenticationException;
-import org.wso2.carbon.databridge.commons.exception.DifferentStreamDefinitionAlreadyDefinedException;
-import org.wso2.carbon.databridge.commons.exception.MalformedStreamDefinitionException;
-import org.wso2.carbon.databridge.commons.exception.StreamDefinitionException;
-import org.wso2.carbon.databridge.commons.exception.TransportException;
+import org.wso2.carbon.databridge.commons.exception.*;
+import org.wso2.carbon.device.mgt.common.DeviceManagementException;
+import org.wso2.carbon.device.mgt.iot.config.FireAlarmConfigurationManager;
+import org.wso2.carbon.device.mgt.iot.config.FireAlarmManagementConfig;
+import org.wso2.carbon.device.mgt.iot.config.FireAlarmManagementControllerConfig;
+import org.wso2.carbon.device.mgt.iot.config.datastore.FireAlarmDataStoreConfig;
 import org.wso2.carbon.device.mgt.iot.devicecontroller.DataStoreConnector;
-import org.wso2.carbon.device.mgt.iot.utils.DefaultDeviceControlConfigs;
+
+import java.net.MalformedURLException;
+import java.util.HashMap;
 
 /**
  * @author smean-MAC
- * 
+ *
  */
 public class BAMDataStore implements DataStoreConnector {
+
 	Logger log = Logger.getLogger(BAMDataStore.class);
 
 	private String DATASTORE_ENDPOINT = "";
@@ -62,70 +62,70 @@ public class BAMDataStore implements DataStoreConnector {
 		String bamUrl = "";
 		String bamPort = "";
 
+		FireAlarmManagementConfig config = null;
 		try {
-			dataStore = DefaultDeviceControlConfigs.getInstance().getDataStore();
+			config = FireAlarmConfigurationManager.getInstance().getFireAlarmMgtConfig();
+			// controller configurations
+			FireAlarmManagementControllerConfig controllerConfig = config
+					.getFireAlarmManagementControllerConfig();
+			dataStore = controllerConfig.getDeviceDataStore();
 
-			bamUrl = DefaultDeviceControlConfigs.getInstance().getDataStoreUrl();
-			bamPort = DefaultDeviceControlConfigs.getInstance().getDataStorePort();
+			FireAlarmDataStoreConfig dataStoreConfig = config.getDataStoresMap().get(dataStore);
+
+			bamUrl = dataStoreConfig.getEndPoint();
+			bamPort = dataStoreConfig.getPort();
 
 			DATASTORE_ENDPOINT = bamUrl + ":" + bamPort;
-			DATASTORE_USERNAME = DefaultDeviceControlConfigs.getInstance().getDataStoreUsername();
-			DATASTORE_PASSWORD = DefaultDeviceControlConfigs.getInstance().getDataStorePassword();
+			DATASTORE_USERNAME = dataStoreConfig.getUserName();
+			DATASTORE_PASSWORD = dataStoreConfig.getPassword();
 
 			log.info("DATASTORE_ENDPOINT : " + DATASTORE_ENDPOINT);
-
-		} catch (ConfigurationException e) {
-			log.error("Error occured when retreiving configs for DataStore - " + dataStore +
-			          " from controller.xml" + ": ", e);
+		} catch (DeviceManagementException ex) {
+			log.error("Error occurred when trying to read configurations file: firealarm-config"
+							  + ".xml", ex);
 		}
 
 		try {
-			BAM_DATA_PUBLISHER =
-			                     new DataPublisher(DATASTORE_ENDPOINT, DATASTORE_USERNAME,
-			                                       DATASTORE_PASSWORD);
+			BAM_DATA_PUBLISHER = new DataPublisher(DATASTORE_ENDPOINT, DATASTORE_USERNAME,
+												   DATASTORE_PASSWORD);
 		} catch (MalformedURLException | AgentException | AuthenticationException
-		        | TransportException e) {
+				| TransportException e) {
 			log.error("Error creating DataPublisher for Endpoint: " + DATASTORE_ENDPOINT +
-			          " with credentials, USERNAME-" + DATASTORE_USERNAME + " and PASSWORD-" +
-			          DATASTORE_PASSWORD + ": ", e);
+							  " with credentials, USERNAME-" + DATASTORE_USERNAME + " and PASSWORD-"
+							  +
+							  DATASTORE_PASSWORD + ": ", e);
 
-			return String.format(httpReply, HttpStatus.SC_BAD_GATEWAY,
-			                     HttpStatus.getStatusText(HttpStatus.SC_BAD_GATEWAY));
+			return String.format(httpReply, HttpStatus.SC_BAD_GATEWAY, HttpStatus.getStatusText(
+					HttpStatus.SC_BAD_GATEWAY));
 		}
 
 		try {
-			DEVICE_DATA_STREAM =
-			                     BAM_DATA_PUBLISHER.defineStream("{"
-			                                                     + "'name':'org_wso2_iot_devices_data',"
-			                                                     + "'version':'1.0.0',"
-			                                                     + "'nickName': 'IoT Connected Device Data',"
-			                                                     + "'description': 'Data Received from Device',"
-			                                                     + "'tags': ['iot', 'embeddedDevice'],"
-			                                                     + "'metaData':["
-			                                                     + "        {'name':'owner','type':'STRING'},"
-			                                                     + "        {'name':'deviceType','type':'STRING'},"
-			                                                     + "        {'name':'deviceId','type':'STRING'},"
-			                                                     + "		{'name':'requestTime','type':'LONG'}"
-			                                                     + "],"
-			                                                     + "'payloadData':["
-			                                                     + "        {'name':'key','type':'STRING'},"
-			                                                     + "        {'name':'value','type':'STRING'},"
-			                                                     + "        {'name':'description','type':'STRING'}"
-			                                                     + "]" + "}");
+			DEVICE_DATA_STREAM = BAM_DATA_PUBLISHER.defineStream(
+					"{" + "'name':'org_wso2_iot_devices_data'," + "'version':'1.0.0',"
+							+ "'nickName': 'IoT Connected Device Data',"
+							+ "'description': 'Data Received from Device',"
+							+ "'tags': ['iot', 'embeddedDevice']," + "'metaData':["
+							+ "        {'name':'owner','type':'STRING'},"
+							+ "        {'name':'deviceType','type':'STRING'},"
+							+ "        {'name':'deviceId','type':'STRING'},"
+							+ "		{'name':'requestTime','type':'LONG'}" + "],"
+							+ "'payloadData':[" + "        {'name':'key','type':'STRING'},"
+							+ "        {'name':'value','type':'STRING'},"
+							+ "        {'name':'description','type':'STRING'}" + "]" + "}");
 
 			log.info("stream definition ID for data from device pin: " + DEVICE_DATA_STREAM);
 
 		} catch (AgentException | MalformedStreamDefinitionException | StreamDefinitionException
-		        | DifferentStreamDefinitionAlreadyDefinedException e) {
+				| DifferentStreamDefinitionAlreadyDefinedException e) {
 
 			log.error("Error in defining stream for data publisher: ", e);
 			return String.format(httpReply, HttpStatus.SC_INTERNAL_SERVER_ERROR,
-			                     HttpStatus.getStatusText(HttpStatus.SC_INTERNAL_SERVER_ERROR));
+								 HttpStatus.getStatusText(HttpStatus.SC_INTERNAL_SERVER_ERROR));
 
 		}
 
-		return String.format(httpReply, HttpStatus.SC_OK,
-		                     HttpStatus.getStatusText(HttpStatus.SC_OK));
+		return String.format(httpReply, HttpStatus.SC_OK, HttpStatus.getStatusText(
+				HttpStatus.SC_OK));
 
 	}
 
@@ -148,28 +148,25 @@ public class BAMDataStore implements DataStoreConnector {
 		String description = deviceData.get("description");
 
 		try {
-			BAM_DATA_PUBLISHER.publish(DEVICE_DATA_STREAM,
-			                           System.currentTimeMillis(),
-			                           new Object[] { owner, deviceType, deviceId,
-			                                         Long.parseLong(time) }, null,
-			                           new Object[] { key, value, description });
+			BAM_DATA_PUBLISHER.publish(DEVICE_DATA_STREAM, System.currentTimeMillis(),
+									   new Object[] { owner, deviceType, deviceId, Long.parseLong(
+											   time) }, null,
+									   new Object[] { key, value, description });
 
-			String logMsg =
-			                "event published to devicePinDataStream\n"
-			                		+ "\tOwner: " + owner + "\tDeviceType: " + deviceType + "\n"
-			                        + "\tDeviceId: " + deviceId + "\tTime: " + time + "\n"
-			                        + "\tDescription: " + description + "\n"
-			                        + "\tKey: " + key + "\tValue: " + value + "\n";
+			String logMsg = "event published to devicePinDataStream\n" + "\tOwner: " + owner
+					+ "\tDeviceType: " + deviceType + "\n" + "\tDeviceId: " + deviceId + "\tTime: "
+					+ time + "\n" + "\tDescription: " + description + "\n" + "\tKey: " + key
+					+ "\tValue: " + value + "\n";
 			log.info(logMsg);
 
 		} catch (AgentException e) {
 			log.error("Error while publishing device pin data", e);
 			return String.format(httpReply, HttpStatus.SC_INTERNAL_SERVER_ERROR,
-			                     HttpStatus.getStatusText(HttpStatus.SC_INTERNAL_SERVER_ERROR));
+								 HttpStatus.getStatusText(HttpStatus.SC_INTERNAL_SERVER_ERROR));
 		}
 
-		return String.format(httpReply, HttpStatus.SC_ACCEPTED,
-		                     HttpStatus.getStatusText(HttpStatus.SC_ACCEPTED));
+		return String.format(httpReply, HttpStatus.SC_ACCEPTED, HttpStatus.getStatusText(
+				HttpStatus.SC_ACCEPTED));
 	}
 
 	/*

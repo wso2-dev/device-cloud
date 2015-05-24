@@ -87,12 +87,14 @@ public class FireAlarmDAO extends IotDeviceManagementDAOFactory
 
     public static void closeConnection() throws IotDeviceManagementDAOException {
 
-        Connection con = currentConnection.get();
-        try {
-            con.close();
-        } catch (SQLException e) {
-            log.error("Error occurred while close the connection");
-        }
+		Connection con = currentConnection.get();
+		if(con != null){
+			try {
+				con.close();
+			} catch (SQLException e) {
+				log.error("Error occurred while close the connection");
+			}
+		}
         currentConnection.remove();
     }
 

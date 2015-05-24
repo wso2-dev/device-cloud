@@ -122,11 +122,11 @@ public class IotDeviceManagementUtil {
 		new File(archivesPath).mkdirs();//new dir
 
 		try {
-			parseTemplate(templateSketchPath + sep + "IoTArduinoAgent.h",
-						  archivesPath + sep + "IoTArduinoAgent.h", context);
+			parseTemplate(templateSketchPath + sep + "FireAlarmAgent.h",
+						  archivesPath + sep + "FireAlarmAgent.h", context);
 			copyFile(sketchPath + sep + "Connect.ino", archivesPath + sep + "Connect.ino");
-			copyFile(sketchPath + sep + "IoTArduinoAgent.ino",
-					 archivesPath + sep + "IoTArduinoAgent.ino");
+			copyFile(sketchPath + sep + "FireAlarmAgent.ino",
+					 archivesPath + sep + "FireAlarmAgent.ino");
 			copyFile(sketchPath + sep + "MQTTConnect.ino", archivesPath + sep + "MQTTConnect.ino");
 			copyFile(sketchPath + sep + "PushData.ino", archivesPath + sep + "PushData.ino");
 			createZipArchive(archivesPath);

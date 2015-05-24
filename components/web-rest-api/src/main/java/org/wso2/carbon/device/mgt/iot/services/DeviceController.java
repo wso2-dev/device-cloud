@@ -16,12 +16,16 @@
 
 package org.wso2.carbon.device.mgt.iot.services;
 
-import org.apache.commons.configuration.ConfigurationException;
 import org.apache.log4j.Logger;
+import org.wso2.carbon.device.mgt.common.DeviceManagementException;
+import org.wso2.carbon.device.mgt.iot.config.FireAlarmConfigurationManager;
+import org.wso2.carbon.device.mgt.iot.config.FireAlarmManagementConfig;
+import org.wso2.carbon.device.mgt.iot.config.FireAlarmManagementControllerConfig;
+import org.wso2.carbon.device.mgt.iot.config.FireAlarmManagementSecurityConfig;
+import org.wso2.carbon.device.mgt.iot.config.controlqueue.FireAlarmControlQueueConfig;
+import org.wso2.carbon.device.mgt.iot.config.datastore.FireAlarmDataStoreConfig;
 import org.wso2.carbon.device.mgt.iot.devicecontroller.ControlQueueConnector;
 import org.wso2.carbon.device.mgt.iot.devicecontroller.DataStoreConnector;
-import org.wso2.carbon.device.mgt.iot.utils.DefaultDeviceControlConfigs;
-import org.wso2.carbon.device.mgt.iot.utils.IoTConfiguration;
 import org.wso2.carbon.device.mgt.iot.utils.ResourceFileLoader;
 
 import javax.servlet.http.HttpServletResponse;
@@ -47,9 +51,21 @@ public class DeviceController {
 		String trustStorePassword = null;
 		File certificateFile = null;
 
+		FireAlarmManagementConfig config = null;
+
 		try {
-			trustStoreFile = DefaultDeviceControlConfigs.getInstance().getTrustStoreFile();
-			trustStorePassword = DefaultDeviceControlConfigs.getInstance().getTrustStorePassword();
+			config = FireAlarmConfigurationManager.getInstance().getFireAlarmMgtConfig();
+		} catch (DeviceManagementException ex) {
+			log.error("Error occurred when trying to read configurations file: firealarm-config"
+							  + ".xml", ex);
+		}
+
+		if (config != null) {
+			/* reading security configurations */
+			FireAlarmManagementSecurityConfig securityConfig = config
+					.getFireAlarmManagementSecurityConfig();
+			trustStoreFile = securityConfig.getClient();
+			trustStorePassword = securityConfig.getTrustStorePassword();
 			certificateFile = new ResourceFileLoader("/resources/security/" + trustStoreFile)
 					.getFile();
 
@@ -62,26 +78,51 @@ public class DeviceController {
 			} else {
 				log.error("Trust Store not found in path : " + trustStoreFile);
 			}
-		} catch (ConfigurationException e1) {
-			log.error("Error occured when trying to retreive Trust-Store-Certificate from path: "
-							  + certificateFile, e1);
+
+			// controller configurations
+			FireAlarmManagementControllerConfig controllerConfig = config
+					.getFireAlarmManagementControllerConfig();
+
+			// reading data store configurations
+			String deviceDataStoreKey = controllerConfig.getDeviceDataStore();
+			FireAlarmDataStoreConfig dataStoreConfig = (FireAlarmDataStoreConfig) config
+					.getDataStoresMap().get(deviceDataStoreKey);
+			if (dataStoreConfig == null) {
+				log.error("Error occurred when trying to read data stores configurations");
+			}
+
+			//initialization data store
+			try {
+				String handlerClass = dataStoreConfig.getHandlerClass().trim();
+				Class<?> dataStore = DeviceController.class.forName(handlerClass);
+				if (DataStoreConnector.class.isAssignableFrom(dataStore)) {
+					iotDataStore = (DataStoreConnector) dataStore.newInstance();
+					iotDataStore.initDataStore();
+				}
+			} catch (ClassNotFoundException | IllegalAccessException | InstantiationException ex) {
+				log.error("Error occurred when trying to initiate data store", ex);
+			}
+
+			// reading control queue configurations
+			String controlQueueKey = controllerConfig.getDeviceControlQueue();
+			FireAlarmControlQueueConfig controlQueueConfig = (FireAlarmControlQueueConfig) config
+					.getControlQueuesMap().get(controlQueueKey);
+			if (controlQueueConfig == null) {
+				log.error("Error occurred when trying to read control queue configurations");
+			}
+
+			//initialization control queue
+			try {
+				String handlerClass = controlQueueConfig.getHandlerClass().trim();
+				Class<?> controlQueue = DeviceController.class.forName(handlerClass);
+				if (ControlQueueConnector.class.isAssignableFrom(controlQueue)) {
+					iotControlQueue = (ControlQueueConnector) controlQueue.newInstance();
+					iotControlQueue.initControlQueue();
+				}
+			} catch (ClassNotFoundException | IllegalAccessException | InstantiationException ex) {
+				log.error("Error occurred when trying to initiate control queue", ex);
+			}
 		}
-
-		try {
-			iotDataStore = IoTConfiguration.getInstance().getDataStore();
-			iotControlQueue = IoTConfiguration.getInstance().getControlQueue();
-
-			iotDataStore.initDataStore();
-			iotControlQueue.initControlQueue();
-
-		} catch (ConfigurationException ex) {
-			log.error("Error creating DataStore or ControlQueue objects");
-		} catch (InstantiationException ex) {
-			log.error("Error creating DataStore or ControlQueue objects");
-		} catch (IllegalAccessException ex) {
-			log.error("Error creating DataStore or ControlQueue objects");
-		}
-
 	}
 
 	@Path("/pushdata/{owner}/{type}/{id}/{time}/{key}/{value}")

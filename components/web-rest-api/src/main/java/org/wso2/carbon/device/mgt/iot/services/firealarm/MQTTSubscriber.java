@@ -16,17 +16,15 @@
 
 package org.wso2.carbon.device.mgt.iot.services.firealarm;
 
-import java.util.LinkedList;
-
-import org.apache.commons.configuration.ConfigurationException;
 import org.apache.log4j.Logger;
 import org.eclipse.paho.client.mqttv3.*;
-import org.wso2.carbon.device.mgt.iot.utils.IoTConfiguration;
+
+import java.util.LinkedList;
 
 public class MQTTSubscriber implements MqttCallback {
 
 	private static Logger log = Logger.getLogger(MQTTSubscriber.class);
-	
+
 	private MqttClient client;
 	private MqttConnectOptions options;
 	private String clientId = "out:";
@@ -36,18 +34,16 @@ public class MQTTSubscriber implements MqttCallback {
 		this.clientId += owner + ":" + deviceUuid;
 		this.initSubscriber();
 	}
-	
 
 	private void initSubscriber() {
 		try {
 			client = new MqttClient(FireAlarmController.CONTROL_QUEUE_ENDPOINT, clientId, null);
 			log.info("MQTT subscriber was created with ClientID : " + clientId);
 		} catch (MqttException ex) {
-			String errorMsg =
-			                  "MQTT Client Error\n" + "\tReason:  " + ex.getReasonCode() +
-			                          "\n\tMessage: " + ex.getMessage() + "\n\tLocalMsg: " +
-			                          ex.getLocalizedMessage() + "\n\tCause: " + ex.getCause() +
-			                          "\n\tException: " + ex;
+			String errorMsg = "MQTT Client Error\n" + "\tReason:  " + ex.getReasonCode() +
+					"\n\tMessage: " + ex.getMessage() + "\n\tLocalMsg: " +
+					ex.getLocalizedMessage() + "\n\tCause: " + ex.getCause() +
+					"\n\tException: " + ex;
 			log.error(errorMsg);
 		}
 
@@ -67,21 +63,19 @@ public class MQTTSubscriber implements MqttCallback {
 	public void subscribe() {
 		try {
 			client.connect(options);
-			log.info("Subscriber connected to queue at: " +
-			         FireAlarmController.CONTROL_QUEUE_ENDPOINT);
+			log.info("Subscriber connected to queue at: "
+							 + FireAlarmController.CONTROL_QUEUE_ENDPOINT);
 		} catch (MqttSecurityException ex) {
-			String errorMsg =
-			                  "MQTT Security Exception when connecting to queue\n" + "\tReason:  " +
-			                          ex.getReasonCode() + "\n\tMessage: " + ex.getMessage() +
-			                          "\n\tLocalMsg: " + ex.getLocalizedMessage() + "\n\tCause: " +
-			                          ex.getCause() + "\n\tException: " + ex;
+			String errorMsg = "MQTT Security Exception when connecting to queue\n" + "\tReason:  " +
+					ex.getReasonCode() + "\n\tMessage: " + ex.getMessage() +
+					"\n\tLocalMsg: " + ex.getLocalizedMessage() + "\n\tCause: " +
+					ex.getCause() + "\n\tException: " + ex;
 			log.error(errorMsg);
 		} catch (MqttException ex) {
-			String errorMsg =
-			                  "MQTT Exception when connecting to queue\n" + "\tReason:  " +
-			                          ex.getReasonCode() + "\n\tMessage: " + ex.getMessage() +
-			                          "\n\tLocalMsg: " + ex.getLocalizedMessage() + "\n\tCause: " +
-			                          ex.getCause() + "\n\tException: " + ex;
+			String errorMsg = "MQTT Exception when connecting to queue\n" + "\tReason:  " +
+					ex.getReasonCode() + "\n\tMessage: " + ex.getMessage() +
+					"\n\tLocalMsg: " + ex.getLocalizedMessage() + "\n\tCause: " +
+					ex.getCause() + "\n\tException: " + ex;
 			log.error(errorMsg);
 		}
 
@@ -92,12 +86,11 @@ public class MQTTSubscriber implements MqttCallback {
 				log.info("Subscribed with client id: " + clientId);
 				log.info("Subscribed to topic: " + subscribeTopic);
 			} catch (MqttException ex) {
-				String errorMsg =
-				                  "MQTT Exception when trying to subscribe to topic: " +
-				                          subscribeTopic + "\n\tReason:  " + ex.getReasonCode() +
-				                          "\n\tMessage: " + ex.getMessage() + "\n\tLocalMsg: " +
-				                          ex.getLocalizedMessage() + "\n\tCause: " + ex.getCause() +
-				                          "\n\tException: " + ex;
+				String errorMsg = "MQTT Exception when trying to subscribe to topic: " +
+						subscribeTopic + "\n\tReason:  " + ex.getReasonCode() +
+						"\n\tMessage: " + ex.getMessage() + "\n\tLocalMsg: " +
+						ex.getLocalizedMessage() + "\n\tCause: " + ex.getCause() +
+						"\n\tException: " + ex;
 				log.error(errorMsg);
 			}
 		}
@@ -138,6 +131,7 @@ public class MQTTSubscriber implements MqttCallback {
 	@Override
 	public void messageArrived(final String arg0, final MqttMessage arg1) {
 		Thread subscriberThread = new Thread() {
+
 			public void run() {
 
 				int lastIndex = arg0.lastIndexOf("/");
@@ -157,8 +151,8 @@ public class MQTTSubscriber implements MqttCallback {
 						deviceControlList = FireAlarmController.internalControlsQueue.get(deviceId);
 						if (deviceControlList == null) {
 							FireAlarmController.internalControlsQueue.put(deviceId,
-							                                              deviceControlList =
-							                                                                  new LinkedList<String>());
+																		  deviceControlList
+																				  = new LinkedList<String>());
 						}
 					}
 					deviceControlList.add(arg1.toString());
@@ -169,9 +163,8 @@ public class MQTTSubscriber implements MqttCallback {
 					synchronized (FireAlarmController.replyMsgQueue) {
 						replyMessageList = FireAlarmController.replyMsgQueue.get(deviceId);
 						if (replyMessageList == null) {
-							FireAlarmController.replyMsgQueue.put(deviceId,
-							                                      replyMessageList =
-							                                                         new LinkedList<String>());
+							FireAlarmController.replyMsgQueue.put(deviceId, replyMessageList
+																		  = new LinkedList<String>());
 						}
 					}
 					replyMessageList.add(arg1.toString());
