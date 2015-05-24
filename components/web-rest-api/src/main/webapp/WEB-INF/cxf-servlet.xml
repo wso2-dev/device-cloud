@@ -31,11 +31,9 @@
         </jaxrs:serviceBeans>
     </jaxrs:server>
 
-	<bean id="FireAlarmManagerService" class="org.wso2.carbon.device.mgt.iot.services.firealarm.FireAlarmManagerService"/>
-	<bean id="FireAlarmController" class="org.wso2.carbon.device.mgt.iot.services.firealarm
-	.FireAlarmControllerService"/>
-	<bean id="DeviceControllerService" class="org.wso2.carbon.device.mgt.iot.services
-	.DeviceControllerService" />
+	<bean id="FireAlarmManagerService" class="org.wso2.carbon.device.mgt.iot.services.firealarm.FireAlarmManagerService" />
+	<bean id="FireAlarmControllerService" class="org.wso2.carbon.device.mgt.iot.services.firealarm.FireAlarmControllerService" />
+	<bean id="DeviceControllerService" class="org.wso2.carbon.device.mgt.iot.services.DeviceControllerService" />
 
 </beans>
 
