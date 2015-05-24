@@ -36,9 +36,9 @@ import java.util.LinkedList;
 import java.util.NoSuchElementException;
 
 @Path(value = "/FireAlarmController")
-public class FireAlarmController {
+public class FireAlarmControllerService {
 
-	private static Logger log = Logger.getLogger(FireAlarmController.class);
+	private static Logger log = Logger.getLogger(FireAlarmControllerService.class);
 
 	public static final String CONTROL_QUEUE_ENDPOINT;
 	public static final HashMap<String, LinkedList<String>> replyMsgQueue;
@@ -92,9 +92,9 @@ public class FireAlarmController {
 
 			public void run() {
 				while (true) {
-					if (!FireAlarmController.mqttSubscriber.isConnected()) {
+					if (!FireAlarmControllerService.mqttSubscriber.isConnected()) {
 						log.info("Subscriber reconnecting to queue........");
-						FireAlarmController.mqttSubscriber.subscribe();
+						FireAlarmControllerService.mqttSubscriber.subscribe();
 					}
 				}
 			}

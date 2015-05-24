@@ -38,9 +38,9 @@ import java.io.File;
 import java.util.HashMap;
 
 @Path(value = "/DeviceController")
-public class DeviceController {
+public class DeviceControllerService {
 
-	private static Logger log = Logger.getLogger(DeviceController.class);
+	private static Logger log = Logger.getLogger(DeviceControllerService.class);
 
 	private static DataStoreConnector iotDataStore = null;
 	private static ControlQueueConnector iotControlQueue = null;
@@ -94,7 +94,7 @@ public class DeviceController {
 			//initialization data store
 			try {
 				String handlerClass = dataStoreConfig.getHandlerClass().trim();
-				Class<?> dataStore = DeviceController.class.forName(handlerClass);
+				Class<?> dataStore = DeviceControllerService.class.forName(handlerClass);
 				if (DataStoreConnector.class.isAssignableFrom(dataStore)) {
 					iotDataStore = (DataStoreConnector) dataStore.newInstance();
 					iotDataStore.initDataStore();
@@ -114,7 +114,7 @@ public class DeviceController {
 			//initialization control queue
 			try {
 				String handlerClass = controlQueueConfig.getHandlerClass().trim();
-				Class<?> controlQueue = DeviceController.class.forName(handlerClass);
+				Class<?> controlQueue = DeviceControllerService.class.forName(handlerClass);
 				if (ControlQueueConnector.class.isAssignableFrom(controlQueue)) {
 					iotControlQueue = (ControlQueueConnector) controlQueue.newInstance();
 					iotControlQueue.initControlQueue();
