@@ -150,13 +150,6 @@ public class FireAlarmManagerService {
 		return Response.status(200).entity(device).build();
 	}
 
-
-	@Path("/test")
-	@GET
-	public String test(){
-		return "say hello";
-	}
-
 	@Path("/downloadSketch")
 	@GET
 	@Produces("application/octet-stream")
