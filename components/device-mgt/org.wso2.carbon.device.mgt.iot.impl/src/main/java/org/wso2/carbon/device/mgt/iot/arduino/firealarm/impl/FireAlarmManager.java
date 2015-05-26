@@ -44,14 +44,8 @@ import org.wso2.carbon.device.mgt.common.spi.DeviceMgtService;
  */
 public class FireAlarmManager implements DeviceMgtService {
 
-    private static IotDeviceManagementDAOFactory iotDeviceManagementDAOFactory;
+    private static final IotDeviceManagementDAOFactory iotDeviceManagementDAOFactory = new FireAlarmDAO();
     private static final Log log = LogFactory.getLog(FireAlarmManager.class);
-
-    public FireAlarmManager() {
-		if(iotDeviceManagementDAOFactory==null) {
-			iotDeviceManagementDAOFactory = new FireAlarmDAO();
-		}
-    }
 
     @Override
     public String getProviderType() {

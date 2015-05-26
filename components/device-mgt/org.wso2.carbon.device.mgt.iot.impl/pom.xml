@@ -66,8 +66,9 @@
 							org.wso2.carbon.device.mgt.user.core,
 							org.wso2.carbon.device.mgt.user.common,
 							org.apache.commons.collections.map,
-                            org.apache.velocity.*,
-							org.wso2.carbon.ndatasource.core
+                            org.apache.commons.io.*,
+							org.wso2.carbon.ndatasource.core,
+                            <!--org.apache.velocity.*;version="1.7"-->
 						</Import-Package>
 						<Export-Package>
 							!org.wso2.carbon.device.mgt.iot.internal,
@@ -161,10 +162,11 @@
 			<version>3.0</version>
 		</dependency>
 
-        <dependency>
-            <groupId>org.apache.velocity</groupId>
-            <artifactId>velocity</artifactId>
-            <version>1.7</version>
-        </dependency>
+        <!--<dependency>-->
+            <!--<groupId>org.apache.velocity</groupId>-->
+            <!--<artifactId>velocity</artifactId>-->
+            <!--<version>1.7</version>-->
+            <!--<scope>provided</scope>-->
+        <!--</dependency>-->
 	</dependencies>
 </project>

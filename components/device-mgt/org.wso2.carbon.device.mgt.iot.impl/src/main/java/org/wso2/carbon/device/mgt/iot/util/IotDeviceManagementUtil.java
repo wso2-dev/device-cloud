@@ -18,11 +18,9 @@
 
 package org.wso2.carbon.device.mgt.iot.util;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.velocity.Template;
-import org.apache.velocity.VelocityContext;
-import org.apache.velocity.app.VelocityEngine;
 import org.w3c.dom.Document;
 import org.wso2.carbon.device.mgt.common.Device;
 import org.wso2.carbon.device.mgt.common.DeviceManagementException;
@@ -32,11 +30,7 @@ import org.wso2.carbon.utils.CarbonUtils;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.*;
-import java.nio.channels.FileChannel;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
@@ -45,7 +39,7 @@ import java.util.zip.ZipOutputStream;
  */
 public class IotDeviceManagementUtil {
 
-	private static final Log log = LogFactory.getLog(IotDeviceManagementUtil.class);
+	private static final Log log = LogFactory.getLog(IotDeviceManagementUtil.class.getName());
 
 	public static Document convertToDocument(File file) throws DeviceManagementException {
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
@@ -111,8 +105,6 @@ public class IotDeviceManagementUtil {
 
 	public static File getSketchArchive(String archivesPath, String templateSketchPath,
 										Map contextParams) throws DeviceManagementException {
-		/*  create a context and add data */
-		VelocityContext context = new VelocityContext(contextParams);
 
 		String sep = File.separator;
 		String sketchPath = CarbonUtils.getCarbonHome() + sep + templateSketchPath;
@@ -122,68 +114,142 @@ public class IotDeviceManagementUtil {
 		new File(archivesPath).mkdirs();//new dir
 
 		try {
-			parseTemplate(templateSketchPath + sep + "FireAlarmAgent.h",
-						  archivesPath + sep + "FireAlarmAgent.h", context);
-			copyFile(sketchPath + sep + "Connect.ino", archivesPath + sep + "Connect.ino");
-			copyFile(sketchPath + sep + "FireAlarmAgent.ino",
-					 archivesPath + sep + "FireAlarmAgent.ino");
-			copyFile(sketchPath + sep + "MQTTConnect.ino", archivesPath + sep + "MQTTConnect.ino");
-			copyFile(sketchPath + sep + "PushData.ino", archivesPath + sep + "PushData.ino");
-			createZipArchive(archivesPath);
-			deleteDir(new File(archivesPath));//clear folder
+			List<String> templateFiles = getTemplates(sketchPath + sep + "sketch.properties");
+			for (String templateFile : templateFiles) {
+				parseTemplate(templateSketchPath + sep + templateFile,
+							  archivesPath + sep + templateFile, contextParams);
+			}
+			copyFolder(new File(sketchPath), new File(archivesPath), templateFiles);
+
 		} catch (IOException ex) {
-			String msg = "Error occurred while creating archive file";
-			log.error(msg);
-			throw new DeviceManagementException(msg, ex);
+			throw new DeviceManagementException(
+					"Error occurred when trying to read property " + "file sketch.properties", ex);
 		}
+
+		createZipArchive(archivesPath);
+		deleteDir(new File(archivesPath));//clear folder
+
 		/* now get the zip file */
 		File zip = new File(archivesPath + ".zip");
 		return zip;
 	}
 
-	private static void parseTemplate(String srcFile, String dstFile,
-									  org.apache.velocity.context.Context context)
-			throws IOException {
-		/*  first, get and initialize an engine  */
-		VelocityEngine ve = new VelocityEngine();
-		ve.init();
+	private static List getTemplates(String propertyFilePath) throws IOException {
+		Properties prop = new Properties();
+		InputStream input = null;
 
-		String sep = File.separator;
-		Template t = ve.getTemplate(srcFile);
-		FileWriter writer = null;
 		try {
-			writer = new FileWriter(dstFile);
-			t.merge(context, writer);
+
+			input = new FileInputStream(propertyFilePath);
+
+			// load a properties file
+			prop.load(input);
+			String templates = prop.getProperty("templates");
+			List<String> list = new ArrayList<String>(Arrays.asList(templates.split(",")));
+			return list;
+
 		} finally {
-			if (writer != null) {
-				writer.flush();
-				writer.close();
+			if (input != null) {
+				try {
+					input.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
 			}
 		}
 	}
 
-	private static void copyFile(String srcFile, String dstFile) throws IOException {
-		File sourceFile = new File(srcFile);
-		File destFile = new File(dstFile);
+	private static void parseTemplate(String srcFile, String dstFile, Map contextParams)
+			throws IOException {
+		//TODO add velocity 1.7, currently commented
+		//TODO conflicting when calling in CXF environment with the opensaml orbit
 
-		if (!destFile.exists()) {
-			destFile.createNewFile();
+		//		/*  create a context and add data */
+		//		VelocityContext context = new VelocityContext(contextParams);
+		//
+		//		/*  first, get and initialize an engine  */
+		//		VelocityEngine ve = new VelocityEngine();
+		//		ve.setProperty( RuntimeConstants.RUNTIME_LOG_LOGSYSTEM_CLASS,
+		//						"org.apache.velocity.runtime.log.Log4JLogChute" );
+		//		ve.setProperty("runtime.log.logsystem.log4j.logger", IotDeviceManagementUtil.class.getName());
+		//		ve.init();
+		//
+		//		String sep = File.separator;
+		//		Template t = ve.getTemplate(srcFile);
+		//		FileWriter writer = null;
+		//		try {
+		//			writer = new FileWriter(dstFile);
+		//			t.merge(context, writer);
+		//		} finally {
+		//			if (writer != null) {
+		//				writer.flush();
+		//				writer.close();
+		//			}
+		//		}
+
+		String encoding = "UTF-8";
+		//read from file
+		FileInputStream inputStream = new FileInputStream(srcFile);
+		String content = IOUtils.toString(inputStream, encoding);
+		Iterator iterator = contextParams.entrySet().iterator();
+		while (iterator.hasNext()) {
+			Map.Entry mapEntry = (Map.Entry) iterator.next();
+			content = content.replaceAll("\\$\\{" + mapEntry.getKey() + "\\}",
+										 mapEntry.getValue().toString());
 		}
+		if (inputStream != null) {
+			inputStream.close();
+		}
+		//write to file
+		FileOutputStream outputStream = new FileOutputStream(dstFile);
+		IOUtils.write(content, outputStream, encoding);
+		if (outputStream != null) {
+			outputStream.close();
+		}
+	}
 
-		FileChannel source = null;
-		FileChannel destination = null;
+	private static void copyFolder(File src, File dest, List<String> excludeFileNames)
+			throws IOException {
 
-		try {
-			source = new FileInputStream(sourceFile).getChannel();
-			destination = new FileOutputStream(destFile).getChannel();
-			destination.transferFrom(source, 0, source.size());
-		} finally {
-			if (source != null) {
-				source.close();
+		if (src.isDirectory()) {
+
+			//if directory not exists, create it
+			if (!dest.exists()) {
+				dest.mkdir();
 			}
-			if (destination != null) {
-				destination.close();
+
+			//list all the directory contents
+			String files[] = src.list();
+
+			for (String file : files) {
+				//construct the src and dest file structure
+				File srcFile = new File(src, file);
+				File destFile = new File(dest, file);
+				//recursive copy
+				copyFolder(srcFile, destFile, excludeFileNames);
 			}
+
+		} else {
+			for (String fileName : excludeFileNames) {
+				if (src.getName().equals(fileName)) {
+					return;
+				}
+			}
+			//if file, then copy it
+			//Use bytes stream to support all file types
+			InputStream in = new FileInputStream(src);
+			OutputStream out = new FileOutputStream(dest);
+
+			byte[] buffer = new byte[1024];
+
+			int length;
+			//copy the file content in bytes
+			while ((length = in.read(buffer)) > 0) {
+				out.write(buffer, 0, length);
+			}
+
+			in.close();
+			out.close();
 		}
 	}
 

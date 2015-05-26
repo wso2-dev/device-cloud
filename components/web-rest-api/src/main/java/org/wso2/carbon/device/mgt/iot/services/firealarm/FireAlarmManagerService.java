@@ -134,8 +134,6 @@ public class FireAlarmManagerService {
 	public Response getDevice(@QueryParam("deviceId") String deviceId,
 							  @QueryParam("type") String type) throws DeviceManagementException {
 
-		DeviceManagement deviceManagement = new DeviceManagement();
-
 		DeviceIdentifier deviceIdentifier = new DeviceIdentifier();
 		deviceIdentifier.setId(deviceId);
 		deviceIdentifier.setType(FireAlarmConstants.DEVICE_TYPE);
