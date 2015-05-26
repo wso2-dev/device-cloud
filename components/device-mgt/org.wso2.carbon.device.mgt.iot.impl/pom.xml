@@ -68,7 +68,9 @@
 							org.apache.commons.collections.map,
                             org.apache.commons.io.*,
 							org.wso2.carbon.ndatasource.core,
-                            <!--org.apache.velocity.*;version="1.7"-->
+                            org.wso2.carbon.context.*,
+                            org.wso2.carbon.ndatasource.core
+                            <!--org.apache.velocity.*-->
 						</Import-Package>
 						<Export-Package>
 							!org.wso2.carbon.device.mgt.iot.internal,
