@@ -67,6 +67,7 @@
 							org.wso2.carbon.device.mgt.user.common,
 							org.apache.commons.collections.map,
                             org.apache.velocity.*,
+                            org.wso2.carbon.context.*,
 							org.wso2.carbon.ndatasource.core
 						</Import-Package>
 						<Export-Package>
