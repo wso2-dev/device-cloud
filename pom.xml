@@ -286,6 +286,14 @@
                 <version>${orbit.tomcat.jdbc.pooling.version}</version>
             </dependency>
 
+            <!-- IoT dependencies -->
+            <dependency>
+                <groupId>org.wso2.carbon.device.mgt.iot</groupId>
+                <artifactId>WSO2ConnectedDevices</artifactId>
+                <version>${device.mgt.iot.feature.version}</version>
+                <type>war</type>
+            </dependency>
+
             <!--APIM dependencies-->
             <!--            <dependency>
                             <groupId>org.wso2.carbon.apimgt</groupId>
@@ -429,6 +437,8 @@
     </dependencyManagement>
 
     <properties>
+        <!-- IoT device cloud version -->
+        <device.mgt.iot.feature.version>1.0.0</device.mgt.iot.feature.version>
 
         <!--Carbon kernel versions-->
         <carbon.kernel.version>4.4.0</carbon.kernel.version>
