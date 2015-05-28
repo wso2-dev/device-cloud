@@ -77,22 +77,22 @@ public class IoTUsageStatisticsClient {
     public List<DeviceUsageDTO> getTemperatureData(String user, String deviceId, String fromDate, String toDate) throws IoTUsageStatisticsException{
     	
     	log.debug(String.format("Fetching temperature data. user : %s, deviceId : %s, from : %s, to : %s", user, deviceId, fromDate,  toDate));
-    	return getDeviceStats("DEVICE_TEMPERATURE_SUMMARY", user, deviceId, fromDate, toDate);
+    	return getDeviceStats("DEVICE_TEMPERATURE_SUMMARY", "TEMPERATURE", user, deviceId, fromDate, toDate);
     }
     
     public List<DeviceUsageDTO> getBulbStatusData(String user, String deviceId, String fromDate, String toDate) throws IoTUsageStatisticsException{
     	
     	log.debug(String.format("Fetching bulb status data. user : %s, deviceId : %s, from : %s, to : %s", user, deviceId, fromDate,  toDate));
-    	return getDeviceStats("DEVICE_BULB_USAGE_SUMMARY", user, deviceId, fromDate, toDate);
+    	return getDeviceStats("DEVICE_BULB_USAGE_SUMMARY", "STATUS", user, deviceId, fromDate, toDate);
     }
     
     public List<DeviceUsageDTO> getFanStatusData(String user, String deviceId, String fromDate, String toDate) throws IoTUsageStatisticsException{
     	
     	log.debug(String.format("Fetching fan status data. user : %s, deviceId : %s, from : %s, to : %s", user, deviceId, fromDate,  toDate));
-    	return getDeviceStats("DEVICE_FAN_USAGE_SUMMARY", user, deviceId, fromDate, toDate);
+    	return getDeviceStats("DEVICE_FAN_USAGE_SUMMARY", "STATUS", user, deviceId, fromDate, toDate);
     }
 
-    private List<DeviceUsageDTO> getDeviceStats(String table, String owner, String deviceId, String fromDate, String toDate)
+    private List<DeviceUsageDTO> getDeviceStats(String table, String valueColumn, String owner, String deviceId, String fromDate, String toDate)
             throws IoTUsageStatisticsException {
 
         if (dataSource == null) {
@@ -124,8 +124,8 @@ public class IoTUsageStatisticsClient {
             rs = statement.executeQuery(query);
             while (rs.next()) {
             	DeviceUsageDTO deviceUsageDTO = new DeviceUsageDTO();
-            	deviceUsageDTO.setTime(rs.getString(7));
-            	deviceUsageDTO.setValue(rs.getString(1));
+            	deviceUsageDTO.setTime(rs.getString("TIME"));
+            	deviceUsageDTO.setValue(rs.getString(valueColumn));
             	
             	deviceUsageDTOs.add(deviceUsageDTO);
             	
