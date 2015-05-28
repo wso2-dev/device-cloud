@@ -33,9 +33,9 @@ public class ControlQueuesConfigAdapter extends
 		Map<String, FireAlarmControlQueueConfig> fireAlarmControlQueueConfigMap
 				= new HashMap<String, FireAlarmControlQueueConfig>();
 
-		for (FireAlarmControlQueueConfig iotDataSourceConfig : fireAlarmControlQueueConfigurations
+		for (FireAlarmControlQueueConfig iotControlQueueConfig : fireAlarmControlQueueConfigurations
 				.getFireAlarmControlQueueConfigs()) {
-			fireAlarmControlQueueConfigMap.put(iotDataSourceConfig.getType(), iotDataSourceConfig);
+			fireAlarmControlQueueConfigMap.put(iotControlQueueConfig.getType(), iotControlQueueConfig);
 		}
 
 		return fireAlarmControlQueueConfigMap;

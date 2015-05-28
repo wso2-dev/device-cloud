@@ -32,38 +32,42 @@ import java.io.File;
  */
 public class FireAlarmConfigurationManager {
 
-	private static final String CONFIGS_FILE_LOCATION = "/resources/conf/firealarm-config.xml";
-	private FireAlarmManagementConfig currentFireAlarmMgtConfig;
-	private static FireAlarmConfigurationManager fireAlarmDeviceConfigManager;
+    private static final String CONFIGS_FILE_LOCATION = "/resources/conf/firealarm-config.xml";
+    private FireAlarmManagementConfig currentFireAlarmMgtConfig;
+    private static FireAlarmConfigurationManager fireAlarmDeviceConfigManager;
 
-	public static FireAlarmConfigurationManager getInstance() throws DeviceManagementException{
-		if (fireAlarmDeviceConfigManager == null) {
-			synchronized (FireAlarmConfigurationManager.class) {
-				if (fireAlarmDeviceConfigManager == null) {
-					fireAlarmDeviceConfigManager = new FireAlarmConfigurationManager();
-					fireAlarmDeviceConfigManager.initConfig();
-				}
-			}
-		}
-		return fireAlarmDeviceConfigManager;
-	}
+    private FireAlarmConfigurationManager() {
+    }
 
-	private void initConfig() throws DeviceManagementException {
-		try {
-			File fireAlarmMgtConfig = new ResourceFileLoader(CONFIGS_FILE_LOCATION).getFile();
-			Document doc = IotDeviceManagementUtil.convertToDocument(fireAlarmMgtConfig);
-			JAXBContext fireAlarmMgtContext = JAXBContext.newInstance(
-					FireAlarmManagementConfig.class);
-			Unmarshaller unmarshaller = fireAlarmMgtContext.createUnmarshaller();
-			this.currentFireAlarmMgtConfig = (FireAlarmManagementConfig) unmarshaller.unmarshal(doc);
-		} catch (Exception e) {
-			throw new DeviceManagementException(
-					"Error occurred while initializing Fire Alarm Device Management config", e);
-		}
-	}
+    public static FireAlarmConfigurationManager getInstance() throws DeviceManagementException {
+        if (fireAlarmDeviceConfigManager == null) {
+            synchronized (FireAlarmConfigurationManager.class) {
+                if (fireAlarmDeviceConfigManager == null) {
+                    FireAlarmConfigurationManager result = new FireAlarmConfigurationManager();
+                    result.initConfig();
+                    fireAlarmDeviceConfigManager = result;
+                }
+            }
 
-	public FireAlarmManagementConfig getFireAlarmMgtConfig() {
-		return currentFireAlarmMgtConfig;
-	}
+        }
+        return fireAlarmDeviceConfigManager;
+    }
+
+    private void initConfig() throws DeviceManagementException {
+        try {
+            File fireAlarmMgtConfig = new ResourceFileLoader(CONFIGS_FILE_LOCATION).getFile();
+            Document doc = IotDeviceManagementUtil.convertToDocument(fireAlarmMgtConfig);
+            JAXBContext fireAlarmMgtContext = JAXBContext.newInstance(FireAlarmManagementConfig.class);
+            Unmarshaller unmarshaller = fireAlarmMgtContext.createUnmarshaller();
+            this.currentFireAlarmMgtConfig = (FireAlarmManagementConfig) unmarshaller.unmarshal(doc);
+        } catch (Exception e) {
+            throw new DeviceManagementException("Error occurred while initializing Fire Alarm Device Management config",
+                    e);
+        }
+    }
+
+    public FireAlarmManagementConfig getFireAlarmMgtConfig() {
+        return currentFireAlarmMgtConfig;
+    }
 
 }

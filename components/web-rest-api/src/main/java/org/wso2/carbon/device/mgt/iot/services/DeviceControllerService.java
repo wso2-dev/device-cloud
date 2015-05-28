@@ -37,7 +37,7 @@ import javax.ws.rs.core.Context;
 import java.io.File;
 import java.util.HashMap;
 
-@Path(value = "/DeviceController")
+//@Path(value = "/DeviceController")
 public class DeviceControllerService {
 
 	private static Logger log = Logger.getLogger(DeviceControllerService.class);
