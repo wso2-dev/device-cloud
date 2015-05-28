@@ -30,6 +30,7 @@ import org.wso2.carbon.device.mgt.iot.config.IotDeviceManagementConfig;
 import org.wso2.carbon.device.mgt.iot.config.datasource.IotDataSourceConfig;
 import org.wso2.carbon.device.mgt.iot.dao.IotDeviceManagementDAOFactory;
 import org.wso2.carbon.device.mgt.iot.dao.util.IotDeviceManagementDAOUtil;
+import org.wso2.carbon.device.mgt.iot.usage.statistics.IoTUsageStatisticsClient;
 import org.wso2.carbon.ndatasource.core.DataSourceService;
 import org.wso2.carbon.device.mgt.common.spi.DeviceMgtService;
 
@@ -100,6 +101,7 @@ public class IotDeviceManagementServiceComponent {
 					FireAlarmManager(),
 												  null);
            
+            IoTUsageStatisticsClient.initializeDataSource();
 
             if (log.isDebugEnabled()) {
                 log.debug("Iot Device Management Service Component has been successfully activated");
