@@ -18,6 +18,7 @@ package org.wso2.carbon.device.mgt.iot.services.firealarm;
 
 import org.apache.log4j.Logger;
 import org.eclipse.paho.client.mqttv3.*;
+import org.wso2.carbon.device.mgt.common.DeviceManagementException;
 
 import java.io.File;
 import java.util.LinkedList;
@@ -30,7 +31,9 @@ public class MQTTSubscriber implements MqttCallback {
     private MqttConnectOptions options;
     private String clientId = "out:";
     private String subscribeTopic =
-            "wso2" + File.separator + "iot" + File.separator + "FireAlarm" + File.separator + "#";
+            "wso2" + File.separator + "iot" + File.separator + "+" + File.separator + "FireAlarm" + File.separator
+                    + "#";
+    // topic needs to be set from outside
 
     private MQTTSubscriber(String owner, String deviceUuid) {
         this.clientId += owner + ":" + deviceUuid;
@@ -62,7 +65,7 @@ public class MQTTSubscriber implements MqttCallback {
         return client.isConnected();
     }
 
-    public void subscribe() {
+    public void subscribe() throws DeviceManagementException {
         try {
             client.connect(options);
             log.info("Subscriber connected to queue at: " + FireAlarmControllerService.CONTROL_QUEUE_ENDPOINT);
@@ -70,32 +73,38 @@ public class MQTTSubscriber implements MqttCallback {
             String errorMsg = "MQTT Security Exception when connecting to queue\n" + "\tReason:  " +
                     ex.getReasonCode() + "\n\tMessage: " + ex.getMessage() +
                     "\n\tLocalMsg: " + ex.getLocalizedMessage() + "\n\tCause: " +
-                    ex.getCause() + "\n\tException: " + ex;
-            log.error(errorMsg);
+                    ex.getCause() + "\n\tException: " + ex; //throw
+            if (log.isDebugEnabled()) {
+                log.debug(errorMsg);
+            }
+            throw new DeviceManagementException(errorMsg, ex);
+
         } catch (MqttException ex) {
             String errorMsg = "MQTT Exception when connecting to queue\n" + "\tReason:  " +
                     ex.getReasonCode() + "\n\tMessage: " + ex.getMessage() +
                     "\n\tLocalMsg: " + ex.getLocalizedMessage() + "\n\tCause: " +
-                    ex.getCause() + "\n\tException: " + ex;
-            log.error(errorMsg);
+                    ex.getCause() + "\n\tException: " + ex; //throw
+            if (log.isDebugEnabled()) {
+                log.debug(errorMsg);
+            }
+            throw new DeviceManagementException(errorMsg, ex);
         }
 
-        if (client.isConnected()) {
-            try {
-                client.subscribe(subscribeTopic, 0);
+        try {
+            client.subscribe(subscribeTopic, 0);
 
-                log.info("Subscribed with client id: " + clientId);
-                log.info("Subscribed to topic: " + subscribeTopic);
-            } catch (MqttException ex) {
-                String errorMsg = "MQTT Exception when trying to subscribe to topic: " +
-                        subscribeTopic + "\n\tReason:  " + ex.getReasonCode() +
-                        "\n\tMessage: " + ex.getMessage() + "\n\tLocalMsg: " +
-                        ex.getLocalizedMessage() + "\n\tCause: " + ex.getCause() +
-                        "\n\tException: " + ex;
-                log.error(errorMsg);
+            log.info("Subscribed with client id: " + clientId);
+            log.info("Subscribed to topic: " + subscribeTopic);
+        } catch (MqttException ex) {
+            String errorMsg = "MQTT Exception when trying to subscribe to topic: " +
+                    subscribeTopic + "\n\tReason:  " + ex.getReasonCode() +
+                    "\n\tMessage: " + ex.getMessage() + "\n\tLocalMsg: " +
+                    ex.getLocalizedMessage() + "\n\tCause: " + ex.getCause() +
+                    "\n\tException: " + ex;
+            if (log.isDebugEnabled()) {
+                log.debug(errorMsg);
             }
         }
-
     }
 
     /*
@@ -106,7 +115,37 @@ public class MQTTSubscriber implements MqttCallback {
      * Throwable)
      */
     @Override public void connectionLost(Throwable arg0) {
-        log.info("Lost Connection for client: " + this.clientId);
+        log.warn("Lost Connection for client: " + this.clientId + " to "
+                + FireAlarmControllerService.CONTROL_QUEUE_ENDPOINT);
+        Thread subscriberDaemon = new Thread() {
+
+            public void run() {
+                while (true) {
+                    if (!FireAlarmControllerService.getMQTTSubscriber().isConnected()) {
+                        if (log.isDebugEnabled()) {
+                            log.debug("Subscriber reconnecting to queue........");
+                        }
+                        try {
+                            FireAlarmControllerService.getMQTTSubscriber().subscribe();
+                        } catch (DeviceManagementException e) {
+                            if (log.isDebugEnabled()) {
+                                log.debug("Could not reconnect and subscribe to ControlQueue.");
+                            }
+                        }
+                    } else {
+                        return;
+                    }
+
+                    try {
+                        Thread.sleep(100);
+                    } catch (InterruptedException e) {
+                        log.error("An Interrupted Exception in Subscriber thread.");
+                    }
+                }
+            }
+        };
+        subscriberDaemon.setDaemon(true);
+        subscriberDaemon.start();
     }
 
     /*
