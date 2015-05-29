@@ -43,7 +43,7 @@ public class FireAlarmManagerService {
 
 	@Path("/registerDevice")
 	@PUT
-	public void register(@QueryParam("deviceId") String deviceId, @QueryParam("name") String name,
+	public boolean register(@QueryParam("deviceId") String deviceId, @QueryParam("name") String name,
 						 @QueryParam("owner") String owner)
 			throws DeviceManagementException {
 
@@ -70,17 +70,13 @@ public class FireAlarmManagerService {
 		device.setOwner(owner);
 		boolean added = deviceManagement.addNewDevice(device);
 
-		if (added) {
-			Response.status(200).build();
-		} else {
-			Response.status(409).build();
-		}
+		return added;
 
 	}
 
 	@Path("/removeDevice")
 	@DELETE
-	public void removeDevice(@QueryParam("deviceId") String deviceId)
+	public boolean removeDevice(@QueryParam("deviceId") String deviceId)
 			throws DeviceManagementException {
 
 		DeviceManagement deviceManagement = new DeviceManagement();
@@ -89,17 +85,14 @@ public class FireAlarmManagerService {
 		deviceIdentifier.setType(FireAlarmConstants.DEVICE_TYPE);
 
 		boolean removed = deviceManagement.removeDevice(deviceIdentifier);
-		if (removed) {
-			Response.status(200).build();
-		} else {
-			Response.status(409).build();
-		}
+		return removed;
+
 
 	}
 
 	@Path("/updateDevice")
 	@POST
-	public void updateDevice(@QueryParam("deviceId") String deviceId,
+	public boolean updateDevice(@QueryParam("deviceId") String deviceId,
 							 @QueryParam("name") String name)
 			throws DeviceManagementException {
 
@@ -119,11 +112,7 @@ public class FireAlarmManagerService {
 		device.setType(FireAlarmConstants.DEVICE_TYPE);
 
 		boolean updated = deviceManagement.update(device);
-		if (updated) {
-			Response.status(200).build();
-		} else {
-			Response.status(409).build();
-		}
+		return updated;
 
 	}
 
@@ -131,21 +120,19 @@ public class FireAlarmManagerService {
 	@GET
 	@Consumes("application/json")
 	@Produces("application/json")
-	public Response getDevice(@QueryParam("deviceId") String deviceId,
+	public Device getDevice(@QueryParam("deviceId") String deviceId,
 							  @QueryParam("type") String type) throws DeviceManagementException {
 
+		DeviceManagement deviceManagement = new DeviceManagement();
 		DeviceIdentifier deviceIdentifier = new DeviceIdentifier();
 		deviceIdentifier.setId(deviceId);
 		deviceIdentifier.setType(FireAlarmConstants.DEVICE_TYPE);
 
-		FireAlarmManager manager = getFireAlarmManager();
-		Device device = manager.getDevice(deviceIdentifier);
 
-		if (device == null) {
-			return Response.status(409).build();
-		}
+		Device device = deviceManagement.getDevice(deviceIdentifier);
 
-		return Response.status(200).entity(device).build();
+
+		return device;
 	}
 
 	@Path("/downloadSketch")
@@ -182,9 +169,6 @@ public class FireAlarmManagerService {
 		return rb.build();
 	}
 
-	private FireAlarmManager getFireAlarmManager(){
-		return (FireAlarmManager) PrivilegedCarbonContext.getThreadLocalCarbonContext().getOSGiService
-		(DeviceMgtService.class);
-	}
+
 
 }

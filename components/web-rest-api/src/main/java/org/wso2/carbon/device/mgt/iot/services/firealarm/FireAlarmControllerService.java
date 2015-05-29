@@ -23,6 +23,7 @@ import org.wso2.carbon.device.mgt.iot.config.FireAlarmConfigurationManager;
 import org.wso2.carbon.device.mgt.iot.config.FireAlarmManagementConfig;
 import org.wso2.carbon.device.mgt.iot.config.FireAlarmManagementControllerConfig;
 import org.wso2.carbon.device.mgt.iot.config.controlqueue.FireAlarmControlQueueConfig;
+import org.wso2.carbon.device.mgt.iot.exception.DeviceControllerServiceException;
 import org.wso2.carbon.device.mgt.iot.services.DeviceControllerService;
 
 import javax.servlet.http.HttpServletResponse;
@@ -48,8 +49,8 @@ public class FireAlarmControllerService {
 
         try {
             config = FireAlarmConfigurationManager.getInstance().getFireAlarmMgtConfig();
-        } catch (DeviceManagementException ex) {
-            log.error("Error occurred when trying to read configurations file: firealarm-config" + ".xml", ex);
+        } catch (DeviceControllerServiceException ex) {
+            log.error(ex.getMessage());
         }
 
         if (config != null) {
@@ -96,27 +97,27 @@ public class FireAlarmControllerService {
     /*    Service to switch "ON" and "OFF" the FireAlarm bulb
                Called by an external client intended to control the FireAlarm bulb */
     @Path("/switchbulb") @POST public String switchBulb(@HeaderParam("owner") String owner,
-            @HeaderParam("deviceId") String deviceId) {
+            @HeaderParam("deviceId") String deviceId, @Context HttpServletResponse response) {
         String result = null;
-        result = DeviceControllerService.setControl(owner, "FireAlarm", deviceId, "BULB", "IN");
+        result = DeviceControllerService.setControl(owner, "FireAlarm", deviceId, "BULB", "IN", response);
         return result;
     }
 
     /*    Service to read the temperature from the FireAlarm temperature sensor
                    Called by an external client intended to get the current temperature */
     @Path("/readtemperature") @GET public String readTempearature(@HeaderParam("owner") String owner,
-            @HeaderParam("deviceId") String deviceId) {
+            @HeaderParam("deviceId") String deviceId, @Context HttpServletResponse response) {
         String result = null;
-        result = DeviceControllerService.setControl(owner, "FireAlarm", deviceId, "TEMPERATURE", "IN");
+        result = DeviceControllerService.setControl(owner, "FireAlarm", deviceId, "TEMPERATURE", "IN", response);
         return result;
     }
 
     /*    Service to toggle the FireAlarm fan between "ON" and "OFF"
                Called by an external client intended to control the FireAlarm fan */
     @Path("/togglefan") @POST public String switchFan(@HeaderParam("owner") String owner,
-            @HeaderParam("deviceId") String deviceId) {
+            @HeaderParam("deviceId") String deviceId, @Context HttpServletResponse response) {
         String result = null;
-        result = DeviceControllerService.setControl(owner, "FireAlarm", deviceId, "FAN", "IN");
+        result = DeviceControllerService.setControl(owner, "FireAlarm", deviceId, "FAN", "IN", response);
         return result;
     }
 
@@ -126,7 +127,7 @@ public class FireAlarmControllerService {
             @PathParam("deviceId") String deviceId, @Context HttpServletResponse response) {
         String result = null;
         LinkedList<String> deviceControlList = internalControlsQueue.get(deviceId);
-
+log.info(deviceControlList);
         if (deviceControlList == null) {
             result = "No controls have been set for device " + deviceId + " of owner " + owner;
             response.setStatus(HttpStatus.SC_NO_CONTENT);
@@ -145,10 +146,11 @@ public class FireAlarmControllerService {
 
     /*    Service to send back the replies for the controls sent to the FireAlarm
            Called by the FireAlarm device  */
-    @Path("/reply") @POST @Consumes(MediaType.APPLICATION_JSON) public String reply(final DeviceJSON replyMsg) {
+    @Path("/reply") @POST @Consumes(MediaType.APPLICATION_JSON) public String reply(final DeviceJSON replyMsg,
+            @Context HttpServletResponse response) {
         String result = null;
         result = DeviceControllerService
-                .setControl(replyMsg.owner, "FireAlarm", replyMsg.deviceId, replyMsg.reply, "OUT");
+                .setControl(replyMsg.owner, "FireAlarm", replyMsg.deviceId, replyMsg.reply, "OUT", response);
         return result;
     }
 
@@ -156,10 +158,10 @@ public class FireAlarmControllerService {
            Called by the FireAlarm device  */
     @Path("/pushalarmdata") @POST @Consumes(MediaType.APPLICATION_JSON) public String pushAlarmData(
             final DeviceJSON dataMsg, @Context HttpServletResponse response) {
-        log.info("CAME HERE");
         String result = null;
+
         result = DeviceControllerService
-                .pushData(dataMsg.owner, "FireAlarm", dataMsg.deviceId, dataMsg.time, dataMsg.key, dataMsg.value,
+                .pushData(dataMsg.owner, "FireAlarm", dataMsg.deviceId, System.currentTimeMillis(), "DeviceData", dataMsg.value,
                         dataMsg.reply, response);
         return result;
     }

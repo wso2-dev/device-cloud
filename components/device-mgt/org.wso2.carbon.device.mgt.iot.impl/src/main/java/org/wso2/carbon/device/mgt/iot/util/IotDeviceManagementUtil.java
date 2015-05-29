@@ -24,6 +24,7 @@ import org.apache.commons.logging.LogFactory;
 import org.w3c.dom.Document;
 import org.wso2.carbon.device.mgt.common.Device;
 import org.wso2.carbon.device.mgt.common.DeviceManagementException;
+import org.wso2.carbon.device.mgt.iot.arduino.firealarm.constants.FireAlarmConstants;
 import org.wso2.carbon.device.mgt.iot.dto.IotDevice;
 import org.wso2.carbon.utils.CarbonUtils;
 
@@ -68,16 +69,19 @@ public class IotDeviceManagementUtil {
 		IotDevice iotDevice = null;
 		if (device != null) {
 			iotDevice = new IotDevice();
+			iotDevice.setIotDeviceId(device.getDeviceIdentifier());
+			Map<String, String> deviceProperties = new HashMap<String, String>();
+			deviceProperties.put(FireAlarmConstants.DEVICE_PLUGIN_DEVICE_NAME,device.getName());
 
 			if (device.getProperties() != null) {
-				Map<String, String> deviceProperties = new HashMap<String, String>();
+
 				for (Device.Property deviceProperty : device.getProperties()) {
 					deviceProperties.put(deviceProperty.getName(), deviceProperty.getValue());
 				}
 
 				iotDevice.setDeviceProperties(deviceProperties);
 			} else {
-				iotDevice.setDeviceProperties(new HashMap<String, String>());
+				iotDevice.setDeviceProperties(deviceProperties);
 			}
 		}
 		return iotDevice;
@@ -98,6 +102,7 @@ public class IotDeviceManagementUtil {
 			}
 
 			device.setProperties(propertyList);
+			device.setName(iotDevice.getDeviceProperties().get(FireAlarmConstants.DEVICE_PLUGIN_DEVICE_NAME));
 			device.setDeviceIdentifier(iotDevice.getIotDeviceId());
 		}
 		return device;

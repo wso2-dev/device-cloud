@@ -36,14 +36,23 @@
                 <property name="mqttSubscriber" ref="mqttSubscriber"/>
             </bean>
         </jaxrs:serviceBeans>
+        <jaxrs:providers>
+            <bean class="org.codehaus.jackson.jaxrs.JacksonJsonProvider" />
+        </jaxrs:providers>
     </jaxrs:server>
 
-    <!--<jaxrs:server id="FireAlarmDeviceManager" address="/FireAlarmDeviceManager">-->
-        <!--<jaxrs:serviceBeans>-->
-            <!--<bean id="FireAlarmManagerService"-->
-                  <!--class="org.wso2.carbon.device.mgt.iot.services.firealarm.FireAlarmManagerService"/>-->
-        <!--</jaxrs:serviceBeans>-->
-    <!--</jaxrs:server>-->
+    <jaxrs:server id="FireAlarmManager" address="/FireAlarmManager">
+        <jaxrs:serviceBeans>
+            <bean id="FireAlarmManagerService"
+                  class="org.wso2.carbon.device.mgt.iot.services.firealarm.FireAlarmManagerService"/>
+        </jaxrs:serviceBeans>
+    </jaxrs:server>
+    <jaxrs:server id="DevicesManager" address="/DevicesManager">
+        <jaxrs:serviceBeans>
+            <bean id="DevicesManagerService"
+                  class="org.wso2.carbon.device.mgt.iot.services.common.DevicesManager"/>
+        </jaxrs:serviceBeans>
+    </jaxrs:server>
 
     <bean id="mqttSubscriber" class="org.wso2.carbon.device.mgt.iot.services.firealarm.MQTTSubscriber">
         <constructor-arg index="0" value="Subscriber"></constructor-arg>

@@ -16,8 +16,8 @@
 
 package org.wso2.carbon.device.mgt.iot.services;
 
+import org.apache.commons.httpclient.HttpStatus;
 import org.apache.log4j.Logger;
-import org.wso2.carbon.device.mgt.common.DeviceManagementException;
 import org.wso2.carbon.device.mgt.iot.config.FireAlarmConfigurationManager;
 import org.wso2.carbon.device.mgt.iot.config.FireAlarmManagementConfig;
 import org.wso2.carbon.device.mgt.iot.config.FireAlarmManagementControllerConfig;
@@ -26,6 +26,7 @@ import org.wso2.carbon.device.mgt.iot.config.controlqueue.FireAlarmControlQueueC
 import org.wso2.carbon.device.mgt.iot.config.datastore.FireAlarmDataStoreConfig;
 import org.wso2.carbon.device.mgt.iot.devicecontroller.ControlQueueConnector;
 import org.wso2.carbon.device.mgt.iot.devicecontroller.DataStoreConnector;
+import org.wso2.carbon.device.mgt.iot.exception.DeviceControllerServiceException;
 import org.wso2.carbon.device.mgt.iot.utils.ResourceFileLoader;
 
 import javax.servlet.http.HttpServletResponse;
@@ -40,177 +41,184 @@ import java.util.HashMap;
 //@Path(value = "/DeviceController")
 public class DeviceControllerService {
 
-	private static Logger log = Logger.getLogger(DeviceControllerService.class);
+    private static Logger log = Logger.getLogger(DeviceControllerService.class);
+    private static DataStoreConnector iotDataStore = null;
+    private static ControlQueueConnector iotControlQueue = null;
+    private static FireAlarmDataStoreConfig dataStoreConfig = null;
+    private static FireAlarmControlQueueConfig controlQueueConfig = null;
 
-	private static DataStoreConnector iotDataStore = null;
-	private static ControlQueueConnector iotControlQueue = null;
+    static {
 
-	static {
+        String trustStoreFile = null;
+        String trustStorePassword = null;
+        File certificateFile = null;
 
-		String trustStoreFile = null;
-		String trustStorePassword = null;
-		File certificateFile = null;
+        FireAlarmManagementConfig config = null;
 
-		FireAlarmManagementConfig config = null;
+        try {
+            config = FireAlarmConfigurationManager.getInstance().getFireAlarmMgtConfig();
+        } catch (DeviceControllerServiceException ex) {
+            log.error(ex.getMessage(), ex);
+        }
 
-		try {
-			config = FireAlarmConfigurationManager.getInstance().getFireAlarmMgtConfig();
-		} catch (DeviceManagementException ex) {
-			log.error("Error occurred when trying to read configurations file: firealarm-config"
-							  + ".xml", ex);
-		}
+        if (config != null) {
+            /* reading security configurations */
+            FireAlarmManagementSecurityConfig securityConfig = config.getFireAlarmManagementSecurityConfig();
+            trustStoreFile = securityConfig.getClient();
+            trustStorePassword = securityConfig.getTrustStorePassword();
+            certificateFile = new ResourceFileLoader("/resources/security/" + trustStoreFile).getFile();
 
-		if (config != null) {
-			/* reading security configurations */
-			FireAlarmManagementSecurityConfig securityConfig = config
-					.getFireAlarmManagementSecurityConfig();
-			trustStoreFile = securityConfig.getClient();
-			trustStorePassword = securityConfig.getTrustStorePassword();
-			certificateFile = new ResourceFileLoader("/resources/security/" + trustStoreFile)
-					.getFile();
+            if (certificateFile.exists()) {
+                trustStoreFile = certificateFile.getAbsolutePath();
+                log.info("Trust Store Path : " + trustStoreFile);
 
-			if (certificateFile.exists()) {
-				trustStoreFile = certificateFile.getAbsolutePath();
-				log.info("Trust Store Path : " + trustStoreFile);
+                System.setProperty("javax.net.ssl.trustStore", trustStoreFile);
+                System.setProperty("javax.net.ssl.trustStorePassword", trustStorePassword);
+            } else {
+                log.error("Trust Store not found in path : " + trustStoreFile);
+            }
 
-				System.setProperty("javax.net.ssl.trustStore", trustStoreFile);
-				System.setProperty("javax.net.ssl.trustStorePassword", trustStorePassword);
-			} else {
-				log.error("Trust Store not found in path : " + trustStoreFile);
-			}
+            // controller configurations
+            FireAlarmManagementControllerConfig controllerConfig = config.getFireAlarmManagementControllerConfig();
 
-			// controller configurations
-			FireAlarmManagementControllerConfig controllerConfig = config
-					.getFireAlarmManagementControllerConfig();
+            // reading data store configurations
+            String deviceDataStoreKey = controllerConfig.getDeviceDataStore();
+            log.info("Active Data-Store: " + deviceDataStoreKey);
 
-			// reading data store configurations
-			String deviceDataStoreKey = controllerConfig.getDeviceDataStore();
-			log.info("Active Data-Store: " + deviceDataStoreKey);
+            dataStoreConfig = (FireAlarmDataStoreConfig) config.getDataStoresMap().get(deviceDataStoreKey);
+            if (dataStoreConfig == null) {
+                log.error("Error occurred when trying to read data stores configurations");
+            }
 
-			FireAlarmDataStoreConfig dataStoreConfig = (FireAlarmDataStoreConfig) config
-					.getDataStoresMap().get(deviceDataStoreKey);
-			if (dataStoreConfig == null) {
-				log.error("Error occurred when trying to read data stores configurations");
-			}
+            //initialization data store
+            try {
+                String handlerClass = dataStoreConfig.getHandlerClass().trim();
+                Class<?> dataStore = DeviceControllerService.class.forName(handlerClass);
+                if (DataStoreConnector.class.isAssignableFrom(dataStore)) {
+                    iotDataStore = (DataStoreConnector) dataStore.newInstance();
+                    iotDataStore.initDataStore();
+                }
+            } catch (ClassNotFoundException | IllegalAccessException | InstantiationException ex) {
+                log.error("Error occurred when trying to initiate data store", ex);
+            } catch (DeviceControllerServiceException ex) {
+                log.error(ex.getMessage(), ex);
+            }
 
-			//initialization data store
-			try {
-				String handlerClass = dataStoreConfig.getHandlerClass().trim();
-				Class<?> dataStore = DeviceControllerService.class.forName(handlerClass);
-				if (DataStoreConnector.class.isAssignableFrom(dataStore)) {
-					iotDataStore = (DataStoreConnector) dataStore.newInstance();
-					iotDataStore.initDataStore();
-				}
-			} catch (ClassNotFoundException | IllegalAccessException | InstantiationException ex) {
-				log.error("Error occurred when trying to initiate data store", ex);
-			}
+            // reading control queue configurations
+            String controlQueueKey = controllerConfig.getDeviceControlQueue();
+            controlQueueConfig = (FireAlarmControlQueueConfig) config.getControlQueuesMap().get(controlQueueKey);
+            if (controlQueueConfig == null) {
+                log.error("Error occurred when trying to read control queue configurations");
+            }
 
-			// reading control queue configurations
-			String controlQueueKey = controllerConfig.getDeviceControlQueue();
-			FireAlarmControlQueueConfig controlQueueConfig = (FireAlarmControlQueueConfig) config
-					.getControlQueuesMap().get(controlQueueKey);
-			if (controlQueueConfig == null) {
-				log.error("Error occurred when trying to read control queue configurations");
-			}
+            //initialization control queue
+            try {
+                String handlerClass = controlQueueConfig.getHandlerClass().trim();
+                Class<?> controlQueue = DeviceControllerService.class.forName(handlerClass);
+                if (ControlQueueConnector.class.isAssignableFrom(controlQueue)) {
+                    iotControlQueue = (ControlQueueConnector) controlQueue.newInstance();
+                    iotControlQueue.initControlQueue();
+                }
+            } catch (ClassNotFoundException | IllegalAccessException | InstantiationException ex) {
+                log.error("Error occurred when trying to initiate control queue", ex);
+            } catch (DeviceControllerServiceException ex) {
+                log.error(ex.getMessage(), ex);
+            }
+        }
+    }
 
-			//initialization control queue
-			try {
-				String handlerClass = controlQueueConfig.getHandlerClass().trim();
-				Class<?> controlQueue = DeviceControllerService.class.forName(handlerClass);
-				if (ControlQueueConnector.class.isAssignableFrom(controlQueue)) {
-					iotControlQueue = (ControlQueueConnector) controlQueue.newInstance();
-					iotControlQueue.initControlQueue();
-				}
-			} catch (ClassNotFoundException | IllegalAccessException | InstantiationException ex) {
-				log.error("Error occurred when trying to initiate control queue", ex);
-			}
-		}
-	}
+    @Path("/pushdata/{owner}/{type}/{id}/{time}/{key}/{value}") @POST
+    // @Produces("application/xml")
+    public static String pushData(@PathParam("owner") String owner, @PathParam("type") String deviceType,
+            @PathParam("id") String deviceId, @PathParam("time") Long time, @PathParam("key") String key,
+            @PathParam("value") String value, @HeaderParam("description") String description,
+            @Context HttpServletResponse response) {
 
-	@Path("/pushdata/{owner}/{type}/{id}/{time}/{key}/{value}")
-	@POST
-	// @Produces("application/xml")
-	public static String pushData(@PathParam("owner") String owner,
-								  @PathParam("type") String deviceType,
-								  @PathParam("id") String deviceId, @PathParam("time") Long time,
-								  @PathParam("key") String key, @PathParam("value") String value,
-								  @HeaderParam("description") String description,
-								  @Context HttpServletResponse response) {
+        HashMap<String, String> deviceDataMap = new HashMap<String, String>();
 
-		HashMap<String, String> deviceDataMap = new HashMap<String, String>();
+        deviceDataMap.put("owner", owner);
+        deviceDataMap.put("deviceType", deviceType);
+        deviceDataMap.put("deviceId", deviceId);
+        deviceDataMap.put("time", "" + time);
+        deviceDataMap.put("key", key);
+        deviceDataMap.put("value", value);
+        deviceDataMap.put("description", description);
 
-		deviceDataMap.put("owner", owner);
-		deviceDataMap.put("deviceType", deviceType);
-		deviceDataMap.put("deviceId", deviceId);
-		deviceDataMap.put("time", "" + time);
-		deviceDataMap.put("key", key);
-		deviceDataMap.put("value", value);
-		deviceDataMap.put("description", description);
+        //DeviceValidator deviceChecker = new DeviceValidator();
 
-		//DeviceValidator deviceChecker = new DeviceValidator();
+        //DeviceIdentifier dId = new DeviceIdentifier();
+        //dId.setId(deviceId);
+        //dId.setType(deviceType);
 
-		//DeviceIdentifier dId = new DeviceIdentifier();
-		//dId.setId(deviceId);
-		//dId.setType(deviceType);
+        //		try {
+        //			boolean exists = deviceChecker.isExist(owner, dId);
+        String result = null;
+        //			if (exists) {
+        try {
+            iotDataStore.publishIoTData(deviceDataMap);
+            result = "Data Published Succesfully...";
+        } catch (DeviceControllerServiceException e) {
+            response.setStatus(HttpStatus.SC_INTERNAL_SERVER_ERROR);
+            result = "Failed to push data to dataStore at " + dataStoreConfig.getEndPoint() + ":" + dataStoreConfig
+                    .getPort();
+        }
+        //
+        //			}
+        //
+        return result;
+        //
+        //		} catch (InstantiationException e) {
+        //			response.setStatus(500);
+        //			return null;
+        //		} catch (IllegalAccessException e) {
+        //			response.setStatus(500);
+        //			return null;
+        //		} catch (ConfigurationException e) {
+        //			response.setStatus(500);
+        //			return null;
+        //		} catch (DeviceCloudException e) {
+        //			response.setStatus(500);
+        //			return null;
+        //		}
 
-		//		try {
-		//			boolean exists = deviceChecker.isExist(owner, dId);
-		String result = "Failed to push";
-		//			if (exists) {
-		result = iotDataStore.publishIoTData(deviceDataMap);
-		//
-		//			}
-		//
-		return result;
-		//
-		//		} catch (InstantiationException e) {
-		//			response.setStatus(500);
-		//			return null;
-		//		} catch (IllegalAccessException e) {
-		//			response.setStatus(500);
-		//			return null;
-		//		} catch (ConfigurationException e) {
-		//			response.setStatus(500);
-		//			return null;
-		//		} catch (DeviceCloudException e) {
-		//			response.setStatus(500);
-		//			return null;
-		//		}
+    }
 
-	}
+    @Path("/setcontrol/{owner}/{type}/{id}/{key}/{value}") @POST public static String setControl(
+            @PathParam("owner") String owner, @PathParam("type") String deviceType, @PathParam("id") String deviceId,
+            @PathParam("key") String key, @PathParam("value") String value, @Context HttpServletResponse response) {
+        HashMap<String, String> deviceControlsMap = new HashMap<String, String>();
 
-	@Path("/setcontrol/{owner}/{type}/{id}/{key}/{value}")
-	@POST
-	public static String setControl(@PathParam("owner") String owner,
-									@PathParam("type") String deviceType,
-									@PathParam("id") String deviceId, @PathParam("key") String key,
-									@PathParam("value") String value) {
-		HashMap<String, String> deviceControlsMap = new HashMap<String, String>();
+        deviceControlsMap.put("owner", owner);
+        deviceControlsMap.put("deviceType", deviceType);
+        deviceControlsMap.put("deviceId", deviceId);
+        deviceControlsMap.put("key", key);
+        deviceControlsMap.put("value", value);
 
-		deviceControlsMap.put("owner", owner);
-		deviceControlsMap.put("deviceType", deviceType);
-		deviceControlsMap.put("deviceId", deviceId);
-		deviceControlsMap.put("key", key);
-		deviceControlsMap.put("value", value);
+        String result = null;
+        try {
+            iotControlQueue.enqueueControls(deviceControlsMap);
+            result = "Controls added to queue succesfully..";
+        } catch (DeviceControllerServiceException e) {
+            response.setStatus(HttpStatus.SC_INTERNAL_SERVER_ERROR);
+            result = "Failed to enqueue data to queue at " + controlQueueConfig.getEndPoint() + ":" + controlQueueConfig
+                    .getPort();
+        }
+        return result;
+    }
 
-		String result = null;
-		result = iotControlQueue.enqueueControls(deviceControlsMap);
-		return result;
-	}
-
-	// public static void main(String[] args) {
-	//
-	// DeviceController myController = new DeviceController();
-	// String pushOut =
-	// myController.pushData("10.100.7.38", "Arduino", "Shabirmean", "123456",
-	// Long.parseLong("234890"), "Sensor", "23", "Testing");
-	//
-	// String setOut = myController.setControl("Shabirmean", "Arduino",
-	// "123456", "13", "HIGH");
-	//
-	// System.out.println("---------------------------------------");
-	// System.out.println("PUSH : " + pushOut);
-	// System.out.println("---------------------------------------");
-	// System.out.println("SET : " + setOut);
-	// }
+    // public static void main(String[] args) {
+    //
+    // DeviceController myController = new DeviceController();
+    // String pushOut =
+    // myController.pushData("10.100.7.38", "Arduino", "Shabirmean", "123456",
+    // Long.parseLong("234890"), "Sensor", "23", "Testing");
+    //
+    // String setOut = myController.setControl("Shabirmean", "Arduino",
+    // "123456", "13", "HIGH");
+    //
+    // System.out.println("---------------------------------------");
+    // System.out.println("PUSH : " + pushOut);
+    // System.out.println("---------------------------------------");
+    // System.out.println("SET : " + setOut);
+    // }
 }
