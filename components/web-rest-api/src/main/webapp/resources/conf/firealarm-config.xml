@@ -37,7 +37,7 @@
             </class>
             <protocol>MQTT</protocol>
             <!--<endpoint>tcp://localhost</endpoint>-->
-            <endpoint>tcp://10.100.7.38</endpoint>
+            <endpoint>tcp://10.100.7.77</endpoint>
             <port>1883</port>
             <username>.</username>
             <password>.</password>
