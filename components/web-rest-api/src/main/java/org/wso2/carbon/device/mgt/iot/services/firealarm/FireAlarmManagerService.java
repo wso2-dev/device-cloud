@@ -36,7 +36,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-@Path("/FireAlarmDeviceManager")
+//@Path("/FireAlarmDeviceManager")
 public class FireAlarmManagerService {
 
 	private static Log log = LogFactory.getLog(FireAlarmManagerService.class);
