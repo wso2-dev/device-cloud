@@ -101,7 +101,7 @@ public class MotorCarControllerService {
 		String result = null;
 		result = DeviceControllerService.pushData(dataMsg.owner, "MotorCar", dataMsg.deviceId,
 												  dataMsg.time, dataMsg.key, dataMsg.value,
-												  dataMsg.replyMessage, response);
+												  dataMsg.reply, response);
 		return result;
 	}
 

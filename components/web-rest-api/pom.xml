@@ -148,7 +148,7 @@
                 <artifactId>maven-war-plugin</artifactId>
                 <version>2.2</version>
                 <configuration>
-                    <warName>devices</warName><!--devices.war-->
+                    <warName>iotdevices</warName><!--devices.war-->
                     <!--<packagingExcludes>WEB-INF/lib/*.jar</packagingExcludes>-->
                 </configuration>
             </plugin>
