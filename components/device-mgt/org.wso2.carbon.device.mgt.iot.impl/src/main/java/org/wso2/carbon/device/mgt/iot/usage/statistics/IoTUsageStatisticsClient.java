@@ -20,7 +20,10 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.naming.Context;
@@ -109,12 +112,18 @@ public class IoTUsageStatisticsClient {
             String query = null;
 
             if (fromDate != null && toDate != null) {
-                query = String.format("SELECT * FROM %s WHERE owner = '%s' AND deviceid = '%s' AND `time` BETWEEN '%s' AND '%s'", table, owner, deviceId, fromDate, toDate);
-            } else if(fromDate == null) {
-                query = String.format("SELECT * FROM %s WHERE owner = '%s' AND deviceid = '%s' AND `time` >= '%s'", table, owner, deviceId, fromDate);
-            } else if(toDate == null){
-            	query = String.format("SELECT * FROM %s WHERE owner = '%s' AND deviceid = '%s' AND `time` <= '%s'", table, owner, deviceId, toDate);
+				//fromDate = getConvertedTime(fromDate);
+				//toDate = getConvertedTime(toDate);
+                query = String.format("SELECT * FROM %s WHERE owner = '%s' AND deviceid = '%s' AND `time` BETWEEN %s AND %s", table, owner, deviceId, fromDate, toDate);
+            } else if(fromDate != null) {
+				//fromDate = getConvertedTime(fromDate);
+				query = String.format("SELECT * FROM %s WHERE owner = '%s' AND deviceid = '%s' AND `time` >= %s", table, owner, deviceId, fromDate);
+            } else if(toDate != null){
+				//toDate = getConvertedTime(toDate);
+            	query = String.format("SELECT * FROM %s WHERE owner = '%s' AND deviceid = '%s' AND `time` <= %s", table, owner, deviceId, toDate);
             }
+
+			log.info("query: " + query);
 
             if(query == null){
             	return null;
@@ -159,6 +168,17 @@ public class IoTUsageStatisticsClient {
             }
         }
     }
+
+	private String getConvertedTime(String timeStr){
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		Date date = null;
+		try {
+			date = format.parse(timeStr);
+		} catch (ParseException e) {
+			return new java.sql.Date(0).toString();
+		}
+		return new java.sql.Date(date.getTime()).toString();
+	}
     
     
 }
