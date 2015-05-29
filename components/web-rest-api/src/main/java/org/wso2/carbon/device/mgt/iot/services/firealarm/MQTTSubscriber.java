@@ -74,7 +74,9 @@ public class MQTTSubscriber implements MqttCallback {
                     ex.getReasonCode() + "\n\tMessage: " + ex.getMessage() +
                     "\n\tLocalMsg: " + ex.getLocalizedMessage() + "\n\tCause: " +
                     ex.getCause() + "\n\tException: " + ex; //throw
-            log.error(errorMsg);
+            if (log.isDebugEnabled()) {
+                log.debug(errorMsg);
+            }
             throw new DeviceManagementException(errorMsg, ex);
 
         } catch (MqttException ex) {
@@ -82,7 +84,9 @@ public class MQTTSubscriber implements MqttCallback {
                     ex.getReasonCode() + "\n\tMessage: " + ex.getMessage() +
                     "\n\tLocalMsg: " + ex.getLocalizedMessage() + "\n\tCause: " +
                     ex.getCause() + "\n\tException: " + ex; //throw
-            log.error(errorMsg);
+            if (log.isDebugEnabled()) {
+                log.debug(errorMsg);
+            }
             throw new DeviceManagementException(errorMsg, ex);
         }
 
@@ -97,7 +101,9 @@ public class MQTTSubscriber implements MqttCallback {
                     "\n\tMessage: " + ex.getMessage() + "\n\tLocalMsg: " +
                     ex.getLocalizedMessage() + "\n\tCause: " + ex.getCause() +
                     "\n\tException: " + ex;
-            log.error(errorMsg);
+            if (log.isDebugEnabled()) {
+                log.debug(errorMsg);
+            }
         }
     }
 
