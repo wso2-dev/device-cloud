@@ -85,6 +85,8 @@ public class DeviceControllerService {
 
 			// reading data store configurations
 			String deviceDataStoreKey = controllerConfig.getDeviceDataStore();
+			log.info("Active Data-Store: " + deviceDataStoreKey);
+
 			FireAlarmDataStoreConfig dataStoreConfig = (FireAlarmDataStoreConfig) config
 					.getDataStoresMap().get(deviceDataStoreKey);
 			if (dataStoreConfig == null) {
