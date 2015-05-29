@@ -27,6 +27,8 @@ import org.wso2.carbon.device.mgt.core.dao.DeviceManagementDAOException;
 import org.wso2.carbon.device.mgt.core.dao.DeviceManagementDAOFactory;
 import org.wso2.carbon.device.mgt.core.dto.DeviceType;
 import org.wso2.carbon.device.mgt.iot.util.IotDeviceManagementUtil;
+import org.wso2.carbon.device.mgt.core.service.DeviceManagementServiceImpl;
+import org.wso2.carbon.device.mgt.core.service.DeviceManagementService;
 
 import java.io.File;
 import java.util.List;
@@ -38,10 +40,8 @@ public class DeviceManagement {
 
 	public boolean addNewDevice(Device device) throws DeviceManagementException  {
 		
-		DeviceMgtService dmService=(DeviceMgtService)PrivilegedCarbonContext.getThreadLocalCarbonContext().getOSGiService(DeviceMgtService.class);
-		
-		
-
+		//DeviceMgtService dmService=(DeviceMgtService)PrivilegedCarbonContext.getThreadLocalCarbonContext().getOSGiService(DeviceMgtService.class);
+		DeviceManagementService dmService = new DeviceManagementServiceImpl();
 		boolean status;
 
 		status = dmService.enrollDevice(device);
@@ -55,8 +55,8 @@ public class DeviceManagement {
 
 		boolean status = false;
 
-		//DeviceManagementService dmService = new DeviceManagementServiceImpl();
-		DeviceMgtService dmService=(DeviceMgtService)PrivilegedCarbonContext.getThreadLocalCarbonContext().getOSGiService(DeviceMgtService.class);
+		DeviceManagementService dmService = new DeviceManagementServiceImpl();
+		//DeviceMgtService dmService=(DeviceMgtService)PrivilegedCarbonContext.getThreadLocalCarbonContext().getOSGiService(DeviceMgtService.class);
 		
 		
 		status = dmService.disenrollDevice(deviceIdentifier);
@@ -67,20 +67,20 @@ public class DeviceManagement {
 	public boolean update(Device device) throws DeviceManagementException {
 
 		boolean status = false;
-		DeviceMgtService dmService=(DeviceMgtService)PrivilegedCarbonContext.getThreadLocalCarbonContext().getOSGiService(DeviceMgtService.class);
+		//DeviceMgtService dmService=(DeviceMgtService)PrivilegedCarbonContext.getThreadLocalCarbonContext().getOSGiService(DeviceMgtService.class);
 		
 		
-		//DeviceManagementService dmService = new DeviceManagementServiceImpl();
+		DeviceManagementService dmService = new DeviceManagementServiceImpl();
 		status = dmService.modifyEnrollment(device);
 
 		return status;
 	}
 
 	public Device getDevice(DeviceIdentifier deviceIdentifier) throws DeviceManagementException {
-		DeviceMgtService dmService=(DeviceMgtService)PrivilegedCarbonContext.getThreadLocalCarbonContext().getOSGiService(DeviceMgtService.class);
+		//DeviceMgtService dmService=(DeviceMgtService)PrivilegedCarbonContext.getThreadLocalCarbonContext().getOSGiService(DeviceMgtService.class);
 		
 		
-		//DeviceManagementService dmService = new DeviceManagementServiceImpl();
+		DeviceManagementService dmService = new DeviceManagementServiceImpl();
 
 		return dmService.getDevice(deviceIdentifier);
 
@@ -98,31 +98,31 @@ public class DeviceManagement {
 
 	public boolean isExist(String owner, DeviceIdentifier deviceIdentifier)
 			throws DeviceManagementException {
-		DeviceMgtService dmService=(DeviceMgtService)PrivilegedCarbonContext.getThreadLocalCarbonContext().getOSGiService(DeviceMgtService.class);
+		//DeviceMgtService dmService=(DeviceMgtService)PrivilegedCarbonContext.getThreadLocalCarbonContext().getOSGiService(DeviceMgtService.class);
 		
 		
-		//DeviceManagementService dmService = new DeviceManagementServiceImpl();
+		DeviceManagementService dmService = new DeviceManagementServiceImpl();
 
-//		if (dmService.isEnrolled(deviceIdentifier)) {
-//			List<Device> deviceList = dmService.getDeviceListOfUser(owner);
-//			for (Device device : deviceList) {
-//				if (device.getDeviceIdentifier().equals(deviceIdentifier.getId())) {
-//					return true;
-//
-//				}
-//
-//			}
-//
-//		}
+		if (dmService.isEnrolled(deviceIdentifier)) {
+			List<Device> deviceList = dmService.getDeviceListOfUser(owner);
+			for (Device device : deviceList) {
+				if (device.getDeviceIdentifier().equals(deviceIdentifier.getId())) {
+					return true;
+
+				}
+
+			}
+
+		}
 
 		return false;
 	}
 
 	public List<Device> getDevices(String user) throws DeviceManagementException {
-	//	DeviceManagementService dmService = new DeviceManagementServiceImpl();
-		DeviceMgtService dmService=(DeviceMgtService)PrivilegedCarbonContext.getThreadLocalCarbonContext().getOSGiService(DeviceMgtService.class);
+		DeviceManagementService dmService = new DeviceManagementServiceImpl();
+		//DeviceMgtService dmService=(DeviceMgtService)PrivilegedCarbonContext.getThreadLocalCarbonContext().getOSGiService(DeviceMgtService.class);
 		
-		return null;//dmService.getAllDevicesOfUser(user);
+		return dmService.getAllDevicesOfUser(user);
 
 	}
 
