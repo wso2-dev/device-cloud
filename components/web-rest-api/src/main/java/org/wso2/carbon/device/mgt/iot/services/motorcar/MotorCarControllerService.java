@@ -18,7 +18,7 @@ package org.wso2.carbon.device.mgt.iot.services.motorcar;
 
 import org.apache.log4j.Logger;
 import org.wso2.carbon.device.mgt.iot.services.DeviceControllerService;
-import org.wso2.carbon.device.mgt.iot.services.DeviceDataJSON;
+import org.wso2.carbon.device.mgt.iot.services.firealarm.DeviceJSON;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.Consumes;
@@ -97,8 +97,7 @@ public class MotorCarControllerService {
 	@Path("/pushData")
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
-	public String pushAlarmData(final DeviceDataJSON dataMsg,
-								@Context HttpServletResponse response) {
+	public String pushAlarmData(final DeviceJSON dataMsg, @Context HttpServletResponse response) {
 		String result = null;
 		result = DeviceControllerService.pushData(dataMsg.owner, "MotorCar", dataMsg.deviceId,
 												  dataMsg.time, dataMsg.key, dataMsg.value,
