@@ -18,8 +18,9 @@
 
 package org.wso2.carbon.device.mgt.iot.config;
 
+import org.apache.log4j.Logger;
 import org.w3c.dom.Document;
-import org.wso2.carbon.device.mgt.common.DeviceManagementException;
+import org.wso2.carbon.device.mgt.iot.exception.DeviceControllerServiceException;
 import org.wso2.carbon.device.mgt.iot.util.IotDeviceManagementUtil;
 import org.wso2.carbon.device.mgt.iot.utils.ResourceFileLoader;
 
@@ -32,6 +33,8 @@ import java.io.File;
  */
 public class FireAlarmConfigurationManager {
 
+    Logger log = Logger.getLogger(FireAlarmConfigurationManager.class);
+
     private static final String CONFIGS_FILE_LOCATION = "/resources/conf/firealarm-config.xml";
     private FireAlarmManagementConfig currentFireAlarmMgtConfig;
     private static FireAlarmConfigurationManager fireAlarmDeviceConfigManager;
@@ -39,7 +42,7 @@ public class FireAlarmConfigurationManager {
     private FireAlarmConfigurationManager() {
     }
 
-    public static FireAlarmConfigurationManager getInstance() throws DeviceManagementException {
+    public static FireAlarmConfigurationManager getInstance() throws DeviceControllerServiceException {
         if (fireAlarmDeviceConfigManager == null) {
             synchronized (FireAlarmConfigurationManager.class) {
                 if (fireAlarmDeviceConfigManager == null) {
@@ -53,7 +56,7 @@ public class FireAlarmConfigurationManager {
         return fireAlarmDeviceConfigManager;
     }
 
-    private void initConfig() throws DeviceManagementException {
+    private void initConfig() throws DeviceControllerServiceException {
         try {
             File fireAlarmMgtConfig = new ResourceFileLoader(CONFIGS_FILE_LOCATION).getFile();
             Document doc = IotDeviceManagementUtil.convertToDocument(fireAlarmMgtConfig);
@@ -61,8 +64,9 @@ public class FireAlarmConfigurationManager {
             Unmarshaller unmarshaller = fireAlarmMgtContext.createUnmarshaller();
             this.currentFireAlarmMgtConfig = (FireAlarmManagementConfig) unmarshaller.unmarshal(doc);
         } catch (Exception e) {
-            throw new DeviceManagementException("Error occurred while initializing Fire Alarm Device Management config",
-                    e);
+            String error = "Error occurred while initializing DeviceController configurations";
+            log.error(error);
+            throw new DeviceControllerServiceException(error, e);
         }
     }
 

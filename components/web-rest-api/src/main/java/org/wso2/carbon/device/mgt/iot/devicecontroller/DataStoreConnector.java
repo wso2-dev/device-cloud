@@ -16,6 +16,9 @@
 
 package org.wso2.carbon.device.mgt.iot.devicecontroller;
 
+import org.wso2.carbon.device.mgt.iot.exception.DeviceControllerServiceException;
+import org.wso2.carbon.device.mgt.iot.exception.FireAlarmControllerServiceException;
+
 import java.util.HashMap;
 
 // TODO: Auto-generated Javadoc
@@ -34,7 +37,7 @@ public interface DataStoreConnector {
 	 * @return A status message according to the outcome of the
 	 *         method execution.
 	 */
-	public String initDataStore();
+	public void initDataStore() throws DeviceControllerServiceException;
 
 	/**
 	 * Pushes the device/sensor data received from the devices into the
@@ -47,5 +50,6 @@ public interface DataStoreConnector {
 	 * @return A status message according to the outcome of the
 	 *         method execution.
 	 */
-	public String publishIoTData(HashMap<String, String> deviceData);
+	public void publishIoTData(HashMap<String, String> deviceData)
+			throws DeviceControllerServiceException;
 }

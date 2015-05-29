@@ -16,6 +16,8 @@
 
 package org.wso2.carbon.device.mgt.iot.devicecontroller;
 
+import org.wso2.carbon.device.mgt.iot.exception.DeviceControllerServiceException;
+
 import java.util.HashMap;
 
 // TODO: Auto-generated Javadoc
@@ -34,7 +36,7 @@ public interface ControlQueueConnector {
 	 * @return A status message according to the outcome of the
 	 *         method execution.
 	 */
-	public String initControlQueue();
+	public void initControlQueue() throws DeviceControllerServiceException;
 
 	/**
 	 * Pushes the control messages received to the implemented queue
@@ -46,5 +48,5 @@ public interface ControlQueueConnector {
 	 * @return A status message according to the outcome of the
 	 *         method execution.
 	 */
-	public String enqueueControls(HashMap<String, String> deviceControls);
+	public void enqueueControls(HashMap<String, String> deviceControls) throws DeviceControllerServiceException;
 }
