@@ -25,7 +25,7 @@ import java.util.List;
 
 @XmlRootElement(name = "ControlQueues")
 @XmlAccessorType(XmlAccessType.FIELD)
-public class FireAlarmControlQueueConfigurations {
+public class DeviceControlQueueConfigurations {
 
     @XmlElement(name = "ControlQueue", nillable = true)
     private List<DeviceControlQueueConfig> deviceControlQueueConfigs;

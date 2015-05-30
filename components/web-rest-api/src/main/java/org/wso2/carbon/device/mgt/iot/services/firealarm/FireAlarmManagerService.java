@@ -62,7 +62,7 @@ public class FireAlarmManagerService {
 
 		device.setDateOfEnrolment(new Date().getTime());
 		device.setDateOfLastUpdate(new Date().getTime());
-		device.setStatus(true);
+//		device.setStatus(true);
 
 		device.setName(name);
 		device.setType(FireAlarmConstants.DEVICE_TYPE);
