@@ -18,155 +18,175 @@ package org.wso2.carbon.device.mgt.iot.services.sensebot;
 
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.log4j.Logger;
-import org.wso2.carbon.device.mgt.common.DeviceManagementException;
-import org.wso2.carbon.device.mgt.iot.config.DeviceConfigurationManager;
-import org.wso2.carbon.device.mgt.iot.config.DeviceManagementConfig;
-import org.wso2.carbon.device.mgt.iot.config.DeviceManagementControllerConfig;
-import org.wso2.carbon.device.mgt.iot.config.controlqueue.DeviceControlQueueConfig;
-import org.wso2.carbon.device.mgt.iot.exception.DeviceControllerServiceException;
 import org.wso2.carbon.device.mgt.iot.services.DeviceControllerService;
 import org.wso2.carbon.device.mgt.iot.services.DeviceJSON;
-import org.wso2.carbon.device.mgt.iot.services.MQTTSubscriber;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.ProtocolException;
+import java.net.URL;
 import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.NoSuchElementException;
+import java.util.Map;
 
 //@Path(value = "/FireAlarmController")
 public class SenseBotControllerService {
 
-    private static Logger log = Logger.getLogger(
-            org.wso2.carbon.device.mgt.iot.services.firealarm.FireAlarmControllerService.class);
+    private static Logger log = Logger.getLogger(SenseBotControllerService.class);
+    private static final Map<String, String> deviceIPList = new HashMap<String, String>();
 
-    public static final String CONTROL_QUEUE_ENDPOINT;
-    public static final HashMap<String, LinkedList<String>> replyMsgQueue;
-    public static final HashMap<String, LinkedList<String>> internalControlsQueue;
-    private static MQTTSubscriber mqttSubscriber;
-
-    static {
-        DeviceManagementConfig config = null;
-
-        try {
-            config = DeviceConfigurationManager.getInstance().getFireAlarmMgtConfig();
-        } catch (DeviceControllerServiceException ex) {
-            log.error(ex.getMessage());
-        }
-
-        if (config != null) {
-            // controller configurations
-            DeviceManagementControllerConfig controllerConfig = config.getFireAlarmManagementControllerConfig();
-
-            // reading control queue configurations
-            String controlQueueKey = controllerConfig.getDeviceControlQueue();
-            DeviceControlQueueConfig controlQueueConfig = config.getControlQueuesMap().get(controlQueueKey);
-            if (controlQueueConfig == null) {
-                log.error("Error occurred when trying to read control queue configurations");
-            }
-
-            String mqttUrl = controlQueueConfig.getEndPoint();
-            String mqttPort = controlQueueConfig.getPort();
-            CONTROL_QUEUE_ENDPOINT = mqttUrl + ":" + mqttPort;
-            log.info("CONTROL_QUEUE_ENDPOINT Successfully initialized.");
-        } else {
-            CONTROL_QUEUE_ENDPOINT = null;
-            log.error("CONTROL_QUEUE_ENDPOINT initialization failed.");
-        }
-
-        replyMsgQueue = new HashMap<String, LinkedList<String>>();
-        internalControlsQueue = new HashMap<String, LinkedList<String>>();
-    }
-
-    /**
-     * @param mqttSubscriber
-     *            the mqttSubscriber to set
-     */
-    public void setMqttSubscriber(MQTTSubscriber mqttSubscriber) {
-        this.mqttSubscriber = mqttSubscriber;
-        try {
-            mqttSubscriber.subscribe();
-        } catch (DeviceManagementException e) {
-            log.error(e.getErrorMessage());
-        }
-    }
-
-    public static MQTTSubscriber getMQTTSubscriber() {
-        return mqttSubscriber;
-    }
+    private static HttpURLConnection httpConn;
+    private static final String URL_PREFIX = "http://";
+    private static final String FORWARD_URL = "/move/F";
+    private static final String BACKWARD_URL = "/move/B";
+    private static final String LEFT_URL = "/move/L";
+    private static final String RIGHT_URL = "/move/R";
+    private static final String STOP_URL = "/move/S";
 
     /*    Service to switch "ON" and "OFF" the FireAlarm bulb
                Called by an external client intended to control the FireAlarm bulb */
-    @Path("/switchbulb") @POST public String switchBulb(@HeaderParam("owner") String owner,
-            @HeaderParam("deviceId") String deviceId, @Context HttpServletResponse response) {
+    @Path("/forward") @POST public String moveForward(@HeaderParam("owner") String owner,
+            @HeaderParam("deviceId") String deviceId, @FormParam("ip") String deviceIp,
+            @FormParam("port") int deviceServerPort) {
+        if (deviceServerPort == 0) {
+            deviceServerPort = 80;
+        }
+
         String result = null;
-        result = DeviceControllerService.setControl(owner, "FireAlarm", deviceId, "BULB", "IN", response);
+        String urlString = URL_PREFIX + deviceIp + ":" + deviceServerPort + FORWARD_URL;
+        log.info(urlString);
+
+        result = sendCommand(urlString);
         return result;
     }
 
     /*    Service to read the temperature from the FireAlarm temperature sensor
                    Called by an external client intended to get the current temperature */
-    @Path("/readtemperature") @GET public String readTempearature(@HeaderParam("owner") String owner,
-            @HeaderParam("deviceId") String deviceId, @Context HttpServletResponse response) {
+    @Path("/backward") @POST public String moveBackward(@HeaderParam("owner") String owner,
+            @HeaderParam("deviceId") String deviceId, @FormParam("ip") String deviceIp,
+            @FormParam("port") int deviceServerPort) {
+        if (deviceServerPort == 0) {
+            deviceServerPort = 80;
+        }
+
         String result = null;
-        result = DeviceControllerService.setControl(owner, "FireAlarm", deviceId, "TEMPERATURE", "IN", response);
+        String urlString = URL_PREFIX + deviceIp + ":" + deviceServerPort + BACKWARD_URL;
+        log.info(urlString);
+
+        result = sendCommand(urlString);
         return result;
     }
 
     /*    Service to toggle the FireAlarm fan between "ON" and "OFF"
                Called by an external client intended to control the FireAlarm fan */
-    @Path("/togglefan") @POST public String switchFan(@HeaderParam("owner") String owner,
-            @HeaderParam("deviceId") String deviceId, @Context HttpServletResponse response) {
-        String result = null;
-        result = DeviceControllerService.setControl(owner, "FireAlarm", deviceId, "FAN", "IN", response);
-        return result;
-    }
-
-    /*    Service to poll the control-queue for the controls sent to the FireAlarm
-               Called by the FireAlarm device  */
-    @Path("/readcontrols/{owner}/{deviceId}") @GET public String readControls(@PathParam("owner") String owner,
-            @PathParam("deviceId") String deviceId, @Context HttpServletResponse response) {
-        String result = null;
-        LinkedList<String> deviceControlList = internalControlsQueue.get(deviceId);
-
-        if (deviceControlList == null) {
-            result = "No controls have been set for device " + deviceId + " of owner " + owner;
-            response.setStatus(HttpStatus.SC_NO_CONTENT);
-        } else {
-            try {
-                result = deviceControlList.remove();
-                response.setStatus(HttpStatus.SC_ACCEPTED);
-                response.addHeader("Control", result);
-            } catch (NoSuchElementException ex) {
-                result = "There are no more controls for device " + deviceId + " of owner " + owner;
-                response.setStatus(HttpStatus.SC_NO_CONTENT);
-            }
+    @Path("/left") @POST public String turnLeft(@HeaderParam("owner") String owner,
+            @HeaderParam("deviceId") String deviceId, @FormParam("ip") String deviceIp,
+            @FormParam("port") int deviceServerPort) {
+        if (deviceServerPort == 0) {
+            deviceServerPort = 80;
         }
-        log.info(result);
+
+        String result = null;
+        String urlString = URL_PREFIX + deviceIp + ":" + deviceServerPort + LEFT_URL;
+        log.info(urlString);
+
+        result = sendCommand(urlString);
         return result;
     }
 
-    /*    Service to send back the replies for the controls sent to the FireAlarm
-           Called by the FireAlarm device  */
-    @Path("/reply") @POST @Consumes(MediaType.APPLICATION_JSON) public String reply(final DeviceJSON replyMsg,
-            @Context HttpServletResponse response) {
+    @Path("/right") @POST public String turnRight(@HeaderParam("owner") String owner,
+            @HeaderParam("deviceId") String deviceId, @FormParam("ip") String deviceIp,
+            @FormParam("port") int deviceServerPort) {
+        if (deviceServerPort == 0) {
+            deviceServerPort = 80;
+        }
+
         String result = null;
-        result = DeviceControllerService
-                .setControl(replyMsg.owner, "FireAlarm", replyMsg.deviceId, replyMsg.reply, "OUT", response);
+        String urlString = URL_PREFIX + deviceIp + ":" + deviceServerPort + RIGHT_URL;
+        log.info(urlString);
+
+        result = sendCommand(urlString);
+        return result;
+    }
+
+    @Path("/stop") @POST public String stop(@HeaderParam("owner") String owner,
+            @HeaderParam("deviceId") String deviceId, @FormParam("ip") String deviceIp,
+            @FormParam("port") int deviceServerPort) {
+        if (deviceServerPort == 0) {
+            deviceServerPort = 80;
+        }
+
+        String result = null;
+        String urlString = URL_PREFIX + deviceIp + ":" + deviceServerPort + STOP_URL;
+        log.info(urlString);
+
+        result = sendCommand(urlString);
         return result;
     }
 
     /*    Service to push all the sensor data collected by the FireAlarm
-           Called by the FireAlarm device  */
+       Called by the FireAlarm device  */
     @Path("/pushalarmdata") @POST @Consumes(MediaType.APPLICATION_JSON) public String pushAlarmData(
             final DeviceJSON dataMsg, @Context HttpServletResponse response) {
         String result = null;
 
         result = DeviceControllerService
-                .pushData(dataMsg.owner, "FireAlarm", dataMsg.deviceId, System.currentTimeMillis(), "DeviceData", dataMsg.value,
-                        dataMsg.reply, response);
+                .pushData(dataMsg.owner, "FireAlarm", dataMsg.deviceId, System.currentTimeMillis(), "DeviceData",
+                        dataMsg.value, dataMsg.reply, response);
         return result;
     }
+
+
+    private String sendCommand(String urlString) {
+        String result = null;
+        URL url = null;
+        try {
+            url = new URL(urlString);
+        } catch (MalformedURLException e) {
+            log.error("Invalid URL: " + urlString);
+        }
+        try {
+            httpConn = (HttpURLConnection) url.openConnection();
+        } catch (IOException e) {
+            log.error("Error Connectiong to HTTP Endpoint at: " + urlString);
+        }
+
+        try {
+            httpConn.setRequestMethod(HttpMethod.GET);
+            httpConn.setRequestProperty("User-Agent", "WSO2 Carbon Server");
+            int responseCode = httpConn.getResponseCode();
+            result = ""+responseCode + HttpStatus.getStatusText(responseCode) + "(No reply from Robot)";
+
+            log.info("\nSending 'GET' request to URL : " + urlString);
+            log.info("Response Code : " + responseCode);
+        } catch (ProtocolException e) {
+            log.error("Protocal mismatch exception ccured whilst trying to 'GET' resource");
+        } catch (IOException e) {
+            log.error("Error occured whilst reading return code from server");
+        }
+
+//        BufferedReader in = null;
+//        StringBuffer response = new StringBuffer();
+//        try {
+//            in = new BufferedReader(new InputStreamReader(httpConn.getInputStream()));
+//
+//            String inputLine;
+//            while ((inputLine = in.readLine()) != null) {
+//                response.append(inputLine);
+//            }
+//            result = response.toString();
+//            in.close();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+
+        return result;
+    }
+
 }

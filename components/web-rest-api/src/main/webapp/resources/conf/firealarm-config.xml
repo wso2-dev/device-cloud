@@ -36,8 +36,8 @@
                 org.wso2.carbon.device.mgt.iot.devicecontroller.impl.MQTTControlQueue
             </class>
             <protocol>MQTT</protocol>
-            <!--<endpoint>tcp://localhost</endpoint>-->
-            <endpoint>tcp://10.100.7.77</endpoint>
+            <endpoint>tcp://localhost</endpoint>
+            <!--<endpoint>tcp://212.72.74.21</endpoint>-->  <!-- broker.mqtt-dashboard.com -->
             <port>1883</port>
             <username>.</username>
             <password>.</password>

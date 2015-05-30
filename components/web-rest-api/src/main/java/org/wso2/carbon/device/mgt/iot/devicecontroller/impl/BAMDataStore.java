@@ -84,6 +84,7 @@ public class BAMDataStore implements DataStoreConnector {
 
         try {
             BAM_DATA_PUBLISHER = new DataPublisher(DATASTORE_ENDPOINT, DATASTORE_USERNAME, DATASTORE_PASSWORD);
+            log.info("DATA PUBLISHER created for endpoint " + DATASTORE_ENDPOINT);
         } catch (MalformedURLException | AgentException | AuthenticationException
                 | TransportException e) {
             String error = "Error creating DataPublisher for Endpoint: " + DATASTORE_ENDPOINT +
@@ -136,15 +137,21 @@ public class BAMDataStore implements DataStoreConnector {
         try {
             switch (description) {
             case "TEMP":
-                log.info("Stream definition set to FireAlarm-Temperature");
+                if (log.isDebugEnabled()) {
+                    log.info("Stream definition set to FireAlarm-Temperature");
+                }
                 DEVICE_DATA_STREAM = BAM_DATA_PUBLISHER.defineStream(FireAlarmConstants.TEMPERATURE_STREAM_DEFINITION);
                 break;
             case "BULB":
-                log.info("Stream definition set to FireAlarm-Bulb");
+                if (log.isDebugEnabled()) {
+                    log.info("Stream definition set to FireAlarm-Bulb");
+                }
                 DEVICE_DATA_STREAM = BAM_DATA_PUBLISHER.defineStream(FireAlarmConstants.BULB_STREAM_DEFINITION);
                 break;
             case "FAN":
-                log.info("Stream definition set to FireAlarm-Fan");
+                if (log.isDebugEnabled()) {
+                    log.info("Stream definition set to FireAlarm-Fan");
+                }
                 DEVICE_DATA_STREAM = BAM_DATA_PUBLISHER.defineStream(FireAlarmConstants.FAN_STREAM_DEFINITION);
                 break;
             }
@@ -157,7 +164,9 @@ public class BAMDataStore implements DataStoreConnector {
 
         try {
             if (deviceType.equalsIgnoreCase("FireAlarm")) {
-                log.info("Publishing FireAlarm specific data");
+                if (log.isDebugEnabled()) {
+                    log.info("Publishing FireAlarm specific data");
+                }
                 BAM_DATA_PUBLISHER.publish(DEVICE_DATA_STREAM, System.currentTimeMillis(),
                         new Object[] { owner, deviceType, deviceId, Long.parseLong(time) }, null,
                         new Object[] { value });
@@ -168,7 +177,9 @@ public class BAMDataStore implements DataStoreConnector {
                                 + description + "\n" + "\tKey: " + key + "\tValue: " + value + "\n";
 
             } else {
-                log.info("Publishing common device specific data");
+                if (log.isDebugEnabled()) {
+                    log.info("Publishing common device specific data");
+                }
                 BAM_DATA_PUBLISHER.publish(DEVICE_DATA_STREAM, System.currentTimeMillis(),
                         new Object[] { owner, deviceType, deviceId, Long.parseLong(time) }, null,
                         new Object[] { key, value, description });
@@ -179,7 +190,11 @@ public class BAMDataStore implements DataStoreConnector {
                                 + description + "\n" + "\tKey: " + key + "\tValue: " + value + "\n";
 
             }
-            log.info(logMsg);
+
+            if (log.isDebugEnabled()) {
+                log.info(logMsg);
+            }
+
         } catch (AgentException e) {
             String error = "Error while publishing device pin data";
             log.error(error, e);
