@@ -23,6 +23,7 @@ import org.w3c.dom.Document;
 import org.wso2.carbon.device.mgt.iot.exception.DeviceControllerServiceException;
 import org.wso2.carbon.device.mgt.iot.util.IotDeviceManagementUtil;
 import org.wso2.carbon.device.mgt.iot.utils.ResourceFileLoader;
+import org.wso2.carbon.utils.CarbonUtils;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Unmarshaller;
@@ -35,7 +36,12 @@ public class DeviceConfigurationManager {
 
     Logger log = Logger.getLogger(DeviceConfigurationManager.class);
 
-    private static final String CONFIGS_FILE_LOCATION = "/resources/conf/firealarm-config.xml";
+    private static final String IOT_DEVICE_CONFIG_XML_NAME = "devicecloud-config.xml";
+	private static final String IOT_DEVICE_PLUGIN_DIRECTORY = "iot";
+	private final String CONFIGS_FILE_LOCATION =
+			CarbonUtils.getCarbonConfigDirPath() + File.separator +
+					IOT_DEVICE_PLUGIN_DIRECTORY + File.separator + IOT_DEVICE_CONFIG_XML_NAME;
+
     private DeviceManagementConfig currentFireAlarmMgtConfig;
     private static DeviceConfigurationManager deviceConfigurationManager;
 
@@ -58,7 +64,7 @@ public class DeviceConfigurationManager {
 
     private void initConfig() throws DeviceControllerServiceException {
         try {
-            File fireAlarmMgtConfig = new ResourceFileLoader(CONFIGS_FILE_LOCATION).getFile();
+            File fireAlarmMgtConfig = new File(CONFIGS_FILE_LOCATION);
             Document doc = IotDeviceManagementUtil.convertToDocument(fireAlarmMgtConfig);
             JAXBContext fireAlarmMgtContext = JAXBContext.newInstance(DeviceManagementConfig.class);
             Unmarshaller unmarshaller = fireAlarmMgtContext.createUnmarshaller();

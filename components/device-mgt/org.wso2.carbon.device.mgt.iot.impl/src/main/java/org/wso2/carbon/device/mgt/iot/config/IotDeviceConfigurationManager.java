@@ -20,13 +20,11 @@ package org.wso2.carbon.device.mgt.iot.config;
 
 import org.w3c.dom.Document;
 import org.wso2.carbon.device.mgt.common.DeviceManagementException;
-import org.wso2.carbon.device.mgt.iot.config.datasource.IotDataSourceConfig;
 import org.wso2.carbon.device.mgt.iot.util.IotDeviceManagementUtil;
 import org.wso2.carbon.utils.CarbonUtils;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Unmarshaller;
-
 import java.io.File;
 
 /**
@@ -36,14 +34,11 @@ public class IotDeviceConfigurationManager {
 
 	private static final String IOT_DEVICE_CONFIG_XML_NAME = "iot-config.xml";
 	private static final String IOT_DEVICE_PLUGIN_DIRECTORY = "iot";
-	private static final String DEVICE_MGT_PLUGIN_CONFIGS_DIRECTORY = "device-mgt-plugin-configs";
 	private IotDeviceManagementConfig currentIoTDeviceConfig;
 	private static IotDeviceConfigurationManager iotDeviceConfigManager;
 
-	private final String iotDeviceMgtConfigXMLPath =
-			CarbonUtils.getEtcCarbonConfigDirPath() + File.separator +
-			DEVICE_MGT_PLUGIN_CONFIGS_DIRECTORY +
-			File.separator +
+	private final String iotDeviceMgtConfigXMLPath = CarbonUtils.getCarbonConfigDirPath()
+			+ File.separator +
 			IOT_DEVICE_PLUGIN_DIRECTORY + File.separator + IOT_DEVICE_CONFIG_XML_NAME;
 
 	public static IotDeviceConfigurationManager getInstance() {
@@ -61,11 +56,10 @@ public class IotDeviceConfigurationManager {
 		try {
 			File iotDeviceMgtConfig = new File(iotDeviceMgtConfigXMLPath);
 			Document doc = IotDeviceManagementUtil.convertToDocument(iotDeviceMgtConfig);
-			JAXBContext iotDeviceMgmtContext =
-					JAXBContext.newInstance(IotDeviceManagementConfig.class);
+			JAXBContext iotDeviceMgmtContext = JAXBContext.newInstance(
+					IotDeviceManagementConfig.class);
 			Unmarshaller unmarshaller = iotDeviceMgmtContext.createUnmarshaller();
-			this.currentIoTDeviceConfig =
-					(IotDeviceManagementConfig) unmarshaller.unmarshal(doc);
+			this.currentIoTDeviceConfig = (IotDeviceManagementConfig) unmarshaller.unmarshal(doc);
 		} catch (Exception e) {
 			throw new DeviceManagementException(
 					"Error occurred while initializing iot Device Management config", e);
@@ -75,6 +69,5 @@ public class IotDeviceConfigurationManager {
 	public IotDeviceManagementConfig getIotDeviceManagementConfig() {
 		return currentIoTDeviceConfig;
 	}
-
 
 }

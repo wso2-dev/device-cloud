@@ -136,7 +136,8 @@ public class FireAlarmManagerService {
 	@Path("/downloadSketch")
 	@GET
 	@Produces("application/octet-stream")
-	public Response downloadSketch(@QueryParam("owner") String owner) {
+	public Response downloadSketch(@QueryParam("owner") String owner, @QueryParam("type") String
+			sketchType) {
 
 		if (owner == null) {
 			return Response.status(400).build();//bad request
@@ -151,7 +152,7 @@ public class FireAlarmManagerService {
 		//adding registering data
 		try {
 			register(deviceId,
-					 owner + "s_" + FireAlarmConstants.DEVICE_TYPE + "_" + deviceId.substring(0, 3),
+					 owner + "s_" + sketchType + "_" + deviceId.substring(0, 3),
 					 owner);
 		} catch (DeviceManagementException ex) {
 			return Response.status(500).entity(
@@ -162,7 +163,7 @@ public class FireAlarmManagerService {
 		DevicesManager devicesManager = new DevicesManager();
 		File zipFile = null;
 		try {
-			zipFile = devicesManager.downloadSketch(owner, FireAlarmConstants.DEVICE_TYPE, deviceId,
+			zipFile = devicesManager.downloadSketch(owner, sketchType, deviceId,
 													token);
 		} catch (DeviceManagementException ex) {
 			return Response.status(500).entity("Error occurred while creating zip file").build();
