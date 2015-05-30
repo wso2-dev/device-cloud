@@ -25,9 +25,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
@@ -54,15 +52,9 @@ public class SenseBotControllerService {
     @Path("/forward") @POST public String moveForward(@HeaderParam("owner") String owner,
             @HeaderParam("deviceId") String deviceId, @FormParam("ip") String deviceIp,
             @FormParam("port") int deviceServerPort) {
-        if (deviceServerPort == 0) {
-            deviceServerPort = 80;
-        }
 
         String result = null;
-        String urlString = URL_PREFIX + deviceIp + ":" + deviceServerPort + FORWARD_URL;
-        log.info(urlString);
-
-        result = sendCommand(urlString);
+        result = sendCommand(deviceIp, deviceServerPort, FORWARD_URL);
         return result;
     }
 
@@ -71,15 +63,8 @@ public class SenseBotControllerService {
     @Path("/backward") @POST public String moveBackward(@HeaderParam("owner") String owner,
             @HeaderParam("deviceId") String deviceId, @FormParam("ip") String deviceIp,
             @FormParam("port") int deviceServerPort) {
-        if (deviceServerPort == 0) {
-            deviceServerPort = 80;
-        }
-
         String result = null;
-        String urlString = URL_PREFIX + deviceIp + ":" + deviceServerPort + BACKWARD_URL;
-        log.info(urlString);
-
-        result = sendCommand(urlString);
+        result = sendCommand(deviceIp, deviceServerPort, BACKWARD_URL);
         return result;
     }
 
@@ -88,45 +73,24 @@ public class SenseBotControllerService {
     @Path("/left") @POST public String turnLeft(@HeaderParam("owner") String owner,
             @HeaderParam("deviceId") String deviceId, @FormParam("ip") String deviceIp,
             @FormParam("port") int deviceServerPort) {
-        if (deviceServerPort == 0) {
-            deviceServerPort = 80;
-        }
-
         String result = null;
-        String urlString = URL_PREFIX + deviceIp + ":" + deviceServerPort + LEFT_URL;
-        log.info(urlString);
-
-        result = sendCommand(urlString);
+        result = sendCommand(deviceIp, deviceServerPort, LEFT_URL);
         return result;
     }
 
     @Path("/right") @POST public String turnRight(@HeaderParam("owner") String owner,
             @HeaderParam("deviceId") String deviceId, @FormParam("ip") String deviceIp,
             @FormParam("port") int deviceServerPort) {
-        if (deviceServerPort == 0) {
-            deviceServerPort = 80;
-        }
-
         String result = null;
-        String urlString = URL_PREFIX + deviceIp + ":" + deviceServerPort + RIGHT_URL;
-        log.info(urlString);
-
-        result = sendCommand(urlString);
+        result = sendCommand(deviceIp, deviceServerPort, RIGHT_URL);
         return result;
     }
 
     @Path("/stop") @POST public String stop(@HeaderParam("owner") String owner,
             @HeaderParam("deviceId") String deviceId, @FormParam("ip") String deviceIp,
             @FormParam("port") int deviceServerPort) {
-        if (deviceServerPort == 0) {
-            deviceServerPort = 80;
-        }
-
         String result = null;
-        String urlString = URL_PREFIX + deviceIp + ":" + deviceServerPort + STOP_URL;
-        log.info(urlString);
-
-        result = sendCommand(urlString);
+        result = sendCommand(deviceIp, deviceServerPort, STOP_URL);
         return result;
     }
 
@@ -142,8 +106,15 @@ public class SenseBotControllerService {
         return result;
     }
 
+    private String sendCommand(String deviceIp, int deviceServerPort, String motionType) {
 
-    private String sendCommand(String urlString) {
+        if (deviceServerPort == 0) {
+            deviceServerPort = 80;
+        }
+
+        String urlString = URL_PREFIX + deviceIp + ":" + deviceServerPort + motionType;
+        log.info(urlString);
+
         String result = null;
         URL url = null;
         try {
@@ -161,30 +132,16 @@ public class SenseBotControllerService {
             httpConn.setRequestMethod(HttpMethod.GET);
             httpConn.setRequestProperty("User-Agent", "WSO2 Carbon Server");
             int responseCode = httpConn.getResponseCode();
-            result = ""+responseCode + HttpStatus.getStatusText(responseCode) + "(No reply from Robot)";
+            result = "" + responseCode + HttpStatus.getStatusText(responseCode) + "(No reply from Robot)";
 
             log.info("\nSending 'GET' request to URL : " + urlString);
             log.info("Response Code : " + responseCode);
         } catch (ProtocolException e) {
             log.error("Protocal mismatch exception ccured whilst trying to 'GET' resource");
         } catch (IOException e) {
-            log.error("Error occured whilst reading return code from server");
+            log.error(
+                    "Error occured whilst reading return code from server. This could be because the server did not return anything");
         }
-
-//        BufferedReader in = null;
-//        StringBuffer response = new StringBuffer();
-//        try {
-//            in = new BufferedReader(new InputStreamReader(httpConn.getInputStream()));
-//
-//            String inputLine;
-//            while ((inputLine = in.readLine()) != null) {
-//                response.append(inputLine);
-//            }
-//            result = response.toString();
-//            in.close();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
 
         return result;
     }
