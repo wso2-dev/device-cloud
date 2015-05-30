@@ -31,38 +31,38 @@ import java.io.File;
 /**
  * Class responsible for the iot device manager configuration initialization.
  */
-public class FireAlarmConfigurationManager {
+public class DeviceConfigurationManager {
 
-    Logger log = Logger.getLogger(FireAlarmConfigurationManager.class);
+    Logger log = Logger.getLogger(DeviceConfigurationManager.class);
 
     private static final String CONFIGS_FILE_LOCATION = "/resources/conf/firealarm-config.xml";
-    private FireAlarmManagementConfig currentFireAlarmMgtConfig;
-    private static FireAlarmConfigurationManager fireAlarmDeviceConfigManager;
+    private DeviceManagementConfig currentFireAlarmMgtConfig;
+    private static DeviceConfigurationManager deviceConfigurationManager;
 
-    private FireAlarmConfigurationManager() {
+    private DeviceConfigurationManager() {
     }
 
-    public static FireAlarmConfigurationManager getInstance() throws DeviceControllerServiceException {
-        if (fireAlarmDeviceConfigManager == null) {
-            synchronized (FireAlarmConfigurationManager.class) {
-                if (fireAlarmDeviceConfigManager == null) {
-                    FireAlarmConfigurationManager result = new FireAlarmConfigurationManager();
+    public static DeviceConfigurationManager getInstance() throws DeviceControllerServiceException {
+        if (deviceConfigurationManager == null) {
+            synchronized (DeviceConfigurationManager.class) {
+                if (deviceConfigurationManager == null) {
+                    DeviceConfigurationManager result = new DeviceConfigurationManager();
                     result.initConfig();
-                    fireAlarmDeviceConfigManager = result;
+                    deviceConfigurationManager = result;
                 }
             }
 
         }
-        return fireAlarmDeviceConfigManager;
+        return deviceConfigurationManager;
     }
 
     private void initConfig() throws DeviceControllerServiceException {
         try {
             File fireAlarmMgtConfig = new ResourceFileLoader(CONFIGS_FILE_LOCATION).getFile();
             Document doc = IotDeviceManagementUtil.convertToDocument(fireAlarmMgtConfig);
-            JAXBContext fireAlarmMgtContext = JAXBContext.newInstance(FireAlarmManagementConfig.class);
+            JAXBContext fireAlarmMgtContext = JAXBContext.newInstance(DeviceManagementConfig.class);
             Unmarshaller unmarshaller = fireAlarmMgtContext.createUnmarshaller();
-            this.currentFireAlarmMgtConfig = (FireAlarmManagementConfig) unmarshaller.unmarshal(doc);
+            this.currentFireAlarmMgtConfig = (DeviceManagementConfig) unmarshaller.unmarshal(doc);
         } catch (Exception e) {
             String error = "Error occurred while initializing DeviceController configurations";
             log.error(error);
@@ -70,7 +70,7 @@ public class FireAlarmConfigurationManager {
         }
     }
 
-    public FireAlarmManagementConfig getFireAlarmMgtConfig() {
+    public DeviceManagementConfig getFireAlarmMgtConfig() {
         return currentFireAlarmMgtConfig;
     }
 

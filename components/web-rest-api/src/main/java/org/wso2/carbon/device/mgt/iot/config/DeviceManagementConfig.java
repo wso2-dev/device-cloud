@@ -19,9 +19,9 @@
 package org.wso2.carbon.device.mgt.iot.config;
 
 import org.wso2.carbon.device.mgt.iot.config.controlqueue.ControlQueuesConfigAdapter;
-import org.wso2.carbon.device.mgt.iot.config.controlqueue.FireAlarmControlQueueConfig;
+import org.wso2.carbon.device.mgt.iot.config.controlqueue.DeviceControlQueueConfig;
 import org.wso2.carbon.device.mgt.iot.config.datastore.DataStoresConfigAdapter;
-import org.wso2.carbon.device.mgt.iot.config.datastore.FireAlarmDataStoreConfig;
+import org.wso2.carbon.device.mgt.iot.config.datastore.DeviceDataStoreConfig;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -32,51 +32,51 @@ import java.util.Map;
  * Represents Iot Device Mgt configuration.
  */
 @XmlRootElement(name = "FireAlarmDeviceMgtConfiguration")
-public final class FireAlarmManagementConfig {
+public final class DeviceManagementConfig {
 
-	private FireAlarmManagementControllerConfig fireAlarmManagementControllerConfig;
-	private Map<String, FireAlarmDataStoreConfig> fireAlarmMgtDeviceDataStoreConfigMap;
-	private Map<String, FireAlarmControlQueueConfig> fireAlarmControlQueueConfigMap;
-	private FireAlarmManagementSecurityConfig fireAlarmManagementSecurityConfig;
+	private DeviceManagementControllerConfig fireAlarmManagementControllerConfig;
+	private Map<String, DeviceDataStoreConfig> fireAlarmMgtDeviceDataStoreConfigMap;
+	private Map<String, DeviceControlQueueConfig> fireAlarmControlQueueConfigMap;
+	private DeviceManagementSecurityConfig deviceManagementSecurityConfig;
 
 	@XmlElement(name = "DeviceController", nillable = false)
-	public FireAlarmManagementControllerConfig getFireAlarmManagementControllerConfig() {
+	public DeviceManagementControllerConfig getFireAlarmManagementControllerConfig() {
 		return fireAlarmManagementControllerConfig;
 	}
 
-	public void setFireAlarmManagementControllerConfig(FireAlarmManagementControllerConfig fireAlarmMgtDeviceDataStore) {
+	public void setFireAlarmManagementControllerConfig(DeviceManagementControllerConfig fireAlarmMgtDeviceDataStore) {
 		this.fireAlarmManagementControllerConfig = fireAlarmMgtDeviceDataStore;
 	}
 
 	@XmlElement(name = "DataStores", nillable = false)
 	@XmlJavaTypeAdapter(DataStoresConfigAdapter.class)
-	public Map<String, FireAlarmDataStoreConfig> getDataStoresMap() {
+	public Map<String, DeviceDataStoreConfig> getDataStoresMap() {
 		return fireAlarmMgtDeviceDataStoreConfigMap;
 	}
 
 	public void setDataStoresMap(
-			Map<String, FireAlarmDataStoreConfig> fireAlarmMgtDeviceDataStoreConfigMap) {
+			Map<String, DeviceDataStoreConfig> fireAlarmMgtDeviceDataStoreConfigMap) {
 		this.fireAlarmMgtDeviceDataStoreConfigMap = fireAlarmMgtDeviceDataStoreConfigMap;
 	}
 
 	@XmlElement(name = "ControlQueues", nillable = false)
 	@XmlJavaTypeAdapter(ControlQueuesConfigAdapter.class)
-	public Map<String, FireAlarmControlQueueConfig> getControlQueuesMap() {
+	public Map<String, DeviceControlQueueConfig> getControlQueuesMap() {
 		return fireAlarmControlQueueConfigMap;
 	}
 
 	public void setControlQueuesMap(
-			Map<String, FireAlarmControlQueueConfig> fireAlarmControlQueueConfigMap) {
+			Map<String, DeviceControlQueueConfig> fireAlarmControlQueueConfigMap) {
 		this.fireAlarmControlQueueConfigMap = fireAlarmControlQueueConfigMap;
 	}
 
 	@XmlElement(name = "Security", nillable = false)
-	public FireAlarmManagementSecurityConfig getFireAlarmManagementSecurityConfig() {
-		return fireAlarmManagementSecurityConfig;
+	public DeviceManagementSecurityConfig getDeviceManagementSecurityConfig() {
+		return deviceManagementSecurityConfig;
 	}
 
-	public void setFireAlarmManagementSecurityConfig(FireAlarmManagementSecurityConfig fireAlarmManagementSecurityConfig) {
-		this.fireAlarmManagementSecurityConfig = fireAlarmManagementSecurityConfig;
+	public void setDeviceManagementSecurityConfig(DeviceManagementSecurityConfig deviceManagementSecurityConfig) {
+		this.deviceManagementSecurityConfig = deviceManagementSecurityConfig;
 	}
 
 }

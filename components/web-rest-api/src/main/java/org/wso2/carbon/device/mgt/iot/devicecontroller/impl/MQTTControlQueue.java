@@ -18,10 +18,10 @@ package org.wso2.carbon.device.mgt.iot.devicecontroller.impl;
 
 import org.apache.log4j.Logger;
 import org.eclipse.paho.client.mqttv3.*;
-import org.wso2.carbon.device.mgt.iot.config.FireAlarmConfigurationManager;
-import org.wso2.carbon.device.mgt.iot.config.FireAlarmManagementConfig;
-import org.wso2.carbon.device.mgt.iot.config.FireAlarmManagementControllerConfig;
-import org.wso2.carbon.device.mgt.iot.config.controlqueue.FireAlarmControlQueueConfig;
+import org.wso2.carbon.device.mgt.iot.config.DeviceConfigurationManager;
+import org.wso2.carbon.device.mgt.iot.config.DeviceManagementConfig;
+import org.wso2.carbon.device.mgt.iot.config.DeviceManagementControllerConfig;
+import org.wso2.carbon.device.mgt.iot.config.controlqueue.DeviceControlQueueConfig;
 import org.wso2.carbon.device.mgt.iot.devicecontroller.ControlQueueConnector;
 import org.wso2.carbon.device.mgt.iot.exception.DeviceControllerServiceException;
 
@@ -74,17 +74,17 @@ public class MQTTControlQueue implements ControlQueueConnector, MqttCallback {
         String mqttUrl = "";
         String mqttPort = "";
 
-        FireAlarmManagementConfig config = null;
+        DeviceManagementConfig config = null;
 
         try {
-            config = FireAlarmConfigurationManager.getInstance().getFireAlarmMgtConfig();
+            config = DeviceConfigurationManager.getInstance().getFireAlarmMgtConfig();
 
             // controller configurations
-            FireAlarmManagementControllerConfig controllerConfig = config.getFireAlarmManagementControllerConfig();
+            DeviceManagementControllerConfig controllerConfig = config.getFireAlarmManagementControllerConfig();
 
             controlQueue = controllerConfig.getDeviceControlQueue();
 
-            FireAlarmControlQueueConfig controlQueueConfig = config.getControlQueuesMap().get(controlQueue);
+            DeviceControlQueueConfig controlQueueConfig = config.getControlQueuesMap().get(controlQueue);
 
             mqttUrl = controlQueueConfig.getEndPoint();
             mqttPort = controlQueueConfig.getPort();

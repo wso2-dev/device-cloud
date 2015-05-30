@@ -25,7 +25,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  * Class for holding security config data.
  */
 @XmlRootElement(name = "Security")
-public class FireAlarmManagementSecurityConfig {
+public class DeviceManagementSecurityConfig {
 
 	private String client;
 	private String trustStorePassword;

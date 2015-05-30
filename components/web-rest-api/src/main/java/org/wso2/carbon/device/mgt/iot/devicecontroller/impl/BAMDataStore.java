@@ -21,10 +21,10 @@ import org.wso2.carbon.databridge.agent.thrift.DataPublisher;
 import org.wso2.carbon.databridge.agent.thrift.exception.AgentException;
 import org.wso2.carbon.databridge.commons.exception.*;
 import org.wso2.carbon.device.mgt.iot.arduino.firealarm.constants.FireAlarmConstants;
-import org.wso2.carbon.device.mgt.iot.config.FireAlarmConfigurationManager;
-import org.wso2.carbon.device.mgt.iot.config.FireAlarmManagementConfig;
-import org.wso2.carbon.device.mgt.iot.config.FireAlarmManagementControllerConfig;
-import org.wso2.carbon.device.mgt.iot.config.datastore.FireAlarmDataStoreConfig;
+import org.wso2.carbon.device.mgt.iot.config.DeviceConfigurationManager;
+import org.wso2.carbon.device.mgt.iot.config.DeviceManagementConfig;
+import org.wso2.carbon.device.mgt.iot.config.DeviceManagementControllerConfig;
+import org.wso2.carbon.device.mgt.iot.config.datastore.DeviceDataStoreConfig;
 import org.wso2.carbon.device.mgt.iot.devicecontroller.DataStoreConnector;
 import org.wso2.carbon.device.mgt.iot.exception.DeviceControllerServiceException;
 
@@ -59,14 +59,14 @@ public class BAMDataStore implements DataStoreConnector {
         String bamUrl = "";
         String bamPort = "";
 
-        FireAlarmManagementConfig config = null;
+        DeviceManagementConfig config = null;
         try {
-            config = FireAlarmConfigurationManager.getInstance().getFireAlarmMgtConfig();
+            config = DeviceConfigurationManager.getInstance().getFireAlarmMgtConfig();
             // controller configurations
-            FireAlarmManagementControllerConfig controllerConfig = config.getFireAlarmManagementControllerConfig();
+            DeviceManagementControllerConfig controllerConfig = config.getFireAlarmManagementControllerConfig();
             dataStore = controllerConfig.getDeviceDataStore();
 
-            FireAlarmDataStoreConfig dataStoreConfig = config.getDataStoresMap().get(dataStore);
+            DeviceDataStoreConfig dataStoreConfig = config.getDataStoresMap().get(dataStore);
 
             bamUrl = dataStoreConfig.getEndPoint();
             bamPort = dataStoreConfig.getPort();
@@ -135,7 +135,7 @@ public class BAMDataStore implements DataStoreConnector {
 
         try {
             switch (description) {
-            case "TEMPERATURE":
+            case "TEMP":
                 log.info("Stream definition set to FireAlarm-Temperature");
                 DEVICE_DATA_STREAM = BAM_DATA_PUBLISHER.defineStream(FireAlarmConstants.TEMPERATURE_STREAM_DEFINITION);
                 break;

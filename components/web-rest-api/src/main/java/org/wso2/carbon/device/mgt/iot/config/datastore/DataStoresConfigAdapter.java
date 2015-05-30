@@ -24,16 +24,16 @@ import java.util.List;
 import java.util.Map;
 
 public class DataStoresConfigAdapter extends
-		XmlAdapter<FireAlarmDataStoreConfigurations, Map<String, FireAlarmDataStoreConfig>> {
+		XmlAdapter<FireAlarmDataStoreConfigurations, Map<String, DeviceDataStoreConfig>> {
 
 	@Override
-	public Map<String, FireAlarmDataStoreConfig> unmarshal(
+	public Map<String, DeviceDataStoreConfig> unmarshal(
 			FireAlarmDataStoreConfigurations fireAlarmDataStoreConfigurations) throws Exception {
 
-		Map<String, FireAlarmDataStoreConfig> fireAlarmDataStoreConfigMap
-				= new HashMap<String, FireAlarmDataStoreConfig>();
+		Map<String, DeviceDataStoreConfig> fireAlarmDataStoreConfigMap
+				= new HashMap<String, DeviceDataStoreConfig>();
 
-		for (FireAlarmDataStoreConfig iotDataSourceConfig : fireAlarmDataStoreConfigurations
+		for (DeviceDataStoreConfig iotDataSourceConfig : fireAlarmDataStoreConfigurations
 				.getIotDataSourceConfigs()) {
 			fireAlarmDataStoreConfigMap.put(iotDataSourceConfig.getType(), iotDataSourceConfig);
 		}
@@ -43,13 +43,13 @@ public class DataStoresConfigAdapter extends
 
 	@Override
 	public FireAlarmDataStoreConfigurations marshal(
-			Map<String, FireAlarmDataStoreConfig> fireAlarmDataStoreConfigMap) throws Exception {
+			Map<String, DeviceDataStoreConfig> fireAlarmDataStoreConfigMap) throws Exception {
 
 		FireAlarmDataStoreConfigurations fireAlarmDataStoreConfigurations
 				= new FireAlarmDataStoreConfigurations();
 
 		fireAlarmDataStoreConfigurations.setIotDataSourceConfigs(
-				(List<FireAlarmDataStoreConfig>) fireAlarmDataStoreConfigMap.values());
+				(List<DeviceDataStoreConfig>) fireAlarmDataStoreConfigMap.values());
 
 		return fireAlarmDataStoreConfigurations;
 	}

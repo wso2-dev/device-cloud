@@ -18,12 +18,12 @@ package org.wso2.carbon.device.mgt.iot.services;
 
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.log4j.Logger;
-import org.wso2.carbon.device.mgt.iot.config.FireAlarmConfigurationManager;
-import org.wso2.carbon.device.mgt.iot.config.FireAlarmManagementConfig;
-import org.wso2.carbon.device.mgt.iot.config.FireAlarmManagementControllerConfig;
-import org.wso2.carbon.device.mgt.iot.config.FireAlarmManagementSecurityConfig;
-import org.wso2.carbon.device.mgt.iot.config.controlqueue.FireAlarmControlQueueConfig;
-import org.wso2.carbon.device.mgt.iot.config.datastore.FireAlarmDataStoreConfig;
+import org.wso2.carbon.device.mgt.iot.config.DeviceConfigurationManager;
+import org.wso2.carbon.device.mgt.iot.config.DeviceManagementConfig;
+import org.wso2.carbon.device.mgt.iot.config.DeviceManagementControllerConfig;
+import org.wso2.carbon.device.mgt.iot.config.DeviceManagementSecurityConfig;
+import org.wso2.carbon.device.mgt.iot.config.controlqueue.DeviceControlQueueConfig;
+import org.wso2.carbon.device.mgt.iot.config.datastore.DeviceDataStoreConfig;
 import org.wso2.carbon.device.mgt.iot.devicecontroller.ControlQueueConnector;
 import org.wso2.carbon.device.mgt.iot.devicecontroller.DataStoreConnector;
 import org.wso2.carbon.device.mgt.iot.exception.DeviceControllerServiceException;
@@ -44,8 +44,8 @@ public class DeviceControllerService {
     private static Logger log = Logger.getLogger(DeviceControllerService.class);
     private static DataStoreConnector iotDataStore = null;
     private static ControlQueueConnector iotControlQueue = null;
-    private static FireAlarmDataStoreConfig dataStoreConfig = null;
-    private static FireAlarmControlQueueConfig controlQueueConfig = null;
+    private static DeviceDataStoreConfig dataStoreConfig = null;
+    private static DeviceControlQueueConfig controlQueueConfig = null;
 
     static {
 
@@ -53,17 +53,17 @@ public class DeviceControllerService {
         String trustStorePassword = null;
         File certificateFile = null;
 
-        FireAlarmManagementConfig config = null;
+        DeviceManagementConfig config = null;
 
         try {
-            config = FireAlarmConfigurationManager.getInstance().getFireAlarmMgtConfig();
+            config = DeviceConfigurationManager.getInstance().getFireAlarmMgtConfig();
         } catch (DeviceControllerServiceException ex) {
             log.error(ex.getMessage(), ex);
         }
 
         if (config != null) {
             /* reading security configurations */
-            FireAlarmManagementSecurityConfig securityConfig = config.getFireAlarmManagementSecurityConfig();
+            DeviceManagementSecurityConfig securityConfig = config.getDeviceManagementSecurityConfig();
             trustStoreFile = securityConfig.getClient();
             trustStorePassword = securityConfig.getTrustStorePassword();
             certificateFile = new ResourceFileLoader("/resources/security/" + trustStoreFile).getFile();
@@ -79,13 +79,13 @@ public class DeviceControllerService {
             }
 
             // controller configurations
-            FireAlarmManagementControllerConfig controllerConfig = config.getFireAlarmManagementControllerConfig();
+            DeviceManagementControllerConfig controllerConfig = config.getFireAlarmManagementControllerConfig();
 
             // reading data store configurations
             String deviceDataStoreKey = controllerConfig.getDeviceDataStore();
             log.info("Active Data-Store: " + deviceDataStoreKey);
 
-            dataStoreConfig = (FireAlarmDataStoreConfig) config.getDataStoresMap().get(deviceDataStoreKey);
+            dataStoreConfig = (DeviceDataStoreConfig) config.getDataStoresMap().get(deviceDataStoreKey);
             if (dataStoreConfig == null) {
                 log.error("Error occurred when trying to read data stores configurations");
             }
@@ -106,7 +106,7 @@ public class DeviceControllerService {
 
             // reading control queue configurations
             String controlQueueKey = controllerConfig.getDeviceControlQueue();
-            controlQueueConfig = (FireAlarmControlQueueConfig) config.getControlQueuesMap().get(controlQueueKey);
+            controlQueueConfig = (DeviceControlQueueConfig) config.getControlQueuesMap().get(controlQueueKey);
             if (controlQueueConfig == null) {
                 log.error("Error occurred when trying to read control queue configurations");
             }

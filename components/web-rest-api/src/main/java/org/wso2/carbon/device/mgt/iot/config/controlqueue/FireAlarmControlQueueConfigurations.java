@@ -28,15 +28,14 @@ import java.util.List;
 public class FireAlarmControlQueueConfigurations {
 
     @XmlElement(name = "ControlQueue", nillable = true)
-    private List<FireAlarmControlQueueConfig> fireAlarmControlQueueConfigs;
+    private List<DeviceControlQueueConfig> deviceControlQueueConfigs;
 
-    public List<FireAlarmControlQueueConfig> getFireAlarmControlQueueConfigs() {
-        return fireAlarmControlQueueConfigs;
+    public List<DeviceControlQueueConfig> getDeviceControlQueueConfigs() {
+        return deviceControlQueueConfigs;
     }
 
-    public void setFireAlarmControlQueueConfigs(
-			List<FireAlarmControlQueueConfig> fireAlarmControlQueueConfigs) {
-        this.fireAlarmControlQueueConfigs = fireAlarmControlQueueConfigs;
+    public void setDeviceControlQueueConfigs(List<DeviceControlQueueConfig> deviceControlQueueConfigs) {
+        this.deviceControlQueueConfigs = deviceControlQueueConfigs;
     }
 
 }

@@ -24,17 +24,17 @@ import java.util.List;
 import java.util.Map;
 
 public class ControlQueuesConfigAdapter extends
-		XmlAdapter<FireAlarmControlQueueConfigurations, Map<String, FireAlarmControlQueueConfig>> {
+		XmlAdapter<FireAlarmControlQueueConfigurations, Map<String, DeviceControlQueueConfig>> {
 
 	@Override
-	public Map<String, FireAlarmControlQueueConfig> unmarshal(
+	public Map<String, DeviceControlQueueConfig> unmarshal(
 			FireAlarmControlQueueConfigurations fireAlarmControlQueueConfigurations) throws Exception {
 
-		Map<String, FireAlarmControlQueueConfig> fireAlarmControlQueueConfigMap
-				= new HashMap<String, FireAlarmControlQueueConfig>();
+		Map<String, DeviceControlQueueConfig> fireAlarmControlQueueConfigMap
+				= new HashMap<String, DeviceControlQueueConfig>();
 
-		for (FireAlarmControlQueueConfig iotControlQueueConfig : fireAlarmControlQueueConfigurations
-				.getFireAlarmControlQueueConfigs()) {
+		for (DeviceControlQueueConfig iotControlQueueConfig : fireAlarmControlQueueConfigurations
+				.getDeviceControlQueueConfigs()) {
 			fireAlarmControlQueueConfigMap.put(iotControlQueueConfig.getType(), iotControlQueueConfig);
 		}
 
@@ -43,13 +43,13 @@ public class ControlQueuesConfigAdapter extends
 
 	@Override
 	public FireAlarmControlQueueConfigurations marshal(
-			Map<String, FireAlarmControlQueueConfig> fireAlarmControlQueueConfigMap) throws Exception {
+			Map<String, DeviceControlQueueConfig> fireAlarmControlQueueConfigMap) throws Exception {
 
 		FireAlarmControlQueueConfigurations fireAlarmControlQueueConfigurations
 				= new FireAlarmControlQueueConfigurations();
 
-		fireAlarmControlQueueConfigurations.setFireAlarmControlQueueConfigs(
-				(List<FireAlarmControlQueueConfig>) fireAlarmControlQueueConfigMap.values());
+		fireAlarmControlQueueConfigurations.setDeviceControlQueueConfigs(
+				(List<DeviceControlQueueConfig>) fireAlarmControlQueueConfigMap.values());
 
 		return fireAlarmControlQueueConfigurations;
 	}

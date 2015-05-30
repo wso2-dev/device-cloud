@@ -26,7 +26,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  * Class for holding data store configurations.
  */
 @XmlRootElement(name = "DataStore")
-public class FireAlarmDataStoreConfig {
+public class DeviceDataStoreConfig {
 
     private String type;
 	private String handlerClass;

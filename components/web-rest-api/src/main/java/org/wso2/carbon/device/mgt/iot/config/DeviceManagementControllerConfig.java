@@ -31,7 +31,7 @@ import java.util.Map;
  * Class for holding device controller data.
  */
 @XmlRootElement(name = "DeviceController")
-public class FireAlarmManagementControllerConfig {
+public class DeviceManagementControllerConfig {
 
 	private String deviceDataStore;
 	private String deviceControlQueue;

@@ -28,14 +28,14 @@ import java.util.List;
 public class FireAlarmDataStoreConfigurations {
 
     @XmlElement(name = "DataStore", nillable = true)
-    private List<FireAlarmDataStoreConfig> fireAlarmDataStoreConfigs;
+    private List<DeviceDataStoreConfig> deviceDataStoreConfigs;
 
-    public List<FireAlarmDataStoreConfig> getIotDataSourceConfigs() {
-        return fireAlarmDataStoreConfigs;
+    public List<DeviceDataStoreConfig> getIotDataSourceConfigs() {
+        return deviceDataStoreConfigs;
     }
 
-    public void setIotDataSourceConfigs(List<FireAlarmDataStoreConfig> fireAlarmDataStoreConfigs) {
-        this.fireAlarmDataStoreConfigs = fireAlarmDataStoreConfigs;
+    public void setIotDataSourceConfigs(List<DeviceDataStoreConfig> deviceDataStoreConfigs) {
+        this.deviceDataStoreConfigs = deviceDataStoreConfigs;
     }
 
 }

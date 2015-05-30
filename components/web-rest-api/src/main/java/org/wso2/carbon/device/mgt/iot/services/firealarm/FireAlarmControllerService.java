@@ -19,10 +19,10 @@ package org.wso2.carbon.device.mgt.iot.services.firealarm;
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.log4j.Logger;
 import org.wso2.carbon.device.mgt.common.DeviceManagementException;
-import org.wso2.carbon.device.mgt.iot.config.FireAlarmConfigurationManager;
-import org.wso2.carbon.device.mgt.iot.config.FireAlarmManagementConfig;
-import org.wso2.carbon.device.mgt.iot.config.FireAlarmManagementControllerConfig;
-import org.wso2.carbon.device.mgt.iot.config.controlqueue.FireAlarmControlQueueConfig;
+import org.wso2.carbon.device.mgt.iot.config.DeviceConfigurationManager;
+import org.wso2.carbon.device.mgt.iot.config.DeviceManagementConfig;
+import org.wso2.carbon.device.mgt.iot.config.DeviceManagementControllerConfig;
+import org.wso2.carbon.device.mgt.iot.config.controlqueue.DeviceControlQueueConfig;
 import org.wso2.carbon.device.mgt.iot.exception.DeviceControllerServiceException;
 import org.wso2.carbon.device.mgt.iot.services.DeviceControllerService;
 
@@ -45,21 +45,21 @@ public class FireAlarmControllerService {
     private static MQTTSubscriber mqttSubscriber;
 
     static {
-        FireAlarmManagementConfig config = null;
+        DeviceManagementConfig config = null;
 
         try {
-            config = FireAlarmConfigurationManager.getInstance().getFireAlarmMgtConfig();
+            config = DeviceConfigurationManager.getInstance().getFireAlarmMgtConfig();
         } catch (DeviceControllerServiceException ex) {
             log.error(ex.getMessage());
         }
 
         if (config != null) {
             // controller configurations
-            FireAlarmManagementControllerConfig controllerConfig = config.getFireAlarmManagementControllerConfig();
+            DeviceManagementControllerConfig controllerConfig = config.getFireAlarmManagementControllerConfig();
 
             // reading control queue configurations
             String controlQueueKey = controllerConfig.getDeviceControlQueue();
-            FireAlarmControlQueueConfig controlQueueConfig = config.getControlQueuesMap().get(controlQueueKey);
+            DeviceControlQueueConfig controlQueueConfig = config.getControlQueuesMap().get(controlQueueKey);
             if (controlQueueConfig == null) {
                 log.error("Error occurred when trying to read control queue configurations");
             }
@@ -127,7 +127,7 @@ public class FireAlarmControllerService {
             @PathParam("deviceId") String deviceId, @Context HttpServletResponse response) {
         String result = null;
         LinkedList<String> deviceControlList = internalControlsQueue.get(deviceId);
-log.info(deviceControlList);
+
         if (deviceControlList == null) {
             result = "No controls have been set for device " + deviceId + " of owner " + owner;
             response.setStatus(HttpStatus.SC_NO_CONTENT);
@@ -135,6 +135,7 @@ log.info(deviceControlList);
             try {
                 result = deviceControlList.remove();
                 response.setStatus(HttpStatus.SC_ACCEPTED);
+                response.addHeader("Control", result);
             } catch (NoSuchElementException ex) {
                 result = "There are no more controls for device " + deviceId + " of owner " + owner;
                 response.setStatus(HttpStatus.SC_NO_CONTENT);

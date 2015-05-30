@@ -26,7 +26,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  * Class for holding data store configurations.
  */
 @XmlRootElement(name = "ControlQueue")
-public class FireAlarmControlQueueConfig {
+public class DeviceControlQueueConfig {
 
     private String type;
 	private String handlerClass;
