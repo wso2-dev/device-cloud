@@ -167,33 +167,43 @@ public class FireAlarmControllerService {
         log.info("Recieved Sensor Data Values: " + sensorValues);
 
         int delimiterOne = sensorValues.indexOf("-");
-        int delimiterTwo = sensorValues.lastIndexOf("-");
-        String temperature = sensorValues.substring(0, delimiterOne);
-        String bulb = sensorValues.substring(delimiterOne + 1, delimiterTwo);
-        String fan = sensorValues.substring(delimiterTwo + 1, sensorValues.length());
 
-        sensorValues = "Temperature: " + temperature + "\tBulb Status: " + bulb + "\tFan Status: " + fan;
-        log.info(sensorValues);
+        if(delimiterOne == -1) {
 
-        result = DeviceControllerService
-                .pushData(dataMsg.owner, "FireAlarm", dataMsg.deviceId, System.currentTimeMillis(), "DeviceData", temperature,
-                        "TEMP", response);
+            result = DeviceControllerService
+                    .pushData(dataMsg.owner, "FireAlarm", dataMsg.deviceId, System.currentTimeMillis(), "DeviceData",
+                            dataMsg.value, dataMsg.reply, response);
 
-        if (!result.equals("Data Published Succesfully...")) {
-            return result;
+        } else {
+            int delimiterTwo = sensorValues.lastIndexOf("-");
+            String temperature = sensorValues.substring(0, delimiterOne);
+            String bulb = sensorValues.substring(delimiterOne + 1, delimiterTwo);
+            String fan = sensorValues.substring(delimiterTwo + 1, sensorValues.length());
+
+            sensorValues = "Temperature: " + temperature + "\tBulb Status: " + bulb + "\tFan Status: " + fan;
+            log.info(sensorValues);
+
+            result = DeviceControllerService
+                    .pushData(dataMsg.owner, "FireAlarm", dataMsg.deviceId, System.currentTimeMillis(), "DeviceData",
+                            temperature, "TEMP", response);
+
+            if (!result.equals("Data Published Succesfully...")) {
+                return result;
+            }
+
+            result = DeviceControllerService
+                    .pushData(dataMsg.owner, "FireAlarm", dataMsg.deviceId, System.currentTimeMillis(), "DeviceData",
+                            bulb, "BULB", response);
+
+            if (!result.equals("Data Published Succesfully...")) {
+                return result;
+            }
+
+            result = DeviceControllerService
+                    .pushData(dataMsg.owner, "FireAlarm", dataMsg.deviceId, System.currentTimeMillis(), "DeviceData",
+                            fan, "FAN", response);
+
         }
-
-        result = DeviceControllerService
-                .pushData(dataMsg.owner, "FireAlarm", dataMsg.deviceId, System.currentTimeMillis(), "DeviceData", bulb,
-                        "BULB", response);
-
-        if (!result.equals("Data Published Succesfully...")) {
-            return result;
-        }
-
-        result = DeviceControllerService
-                .pushData(dataMsg.owner, "FireAlarm", dataMsg.deviceId, System.currentTimeMillis(), "DeviceData", fan,
-                        "FAN", response);
         return "SUCCESS";
     }
 }

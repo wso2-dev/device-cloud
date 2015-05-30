@@ -100,10 +100,50 @@ public class SenseBotControllerService {
             final DeviceJSON dataMsg, @Context HttpServletResponse response) {
         String result = null;
 
-        result = DeviceControllerService
-                .pushData(dataMsg.owner, "FireAlarm", dataMsg.deviceId, System.currentTimeMillis(), "DeviceData",
-                        dataMsg.value, dataMsg.reply, response);
-        return result;
+        String sensorValues = dataMsg.value;
+        log.info("Recieved Sensor Data Values: " + sensorValues);
+
+        //TEMP-PIR-SONAR-MOTION     27-YES-45-ON
+
+        int delimiterOne = sensorValues.indexOf("-");
+
+        if(delimiterOne == -1) {
+
+            result = DeviceControllerService
+                    .pushData(dataMsg.owner, "FireAlarm", dataMsg.deviceId, System.currentTimeMillis(), "DeviceData",
+                            dataMsg.value, dataMsg.reply, response);
+
+        } else {
+            int delimiterTwo = sensorValues.lastIndexOf("-");
+            String temperature = sensorValues.substring(0, delimiterOne);
+            String bulb = sensorValues.substring(delimiterOne + 1, delimiterTwo);
+            String fan = sensorValues.substring(delimiterTwo + 1, sensorValues.length());
+
+            sensorValues = "Temperature: " + temperature + "\tBulb Status: " + bulb + "\tFan Status: " + fan;
+            log.info(sensorValues);
+
+            result = DeviceControllerService
+                    .pushData(dataMsg.owner, "FireAlarm", dataMsg.deviceId, System.currentTimeMillis(), "DeviceData",
+                            temperature, "TEMP", response);
+
+            if (!result.equals("Data Published Succesfully...")) {
+                return result;
+            }
+
+            result = DeviceControllerService
+                    .pushData(dataMsg.owner, "FireAlarm", dataMsg.deviceId, System.currentTimeMillis(), "DeviceData",
+                            bulb, "BULB", response);
+
+            if (!result.equals("Data Published Succesfully...")) {
+                return result;
+            }
+
+            result = DeviceControllerService
+                    .pushData(dataMsg.owner, "FireAlarm", dataMsg.deviceId, System.currentTimeMillis(), "DeviceData",
+                            fan, "FAN", response);
+
+        }
+        return "SUCCESS";
     }
 
     private String sendCommand(String deviceIp, int deviceServerPort, String motionType) {
@@ -117,6 +157,8 @@ public class SenseBotControllerService {
 
         String result = null;
         URL url = null;
+        int responseCode = 200;
+
         try {
             url = new URL(urlString);
         } catch (MalformedURLException e) {
@@ -131,16 +173,18 @@ public class SenseBotControllerService {
         try {
             httpConn.setRequestMethod(HttpMethod.GET);
             httpConn.setRequestProperty("User-Agent", "WSO2 Carbon Server");
-            int responseCode = httpConn.getResponseCode();
+            responseCode = httpConn.getResponseCode();
             result = "" + responseCode + HttpStatus.getStatusText(responseCode) + "(No reply from Robot)";
 
             log.info("\nSending 'GET' request to URL : " + urlString);
             log.info("Response Code : " + responseCode);
         } catch (ProtocolException e) {
-            log.error("Protocal mismatch exception ccured whilst trying to 'GET' resource");
+            log.error("Protocol mismatch exception occured whilst trying to 'GET' resource");
         } catch (IOException e) {
             log.error(
                     "Error occured whilst reading return code from server. This could be because the server did not return anything");
+            result = "" + responseCode + " " + HttpStatus.getStatusText(responseCode) + "(No reply from Robot)";
+            return result;
         }
 
         return result;
