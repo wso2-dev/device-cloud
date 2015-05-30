@@ -24,15 +24,12 @@ import org.wso2.carbon.device.mgt.common.DeviceManagementException;
 import org.wso2.carbon.device.mgt.iot.arduino.firealarm.constants.FireAlarmConstants;
 import org.wso2.carbon.device.mgt.iot.services.common.DevicesManager;
 import org.wso2.carbon.device.mgt.iot.web.register.DeviceManagement;
-import org.wso2.carbon.utils.CarbonUtils;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
 import java.io.File;
 import java.nio.ByteBuffer;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.UUID;
 
 //@Path("/FireAlarmDeviceManager")
@@ -118,7 +115,7 @@ public class FireAlarmManagerService {
 	@GET
 	@Consumes("application/json")
 	@Produces("application/json")
-	public Device getDevice(@QueryParam("deviceId") String deviceId){
+	public Device getDevice(@QueryParam("deviceId") String deviceId) {
 
 		DeviceManagement deviceManagement = new DeviceManagement();
 		DeviceIdentifier deviceIdentifier = new DeviceIdentifier();
@@ -130,10 +127,9 @@ public class FireAlarmManagerService {
 
 			return device;
 		} catch (DeviceManagementException ex) {
-			log.error("Error occurred while retrieving device with Id "+deviceId);
+			log.error("Error occurred while retrieving device with Id " + deviceId);
 			return null;
 		}
-
 
 	}
 
@@ -146,18 +142,11 @@ public class FireAlarmManagerService {
 			return Response.status(400).build();//bad request
 		}
 
-		/* create new device id */
+		//create new device id
 		String deviceId = shortUUID();
 
-		String sep = File.separator;
-		String sketchFolder = "repository" + sep + "resources" + sep + "sketches";
-		String archivesPath = CarbonUtils.getCarbonHome() + sep + sketchFolder + sep + "archives"
-				+ sep + deviceId;
-		String templateSketchPath = sketchFolder + sep + FireAlarmConstants.DEVICE_TYPE;
-
-		Map<String, String> contextParams = new HashMap<String, String>();
-		contextParams.put("DEVICE_OWNER", owner);
-		contextParams.put("DEVICE_ID", deviceId);
+		//create token
+		String token = UUID.randomUUID().toString();
 
 		//adding registering data
 		try {
@@ -173,8 +162,8 @@ public class FireAlarmManagerService {
 		DevicesManager devicesManager = new DevicesManager();
 		File zipFile = null;
 		try {
-			zipFile = devicesManager.downloadSketch(owner, FireAlarmConstants.DEVICE_TYPE,
-													deviceId);
+			zipFile = devicesManager.downloadSketch(owner, FireAlarmConstants.DEVICE_TYPE, deviceId,
+													token);
 		} catch (DeviceManagementException ex) {
 			return Response.status(500).entity("Error occurred while creating zip file").build();
 		}

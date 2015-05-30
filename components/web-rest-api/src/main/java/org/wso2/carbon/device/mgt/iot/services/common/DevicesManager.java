@@ -59,7 +59,7 @@ public class DevicesManager {
 
 	}
 
-	public File downloadSketch(String owner, String deviceType, String deviceId)
+	public File downloadSketch(String owner, String deviceType, String deviceId, String token)
 			throws DeviceManagementException {
 
 		if (owner == null || deviceType == null) {
@@ -75,6 +75,7 @@ public class DevicesManager {
 		Map<String, String> contextParams = new HashMap<String, String>();
 		contextParams.put("DEVICE_OWNER", owner);
 		contextParams.put("DEVICE_ID", deviceId);
+		contextParams.put("DEVICE_TOKEN", token);
 
 		DeviceManagement deviceManagement = new DeviceManagement();
 		File zipFile = deviceManagement.getSketchArchive(archivesPath, templateSketchPath,
