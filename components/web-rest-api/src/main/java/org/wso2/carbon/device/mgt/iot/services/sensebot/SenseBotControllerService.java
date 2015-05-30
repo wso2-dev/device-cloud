@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.wso2.carbon.device.mgt.iot.services.firealarm;
+package org.wso2.carbon.device.mgt.iot.services.sensebot;
 
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.log4j.Logger;
@@ -37,9 +37,10 @@ import java.util.LinkedList;
 import java.util.NoSuchElementException;
 
 //@Path(value = "/FireAlarmController")
-public class FireAlarmControllerService {
+public class SenseBotControllerService {
 
-    private static Logger log = Logger.getLogger(FireAlarmControllerService.class);
+    private static Logger log = Logger.getLogger(
+            org.wso2.carbon.device.mgt.iot.services.firealarm.FireAlarmControllerService.class);
 
     public static final String CONTROL_QUEUE_ENDPOINT;
     public static final HashMap<String, LinkedList<String>> replyMsgQueue;

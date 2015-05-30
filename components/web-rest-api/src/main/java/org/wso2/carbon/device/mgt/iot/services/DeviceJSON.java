@@ -1,4 +1,4 @@
-package org.wso2.carbon.device.mgt.iot.services.firealarm;
+package org.wso2.carbon.device.mgt.iot.services;
 
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 

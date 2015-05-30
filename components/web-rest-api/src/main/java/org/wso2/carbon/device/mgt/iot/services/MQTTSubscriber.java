@@ -14,11 +14,12 @@
  * limitations under the License.
  */
 
-package org.wso2.carbon.device.mgt.iot.services.firealarm;
+package org.wso2.carbon.device.mgt.iot.services;
 
 import org.apache.log4j.Logger;
 import org.eclipse.paho.client.mqttv3.*;
 import org.wso2.carbon.device.mgt.common.DeviceManagementException;
+import org.wso2.carbon.device.mgt.iot.services.firealarm.FireAlarmControllerService;
 
 import java.io.File;
 import java.util.LinkedList;
@@ -28,15 +29,16 @@ public class MQTTSubscriber implements MqttCallback {
     private static Logger log = Logger.getLogger(MQTTSubscriber.class);
 
     private MqttClient client;
-    private MqttConnectOptions options;
     private String clientId = "out:";
-    private String subscribeTopic =
-            "wso2" + File.separator + "iot" + File.separator + "+" + File.separator + "FireAlarm" + File.separator
-                    + "#";
+    private MqttConnectOptions options;
+    private String subscribeTopic = "wso2" + File.separator + "iot" + File.separator + "+" + File.separator;
+    private String clientWillTopic;
     // topic needs to be set from outside
 
-    private MQTTSubscriber(String owner, String deviceUuid) {
-        this.clientId += owner + ":" + deviceUuid;
+    private MQTTSubscriber(String owner, String deviceType) {
+        this.clientId += owner + ":" + deviceType;
+        this.subscribeTopic += deviceType + File.separator + "#";
+        this.clientWillTopic = deviceType.toLowerCase() + File.separator + "disconnection";
         this.initSubscriber();
     }
 
@@ -54,7 +56,7 @@ public class MQTTSubscriber implements MqttCallback {
 
         options = new MqttConnectOptions();
         options.setCleanSession(false);
-        options.setWill("fireAlarm/disconnection", "crashed".getBytes(), 2, true);
+        options.setWill(clientWillTopic, "connection crashed".getBytes(), 2, true);
         client.setCallback(this);
     }
 

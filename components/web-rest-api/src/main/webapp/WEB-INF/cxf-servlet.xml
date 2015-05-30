@@ -55,7 +55,7 @@
         </jaxrs:serviceBeans>
     </jaxrs:server>
 
-    <bean id="mqttSubscriber" class="org.wso2.carbon.device.mgt.iot.services.firealarm.MQTTSubscriber">
+    <bean id="mqttSubscriber" class="org.wso2.carbon.device.mgt.iot.services.MQTTSubscriber">
         <constructor-arg index="0" value="Subscriber"></constructor-arg>
         <constructor-arg index="1" value="FireAlarm"></constructor-arg>
     </bean>
