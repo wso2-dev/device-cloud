@@ -18,19 +18,18 @@ package org.wso2.carbon.device.mgt.iot.services.firealarm;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.wso2.carbon.context.PrivilegedCarbonContext;
 import org.wso2.carbon.device.mgt.common.Device;
 import org.wso2.carbon.device.mgt.common.DeviceIdentifier;
 import org.wso2.carbon.device.mgt.common.DeviceManagementException;
-import org.wso2.carbon.device.mgt.common.spi.DeviceMgtService;
 import org.wso2.carbon.device.mgt.iot.arduino.firealarm.constants.FireAlarmConstants;
-import org.wso2.carbon.device.mgt.iot.arduino.firealarm.impl.FireAlarmManager;
+import org.wso2.carbon.device.mgt.iot.services.common.DevicesManager;
 import org.wso2.carbon.device.mgt.iot.web.register.DeviceManagement;
 import org.wso2.carbon.utils.CarbonUtils;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
 import java.io.File;
+import java.nio.ByteBuffer;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -43,8 +42,8 @@ public class FireAlarmManagerService {
 
 	@Path("/registerDevice")
 	@PUT
-	public boolean register(@QueryParam("deviceId") String deviceId, @QueryParam("name") String name,
-						 @QueryParam("owner") String owner)
+	public boolean register(@QueryParam("deviceId") String deviceId,
+							@QueryParam("name") String name, @QueryParam("owner") String owner)
 			throws DeviceManagementException {
 
 		DeviceManagement deviceManagement = new DeviceManagement();
@@ -55,6 +54,7 @@ public class FireAlarmManagerService {
 
 		if (deviceManagement.isExist(deviceIdentifier)) {
 			Response.status(409).build();
+			return false;
 		}
 
 		Device device = new Device();
@@ -62,7 +62,7 @@ public class FireAlarmManagerService {
 
 		device.setDateOfEnrolment(new Date().getTime());
 		device.setDateOfLastUpdate(new Date().getTime());
-//		device.setStatus(true);
+		//		device.setStatus(true);
 
 		device.setName(name);
 		device.setType(FireAlarmConstants.DEVICE_TYPE);
@@ -87,14 +87,12 @@ public class FireAlarmManagerService {
 		boolean removed = deviceManagement.removeDevice(deviceIdentifier);
 		return removed;
 
-
 	}
 
 	@Path("/updateDevice")
 	@POST
 	public boolean updateDevice(@QueryParam("deviceId") String deviceId,
-							 @QueryParam("name") String name)
-			throws DeviceManagementException {
+								@QueryParam("name") String name) throws DeviceManagementException {
 
 		DeviceManagement deviceManagement = new DeviceManagement();
 
@@ -120,55 +118,76 @@ public class FireAlarmManagerService {
 	@GET
 	@Consumes("application/json")
 	@Produces("application/json")
-	public Device getDevice(@QueryParam("deviceId") String deviceId,
-							  @QueryParam("type") String type) throws DeviceManagementException {
+	public Device getDevice(@QueryParam("deviceId") String deviceId){
 
 		DeviceManagement deviceManagement = new DeviceManagement();
 		DeviceIdentifier deviceIdentifier = new DeviceIdentifier();
 		deviceIdentifier.setId(deviceId);
 		deviceIdentifier.setType(FireAlarmConstants.DEVICE_TYPE);
 
+		try {
+			Device device = deviceManagement.getDevice(deviceIdentifier);
 
-		Device device = deviceManagement.getDevice(deviceIdentifier);
+			return device;
+		} catch (DeviceManagementException ex) {
+			log.error("Error occurred while retrieving device with Id "+deviceId);
+			return null;
+		}
 
 
-		return device;
 	}
 
 	@Path("/downloadSketch")
 	@GET
 	@Produces("application/octet-stream")
-	public Response downloadSketch(@QueryParam("owner") String owner,
-								   @QueryParam("type") String type)
-			throws DeviceManagementException {
+	public Response downloadSketch(@QueryParam("owner") String owner) {
 
-		if (owner == null || type == null) {
+		if (owner == null) {
 			return Response.status(400).build();//bad request
 		}
 
-		String a = FireAlarmConstants.DEVICE_TYPE;
 		/* create new device id */
-		String deviceId = UUID.randomUUID().toString();
+		String deviceId = shortUUID();
 
 		String sep = File.separator;
 		String sketchFolder = "repository" + sep + "resources" + sep + "sketches";
 		String archivesPath = CarbonUtils.getCarbonHome() + sep + sketchFolder + sep + "archives"
 				+ sep + deviceId;
-		String templateSketchPath = sketchFolder + sep + type;
+		String templateSketchPath = sketchFolder + sep + FireAlarmConstants.DEVICE_TYPE;
 
 		Map<String, String> contextParams = new HashMap<String, String>();
 		contextParams.put("DEVICE_OWNER", owner);
 		contextParams.put("DEVICE_ID", deviceId);
 
-		DeviceManagement deviceManagement = new DeviceManagement();
-		File zipFile = deviceManagement.getSketchArchive(archivesPath, templateSketchPath,
-														 contextParams);
+		//adding registering data
+		try {
+			register(deviceId,
+					 owner + "s_" + FireAlarmConstants.DEVICE_TYPE + "_" + deviceId.substring(0, 3),
+					 owner);
+		} catch (DeviceManagementException ex) {
+			return Response.status(500).entity(
+					"Error occurred while registering the device with " + "id: " + deviceId
+							+ " owner:" + owner).build();
+		}
+
+		DevicesManager devicesManager = new DevicesManager();
+		File zipFile = null;
+		try {
+			zipFile = devicesManager.downloadSketch(owner, FireAlarmConstants.DEVICE_TYPE,
+													deviceId);
+		} catch (DeviceManagementException ex) {
+			return Response.status(500).entity("Error occurred while creating zip file").build();
+		}
 
 		Response.ResponseBuilder rb = Response.ok((Object) zipFile);
-		rb.header("Content-Disposition", "attachment; filename=\"IoTArduinoAgent.zip\"");
+		rb.header("Content-Disposition", "attachment; filename=\"FireAlarmAgent.zip\"");
 		return rb.build();
 	}
 
-
+	private static String shortUUID() {
+		UUID uuid = UUID.randomUUID();
+		long l = ByteBuffer.wrap(uuid.toString().getBytes()).getLong();
+		return Long.toString(l, Character.MAX_RADIX);
+	}
 
 }
