@@ -114,13 +114,13 @@ public class IoTUsageStatisticsClient {
             if (fromDate != null && toDate != null) {
 				//fromDate = getConvertedTime(fromDate);
 				//toDate = getConvertedTime(toDate);
-                query = String.format("SELECT * FROM %s WHERE owner = '%s' AND deviceid = '%s' AND `time` BETWEEN %s AND %s", table, owner, deviceId, fromDate, toDate);
+                query = String.format("SELECT * FROM %s WHERE owner = '%s' AND deviceid = '%s' AND `time` BETWEEN '%s' AND '%s'", table, owner, deviceId, fromDate, toDate);
             } else if(fromDate != null) {
 				//fromDate = getConvertedTime(fromDate);
-				query = String.format("SELECT * FROM %s WHERE owner = '%s' AND deviceid = '%s' AND `time` >= %s", table, owner, deviceId, fromDate);
+				query = String.format("SELECT * FROM %s WHERE owner = '%s' AND deviceid = '%s' AND `time` >= '%s'", table, owner, deviceId, fromDate);
             } else if(toDate != null){
 				//toDate = getConvertedTime(toDate);
-            	query = String.format("SELECT * FROM %s WHERE owner = '%s' AND deviceid = '%s' AND `time` <= %s", table, owner, deviceId, toDate);
+            	query = String.format("SELECT * FROM %s WHERE owner = '%s' AND deviceid = '%s' AND `time` <= '%s'", table, owner, deviceId, toDate);
             }
 
 			log.info("query: " + query);

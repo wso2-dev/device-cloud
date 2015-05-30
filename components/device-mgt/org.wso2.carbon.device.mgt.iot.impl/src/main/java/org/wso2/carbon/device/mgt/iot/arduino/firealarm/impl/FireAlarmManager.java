@@ -192,7 +192,7 @@ public class FireAlarmManager implements DeviceMgtService {
         return true;
     }
 
-    @Override public boolean isClaimable(DeviceIdentifier deviceIdentifier) throws DeviceManagementException {
+    public boolean isClaimable(DeviceIdentifier deviceIdentifier) throws DeviceManagementException {
         return false;
     }
 
