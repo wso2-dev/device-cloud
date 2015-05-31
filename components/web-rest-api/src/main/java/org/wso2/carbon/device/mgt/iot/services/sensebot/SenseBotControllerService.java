@@ -100,30 +100,30 @@ public class SenseBotControllerService {
             final DeviceJSON dataMsg, @Context HttpServletResponse response) {
         String result = null;
 
-        String sensorValues = dataMsg.value;
+        String sensorValues = dataMsg.value;                            //TEMP-PIR-SONAR-LDR
         log.info("Recieved Sensor Data Values: " + sensorValues);
-
-        //TEMP-PIR-SONAR-MOTION     27-YES-45-ON
 
         int delimiterOne = sensorValues.indexOf("-");
 
-        if(delimiterOne == -1) {
+        if (delimiterOne == -1) {
 
             result = DeviceControllerService
-                    .pushData(dataMsg.owner, "FireAlarm", dataMsg.deviceId, System.currentTimeMillis(), "DeviceData",
+                    .pushData(dataMsg.owner, "SenseBot", dataMsg.deviceId, System.currentTimeMillis(), "DeviceData",
                             dataMsg.value, dataMsg.reply, response);
 
         } else {
-            int delimiterTwo = sensorValues.lastIndexOf("-");
+            int delimiterTwo = sensorValues.indexOf("-", delimiterOne); //   lastIndexOf("-");
             String temperature = sensorValues.substring(0, delimiterOne);
-            String bulb = sensorValues.substring(delimiterOne + 1, delimiterTwo);
-            String fan = sensorValues.substring(delimiterTwo + 1, sensorValues.length());
+            String motion = sensorValues.substring(delimiterOne + 1, delimiterTwo);
+            String sonar = sensorValues.substring(delimiterTwo + 1, sensorValues.indexOf("-", delimiterTwo));
+            String light = sensorValues.substring(sensorValues.indexOf("-", delimiterTwo), sensorValues.length());
 
-            sensorValues = "Temperature: " + temperature + "\tBulb Status: " + bulb + "\tFan Status: " + fan;
+            sensorValues =
+                    "Temperature: " + temperature + "\tMotion: " + motion + "\tSonar: " + sonar + "\tLight:" + light;
             log.info(sensorValues);
 
             result = DeviceControllerService
-                    .pushData(dataMsg.owner, "FireAlarm", dataMsg.deviceId, System.currentTimeMillis(), "DeviceData",
+                    .pushData(dataMsg.owner, "SenseBot", dataMsg.deviceId, System.currentTimeMillis(), "DeviceData",
                             temperature, "TEMP", response);
 
             if (!result.equals("Data Published Succesfully...")) {
@@ -131,16 +131,24 @@ public class SenseBotControllerService {
             }
 
             result = DeviceControllerService
-                    .pushData(dataMsg.owner, "FireAlarm", dataMsg.deviceId, System.currentTimeMillis(), "DeviceData",
-                            bulb, "BULB", response);
+                    .pushData(dataMsg.owner, "SenseBot", dataMsg.deviceId, System.currentTimeMillis(), "DeviceData",
+                            motion, "PIR", response);
 
             if (!result.equals("Data Published Succesfully...")) {
                 return result;
             }
 
             result = DeviceControllerService
-                    .pushData(dataMsg.owner, "FireAlarm", dataMsg.deviceId, System.currentTimeMillis(), "DeviceData",
-                            fan, "FAN", response);
+                    .pushData(dataMsg.owner, "SenseBot", dataMsg.deviceId, System.currentTimeMillis(), "DeviceData",
+                            sonar, "SONAR", response);
+
+            if (!result.equals("Data Published Succesfully...")) {
+                return result;
+            }
+
+            result = DeviceControllerService
+                    .pushData(dataMsg.owner, "SenseBot", dataMsg.deviceId, System.currentTimeMillis(), "DeviceData",
+                            light, "LDR", response);
 
         }
         return "SUCCESS";
