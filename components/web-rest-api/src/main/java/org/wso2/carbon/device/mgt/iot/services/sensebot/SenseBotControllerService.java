@@ -96,7 +96,7 @@ public class SenseBotControllerService {
 
     /*    Service to push all the sensor data collected by the FireAlarm
        Called by the FireAlarm device  */
-    @Path("/pushalarmdata") @POST @Consumes(MediaType.APPLICATION_JSON) public String pushAlarmData(
+    @Path("/pushsensordata") @POST @Consumes(MediaType.APPLICATION_JSON) public String pushAlarmData(
             final DeviceJSON dataMsg, @Context HttpServletResponse response) {
         String result = null;
 
@@ -112,46 +112,56 @@ public class SenseBotControllerService {
                             dataMsg.value, dataMsg.reply, response);
 
         } else {
-            int delimiterTwo = sensorValues.indexOf("-", delimiterOne); //   lastIndexOf("-");
             String temperature = sensorValues.substring(0, delimiterOne);
+
+            int delimiterTwo = sensorValues.indexOf("-", delimiterOne + 1);
             String motion = sensorValues.substring(delimiterOne + 1, delimiterTwo);
-            String sonar = sensorValues.substring(delimiterTwo + 1, sensorValues.indexOf("-", delimiterTwo));
-            String light = sensorValues.substring(sensorValues.indexOf("-", delimiterTwo), sensorValues.length());
+
+            int delimiterThree = sensorValues.indexOf("-", delimiterTwo + 1);
+            String sonar = sensorValues.substring(delimiterTwo + 1, delimiterThree);
+
+            if (sonar.equals("500")) {
+                sonar = "No Object";
+            }
+
+            String light = sensorValues.substring(delimiterThree + 1, sensorValues.length());
 
             sensorValues =
-                    "Temperature: " + temperature + "\tMotion: " + motion + "\tSonar: " + sonar + "\tLight:" + light;
+                    "Temperature:" + temperature + "C\t\tMotion:" + motion + "\tSonar:" + sonar + "\tLight:" + light;
             log.info(sensorValues);
 
             result = DeviceControllerService
                     .pushData(dataMsg.owner, "SenseBot", dataMsg.deviceId, System.currentTimeMillis(), "DeviceData",
                             temperature, "TEMP", response);
 
-            if (!result.equals("Data Published Succesfully...")) {
+            if (response.getStatus() != HttpStatus.SC_ACCEPTED) {
                 return result;
             }
 
             result = DeviceControllerService
                     .pushData(dataMsg.owner, "SenseBot", dataMsg.deviceId, System.currentTimeMillis(), "DeviceData",
-                            motion, "PIR", response);
+                            motion, "MOTION", response);
 
-            if (!result.equals("Data Published Succesfully...")) {
+            if (response.getStatus() != HttpStatus.SC_ACCEPTED) {
                 return result;
+            }
+
+            if (!sonar.equals("No Object")) {
+                result = DeviceControllerService
+                        .pushData(dataMsg.owner, "SenseBot", dataMsg.deviceId, System.currentTimeMillis(), "DeviceData",
+                                sonar, "SONAR", response);
+
+                if (response.getStatus() != HttpStatus.SC_ACCEPTED) {
+                    return result;
+                }
             }
 
             result = DeviceControllerService
                     .pushData(dataMsg.owner, "SenseBot", dataMsg.deviceId, System.currentTimeMillis(), "DeviceData",
-                            sonar, "SONAR", response);
-
-            if (!result.equals("Data Published Succesfully...")) {
-                return result;
-            }
-
-            result = DeviceControllerService
-                    .pushData(dataMsg.owner, "SenseBot", dataMsg.deviceId, System.currentTimeMillis(), "DeviceData",
-                            light, "LDR", response);
+                            light, "LIGHT", response);
 
         }
-        return "SUCCESS";
+        return result;
     }
 
     private String sendCommand(String deviceIp, int deviceServerPort, String motionType) {

@@ -36,6 +36,9 @@
                   class="org.wso2.carbon.device.mgt.iot.services.sensebot.SenseBotControllerService">
             </bean>
         </jaxrs:serviceBeans>
+        <jaxrs:providers>
+            <bean class="org.codehaus.jackson.jaxrs.JacksonJsonProvider" />
+        </jaxrs:providers>
     </jaxrs:server>
 
     <jaxrs:server id="FireAlarmController" address="/FireAlarmController">

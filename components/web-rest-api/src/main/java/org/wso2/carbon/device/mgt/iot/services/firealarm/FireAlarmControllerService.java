@@ -180,14 +180,14 @@ public class FireAlarmControllerService {
             String bulb = sensorValues.substring(delimiterOne + 1, delimiterTwo);
             String fan = sensorValues.substring(delimiterTwo + 1, sensorValues.length());
 
-            sensorValues = "Temperature: " + temperature + "\tBulb Status: " + bulb + "\tFan Status: " + fan;
+            sensorValues = "Temperature:" + temperature + "C\tBulb Status:" + bulb + "\t\tFan Status:" + fan;
             log.info(sensorValues);
 
             result = DeviceControllerService
                     .pushData(dataMsg.owner, "FireAlarm", dataMsg.deviceId, System.currentTimeMillis(), "DeviceData",
                             temperature, "TEMP", response);
 
-            if (!result.equals("Data Published Succesfully...")) {
+            if (response.getStatus() != HttpStatus.SC_ACCEPTED) {
                 return result;
             }
 
@@ -195,15 +195,14 @@ public class FireAlarmControllerService {
                     .pushData(dataMsg.owner, "FireAlarm", dataMsg.deviceId, System.currentTimeMillis(), "DeviceData",
                             bulb, "BULB", response);
 
-            if (!result.equals("Data Published Succesfully...")) {
+            if (response.getStatus() != HttpStatus.SC_ACCEPTED) {
                 return result;
             }
 
             result = DeviceControllerService
                     .pushData(dataMsg.owner, "FireAlarm", dataMsg.deviceId, System.currentTimeMillis(), "DeviceData",
                             fan, "FAN", response);
-
         }
-        return "SUCCESS";
+        return result;
     }
 }
