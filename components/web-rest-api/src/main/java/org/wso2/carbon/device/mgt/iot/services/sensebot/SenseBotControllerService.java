@@ -167,7 +167,7 @@ public class SenseBotControllerService {
         try {
             httpConn = (HttpURLConnection) url.openConnection();
         } catch (IOException e) {
-            log.error("Error Connectiong to HTTP Endpoint at: " + urlString);
+            log.error("Error Connecting to HTTP Endpoint at: " + urlString);
         }
 
         try {
