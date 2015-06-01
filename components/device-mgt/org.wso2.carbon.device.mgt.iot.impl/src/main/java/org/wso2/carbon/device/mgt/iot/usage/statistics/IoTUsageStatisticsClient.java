@@ -106,7 +106,7 @@ public class IoTUsageStatisticsClient {
 							  toDate);
 	}
 
-	private List<DeviceUsageDTO> getDeviceStats(String table, String valueColumn, String owner,
+	public List<DeviceUsageDTO> getDeviceStats(String table, String valueColumn, String owner,
 												String deviceId, String fromDate, String toDate)
 			throws IoTUsageStatisticsException {
 
