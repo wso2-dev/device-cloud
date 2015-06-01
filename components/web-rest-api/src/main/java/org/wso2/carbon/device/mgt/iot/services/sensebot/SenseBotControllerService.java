@@ -158,6 +158,82 @@ public class SenseBotControllerService {
     }
 
 
+    @Path("/pushtempdata") @POST @Consumes(MediaType.APPLICATION_JSON) public String pushTempData(
+            final DeviceJSON dataMsg, @Context HttpServletResponse response) {
+        String result = null;
+
+        String temperature = dataMsg.value;                            //TEMP-PIR-SONAR-LDR
+        log.info("Recieved Sensor Data Values: " + temperature);
+
+
+            result = DeviceControllerService
+                    .pushData(dataMsg.owner, "SenseBot", dataMsg.deviceId, System.currentTimeMillis(), "DeviceData",
+                              temperature, "TEMP", response);
+
+        return result;
+    }
+
+
+    @Path("/pushpirdata") @POST @Consumes(MediaType.APPLICATION_JSON) public String pushPIRData(
+            final DeviceJSON dataMsg, @Context HttpServletResponse response) {
+        String result = null;
+
+        String motion = dataMsg.value;                            //TEMP-PIR-SONAR-LDR
+        log.info("Recieved Sensor Data Values: " + motion);
+
+
+        result = DeviceControllerService
+                .pushData(dataMsg.owner, "SenseBot", dataMsg.deviceId,
+                          System.currentTimeMillis(), "DeviceData",
+                          motion, "MOTION", response);
+
+        return result;
+    }
+
+
+    @Path("/pushsonardata") @POST @Consumes(MediaType.APPLICATION_JSON) public String pushSonarData(
+            final DeviceJSON dataMsg, @Context HttpServletResponse response) {
+        String result = null;
+
+        String sonar = dataMsg.value;                            //TEMP-PIR-SONAR-LDR
+        log.info("Recieved Sensor Data Values: " + sonar);
+
+
+
+
+        if (!sonar.equals("-1")) {
+            result = DeviceControllerService
+                    .pushData(dataMsg.owner, "SenseBot", dataMsg.deviceId, System.currentTimeMillis(), "DeviceData",
+                              sonar, "SONAR", response);
+
+            if (response.getStatus() != HttpStatus.SC_ACCEPTED) {
+                return result;
+            }
+        }
+
+
+
+        return result;
+    }
+
+
+    @Path("/pushlightdata") @POST @Consumes(MediaType.APPLICATION_JSON) public String pushlightData(
+            final DeviceJSON dataMsg, @Context HttpServletResponse response) {
+        String result = null;
+
+        String light = dataMsg.value;                            //TEMP-PIR-SONAR-LDR
+        log.info("Recieved Sensor Data Values: " + light);
+
+
+        result = DeviceControllerService
+                .pushData(dataMsg.owner, "SenseBot", dataMsg.deviceId,
+                          System.currentTimeMillis(), "DeviceData",
+                          light, "LIGHT", response);
+
+        return result;
+    }
+
+
     private String sendCommand(String deviceIp, int deviceServerPort, String motionType) {
 
         if (deviceServerPort == 0) {
