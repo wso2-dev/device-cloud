@@ -126,6 +126,11 @@ public class DeviceManagement {
 
 	}
 
+	public List<Device> getDevicesByType(String deviceType) throws DeviceManagementException{
+		DeviceManagementService dmService = new DeviceManagementServiceImpl();
+		return dmService.getAllDevices(deviceType);
+	}
+
 	public List<DeviceType> getDeviceTypes() throws DeviceManagementDAOException {
 
 		return DeviceManagementDAOFactory.getDeviceTypeDAO().getDeviceTypes();

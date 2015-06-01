@@ -100,7 +100,7 @@ public class IotDeviceManagementServiceComponent {
                     bundleContext.registerService(DeviceMgtService.class.getName(), new
 					FireAlarmManager(),
 												  null);
-           
+
             IoTUsageStatisticsClient.initializeDataSource();
 
             if (log.isDebugEnabled()) {
@@ -119,7 +119,7 @@ public class IotDeviceManagementServiceComponent {
             if (arduinoServiceRegRef != null) {
                 arduinoServiceRegRef.unregister();
             }
-            
+
             if (log.isDebugEnabled()) {
                 log.debug(
                         "IOT Device Management Service Component has been successfully de-activated");
