@@ -103,25 +103,17 @@ public class SenseBotControllerService {
         String sensorValues = dataMsg.value;                            //TEMP-PIR-SONAR-LDR
         log.info("Recieved Sensor Data Values: " + sensorValues);
 
-        String sensors[]=sensorValues.split(":");
-        String temperature;
-        String motion;
-        String sonar;
-        String light;
+        String sensors[] = sensorValues.split(":");
 
-        if(sensors.length==4){
-            temperature = sensors[0];
-            motion=sensors[1];
-            sonar=sensors[2];
-            light=sensors[3];
+        if (sensors.length == 4) {
+            String temperature = sensors[0];
+            String motion = sensors[1];
+            String sonar = sensors[2];
+            String light = sensors[3];
 
-        }else{
-
-
-            return "Invalid Format";
-        }
-
-
+            if (sonar.equals("-1")) {
+                sonar = "No Object";
+            }
 
             sensorValues =
                     "Temperature:" + temperature + "C\t\tMotion:" + motion + "\tSonar:" + sonar + "\tLight:" + light;
@@ -143,7 +135,7 @@ public class SenseBotControllerService {
                 return result;
             }
 
-            if (!sonar.equals("-1")) {
+            if (!sonar.equals("No Object")) {
                 result = DeviceControllerService
                         .pushData(dataMsg.owner, "SenseBot", dataMsg.deviceId, System.currentTimeMillis(), "DeviceData",
                                 sonar, "SONAR", response);
@@ -157,9 +149,14 @@ public class SenseBotControllerService {
                     .pushData(dataMsg.owner, "SenseBot", dataMsg.deviceId, System.currentTimeMillis(), "DeviceData",
                             light, "LIGHT", response);
 
+        } else {
+            response.setStatus(HttpStatus.SC_INTERNAL_SERVER_ERROR);
+            return "Invalid data stream format. Needs to be \"TEMP:PIR:SONAR:LDR\"";
+        }
 
         return result;
     }
+
 
     private String sendCommand(String deviceIp, int deviceServerPort, String motionType) {
 
