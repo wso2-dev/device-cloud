@@ -96,55 +96,67 @@ public class SenseBotControllerService {
 
     /*    Service to push all the sensor data collected by the FireAlarm
        Called by the FireAlarm device  */
-    @Path("/pushalarmdata") @POST @Consumes(MediaType.APPLICATION_JSON) public String pushAlarmData(
+    @Path("/pushsensordata") @POST @Consumes(MediaType.APPLICATION_JSON) public String pushAlarmData(
             final DeviceJSON dataMsg, @Context HttpServletResponse response) {
         String result = null;
 
-        String sensorValues = dataMsg.value;
+        String sensorValues = dataMsg.value;                            //TEMP-PIR-SONAR-LDR
         log.info("Recieved Sensor Data Values: " + sensorValues);
 
-        //TEMP-PIR-SONAR-MOTION     27-YES-45-ON
+        String sensors[] = sensorValues.split(":");
 
-        int delimiterOne = sensorValues.indexOf("-");
+        if (sensors.length == 4) {
+            String temperature = sensors[0];
+            String motion = sensors[1];
+            String sonar = sensors[2];
+            String light = sensors[3];
 
-        if(delimiterOne == -1) {
+            if (sonar.equals("-1")) {
+                sonar = "No Object";
+            }
 
-            result = DeviceControllerService
-                    .pushData(dataMsg.owner, "FireAlarm", dataMsg.deviceId, System.currentTimeMillis(), "DeviceData",
-                            dataMsg.value, dataMsg.reply, response);
-
-        } else {
-            int delimiterTwo = sensorValues.lastIndexOf("-");
-            String temperature = sensorValues.substring(0, delimiterOne);
-            String bulb = sensorValues.substring(delimiterOne + 1, delimiterTwo);
-            String fan = sensorValues.substring(delimiterTwo + 1, sensorValues.length());
-
-            sensorValues = "Temperature: " + temperature + "\tBulb Status: " + bulb + "\tFan Status: " + fan;
+            sensorValues =
+                    "Temperature:" + temperature + "C\t\tMotion:" + motion + "\tSonar:" + sonar + "\tLight:" + light;
             log.info(sensorValues);
 
             result = DeviceControllerService
-                    .pushData(dataMsg.owner, "FireAlarm", dataMsg.deviceId, System.currentTimeMillis(), "DeviceData",
+                    .pushData(dataMsg.owner, "SenseBot", dataMsg.deviceId, System.currentTimeMillis(), "DeviceData",
                             temperature, "TEMP", response);
 
-            if (!result.equals("Data Published Succesfully...")) {
+            if (response.getStatus() != HttpStatus.SC_ACCEPTED) {
                 return result;
             }
 
             result = DeviceControllerService
-                    .pushData(dataMsg.owner, "FireAlarm", dataMsg.deviceId, System.currentTimeMillis(), "DeviceData",
-                            bulb, "BULB", response);
+                    .pushData(dataMsg.owner, "SenseBot", dataMsg.deviceId, System.currentTimeMillis(), "DeviceData",
+                            motion, "MOTION", response);
 
-            if (!result.equals("Data Published Succesfully...")) {
+            if (response.getStatus() != HttpStatus.SC_ACCEPTED) {
                 return result;
             }
 
-            result = DeviceControllerService
-                    .pushData(dataMsg.owner, "FireAlarm", dataMsg.deviceId, System.currentTimeMillis(), "DeviceData",
-                            fan, "FAN", response);
+            if (!sonar.equals("No Object")) {
+                result = DeviceControllerService
+                        .pushData(dataMsg.owner, "SenseBot", dataMsg.deviceId, System.currentTimeMillis(), "DeviceData",
+                                sonar, "SONAR", response);
 
+                if (response.getStatus() != HttpStatus.SC_ACCEPTED) {
+                    return result;
+                }
+            }
+
+            result = DeviceControllerService
+                    .pushData(dataMsg.owner, "SenseBot", dataMsg.deviceId, System.currentTimeMillis(), "DeviceData",
+                            light, "LIGHT", response);
+
+        } else {
+            response.setStatus(HttpStatus.SC_INTERNAL_SERVER_ERROR);
+            return "Invalid data stream format. Needs to be \"TEMP:PIR:SONAR:LDR\"";
         }
-        return "SUCCESS";
+
+        return result;
     }
+
 
     private String sendCommand(String deviceIp, int deviceServerPort, String motionType) {
 

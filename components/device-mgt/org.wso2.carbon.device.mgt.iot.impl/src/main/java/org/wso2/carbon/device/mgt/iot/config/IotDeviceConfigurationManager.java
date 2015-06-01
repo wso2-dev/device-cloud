@@ -33,13 +33,13 @@ import java.io.File;
 public class IotDeviceConfigurationManager {
 
 	private static final String IOT_DEVICE_CONFIG_XML_NAME = "iot-config.xml";
-	private static final String IOT_DEVICE_PLUGIN_DIRECTORY = "iot";
+	private static final String IOT_DC_ROOT_DIRECTORY = "iot";
 	private IotDeviceManagementConfig currentIoTDeviceConfig;
 	private static IotDeviceConfigurationManager iotDeviceConfigManager;
 
 	private final String iotDeviceMgtConfigXMLPath = CarbonUtils.getCarbonConfigDirPath()
 			+ File.separator +
-			IOT_DEVICE_PLUGIN_DIRECTORY + File.separator + IOT_DEVICE_CONFIG_XML_NAME;
+			IOT_DC_ROOT_DIRECTORY + File.separator + IOT_DEVICE_CONFIG_XML_NAME;
 
 	public static IotDeviceConfigurationManager getInstance() {
 		if (iotDeviceConfigManager == null) {

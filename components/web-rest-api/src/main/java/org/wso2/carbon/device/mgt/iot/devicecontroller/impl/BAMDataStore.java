@@ -138,21 +138,39 @@ public class BAMDataStore implements DataStoreConnector {
             switch (description) {
             case "TEMP":
                 if (log.isDebugEnabled()) {
-                    log.info("Stream definition set to FireAlarm-Temperature");
+                    log.info("Stream definition set to Temperature");
                 }
-                DEVICE_DATA_STREAM = BAM_DATA_PUBLISHER.defineStream(FireAlarmConstants.TEMPERATURE_STREAM_DEFINITION);
+                DEVICE_DATA_STREAM = BAM_DATA_PUBLISHER.defineStream(BAMStreamDefinitions.TEMPERATURE_STREAM_DEFINITION);
+                break;
+            case "MOTION":
+                if (log.isDebugEnabled()) {
+                    log.info("Stream definition set to Motion (PIR)");
+                }
+                DEVICE_DATA_STREAM = BAM_DATA_PUBLISHER.defineStream(BAMStreamDefinitions.MOTION_STREAM_DEFINITION);
+                break;
+            case "SONAR":
+                if (log.isDebugEnabled()) {
+                    log.info("Stream definition set to Sonar");
+                }
+                DEVICE_DATA_STREAM = BAM_DATA_PUBLISHER.defineStream(BAMStreamDefinitions.SONAR_STREAM_DEFINITION);
+                break;
+            case "LIGHT":
+                if (log.isDebugEnabled()) {
+                    log.info("Stream definition set to Light");
+                }
+                DEVICE_DATA_STREAM = BAM_DATA_PUBLISHER.defineStream(BAMStreamDefinitions.LIGHT_STREAM_DEFINITION);
                 break;
             case "BULB":
                 if (log.isDebugEnabled()) {
-                    log.info("Stream definition set to FireAlarm-Bulb");
+                    log.info("Stream definition set to Bulb Status");
                 }
-                DEVICE_DATA_STREAM = BAM_DATA_PUBLISHER.defineStream(FireAlarmConstants.BULB_STREAM_DEFINITION);
+                DEVICE_DATA_STREAM = BAM_DATA_PUBLISHER.defineStream(BAMStreamDefinitions.BULB_STREAM_DEFINITION);
                 break;
             case "FAN":
                 if (log.isDebugEnabled()) {
-                    log.info("Stream definition set to FireAlarm-Fan");
+                    log.info("Stream definition set to Fan Status");
                 }
-                DEVICE_DATA_STREAM = BAM_DATA_PUBLISHER.defineStream(FireAlarmConstants.FAN_STREAM_DEFINITION);
+                DEVICE_DATA_STREAM = BAM_DATA_PUBLISHER.defineStream(BAMStreamDefinitions.FAN_STREAM_DEFINITION);
                 break;
             }
         } catch (AgentException | MalformedStreamDefinitionException | StreamDefinitionException
@@ -163,7 +181,7 @@ public class BAMDataStore implements DataStoreConnector {
         }
 
         try {
-            if (deviceType.equalsIgnoreCase("FireAlarm")) {
+            if (deviceType.equalsIgnoreCase("FireAlarm") | deviceType.equalsIgnoreCase("SenseBot")) {
                 if (log.isDebugEnabled()) {
                     log.info("Publishing FireAlarm specific data");
                 }

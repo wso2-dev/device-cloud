@@ -11,8 +11,7 @@
             <class>
                 org.wso2.carbon.device.mgt.iot.devicecontroller.impl.BAMDataStore
             </class>
-            <!--<endpoint>tcp://127.0.0.1</endpoint>-->
-            <endpoint>tcp://192.168.43.216</endpoint>
+            <endpoint>tcp://localhost</endpoint>
             <!--<endpoint>tcp://10.100.7.38</endpoint>-->
             <port>7613</port>
             <username>admin</username>

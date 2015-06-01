@@ -166,28 +166,21 @@ public class FireAlarmControllerService {
         String sensorValues = dataMsg.value;
         log.info("Recieved Sensor Data Values: " + sensorValues);
 
-        int delimiterOne = sensorValues.indexOf("-");
+        String sensors[] = sensorValues.split("-");
 
-        if(delimiterOne == -1) {
+        if (sensors.length == 3) {
+            String temperature = sensors[0];
+            String bulb = sensors[1];
+            String fan = sensors[2];
 
-            result = DeviceControllerService
-                    .pushData(dataMsg.owner, "FireAlarm", dataMsg.deviceId, System.currentTimeMillis(), "DeviceData",
-                            dataMsg.value, dataMsg.reply, response);
-
-        } else {
-            int delimiterTwo = sensorValues.lastIndexOf("-");
-            String temperature = sensorValues.substring(0, delimiterOne);
-            String bulb = sensorValues.substring(delimiterOne + 1, delimiterTwo);
-            String fan = sensorValues.substring(delimiterTwo + 1, sensorValues.length());
-
-            sensorValues = "Temperature: " + temperature + "\tBulb Status: " + bulb + "\tFan Status: " + fan;
+            sensorValues = "Temperature:" + temperature + "C\tBulb Status:" + bulb + "\t\tFan Status:" + fan;
             log.info(sensorValues);
 
             result = DeviceControllerService
                     .pushData(dataMsg.owner, "FireAlarm", dataMsg.deviceId, System.currentTimeMillis(), "DeviceData",
                             temperature, "TEMP", response);
 
-            if (!result.equals("Data Published Succesfully...")) {
+            if (response.getStatus() != HttpStatus.SC_ACCEPTED) {
                 return result;
             }
 
@@ -195,7 +188,7 @@ public class FireAlarmControllerService {
                     .pushData(dataMsg.owner, "FireAlarm", dataMsg.deviceId, System.currentTimeMillis(), "DeviceData",
                             bulb, "BULB", response);
 
-            if (!result.equals("Data Published Succesfully...")) {
+            if (response.getStatus() != HttpStatus.SC_ACCEPTED) {
                 return result;
             }
 
@@ -203,7 +196,13 @@ public class FireAlarmControllerService {
                     .pushData(dataMsg.owner, "FireAlarm", dataMsg.deviceId, System.currentTimeMillis(), "DeviceData",
                             fan, "FAN", response);
 
+        } else {
+            result = DeviceControllerService
+                    .pushData(dataMsg.owner, "FireAlarm", dataMsg.deviceId, System.currentTimeMillis(), "DeviceData",
+                            dataMsg.value, dataMsg.reply, response);
+            return result;
         }
-        return "SUCCESS";
+
+        return result;
     }
 }

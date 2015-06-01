@@ -156,11 +156,12 @@ public class DeviceControllerService {
         //			if (exists) {
         try {
             iotDataStore.publishIoTData(deviceDataMap);
+            response.setStatus(HttpStatus.SC_ACCEPTED);
             result = "Data Published Succesfully...";
         } catch (DeviceControllerServiceException e) {
             response.setStatus(HttpStatus.SC_INTERNAL_SERVER_ERROR);
-            result = "Failed to push data to dataStore at " + dataStoreConfig.getEndPoint() + ":" + dataStoreConfig
-                    .getPort();
+            result = "Failed to push " + description + " data to dataStore at " + dataStoreConfig.getEndPoint() + ":"
+                    + dataStoreConfig.getPort();
         }
         //
         //			}
@@ -197,6 +198,7 @@ public class DeviceControllerService {
         String result = null;
         try {
             iotControlQueue.enqueueControls(deviceControlsMap);
+            response.setStatus(HttpStatus.SC_ACCEPTED);
             result = "Controls added to queue succesfully..";
         } catch (DeviceControllerServiceException e) {
             response.setStatus(HttpStatus.SC_INTERNAL_SERVER_ERROR);
