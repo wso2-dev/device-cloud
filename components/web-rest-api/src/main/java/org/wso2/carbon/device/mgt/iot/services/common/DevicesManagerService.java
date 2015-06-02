@@ -23,9 +23,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-/**
- * Created by ayyoobhamza on 5/29/15.
- */
 public class DevicesManagerService {
 
 	@Path("/getDevices")
@@ -42,7 +39,7 @@ public class DevicesManagerService {
 		return devices.toArray(new Device[]{});
 	}
 
-	@Path("/getDevices")
+	@Path("/getDevicesByType")
 	@GET
 	@Consumes("application/json")
 	@Produces("application/json")
