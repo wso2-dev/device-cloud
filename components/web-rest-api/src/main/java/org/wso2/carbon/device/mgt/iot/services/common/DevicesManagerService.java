@@ -7,6 +7,7 @@ import org.wso2.carbon.device.mgt.core.dao.DeviceManagementDAOException;
 import org.wso2.carbon.device.mgt.core.dto.DeviceType;
 
 import org.wso2.carbon.device.mgt.iot.arduino.firealarm.constants.FireAlarmConstants;
+import org.wso2.carbon.device.mgt.iot.util.ZipArchive;
 import org.wso2.carbon.device.mgt.iot.web.register.DeviceManagement;
 import org.wso2.carbon.utils.CarbonUtils;
 
@@ -70,7 +71,7 @@ public class DevicesManagerService {
 
 	}
 
-	public File downloadSketch(String owner, String deviceType, String deviceId, String token)
+	public ZipArchive downloadSketch(String owner, String deviceType, String deviceId, String token)
 			throws DeviceManagementException {
 
 		if (owner == null || deviceType == null) {
@@ -89,7 +90,7 @@ public class DevicesManagerService {
 		contextParams.put("DEVICE_TOKEN", token);
 
 		DeviceManagement deviceManagement = new DeviceManagement();
-		File zipFile = deviceManagement.getSketchArchive(archivesPath, templateSketchPath,
+		ZipArchive zipFile = deviceManagement.getSketchArchive(archivesPath, templateSketchPath,
 														 contextParams);
 
 		return zipFile;

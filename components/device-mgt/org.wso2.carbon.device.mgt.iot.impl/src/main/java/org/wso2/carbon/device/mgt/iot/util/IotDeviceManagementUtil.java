@@ -108,7 +108,7 @@ public class IotDeviceManagementUtil {
 		return device;
 	}
 
-	public static File getSketchArchive(String archivesPath, String templateSketchPath,
+	public static ZipArchive getSketchArchive(String archivesPath, String templateSketchPath,
 										Map contextParams) throws DeviceManagementException {
 
 		String sep = File.separator;
@@ -118,8 +118,13 @@ public class IotDeviceManagementUtil {
 		deleteDir(new File(archivesPath + ".zip"));//clear zip
 		new File(archivesPath).mkdirs();//new dir
 
+		String zipFileName = "zipFile.zip";
+
 		try {
-			List<String> templateFiles = getTemplates(sketchPath + sep + "sketch.properties");
+			Map<String, List<String>> properties = getProperties(sketchPath + sep + "sketch"
+																	 + ".properties");
+			List<String> templateFiles = properties.get("templates");
+			zipFileName = properties.get("zipfilename").get(0);
 			for (String templateFile : templateFiles) {
 				parseTemplate(templateSketchPath + sep + templateFile,
 							  archivesPath + sep + templateFile, contextParams);
@@ -136,10 +141,11 @@ public class IotDeviceManagementUtil {
 
 		/* now get the zip file */
 		File zip = new File(archivesPath + ".zip");
-		return zip;
+		return new ZipArchive(zipFileName,zip);
 	}
 
-	private static List getTemplates(String propertyFilePath) throws IOException {
+	private static Map<String, List<String>> getProperties(String propertyFilePath) throws
+			IOException {
 		Properties prop = new Properties();
 		InputStream input = null;
 
@@ -149,9 +155,16 @@ public class IotDeviceManagementUtil {
 
 			// load a properties file
 			prop.load(input);
+			Map<String, List<String>> properties = new HashMap<String, List<String>>();
+
 			String templates = prop.getProperty("templates");
 			List<String> list = new ArrayList<String>(Arrays.asList(templates.split(",")));
-			return list;
+			properties.put("templates", list);
+
+			final String filename = prop.getProperty("zipfilename");
+			list = new ArrayList<String>(){{add(filename);}};
+			properties.put("zipfilename", list);
+			return properties;
 
 		} finally {
 			if (input != null) {

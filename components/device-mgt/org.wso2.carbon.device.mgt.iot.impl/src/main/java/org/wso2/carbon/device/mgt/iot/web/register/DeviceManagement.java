@@ -29,6 +29,7 @@ import org.wso2.carbon.device.mgt.core.dto.DeviceType;
 import org.wso2.carbon.device.mgt.iot.util.IotDeviceManagementUtil;
 import org.wso2.carbon.device.mgt.core.service.DeviceManagementServiceImpl;
 import org.wso2.carbon.device.mgt.core.service.DeviceManagementService;
+import org.wso2.carbon.device.mgt.iot.util.ZipArchive;
 
 import java.io.File;
 import java.util.List;
@@ -137,7 +138,7 @@ public class DeviceManagement {
 
 	}
 
-	public File getSketchArchive(String archivesPath, String templateSketchPath, Map contextParams)
+	public ZipArchive getSketchArchive(String archivesPath, String templateSketchPath, Map contextParams)
 			throws DeviceManagementException {
 		/*  create a context and add data */
 
