@@ -166,7 +166,7 @@ public class FireAlarmControllerService {
         String sensorValues = dataMsg.value;
         log.info("Recieved Sensor Data Values: " + sensorValues);
 
-        String sensors[] = sensorValues.split("-");
+        String sensors[] = sensorValues.split(":");
 
         if (sensors.length == 3) {
             String temperature = sensors[0];
