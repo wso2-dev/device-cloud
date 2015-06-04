@@ -18,8 +18,6 @@
 
 package org.wso2.carbon.device.mgt.iot.dao;
 
-import org.wso2.carbon.device.mgt.iot.config.datasource.IotDataSourceConfig;
-
 public interface IotDeviceManagementDAOFactoryInterface {
 
     public IotDeviceDAO getIotDeviceDAO();

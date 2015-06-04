@@ -9,7 +9,7 @@
     <DataStores>
         <DataStore type="WSO2-BAM">
             <class>
-                org.wso2.carbon.device.mgt.iot.devicecontroller.impl.BAMDataStore
+                org.wso2.carbon.device.mgt.iot.common.datastore.bam.BAMDataStore
             </class>
             <endpoint>tcp://localhost</endpoint>
             <!--<endpoint>tcp://10.100.7.38</endpoint>-->
@@ -20,7 +20,7 @@
 
         <DataStore type="WSO2-CEP">
             <class>
-                org.wso2.carbon.device.mgt.iot.devicecontroller.impl.CEPDataStore
+                org.wso2.carbon.device.mgt.iot.common.devicecontroller.impl.CEPDataStore
             </class>
             <endpoint>[CEP_ENDPOINT]</endpoint>
             <port>[CEP_PORT]</port>
@@ -32,7 +32,7 @@
     <ControlQueues>
         <ControlQueue type="MQTT">
             <class>
-                org.wso2.carbon.device.mgt.iot.devicecontroller.impl.MQTTControlQueue
+                org.wso2.carbon.device.mgt.iot.common.controlqueue.mqtt.MQTTControlQueue
             </class>
             <protocol>MQTT</protocol>
             <endpoint>tcp://localhost</endpoint>

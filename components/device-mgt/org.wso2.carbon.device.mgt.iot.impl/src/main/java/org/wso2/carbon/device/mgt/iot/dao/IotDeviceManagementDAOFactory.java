@@ -21,8 +21,8 @@ package org.wso2.carbon.device.mgt.iot.dao;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.device.mgt.iot.common.IotDeviceMgtPluginException;
-import org.wso2.carbon.device.mgt.iot.config.datasource.JNDILookupDefinition;
-import org.wso2.carbon.device.mgt.iot.config.datasource.IotDataSourceConfig;
+import org.wso2.carbon.device.mgt.iot.common.config.datasource.JNDILookupDefinition;
+import org.wso2.carbon.device.mgt.iot.common.config.datasource.IotDataSourceConfig;
 import org.wso2.carbon.device.mgt.iot.dao.util.IotDeviceManagementDAOUtil;
 
 import javax.sql.DataSource;

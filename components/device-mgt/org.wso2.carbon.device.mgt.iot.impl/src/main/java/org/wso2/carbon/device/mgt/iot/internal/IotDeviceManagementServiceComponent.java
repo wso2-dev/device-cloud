@@ -25,21 +25,19 @@ import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.component.ComponentContext;
 import org.wso2.carbon.device.mgt.iot.arduino.firealarm.impl.FireAlarmManager;
 import org.wso2.carbon.device.mgt.iot.common.IotDeviceMgtPluginException;
-import org.wso2.carbon.device.mgt.iot.config.IotDeviceConfigurationManager;
-import org.wso2.carbon.device.mgt.iot.config.IotDeviceManagementConfig;
-import org.wso2.carbon.device.mgt.iot.config.datasource.IotDataSourceConfig;
+import org.wso2.carbon.device.mgt.iot.common.config.IotDeviceConfigurationManager;
+import org.wso2.carbon.device.mgt.iot.common.config.IotDeviceManagementConfig;
+import org.wso2.carbon.device.mgt.iot.common.config.datasource.IotDataSourceConfig;
 import org.wso2.carbon.device.mgt.iot.dao.IotDeviceManagementDAOFactory;
 import org.wso2.carbon.device.mgt.iot.dao.util.IotDeviceManagementDAOUtil;
 import org.wso2.carbon.device.mgt.iot.usage.statistics.IoTUsageStatisticsClient;
 import org.wso2.carbon.ndatasource.core.DataSourceService;
 import org.wso2.carbon.device.mgt.common.spi.DeviceMgtService;
 
-import javax.sql.DataSource;
-
 import java.util.Map;
 
 /**
- * @scr.component name="org.wso2.carbon.device.mgt.iot.impl.internal.IotDeviceManagementServiceComponent"
+ * @scr.component name="org.wso2.carbon.device.mgt.iot.bam.internal.IotDeviceManagementServiceComponent"
  * immediate="true"
  * @scr.reference name="org.wso2.carbon.ndatasource"
  * interface="org.wso2.carbon.ndatasource.core.DataSourceService"
