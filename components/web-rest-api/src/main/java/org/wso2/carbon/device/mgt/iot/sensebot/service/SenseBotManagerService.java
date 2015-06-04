@@ -22,7 +22,7 @@
 //import org.wso2.carbon.device.mgt.exception.DeviceIdentifier;
 //import org.wso2.carbon.device.mgt.exception.DeviceManagementException;
 //import org.wso2.carbon.device.mgt.iot.arduino.firealarm.constants.SenseBotConstants;
-//import org.wso2.carbon.device.mgt.iot.test.DevicesManagerService;
+//import org.wso2.carbon.device.mgt.iot.common.DevicesManagerService;
 //import org.wso2.carbon.device.mgt.iot.common.util.ZipArchive;
 //import org.wso2.carbon.device.mgt.iot.common.DeviceManagement;
 //

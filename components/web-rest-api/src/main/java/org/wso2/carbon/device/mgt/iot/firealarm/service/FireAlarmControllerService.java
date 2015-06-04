@@ -26,7 +26,7 @@ import org.wso2.carbon.device.mgt.iot.devicecloud.config.DeviceManagementControl
 import org.wso2.carbon.device.mgt.iot.devicecloud.config.controlqueue.DeviceControlQueueConfig;
 import org.wso2.carbon.device.mgt.iot.devicecloud.exception.DeviceControllerException;
 import org.wso2.carbon.device.mgt.iot.firealarm.util.DeviceJSON;
-import org.wso2.carbon.device.mgt.iot.devicecloud.controlqueue.mqtt.MQTTSubscriber;
+import org.wso2.carbon.device.mgt.iot.firealarm.util.MQTTFireAlarmSubscriber;
 import org.wso2.carbon.device.mgt.iot.devicecloud.exception.UnauthorizedException;
 
 import javax.servlet.http.HttpServletResponse;
@@ -45,7 +45,7 @@ public class FireAlarmControllerService {
 	public static final String CONTROL_QUEUE_ENDPOINT;
 	public static final HashMap<String, LinkedList<String>> replyMsgQueue;
 	public static final HashMap<String, LinkedList<String>> internalControlsQueue;
-	private static MQTTSubscriber mqttSubscriber;
+	private static MQTTFireAlarmSubscriber mqttFireAlarmSubscriber;
 
 	static {
 		DeviceManagementConfig config = null;
@@ -83,19 +83,19 @@ public class FireAlarmControllerService {
 	}
 
 	/**
-	 * @param mqttSubscriber the mqttSubscriber to set
+	 * @param mqttFireAlarmSubscriber the mqttFireAlarmSubscriber to set
 	 */
-	public void setMqttSubscriber(MQTTSubscriber mqttSubscriber) {
-		this.mqttSubscriber = mqttSubscriber;
+	public void setMqttSubscriber(MQTTFireAlarmSubscriber mqttFireAlarmSubscriber) {
+		this.mqttFireAlarmSubscriber = mqttFireAlarmSubscriber;
 		try {
-			mqttSubscriber.subscribe();
+			mqttFireAlarmSubscriber.subscribe();
 		} catch (DeviceManagementException e) {
 			log.error(e.getErrorMessage());
 		}
 	}
 
-	public static MQTTSubscriber getMQTTSubscriber() {
-		return mqttSubscriber;
+	public static MQTTFireAlarmSubscriber getMQTTSubscriber() {
+		return mqttFireAlarmSubscriber;
 	}
 
 	/*    Service to switch "ON" and "OFF" the FireAlarm bulb
