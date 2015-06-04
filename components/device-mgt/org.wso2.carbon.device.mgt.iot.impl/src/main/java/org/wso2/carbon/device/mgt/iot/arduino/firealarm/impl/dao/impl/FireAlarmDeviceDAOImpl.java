@@ -23,10 +23,10 @@ import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.device.mgt.iot.arduino.firealarm.constants.FireAlarmConstants;
 import org.wso2.carbon.device.mgt.iot.arduino.firealarm.impl.dao.FireAlarmDAO;
 import org.wso2.carbon.device.mgt.iot.arduino.firealarm.impl.util.FireAlarmUtils;
-import org.wso2.carbon.device.mgt.iot.dao.IotDeviceDAO;
-import org.wso2.carbon.device.mgt.iot.dao.IotDeviceManagementDAOException;
-import org.wso2.carbon.device.mgt.iot.dao.util.IotDeviceManagementDAOUtil;
-import org.wso2.carbon.device.mgt.iot.dto.IotDevice;
+import org.wso2.carbon.device.mgt.iot.devicecloud.dao.IotDeviceDAO;
+import org.wso2.carbon.device.mgt.iot.devicecloud.dao.IotDeviceManagementDAOException;
+import org.wso2.carbon.device.mgt.iot.devicecloud.dao.util.IotDeviceManagementDAOUtil;
+import org.wso2.carbon.device.mgt.iot.devicecloud.dto.IotDevice;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

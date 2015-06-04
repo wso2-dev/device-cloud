@@ -26,7 +26,7 @@
 
     <jaxrs:server id="DeviceController" address="/DeviceController">
         <jaxrs:serviceBeans>
-            <bean id="DeviceControllerService" class="org.wso2.carbon.device.mgt.iot.common.DeviceControllerService"/>
+            <bean id="DeviceControllerService" class="org.wso2.carbon.device.mgt.iot.devicecloud.DeviceController"/>
         </jaxrs:serviceBeans>
     </jaxrs:server>
 
@@ -63,11 +63,11 @@
     <jaxrs:server id="DevicesManager" address="/DevicesManager">
         <jaxrs:serviceBeans>
             <bean id="DevicesManagerService"
-                  class="org.wso2.carbon.device.mgt.iot.common.service.DevicesManagerService"/>
+                  class="org.wso2.carbon.device.mgt.iot.test.DevicesManagerService"/>
         </jaxrs:serviceBeans>
     </jaxrs:server>
 
-    <bean id="mqttSubscriber" class="org.wso2.carbon.device.mgt.iot.common.controlqueue.mqtt.MQTTSubscriber">
+    <bean id="mqttSubscriber" class="org.wso2.carbon.device.mgt.iot.devicecloud.controlqueue.mqtt.MQTTSubscriber">
         <constructor-arg index="0" value="Subscriber"></constructor-arg>
         <constructor-arg index="1" value="FireAlarm"></constructor-arg>
     </bean>

@@ -102,7 +102,7 @@ public class SenseBotControllerService {
 //                    "Temperature:" + temperature + "C\t\tMotion:" + motion + "\tSonar:" + sonar + "\tLight:" + light;
 //            log.info(sensorValues);
 //
-//            result = DeviceControllerService
+//            result = DeviceController
 //                    .pushData(dataMsg.owner, "SenseBot", dataMsg.deviceId, System.currentTimeMillis(), "DeviceData",
 //                            temperature, "TEMP", response);
 //
@@ -110,7 +110,7 @@ public class SenseBotControllerService {
 //                return result;
 //            }
 //
-//            result = DeviceControllerService
+//            result = DeviceController
 //                    .pushData(dataMsg.owner, "SenseBot", dataMsg.deviceId, System.currentTimeMillis(), "DeviceData",
 //                            motion, "MOTION", response);
 //
@@ -119,7 +119,7 @@ public class SenseBotControllerService {
 //            }
 //
 //            if (!sonar.equals("No Object")) {
-//                result = DeviceControllerService
+//                result = DeviceController
 //                        .pushData(dataMsg.owner, "SenseBot", dataMsg.deviceId, System.currentTimeMillis(), "DeviceData",
 //                                sonar, "SONAR", response);
 //
@@ -128,7 +128,7 @@ public class SenseBotControllerService {
 //                }
 //            }
 //
-//            result = DeviceControllerService
+//            result = DeviceController
 //                    .pushData(dataMsg.owner, "SenseBot", dataMsg.deviceId, System.currentTimeMillis(), "DeviceData",
 //                            light, "LIGHT", response);
 //
@@ -147,7 +147,7 @@ public class SenseBotControllerService {
 //        String temperature = dataMsg.value;                            //TEMP-PIR-SONAR-LDR
 //        log.info("Recieved Tenperature Data Value: " + temperature + " degrees C");
 //
-//        result = DeviceControllerService
+//        result = DeviceController
 //                .pushData(dataMsg.owner, "SenseBot", dataMsg.deviceId, System.currentTimeMillis(), "DeviceData",
 //                        temperature, "TEMP", response);
 //
@@ -161,7 +161,7 @@ public class SenseBotControllerService {
 //        String motion = dataMsg.value;                            //TEMP-PIR-SONAR-LDR
 //        log.info("Recieved PIR (Motion) Sensor Data Value: " + motion);
 //
-//        result = DeviceControllerService
+//        result = DeviceController
 //                .pushData(dataMsg.owner, "SenseBot", dataMsg.deviceId, System.currentTimeMillis(), "DeviceData", motion,
 //                        "MOTION", response);
 //
@@ -179,7 +179,7 @@ public class SenseBotControllerService {
 //        } else {
 //            log.info("Recieved Sonar Sensor Data Value: " + sonar + " cm");
 //
-//            result = DeviceControllerService
+//            result = DeviceController
 //                    .pushData(dataMsg.owner, "SenseBot", dataMsg.deviceId, System.currentTimeMillis(), "DeviceData",
 //                            sonar, "SONAR", response);
 //
@@ -198,7 +198,7 @@ public class SenseBotControllerService {
 //        String light = dataMsg.value;                            //TEMP-PIR-SONAR-LDR
 //        log.info("Recieved LDR (Light) Sensor Data Value: " + light);
 //
-//        result = DeviceControllerService
+//        result = DeviceController
 //                .pushData(dataMsg.owner, "SenseBot", dataMsg.deviceId, System.currentTimeMillis(), "DeviceData", light,
 //                        "LIGHT", response);
 //

@@ -23,9 +23,9 @@ import org.wso2.carbon.device.mgt.common.Device;
 import org.wso2.carbon.device.mgt.common.DeviceIdentifier;
 import org.wso2.carbon.device.mgt.common.DeviceManagementException;
 import org.wso2.carbon.device.mgt.iot.arduino.firealarm.constants.FireAlarmConstants;
-import org.wso2.carbon.device.mgt.iot.common.service.DevicesManagerService;
-import org.wso2.carbon.device.mgt.iot.util.ZipArchive;
-import org.wso2.carbon.device.mgt.iot.web.register.DeviceManagement;
+import org.wso2.carbon.device.mgt.iot.test.DevicesManagerService;
+import org.wso2.carbon.device.mgt.iot.common.util.ZipArchive;
+import org.wso2.carbon.device.mgt.iot.common.DeviceManagement;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.*;

@@ -19,15 +19,15 @@ package org.wso2.carbon.device.mgt.iot.firealarm.service;
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.log4j.Logger;
 import org.wso2.carbon.device.mgt.common.DeviceManagementException;
-import org.wso2.carbon.device.mgt.iot.common.config.DeviceConfigurationManager;
-import org.wso2.carbon.device.mgt.iot.common.config.DeviceManagementConfig;
-import org.wso2.carbon.device.mgt.iot.common.config.DeviceManagementControllerConfig;
-import org.wso2.carbon.device.mgt.iot.common.config.controlqueue.DeviceControlQueueConfig;
-import org.wso2.carbon.device.mgt.iot.common.exception.DeviceControllerServiceException;
-import org.wso2.carbon.device.mgt.iot.common.DeviceControllerService;
+import org.wso2.carbon.device.mgt.iot.devicecloud.DeviceController;
+import org.wso2.carbon.device.mgt.iot.devicecloud.config.DeviceConfigurationManager;
+import org.wso2.carbon.device.mgt.iot.devicecloud.config.DeviceManagementConfig;
+import org.wso2.carbon.device.mgt.iot.devicecloud.config.DeviceManagementControllerConfig;
+import org.wso2.carbon.device.mgt.iot.devicecloud.config.controlqueue.DeviceControlQueueConfig;
+import org.wso2.carbon.device.mgt.iot.devicecloud.exception.DeviceControllerException;
 import org.wso2.carbon.device.mgt.iot.firealarm.util.DeviceJSON;
-import org.wso2.carbon.device.mgt.iot.common.controlqueue.mqtt.MQTTSubscriber;
-import org.wso2.carbon.device.mgt.iot.common.exception.UnauthorizedException;
+import org.wso2.carbon.device.mgt.iot.devicecloud.controlqueue.mqtt.MQTTSubscriber;
+import org.wso2.carbon.device.mgt.iot.devicecloud.exception.UnauthorizedException;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.*;
@@ -52,7 +52,7 @@ public class FireAlarmControllerService {
 
 		try {
 			config = DeviceConfigurationManager.getInstance().getFireAlarmMgtConfig();
-		} catch (DeviceControllerServiceException ex) {
+		} catch (DeviceControllerException ex) {
 			log.error(ex.getMessage());
 		}
 
@@ -107,8 +107,8 @@ public class FireAlarmControllerService {
 						   @Context HttpServletResponse response) {
 
 		try {
-			boolean result = DeviceControllerService.setControl(owner, "FireAlarm", deviceId,
-																"BULB", "IN");
+			boolean result = DeviceController.setControl(owner, "FireAlarm", deviceId,
+														 "BULB", "IN");
 			if (result) {
 				response.setStatus(HttpStatus.SC_ACCEPTED);
 
@@ -130,9 +130,9 @@ public class FireAlarmControllerService {
 								   @HeaderParam("deviceId") String deviceId,
 								   @Context HttpServletResponse response) {
 		try {
-			boolean result = DeviceControllerService.setControl(owner, "FireAlarm", deviceId,
-																"TEMPERATURE",
-																"IN");
+			boolean result = DeviceController.setControl(owner, "FireAlarm", deviceId,
+														 "TEMPERATURE",
+														 "IN");
 			if (result) {
 				response.setStatus(HttpStatus.SC_ACCEPTED);
 
@@ -157,9 +157,9 @@ public class FireAlarmControllerService {
 						  @Context HttpServletResponse response) {
 
 		try {
-			boolean result = DeviceControllerService.setControl(owner, "FireAlarm", deviceId,
-																"FAN",
-																"IN");
+			boolean result = DeviceController.setControl(owner, "FireAlarm", deviceId,
+														 "FAN",
+														 "IN");
 			if (result) {
 				response.setStatus(HttpStatus.SC_ACCEPTED);
 
@@ -215,9 +215,9 @@ public class FireAlarmControllerService {
 	public void reply(final DeviceJSON replyMsg,
 					  @Context HttpServletResponse response) {
 		try {
-			boolean result = DeviceControllerService.setControl(replyMsg.owner, "FireAlarm",
-																replyMsg.deviceId, replyMsg.reply,
-																"OUT");
+			boolean result = DeviceController.setControl(replyMsg.owner, "FireAlarm",
+														 replyMsg.deviceId, replyMsg.reply,
+														 "OUT");
 			if (result) {
 				response.setStatus(HttpStatus.SC_ACCEPTED);
 
@@ -257,7 +257,7 @@ public class FireAlarmControllerService {
 							fan;
 			log.info(sensorValues);
 
-			result = DeviceControllerService
+			result = DeviceController
 					.pushData(dataMsg.owner, "FireAlarm", dataMsg.deviceId,
 							  System.currentTimeMillis(), "DeviceData",
 							  temperature, "TEMP");
@@ -267,7 +267,7 @@ public class FireAlarmControllerService {
 				return ;
 			}
 
-			result = DeviceControllerService
+			result = DeviceController
 					.pushData(dataMsg.owner, "FireAlarm", dataMsg.deviceId,
 							  System.currentTimeMillis(), "DeviceData",
 							  bulb, "BULB");
@@ -277,7 +277,7 @@ public class FireAlarmControllerService {
 				return ;
 			}
 
-			result = DeviceControllerService
+			result = DeviceController
 					.pushData(dataMsg.owner, "FireAlarm", dataMsg.deviceId,
 							  System.currentTimeMillis(), "DeviceData",
 							  fan, "FAN");
@@ -288,7 +288,7 @@ public class FireAlarmControllerService {
 			}
 
 		} else {
-			result = DeviceControllerService
+			result = DeviceController
 					.pushData(dataMsg.owner, "FireAlarm", dataMsg.deviceId,
 							  System.currentTimeMillis(), "DeviceData",
 							  dataMsg.value, dataMsg.reply);

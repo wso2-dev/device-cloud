@@ -24,19 +24,19 @@
 	
 	<DataStores>
 		<DataStore>
-			<class type="WSO2-BAM">org.wso2.carbon.device.mgt.iot.common.datastore.bam.BAMDataStore
+			<class type="WSO2-BAM">org.wso2.carbon.device.mgt.iot.devicecloud.config.datastore.bam.BAMDataStore
 			</class>
 		</DataStore>
 
 		<DataStore>
-			<class type="WSO2-CEP">org.wso2.carbon.device.mgt.iot.common.devicecontroller.impl.CEPDataStore
+			<class type="WSO2-CEP">org.wso2.carbon.device.mgt.iot.common.devicecloud.exception.devicecontroller.impl.CEPDataStore
 			</class>
 		</DataStore>
 	</DataStores>
 
 	<ControlQueues>
 		<ControlQueue>
-			<class type="MQTT">org.wso2.carbon.device.mgt.iot.common.controlqueue.mqtt.MQTTControlQueue
+			<class type="MQTT">org.wso2.carbon.device.mgt.iot.devicecloud.controlqueue.mqtt.MQTTControlQueue
 			</class>
 		</ControlQueue>
 	</ControlQueues>
