@@ -65,7 +65,7 @@
 							org.wso2.carbon.user.api,
 							org.wso2.carbon.device.mgt.user.core,
 							org.wso2.carbon.device.mgt.user.common,
-							org.apache.commons.collections.map,
+							org.apache.commons.collections.map.*,
                             org.apache.commons.io.*,
                             org.wso2.carbon.context.*,
                             org.wso2.carbon.ndatasource.core
@@ -156,11 +156,11 @@
 			<artifactId>org.wso2.carbon.registry.core</artifactId>
 			<version>4.3.0</version>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>commons-collections</groupId>
 			<artifactId>commons-collections</artifactId>
-			<version>3.0</version>
+			<version>3.2.1</version>
 		</dependency>
 
         <!--<dependency>-->

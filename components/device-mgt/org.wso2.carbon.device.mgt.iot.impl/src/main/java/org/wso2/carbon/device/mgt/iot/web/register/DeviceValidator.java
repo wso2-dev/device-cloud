@@ -33,38 +33,43 @@ public class DeviceValidator {
     }
 
     public boolean isExist(String owner, DeviceIdentifier deviceId)
-            throws InstantiationException, IllegalAccessException, DeviceManagementException {
-        boolean status = false;
+            throws  DeviceManagementException {
 
-        // ADD DeviceIdentifier
-        // TODO add deviceType
-        status = cacheCheck(owner, deviceId.getId());
-        if (!status) {
-            DeviceManagement deviceManagement = new DeviceManagement();
-            status = deviceManagement.isExist(owner, deviceId);
-            if (status) {
-                addToCache(owner, deviceId.getId());
 
-            }
-        }
+        return cacheCheck(owner, deviceId);
 
-        return status;
 
     }
 
-    private boolean cacheCheck(String owner, String deviceId) {
+    private boolean cacheCheck(String owner, DeviceIdentifier deviceId) throws DeviceManagementException{
 
         String value = (String) cache.get(deviceId);
 
-        if (value != null && value.equals(owner)) {
-            return true;
+        if (value != null && !value.isEmpty()) {
+
+            if( value.equals(owner)){
+                return true;
+
+            }else{
+
+                return false;
+            }
+
+        }else{
+            DeviceManagement deviceManagement = new DeviceManagement();
+            boolean status = deviceManagement.isExist(owner, deviceId);
+            if (status) {
+                addToCache(owner, deviceId );
+
+            }
+            return status;
 
         }
-        return false;
+
 
     }
 
-    private void addToCache(String owner, String deviceId) {
+    private void addToCache(String owner, DeviceIdentifier deviceId) {
 
         cache.put(deviceId, owner);
     }
