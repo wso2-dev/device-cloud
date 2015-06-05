@@ -79,17 +79,18 @@
                             org.apache.commons.io.*,
                             org.wso2.carbon.context.*,
                             org.wso2.carbon.ndatasource.core,
-                            org.eclipse.paho.client.mqttv3;version=0.4.0,
-                            org.eclipse.paho.client.mqttv3.*;version=0.4.0,
+                            <!--org.eclipse.paho.client.mqttv3,-->
+                            <!--org.eclipse.paho.client.mqttv3.*,-->
 							org.wso2.carbon.databridge.agent.thrift,
 							org.wso2.carbon.databridge.agent.thrift.exception,
 							org.wso2.carbon.databridge.commons.exception
                             <!--org.apache.velocity.*-->
 						</Import-Package>
+
 						<Export-Package>
 							!org.wso2.carbon.device.mgt.iot.internal,
 							org.wso2.carbon.device.mgt.iot.*,
-                            org.eclipse.paho.client.mqttv3.*;version=0.4.0
+							org.eclipse.paho.client.mqttv3.*
 						</Export-Package>
 					</instructions>
 				</configuration>

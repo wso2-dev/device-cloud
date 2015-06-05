@@ -39,7 +39,7 @@ public class DeviceConfigurationManager {
 
     private static final Log log = LogFactory.getLog(DeviceConfigurationManager.class);
 
-    private static final String IOT_DEVICE_CONFIG_XML_NAME = "iotdevice-config.xml";
+    private static final String IOT_DEVICE_CONFIG_XML_NAME = "iot-config.xml";
 	private static final String IOT_DC_ROOT_DIRECTORY = "iot";
 	private final String CONFIGS_FILE_LOCATION =
 			CarbonUtils.getCarbonConfigDirPath() + File.separator +

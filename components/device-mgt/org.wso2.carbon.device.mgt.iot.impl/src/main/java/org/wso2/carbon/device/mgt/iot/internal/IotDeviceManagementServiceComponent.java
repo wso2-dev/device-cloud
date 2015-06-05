@@ -37,7 +37,7 @@ import org.wso2.carbon.device.mgt.common.spi.DeviceMgtService;
 import java.util.Map;
 
 /**
- * @scr.component name="org.wso2.carbon.device.mgt.iot.bam.internal.IotDeviceManagementServiceComponent"
+ * @scr.component name="org.wso2.carbon.device.mgt.iot.internal.IotDeviceManagementServiceComponent"
  * immediate="true"
  * @scr.reference name="org.wso2.carbon.ndatasource"
  * interface="org.wso2.carbon.ndatasource.core.DataSourceService"

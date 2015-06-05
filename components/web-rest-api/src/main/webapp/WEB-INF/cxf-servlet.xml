@@ -24,22 +24,18 @@
          http://cxf.apache.org/jaxrs http://cxf.apache.org/schemas/jaxrs.xsd">
 
 
-    <jaxrs:server id="DeviceController" address="/DeviceController">
-        <jaxrs:serviceBeans>
-            <bean id="DeviceControllerService" class="org.wso2.carbon.device.mgt.iot.devicecloud.DeviceController"/>
-        </jaxrs:serviceBeans>
-    </jaxrs:server>
 
-    <jaxrs:server id="SenseBotController" address="/SenseBotController">
-        <jaxrs:serviceBeans>
-            <bean id="SenseBotControllerService"
-                  class="org.wso2.carbon.device.mgt.iot.sensebot.service.SenseBotControllerService">
-            </bean>
-        </jaxrs:serviceBeans>
-        <jaxrs:providers>
-            <bean class="org.codehaus.jackson.jaxrs.JacksonJsonProvider" />
-        </jaxrs:providers>
-    </jaxrs:server>
+
+    <!--<jaxrs:server id="SenseBotController" address="/SenseBotController">-->
+        <!--<jaxrs:serviceBeans>-->
+            <!--<bean id="SenseBotControllerService"-->
+                  <!--class="org.wso2.carbon.device.mgt.iot.sensebot.service.SenseBotControllerService">-->
+            <!--</bean>-->
+        <!--</jaxrs:serviceBeans>-->
+        <!--<jaxrs:providers>-->
+            <!--<bean class="org.codehaus.jackson.jaxrs.JacksonJsonProvider" />-->
+        <!--</jaxrs:providers>-->
+    <!--</jaxrs:server>-->
 
     <jaxrs:server id="FireAlarmController" address="/FireAlarmController">
         <jaxrs:serviceBeans>
