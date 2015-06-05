@@ -37,7 +37,7 @@
 
     <modules>
         <module>components/devicecloud-mgt</module>
-        <module>components/devicecloud-api</module>
+        <module>components/devicecloud-api/</module>
         <module>features/devicecloud-mgt</module>
     </modules>
 

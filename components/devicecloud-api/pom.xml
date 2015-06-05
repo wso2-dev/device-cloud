@@ -14,7 +14,12 @@
     <groupId>org.wso2.carbon.device.mgt.iot</groupId>
     <artifactId>devicecloud-api</artifactId>
     <version>1.0.0</version>
-    <packaging>war</packaging>
+    <modules>
+        <module>org.wso2.carbon.device.mgt.iot.common</module>
+        <module>org.wso2.carbon.device.mgt.iot.sensebot</module>
+        <module>org.wso2.carbon.device.mgt.iot.firealarm</module>
+    </modules>
+    <packaging>pom</packaging>
     <name>WSO2 Carbon - Device Cloud API</name>
 
     <dependencies>
@@ -80,34 +85,34 @@
         </dependency>
         <!-- -->
         <!--<dependency>-->
-            <!--<groupId>commons-configuration</groupId>-->
-            <!--<artifactId>commons-configuration</artifactId>-->
-            <!--<version>1.8</version>-->
-            <!--<scope>provided</scope>-->
+        <!--<groupId>commons-configuration</groupId>-->
+        <!--<artifactId>commons-configuration</artifactId>-->
+        <!--<version>1.8</version>-->
+        <!--<scope>provided</scope>-->
         <!--</dependency>-->
         <!--<dependency>-->
-            <!--<groupId>org.wso2.carbon</groupId>-->
-            <!--<artifactId>org.wso2.carbon.databridge.agent.thrift</artifactId>-->
-            <!--<version>4.0.0</version>-->
-            <!--<scope>provided</scope>-->
+        <!--<groupId>org.wso2.carbon</groupId>-->
+        <!--<artifactId>org.wso2.carbon.databridge.agent.thrift</artifactId>-->
+        <!--<version>4.0.0</version>-->
+        <!--<scope>provided</scope>-->
         <!--</dependency>-->
         <!--<dependency>-->
-            <!--<groupId>org.wso2.carbon</groupId>-->
-            <!--<artifactId>org.wso2.carbon.databridge.commons</artifactId>-->
-            <!--<version>4.0.0</version>-->
-            <!--<scope>provided</scope>-->
+        <!--<groupId>org.wso2.carbon</groupId>-->
+        <!--<artifactId>org.wso2.carbon.databridge.commons</artifactId>-->
+        <!--<version>4.0.0</version>-->
+        <!--<scope>provided</scope>-->
         <!--</dependency>-->
         <!--<dependency>-->
-            <!--<groupId>org.wso2.carbon</groupId>-->
-            <!--<artifactId>org.wso2.carbon.databridge.commons.thrift</artifactId>-->
-            <!--<version>4.0.0</version>-->
-            <!--<scope>provided</scope>-->
+        <!--<groupId>org.wso2.carbon</groupId>-->
+        <!--<artifactId>org.wso2.carbon.databridge.commons.thrift</artifactId>-->
+        <!--<version>4.0.0</version>-->
+        <!--<scope>provided</scope>-->
         <!--</dependency>-->
         <!--<dependency>-->
-            <!--<groupId>org.wso2.carbon</groupId>-->
-            <!--<artifactId>org.wso2.carbon.logging</artifactId>-->
-            <!--<version>${carbon.kernel.version}</version>-->
-            <!--<scope>provided</scope>-->
+        <!--<groupId>org.wso2.carbon</groupId>-->
+        <!--<artifactId>org.wso2.carbon.logging</artifactId>-->
+        <!--<version>${carbon.kernel.version}</version>-->
+        <!--<scope>provided</scope>-->
         <!--</dependency>-->
         <dependency>
             <groupId>org.eclipse.paho</groupId>
@@ -143,32 +148,13 @@
     <build>
         <plugins>
             <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
+                <version>2.3.1</version>
                 <configuration>
+                    <encoding>UTF-8</encoding>
                     <source>1.7</source>
                     <target>1.7</target>
-                </configuration>
-                <version>2.3.2</version>
-            </plugin>
-            <plugin>
-                <artifactId>maven-war-plugin</artifactId>
-                <version>2.2</version>
-                <configuration>
-                    <warName>iotdevices</warName><!--devices.war-->
-                    <!--<packagingExcludes>WEB-INF/lib/*.jar</packagingExcludes>-->
-                </configuration>
-            </plugin>
-            <plugin>
-                <artifactId>maven-eclipse-plugin</artifactId>
-                <version>2.9</version>
-                <configuration>
-                    <buildcommands>
-                        <buildcommand>org.eclipse.jdt.core.javabuilder</buildcommand>
-                    </buildcommands>
-                    <projectnatures>
-                        <projectnature>org.wso2.developerstudio.eclipse.jaxrs.project.nature</projectnature>
-                        <projectnature>org.eclipse.jdt.core.javanature</projectnature>
-                    </projectnatures>
                 </configuration>
             </plugin>
         </plugins>
