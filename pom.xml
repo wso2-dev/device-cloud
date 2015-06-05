@@ -274,6 +274,12 @@
                 <version>3.3.100.v20120522-1822</version>
             </dependency>
 
+            <dependency>
+                <groupId>org.eclipse.paho</groupId>
+                <artifactId>mqtt-client</artifactId>
+                <version>${eclipse.paho.version}</version>
+            </dependency>
+
             <!--Orbit dependencies-->
             <dependency>
                 <groupId>com.h2database.wso2</groupId>
@@ -461,6 +467,8 @@
         <orbit.h2.engine.version>1.2.140.wso2v3</orbit.h2.engine.version>
         <orbit.tomcat.version>7.0.52.wso2v5</orbit.tomcat.version>
         <orbit.tomcat.jdbc.pooling.version>7.0.34.wso2v2</orbit.tomcat.jdbc.pooling.version>
+
+        <eclipse.paho.version>0.4.0</eclipse.paho.version>
 
         <!-- CXF version -->
         <cxf.version>2.6.1</cxf.version>
