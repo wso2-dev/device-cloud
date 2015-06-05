@@ -91,6 +91,7 @@
 							!org.wso2.carbon.device.mgt.iot.internal,
 							org.wso2.carbon.device.mgt.iot.*,
 							org.eclipse.paho.client.mqttv3.*
+
 						</Export-Package>
 					</instructions>
 				</configuration>
