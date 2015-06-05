@@ -13,19 +13,19 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<parent>
-		<artifactId>device-mgt</artifactId>
-		<groupId>org.wso2.carbon.devicemgt-plugins</groupId>
-		<version>1.9.2-SNAPSHOT</version>
+		<artifactId>devicecloud-mgt</artifactId>
+		<groupId>org.wso2.carbon.device.mgt.iot</groupId>
+		<version>1.0.0-SNAPSHOT</version>
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>org.wso2.carbon.devicemgt-plugins</groupId>
+	<groupId>org.wso2.carbon.device.mgt.iot</groupId>
 	<artifactId>org.wso2.carbon.device.mgt.iot.impl</artifactId>
-	<version>1.9.2-SNAPSHOT</version>
+	<version>1.0.0-SNAPSHOT</version>
 	<packaging>bundle</packaging>
 	<name>WSO2 Carbon - IoT Device Management Impl</name>
-	<description>WSO2 Carbon - IoT Device Management Impl</description>
+	<description>WSO2 Carbon - IoT Device Management and Control Implementation</description>
 	<url>http://wso2.org</url>
 
 	<build>
@@ -52,7 +52,7 @@
 						<Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
 						<Bundle-Name>${project.artifactId}</Bundle-Name>
 						<Bundle-Version>${carbon.iot.device.mgt.version}</Bundle-Version>
-						<Bundle-Description>Device Management IoT Impl Bundle</Bundle-Description>
+						<Bundle-Description>Device Cloud Impl Bundle</Bundle-Description>
 						<Private-Package>org.wso2.carbon.device.mgt.iot.internal</Private-Package>
 						<Import-Package>
 							org.osgi.framework,

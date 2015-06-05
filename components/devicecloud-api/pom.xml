@@ -4,18 +4,18 @@
         xmlns="http://maven.apache.org/POM/4.0.0"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <parent>
-        <groupId>org.wso2.carbon.devicemgt-plugins</groupId>
-        <artifactId>carbon-device-mgt-plugins-parent</artifactId>
-        <version>1.9.2-SNAPSHOT</version>
+        <groupId>org.wso2.carbon.device.mgt.iot</groupId>
+        <artifactId>carbon-device-cloud</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
         <relativePath>../../pom.xml</relativePath>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.wso2.carbon.device.mgt.iot</groupId>
-    <artifactId>WSO2ConnectedDevices</artifactId>
+    <artifactId>devicecloud-api</artifactId>
     <version>1.0.0</version>
     <packaging>war</packaging>
-    <name>WSO2-IoT-Rest-APi</name>
+    <name>WSO2 Carbon - Device Cloud API</name>
 
     <dependencies>
 
@@ -48,9 +48,9 @@
         </dependency>
         <!--IOT -->
         <dependency>
-            <groupId>org.wso2.carbon.devicemgt-plugins</groupId>
+            <groupId>org.wso2.carbon.device.mgt.iot</groupId>
             <artifactId>org.wso2.carbon.device.mgt.iot.impl</artifactId>
-            <version>1.9.2-SNAPSHOT</version>
+            <version>1.0.0-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
         <!-- -->

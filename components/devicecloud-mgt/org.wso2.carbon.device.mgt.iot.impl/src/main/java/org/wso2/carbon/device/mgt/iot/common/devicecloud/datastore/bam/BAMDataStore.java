@@ -233,7 +233,7 @@ public class BAMDataStore implements DataStoreConnector {
     //
     // File file =
     // new File(
-    // "/Users/smean-MAC/Documents/WSO2Git/device-cloud/WSO2ConnectedDevices/src/main/webapp/resources/security/client-truststore.jks");
+    // "/Users/smean-MAC/Documents/WSO2Git/device-cloud/devicecloud-api/src/main/webapp/resources/security/client-truststore.jks");
     // System.out.println(file);
     //
     // if (file.exists()) {
