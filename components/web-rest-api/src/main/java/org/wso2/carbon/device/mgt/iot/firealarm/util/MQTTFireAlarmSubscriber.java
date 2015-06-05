@@ -125,12 +125,12 @@ public class MQTTFireAlarmSubscriber implements MqttCallback {
 
             public void run() {
                 while (true) {
-                    if (!FireAlarmControllerService.getMQTTSubscriber().isConnected()) {
+                    if (!FireAlarmControllerService.getMqttFireAlarmSubscriber().isConnected()) {
                         if (log.isDebugEnabled()) {
                             log.debug("Subscriber reconnecting to queue........");
                         }
                         try {
-                            FireAlarmControllerService.getMQTTSubscriber().subscribe();
+                            FireAlarmControllerService.getMqttFireAlarmSubscriber().subscribe();
                         } catch (DeviceManagementException e) {
                             if (log.isDebugEnabled()) {
                                 log.debug("Could not reconnect and subscribe to ControlQueue.");

@@ -19,15 +19,15 @@ package org.wso2.carbon.device.mgt.iot.firealarm.service;
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.log4j.Logger;
 import org.wso2.carbon.device.mgt.common.DeviceManagementException;
-import org.wso2.carbon.device.mgt.iot.devicecloud.DeviceController;
-import org.wso2.carbon.device.mgt.iot.devicecloud.config.DeviceConfigurationManager;
-import org.wso2.carbon.device.mgt.iot.devicecloud.config.DeviceManagementConfig;
-import org.wso2.carbon.device.mgt.iot.devicecloud.config.DeviceManagementControllerConfig;
-import org.wso2.carbon.device.mgt.iot.devicecloud.config.controlqueue.DeviceControlQueueConfig;
-import org.wso2.carbon.device.mgt.iot.devicecloud.exception.DeviceControllerException;
+import org.wso2.carbon.device.mgt.iot.common.devicecloud.DeviceController;
+import org.wso2.carbon.device.mgt.iot.common.devicecloud.config.DeviceCloudConfigManager;
+import org.wso2.carbon.device.mgt.iot.common.devicecloud.config.DeviceCloudManagementConfig;
+import org.wso2.carbon.device.mgt.iot.common.devicecloud.config.DeviceCloudManagementControllerConfig;
+import org.wso2.carbon.device.mgt.iot.common.devicecloud.config.controlqueue.DeviceControlQueueConfig;
+import org.wso2.carbon.device.mgt.iot.common.devicecloud.exception.DeviceControllerException;
 import org.wso2.carbon.device.mgt.iot.firealarm.util.DeviceJSON;
 import org.wso2.carbon.device.mgt.iot.firealarm.util.MQTTFireAlarmSubscriber;
-import org.wso2.carbon.device.mgt.iot.devicecloud.exception.UnauthorizedException;
+import org.wso2.carbon.device.mgt.iot.common.devicecloud.exception.UnauthorizedException;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.*;
@@ -48,18 +48,18 @@ public class FireAlarmControllerService {
 	private static MQTTFireAlarmSubscriber mqttFireAlarmSubscriber;
 
 	static {
-		DeviceManagementConfig config = null;
 
+		DeviceCloudManagementConfig config=null;
 		try {
-			config = DeviceConfigurationManager.getInstance().getFireAlarmMgtConfig();
+			config = DeviceCloudConfigManager.getInstance().getDeviceCloudMgtConfig();
 		} catch (DeviceControllerException ex) {
 			log.error(ex.getMessage());
 		}
 
 		if (config != null) {
 			// controller configurations
-			DeviceManagementControllerConfig controllerConfig =
-					config.getFireAlarmManagementControllerConfig();
+			DeviceCloudManagementControllerConfig controllerConfig =
+					config.getDeviceCloudManagementControllerConfig();
 
 			// reading control queue configurations
 			String controlQueueKey = controllerConfig.getDeviceControlQueue();
@@ -85,7 +85,7 @@ public class FireAlarmControllerService {
 	/**
 	 * @param mqttFireAlarmSubscriber the mqttFireAlarmSubscriber to set
 	 */
-	public void setMqttSubscriber(MQTTFireAlarmSubscriber mqttFireAlarmSubscriber) {
+	public void setMqttFireAlarmSubscriber(MQTTFireAlarmSubscriber mqttFireAlarmSubscriber) {
 		this.mqttFireAlarmSubscriber = mqttFireAlarmSubscriber;
 		try {
 			mqttFireAlarmSubscriber.subscribe();
@@ -94,7 +94,7 @@ public class FireAlarmControllerService {
 		}
 	}
 
-	public static MQTTFireAlarmSubscriber getMQTTSubscriber() {
+	public static MQTTFireAlarmSubscriber getMqttFireAlarmSubscriber() {
 		return mqttFireAlarmSubscriber;
 	}
 

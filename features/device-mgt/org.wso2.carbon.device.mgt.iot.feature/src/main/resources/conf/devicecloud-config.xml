@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<FireAlarmDeviceMgtConfiguration>
+<DeviceCloudMgtConfiguration>
 
     <DeviceController>
         <DeviceDataStore>WSO2-BAM</DeviceDataStore>
@@ -8,10 +8,8 @@
 
     <DataStores>
         <DataStore type="WSO2-BAM">
-            <class>
-                org.wso2.carbon.device.mgt.iot.devicecloud.config.datastore.bam.BAMDataStore
-            </class>
-            <endpoint>tcp://localhost</endpoint>
+            <class>org.wso2.carbon.device.mgt.iot.common.devicecloud.datastore.bam.BAMDataStore</class>
+            <endpoint>tcp://10.100.7.31</endpoint>
             <!--<endpoint>tcp://10.100.7.38</endpoint>-->
             <port>7613</port>
             <username>admin</username>
@@ -31,11 +29,9 @@
 
     <ControlQueues>
         <ControlQueue type="MQTT">
-            <class>
-                org.wso2.carbon.device.mgt.iot.devicecloud.controlqueue.mqtt.MQTTControlQueue
-            </class>
+            <class>org.wso2.carbon.device.mgt.iot.common.devicecloud.controlqueue.mqtt.MQTTControlQueue</class>
             <protocol>MQTT</protocol>
-            <endpoint>tcp://localhost</endpoint>
+            <endpoint>tcp://10.100.7.31</endpoint>
             <!--<endpoint>tcp://212.72.74.21</endpoint>-->  <!-- broker.mqtt-dashboard.com -->
             <port>1883</port>
             <username>.</username>
@@ -48,4 +44,4 @@
         <password>wso2carbon</password>
     </Security>
 
-</FireAlarmDeviceMgtConfiguration>
+</DeviceCloudMgtConfiguration>
