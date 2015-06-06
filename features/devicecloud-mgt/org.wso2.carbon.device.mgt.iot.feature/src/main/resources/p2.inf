@@ -1,8 +1,6 @@
 instructions.configure = \
 org.eclipse.equinox.p2.touchpoint.natives.mkdir(path:${installFolder}/../../deployment/server/webapps/);\
-org.eclipse.equinox.p2.touchpoint.natives.copy(source:${installFolder}/../features/org.wso2.carbon.device.mgt.iot_${feature.version}/devicecloud.war,target:${installFolder}/../../deployment/server/webapps/devicecloud.war,overwrite:true);\
-org.eclipse.equinox.p2.touchpoint.natives.copy(source:${installFolder}/../features/org.wso2.carbon.device.mgt.iot_${feature.version}/firealarm.war,target:${installFolder}/../../deployment/server/webapps/firealarm.war,overwrite:true);\
-org.eclipse.equinox.p2.touchpoint.natives.copy(source:${installFolder}/../features/org.wso2.carbon.device.mgt.iot_${feature.version}/sensebot.war,target:${installFolder}/../../deployment/server/webapps/sensebot.war,overwrite:true);\
+org.eclipse.equinox.p2.touchpoint.natives.copy(source:${installFolder}/../features/org.wso2.carbon.device.mgt.iot_${feature.version}/webapps/,target:${installFolder}/../../deployment/server/webapps/,overwrite:true);\
 org.eclipse.equinox.p2.touchpoint.natives.copy(source:${installFolder}/../features/org.wso2.carbon.device.mgt.iot_${feature.version}/conf/iot-config.xml,target:${installFolder}/../../conf/iot-config.xml,overwrite:true);\
 org.eclipse.equinox.p2.touchpoint.natives.copy(source:${installFolder}/../features/org.wso2.carbon.device.mgt.iot_${feature.version}/conf/devicecloud-config.xml,target:${installFolder}/../../conf/devicecloud-config.xml,overwrite:true);\
 org.eclipse.equinox.p2.touchpoint.natives.copy(source:${installFolder}/../features/org.wso2.carbon.device.mgt.iot_${feature.version}/dbscripts/plugins/,target:${installFolder}/../../../dbscripts/cdm/plugins,overwrite:true);\
