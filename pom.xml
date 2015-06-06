@@ -203,6 +203,41 @@
                 <artifactId>org.wso2.carbon.ndatasource.core</artifactId>
                 <version>${carbon.kernel.version}</version>
             </dependency>
+            <dependency>
+                <groupId>org.wso2.carbon</groupId>
+                <artifactId>org.wso2.carbon.registry.api</artifactId>
+                <version>4.3.0</version>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.carbon</groupId>
+                <artifactId>org.wso2.carbon.registry.core</artifactId>
+                <version>4.3.0</version>
+            </dependency>
+            <dependency>
+                <groupId>commons-collections</groupId>
+                <artifactId>commons-collections</artifactId>
+                <version>3.2.1</version>
+            </dependency>
+            <dependency>
+                <groupId>commons-configuration</groupId>
+                <artifactId>commons-configuration</artifactId>
+                <version>1.8</version>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.carbon</groupId>
+                <artifactId>org.wso2.carbon.databridge.agent.thrift</artifactId>
+                <version>4.0.0</version>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.carbon</groupId>
+                <artifactId>org.wso2.carbon.databridge.commons</artifactId>
+                <version>4.0.0</version>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.carbon</groupId>
+                <artifactId>org.wso2.carbon.databridge.commons.thrift</artifactId>
+                <version>4.0.0</version>
+            </dependency>
 
             <!-- Device Management Core dependencies -->
             <dependency>
@@ -230,12 +265,57 @@
                 <artifactId>org.wso2.carbon.device.mgt.user.core</artifactId>
                 <version>${carbon.device.mgt.version}</version>
             </dependency>
+            <dependency>
+                <groupId>org.wso2.carbon.devicemgt</groupId>
+                <artifactId>org.wso2.carbon.device.mgt.user.common</artifactId>
+                <version>${carbon.device.mgt.version}</version>
+                <scope>provided</scope>
+            </dependency>
 
-            <!--IOT dependency-->
+            <!--IOT dependencies-->
             <dependency>
                 <groupId>org.wso2.carbon.device.mgt.iot</groupId>
                 <artifactId>org.wso2.carbon.device.mgt.iot.impl</artifactId>
                 <version>${carbon.iot.device.mgt.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.paho</groupId>
+                <artifactId>mqtt-client</artifactId>
+                <version>${eclipse.paho.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.carbon.device.mgt.iot</groupId>
+                <artifactId>org.wso2.carbon.device.mgt.iot.common</artifactId>
+                <version>${device.mgt.iot.feature.version}</version>
+                <type>war</type>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.carbon.device.mgt.iot</groupId>
+                <artifactId>org.wso2.carbon.device.mgt.iot.firealarm</artifactId>
+                <version>${device.mgt.iot.feature.version}</version>
+                <type>war</type>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.carbon.device.mgt.iot</groupId>
+                <artifactId>org.wso2.carbon.device.mgt.iot.sensebot</artifactId>
+                <version>${device.mgt.iot.feature.version}</version>
+                <type>war</type>
+            </dependency>
+            <dependency>
+                <groupId>javax</groupId>
+                <artifactId>javaee-web-api</artifactId>
+                <version>6.0</version>
+                <scope>provided</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.codehaus.jackson</groupId>
+                <artifactId>jackson-core-asl</artifactId>
+                <version>${jackson.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.codehaus.jackson</groupId>
+                <artifactId>jackson-jaxrs</artifactId>
+                <version>${jackson.version}</version>
             </dependency>
 
             <!--Osgi dependencies-->
@@ -274,12 +354,6 @@
                 <version>3.3.100.v20120522-1822</version>
             </dependency>
 
-            <dependency>
-                <groupId>org.eclipse.paho</groupId>
-                <artifactId>mqtt-client</artifactId>
-                <version>${eclipse.paho.version}</version>
-            </dependency>
-
             <!--Orbit dependencies-->
             <dependency>
                 <groupId>com.h2database.wso2</groupId>
@@ -292,24 +366,26 @@
                 <version>${orbit.tomcat.jdbc.pooling.version}</version>
             </dependency>
 
-            <!-- IoT dependencies -->
+            <!-- CXF dependencies -->
             <dependency>
-                <groupId>org.wso2.carbon.device.mgt.iot</groupId>
-                <artifactId>org.wso2.carbon.device.mgt.iot.common</artifactId>
-                <version>${device.mgt.iot.feature.version}</version>
-                <type>war</type>
+                <groupId>org.apache.cxf</groupId>
+                <artifactId>cxf-rt-frontend-jaxws</artifactId>
+                <version>${cxf.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.wso2.carbon.device.mgt.iot</groupId>
-                <artifactId>org.wso2.carbon.device.mgt.iot.firealarm</artifactId>
-                <version>${device.mgt.iot.feature.version}</version>
-                <type>war</type>
+                <groupId>org.apache.cxf</groupId>
+                <artifactId>cxf-rt-frontend-jaxrs</artifactId>
+                <version>${cxf.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.wso2.carbon.device.mgt.iot</groupId>
-                <artifactId>org.wso2.carbon.device.mgt.iot.sensebot</artifactId>
-                <version>${device.mgt.iot.feature.version}</version>
-                <type>war</type>
+                <groupId>org.apache.cxf</groupId>
+                <artifactId>cxf-rt-transports-http</artifactId>
+                <version>${cxf.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>javax.ws.rs</groupId>
+                <artifactId>jsr311-api</artifactId>
+                <version>${javax.ws.rs.version}</version>
             </dependency>
 
             <!--APIM dependencies-->
@@ -522,6 +598,10 @@
         <apache.wss4j.version>2.0.0</apache.wss4j.version>
         <codehaus.plexus.version>3.0.21</codehaus.plexus.version>
 
+        <!-- Source code -->
+        <wso2.maven.compiler.source>1.7</wso2.maven.compiler.source>
+        <wso2.maven.compiler.target>1.7</wso2.maven.compiler.target>
+
     </properties>
 
     <scm>
@@ -554,16 +634,6 @@
                         </goals>
                     </execution>
                 </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>2.3.1</version>
-                <configuration>
-                    <encoding>UTF-8</encoding>
-                    <source>1.6</source>
-                    <target>1.6</target>
-                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -624,8 +694,17 @@
                     <version>2.2-beta-2</version>
                 </plugin>
                 <plugin>
+                    <artifactId>maven-resources-plugin</artifactId>
+                    <version>2.6</version>
+                </plugin>
+                <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-project-info-reports-plugin</artifactId>
+                    <version>2.4</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-dependency-plugin</artifactId>
                     <version>2.4</version>
                 </plugin>
                 <plugin>
@@ -633,6 +712,39 @@
                     <artifactId>build-helper-maven-plugin</artifactId>
                     <version>1.8</version>
                 </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <configuration>
+                        <encoding>UTF-8</encoding>
+                        <source>${wso2.maven.compiler.source}</source>
+                        <target>${wso2.maven.compiler.target}</target>
+                    </configuration>
+                    <version>2.3.2</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-war-plugin</artifactId>
+                    <version>2.2</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.wso2.maven</groupId>
+                    <artifactId>carbon-p2-plugin</artifactId>
+                    <version>${carbon.p2.plugin.version}</version>
+                </plugin>
+                <!--<plugin>-->
+                    <!--<artifactId>maven-eclipse-plugin</artifactId>-->
+                    <!--<version>2.9</version>-->
+                    <!--<configuration>-->
+                        <!--<buildcommands>-->
+                            <!--<buildcommand>org.eclipse.jdt.core.javabuilder</buildcommand>-->
+                        <!--</buildcommands>-->
+                        <!--<projectnatures>-->
+                            <!--<projectnature>org.wso2.developerstudio.eclipse.jaxrs.project.nature</projectnature>-->
+                            <!--<projectnature>org.eclipse.jdt.core.javanature</projectnature>-->
+                        <!--</projectnatures>-->
+                    <!--</configuration>-->
+                <!--</plugin>-->
             </plugins>
         </pluginManagement>
     </build>

@@ -16,123 +16,82 @@
 	<version>1.0.0</version>
 
 	<packaging>war</packaging>
-	<name>WSO2 Carbon - Device Cloud API</name>
+	<name>WSO2 Carbon - Device Cloud API - Firealarm API</name>
 
 	<dependencies>
-
 		<!-- CDM -->
-
 		<dependency>
 			<groupId>org.wso2.carbon.devicemgt</groupId>
 			<artifactId>org.wso2.carbon.device.mgt.common</artifactId>
-			<version>0.9.2-SNAPSHOT</version>
 			<scope>provided</scope>
 		</dependency>
-
 		<dependency>
 			<groupId>org.wso2.carbon.devicemgt</groupId>
 			<artifactId>org.wso2.carbon.device.mgt.core</artifactId>
-			<version>0.9.2-SNAPSHOT</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.wso2.carbon.devicemgt</groupId>
 			<artifactId>org.wso2.carbon.device.mgt.user.common</artifactId>
-			<version>0.9.2-SNAPSHOT</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.wso2.carbon.devicemgt</groupId>
 			<artifactId>org.wso2.carbon.device.mgt.user.core</artifactId>
-			<version>0.9.2-SNAPSHOT</version>
 			<scope>provided</scope>
 		</dependency>
+
 		<!--IOT -->
 		<dependency>
 			<groupId>org.wso2.carbon.device.mgt.iot</groupId>
 			<artifactId>org.wso2.carbon.device.mgt.iot.impl</artifactId>
-			<version>1.0.0-SNAPSHOT</version>
 			<scope>provided</scope>
 		</dependency>
-		<!-- -->
+
+		<!--CXF -->
 		<dependency>
 			<groupId>org.apache.cxf</groupId>
 			<artifactId>cxf-rt-frontend-jaxws</artifactId>
-			<version>${cxf.version}</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.cxf</groupId>
 			<artifactId>cxf-rt-frontend-jaxrs</artifactId>
-			<version>${cxf.version}</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.cxf</groupId>
 			<artifactId>cxf-rt-transports-http</artifactId>
-			<version>${cxf.version}</version>
 			<scope>provided</scope>
 		</dependency>
-		<dependency>
-			<groupId>javax.ws.rs</groupId>
-			<artifactId>jsr311-api</artifactId>
-			<version>${javax.ws.rs.version}</version>
-			<scope>provided</scope>
-		</dependency>
-		<!-- -->
-		<!--<dependency>-->
-		<!--<groupId>commons-configuration</groupId>-->
-		<!--<artifactId>commons-configuration</artifactId>-->
-		<!--<version>1.8</version>-->
-		<!--<scope>provided</scope>-->
-		<!--</dependency>-->
-		<!--<dependency>-->
-		<!--<groupId>org.wso2.carbon</groupId>-->
-		<!--<artifactId>org.wso2.carbon.databridge.agent.thrift</artifactId>-->
-		<!--<version>4.0.0</version>-->
-		<!--<scope>provided</scope>-->
-		<!--</dependency>-->
-		<!--<dependency>-->
-		<!--<groupId>org.wso2.carbon</groupId>-->
-		<!--<artifactId>org.wso2.carbon.databridge.commons</artifactId>-->
-		<!--<version>4.0.0</version>-->
-		<!--<scope>provided</scope>-->
-		<!--</dependency>-->
-		<!--<dependency>-->
-		<!--<groupId>org.wso2.carbon</groupId>-->
-		<!--<artifactId>org.wso2.carbon.databridge.commons.thrift</artifactId>-->
-		<!--<version>4.0.0</version>-->
-		<!--<scope>provided</scope>-->
-		<!--</dependency>-->
-		<!--<dependency>-->
-		<!--<groupId>org.wso2.carbon</groupId>-->
-		<!--<artifactId>org.wso2.carbon.logging</artifactId>-->
-		<!--<version>${carbon.kernel.version}</version>-->
-		<!--<scope>provided</scope>-->
-		<!--</dependency>-->
+
+        <!--MQTT -->
 		<dependency>
 			<groupId>org.eclipse.paho</groupId>
 			<artifactId>mqtt-client</artifactId>
 			<scope>provided</scope>
 		</dependency>
 
-		<dependency>
-			<groupId>javax</groupId>
-			<artifactId>javaee-web-api</artifactId>
-			<version>6.0</version>
-			<scope>provided</scope>
-		</dependency>
+        <!--JAX-RS -->
+        <dependency>
+            <groupId>javax.ws.rs</groupId>
+            <artifactId>jsr311-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
 		<dependency>
 			<groupId>org.codehaus.jackson</groupId>
 			<artifactId>jackson-core-asl</artifactId>
-			<version>${jackson.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.codehaus.jackson</groupId>
 			<artifactId>jackson-jaxrs</artifactId>
-			<version>${jackson.version}</version>
 		</dependency>
-	</dependencies>
+        <dependency>
+            <groupId>javax</groupId>
+            <artifactId>javaee-web-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
 
 	<repositories>
 		<repository>
@@ -145,31 +104,16 @@
 		<plugins>
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<configuration>
-					<source>1.7</source>
-					<target>1.7</target>
-				</configuration>
-				<version>2.3.2</version>
+                <configuration>
+                    <encoding>UTF-8</encoding>
+                    <source>${wso2.maven.compiler.source}</source>
+                    <target>${wso2.maven.compiler.target}</target>
+                </configuration>
 			</plugin>
 			<plugin>
 				<artifactId>maven-war-plugin</artifactId>
-				<version>2.2</version>
 				<configuration>
-					<warName>firealarm</warName><!--devices.war-->
-					<!--<packagingExcludes>WEB-INF/lib/*.jar</packagingExcludes>-->
-				</configuration>
-			</plugin>
-			<plugin>
-				<artifactId>maven-eclipse-plugin</artifactId>
-				<version>2.9</version>
-				<configuration>
-					<buildcommands>
-						<buildcommand>org.eclipse.jdt.core.javabuilder</buildcommand>
-					</buildcommands>
-					<projectnatures>
-						<projectnature>org.wso2.developerstudio.eclipse.jaxrs.project.nature</projectnature>
-						<projectnature>org.eclipse.jdt.core.javanature</projectnature>
-					</projectnatures>
+					<warName>firealarm</warName>
 				</configuration>
 			</plugin>
 		</plugins>
