@@ -40,12 +40,18 @@
             <artifactId>org.wso2.carbon.device.mgt.iot.impl</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.wso2.carbon.devicemgt</groupId>
-            <artifactId>org.wso2.carbon.device.mgt.common</artifactId>
+            <groupId>org.wso2.carbon.device.mgt.iot</groupId>
+            <artifactId>org.wso2.carbon.device.mgt.iot.common</artifactId>
+            <type>war</type>
         </dependency>
         <dependency>
             <groupId>org.wso2.carbon.device.mgt.iot</groupId>
-            <artifactId>devicecloud-api</artifactId>
+            <artifactId>org.wso2.carbon.device.mgt.iot.firealarm</artifactId>
+            <type>war</type>
+        </dependency>
+        <dependency>
+            <groupId>org.wso2.carbon.device.mgt.iot</groupId>
+            <artifactId>org.wso2.carbon.device.mgt.iot.sensebot</artifactId>
             <type>war</type>
         </dependency>
     </dependencies>
@@ -83,7 +89,7 @@
                 <version>2.4</version>
                 <executions>
                     <execution>
-                        <id>copy</id>
+                        <id>copy devicecloud artifact</id>
                         <phase>package</phase>
                         <goals>
                             <goal>copy</goal>
@@ -92,11 +98,49 @@
                             <artifactItems>
                                 <artifactItem>
                                     <groupId>org.wso2.carbon.device.mgt.iot</groupId>
-                                    <artifactId>devicecloud-api</artifactId>
+                                    <artifactId>org.wso2.carbon.device.mgt.iot.common</artifactId>
                                     <type>war</type>
                                     <overWrite>true</overWrite>
                                     <outputDirectory>${basedir}/src/main/resources/</outputDirectory>
-                                    <destFileName>iotdevices.war</destFileName>
+                                    <destFileName>devicecloud.war</destFileName>
+                                </artifactItem>
+                            </artifactItems>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>copy firelaarm artifact</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>copy</goal>
+                        </goals>
+                        <configuration>
+                            <artifactItems>
+                                <artifactItem>
+                                    <groupId>org.wso2.carbon.device.mgt.iot</groupId>
+                                    <artifactId>org.wso2.carbon.device.mgt.iot.firealarm</artifactId>
+                                    <type>war</type>
+                                    <overWrite>true</overWrite>
+                                    <outputDirectory>${basedir}/src/main/resources/</outputDirectory>
+                                    <destFileName>firealarm.war</destFileName>
+                                </artifactItem>
+                            </artifactItems>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>copy sensebot artificat</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>copy</goal>
+                        </goals>
+                        <configuration>
+                            <artifactItems>
+                                <artifactItem>
+                                    <groupId>org.wso2.carbon.device.mgt.iot</groupId>
+                                    <artifactId>org.wso2.carbon.device.mgt.iot.sensebot</artifactId>
+                                    <type>war</type>
+                                    <overWrite>true</overWrite>
+                                    <outputDirectory>${basedir}/src/main/resources/</outputDirectory>
+                                    <destFileName>sensebot.war</destFileName>
                                 </artifactItem>
                             </artifactItems>
                         </configuration>
