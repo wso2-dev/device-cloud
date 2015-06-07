@@ -41,17 +41,17 @@
         </dependency>
         <dependency>
             <groupId>org.wso2.carbon.device.mgt.iot</groupId>
-            <artifactId>org.wso2.carbon.device.mgt.iot.common</artifactId>
+            <artifactId>org.wso2.carbon.device.mgt.iot.common.api</artifactId>
             <type>war</type>
         </dependency>
         <dependency>
             <groupId>org.wso2.carbon.device.mgt.iot</groupId>
-            <artifactId>org.wso2.carbon.device.mgt.iot.firealarm</artifactId>
+            <artifactId>org.wso2.carbon.device.mgt.iot.firealarm.api</artifactId>
             <type>war</type>
         </dependency>
         <dependency>
             <groupId>org.wso2.carbon.device.mgt.iot</groupId>
-            <artifactId>org.wso2.carbon.device.mgt.iot.sensebot</artifactId>
+            <artifactId>org.wso2.carbon.device.mgt.iot.sensebot.api</artifactId>
             <type>war</type>
         </dependency>
     </dependencies>
@@ -96,7 +96,7 @@
                             <artifactItems>
                                 <artifactItem>
                                     <groupId>org.wso2.carbon.device.mgt.iot</groupId>
-                                    <artifactId>org.wso2.carbon.device.mgt.iot.common</artifactId>
+                                    <artifactId>org.wso2.carbon.device.mgt.iot.common.api</artifactId>
                                     <type>war</type>
                                     <overWrite>true</overWrite>
                                     <outputDirectory>${basedir}/src/main/resources/webapps/</outputDirectory>
@@ -104,7 +104,7 @@
                                 </artifactItem>
                                 <artifactItem>
                                     <groupId>org.wso2.carbon.device.mgt.iot</groupId>
-                                    <artifactId>org.wso2.carbon.device.mgt.iot.firealarm</artifactId>
+                                    <artifactId>org.wso2.carbon.device.mgt.iot.firealarm.api</artifactId>
                                     <type>war</type>
                                     <overWrite>true</overWrite>
                                     <outputDirectory>${basedir}/src/main/resources/webapps/</outputDirectory>
@@ -112,7 +112,7 @@
                                 </artifactItem>
                                 <artifactItem>
                                     <groupId>org.wso2.carbon.device.mgt.iot</groupId>
-                                    <artifactId>org.wso2.carbon.device.mgt.iot.sensebot</artifactId>
+                                    <artifactId>org.wso2.carbon.device.mgt.iot.sensebot.api</artifactId>
                                     <type>war</type>
                                     <overWrite>true</overWrite>
                                     <outputDirectory>${basedir}/src/main/resources/webapps/</outputDirectory>

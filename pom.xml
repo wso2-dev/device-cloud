@@ -285,19 +285,19 @@
             </dependency>
             <dependency>
                 <groupId>org.wso2.carbon.device.mgt.iot</groupId>
-                <artifactId>org.wso2.carbon.device.mgt.iot.common</artifactId>
+                <artifactId>org.wso2.carbon.device.mgt.iot.common.api</artifactId>
                 <version>${device.mgt.iot.feature.version}</version>
                 <type>war</type>
             </dependency>
             <dependency>
                 <groupId>org.wso2.carbon.device.mgt.iot</groupId>
-                <artifactId>org.wso2.carbon.device.mgt.iot.firealarm</artifactId>
+                <artifactId>org.wso2.carbon.device.mgt.iot.firealarm.api</artifactId>
                 <version>${device.mgt.iot.feature.version}</version>
                 <type>war</type>
             </dependency>
             <dependency>
                 <groupId>org.wso2.carbon.device.mgt.iot</groupId>
-                <artifactId>org.wso2.carbon.device.mgt.iot.sensebot</artifactId>
+                <artifactId>org.wso2.carbon.device.mgt.iot.sensebot.api</artifactId>
                 <version>${device.mgt.iot.feature.version}</version>
                 <type>war</type>
             </dependency>
