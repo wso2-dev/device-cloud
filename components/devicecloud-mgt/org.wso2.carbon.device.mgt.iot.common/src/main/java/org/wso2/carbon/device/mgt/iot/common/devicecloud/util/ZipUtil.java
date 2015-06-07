@@ -1,8 +1,7 @@
 package org.wso2.carbon.device.mgt.iot.common.devicecloud.util;
 
 import org.wso2.carbon.device.mgt.common.DeviceManagementException;
-import org.wso2.carbon.device.mgt.iot.common.DeviceManagement;
-import org.wso2.carbon.device.mgt.iot.common.util.ZipArchive;
+import org.wso2.carbon.device.mgt.iot.common.devicecloud.DeviceManagement;
 import org.wso2.carbon.utils.CarbonUtils;
 
 import java.io.File;

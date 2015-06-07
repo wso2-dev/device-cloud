@@ -1,4 +1,4 @@
-package org.wso2.carbon.device.mgt.iot.common.usage.statistics;/*
+package org.wso2.carbon.device.mgt.iot.common.devicecloud.usage.statistics;/*
 *Copyright (c) 2005-2015, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
 *
 *WSO2 Inc. licenses this file to you under the Apache License,
@@ -18,7 +18,7 @@ package org.wso2.carbon.device.mgt.iot.common.usage.statistics;/*
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.wso2.carbon.device.mgt.iot.common.usage.statistics.dto.DeviceUsageDTO;
+import org.wso2.carbon.device.mgt.iot.common.devicecloud.usage.statistics.dto.DeviceUsageDTO;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;

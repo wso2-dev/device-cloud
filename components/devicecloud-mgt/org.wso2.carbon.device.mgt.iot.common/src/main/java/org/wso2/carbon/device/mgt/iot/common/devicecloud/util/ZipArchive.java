@@ -1,4 +1,4 @@
-package org.wso2.carbon.device.mgt.iot.common.util;
+package org.wso2.carbon.device.mgt.iot.common.devicecloud.util;
 
 import java.io.File;
 

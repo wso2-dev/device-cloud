@@ -25,7 +25,7 @@ import org.w3c.dom.Document;
 import org.wso2.carbon.device.mgt.common.Device;
 import org.wso2.carbon.device.mgt.common.DeviceManagementException;
 import org.wso2.carbon.device.mgt.iot.common.iotdevice.dto.IotDevice;
-import org.wso2.carbon.device.mgt.iot.common.util.ZipArchive;
+import org.wso2.carbon.device.mgt.iot.common.devicecloud.util.ZipArchive;
 import org.wso2.carbon.utils.CarbonUtils;
 
 import javax.xml.parsers.DocumentBuilder;

@@ -32,7 +32,6 @@ import org.wso2.carbon.device.mgt.iot.common.devicecloud.exception.UnauthorizedE
 import org.wso2.carbon.device.mgt.iot.common.devicecloud.controlqueue.ControlQueueConnector;
 import org.wso2.carbon.device.mgt.iot.common.devicecloud.datastore.DataStoreConnector;
 import org.wso2.carbon.device.mgt.iot.common.devicecloud.util.ResourceFileLoader;
-import org.wso2.carbon.device.mgt.iot.common.DeviceValidator;
 
 import java.io.File;
 import java.util.HashMap;

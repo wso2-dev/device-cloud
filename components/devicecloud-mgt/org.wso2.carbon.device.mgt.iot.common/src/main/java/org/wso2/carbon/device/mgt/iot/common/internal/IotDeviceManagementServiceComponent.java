@@ -28,7 +28,7 @@ import org.wso2.carbon.device.mgt.iot.common.iotdevice.config.IotDeviceManagemen
 import org.wso2.carbon.device.mgt.iot.common.iotdevice.config.datasource.IotDataSourceConfig;
 import org.wso2.carbon.device.mgt.iot.common.iotdevice.dao.IotDeviceManagementDAOFactory;
 import org.wso2.carbon.device.mgt.iot.common.iotdevice.dao.util.IotDeviceManagementDAOUtil;
-import org.wso2.carbon.device.mgt.iot.common.usage.statistics.IoTUsageStatisticsClient;
+import org.wso2.carbon.device.mgt.iot.common.devicecloud.usage.statistics.IoTUsageStatisticsClient;
 import org.wso2.carbon.ndatasource.core.DataSourceService;
 
 import java.util.Map;

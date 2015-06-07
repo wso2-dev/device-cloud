@@ -14,11 +14,12 @@
  * limitations under the License.
  */
 
-package org.wso2.carbon.device.mgt.iot.common;
+package org.wso2.carbon.device.mgt.iot.common.devicecloud;
 
 import org.apache.commons.collections.map.LRUMap;
 import org.wso2.carbon.device.mgt.common.DeviceIdentifier;
 import org.wso2.carbon.device.mgt.common.DeviceManagementException;
+import org.wso2.carbon.device.mgt.iot.common.devicecloud.DeviceManagement;
 
 public class DeviceValidator {
 

@@ -14,7 +14,7 @@ c * Copyright (c) 2014, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
  * limitations under the License.
  */
 
-package org.wso2.carbon.device.mgt.iot.common;
+package org.wso2.carbon.device.mgt.iot.common.devicecloud;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -27,7 +27,7 @@ import org.wso2.carbon.device.mgt.core.dto.DeviceType;
 import org.wso2.carbon.device.mgt.iot.common.iotdevice.util.IotDeviceManagementUtil;
 import org.wso2.carbon.device.mgt.core.service.DeviceManagementServiceImpl;
 import org.wso2.carbon.device.mgt.core.service.DeviceManagementService;
-import org.wso2.carbon.device.mgt.iot.common.util.ZipArchive;
+import org.wso2.carbon.device.mgt.iot.common.devicecloud.util.ZipArchive;
 
 import java.util.List;
 import java.util.Map;

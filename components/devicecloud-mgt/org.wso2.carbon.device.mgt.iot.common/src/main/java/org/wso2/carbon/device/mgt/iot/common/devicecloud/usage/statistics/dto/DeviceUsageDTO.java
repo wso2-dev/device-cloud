@@ -1,4 +1,4 @@
-package org.wso2.carbon.device.mgt.iot.common.usage.statistics.dto;/*
+package org.wso2.carbon.device.mgt.iot.common.devicecloud.usage.statistics.dto;/*
  *Copyright (c) 2005-2015, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
  *
  *WSO2 Inc. licenses this file to you under the Apache License,
