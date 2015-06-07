@@ -273,6 +273,13 @@
             </dependency>
 
             <!--IOT dependencies-->
+
+            <dependency>
+                <groupId>org.wso2.carbon.device.mgt.iot</groupId>
+                <artifactId>org.wso2.carbon.device.mgt.iot.common</artifactId>
+                <version>${carbon.iot.device.mgt.version}</version>
+            </dependency>
+
             <dependency>
                 <groupId>org.wso2.carbon.device.mgt.iot</groupId>
                 <artifactId>org.wso2.carbon.device.mgt.iot.firealarm.impl</artifactId>
@@ -280,7 +287,17 @@
             </dependency>
             <dependency>
                 <groupId>org.wso2.carbon.device.mgt.iot</groupId>
-                <artifactId>org.wso2.carbon.device.mgt.iot.common</artifactId>
+                <artifactId>org.wso2.carbon.device.mgt.iot.sensebot.impl</artifactId>
+                <version>${carbon.iot.device.mgt.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.carbon.device.mgt.iot</groupId>
+                <artifactId>org.wso2.carbon.device.mgt.iot.raspberrypi.impl</artifactId>
+                <version>${carbon.iot.device.mgt.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.carbon.device.mgt.iot</groupId>
+                <artifactId>org.wso2.carbon.device.mgt.iot.digitaldisplay.impl</artifactId>
                 <version>${carbon.iot.device.mgt.version}</version>
             </dependency>
 
@@ -308,6 +325,19 @@
                 <version>${device.mgt.iot.feature.version}</version>
                 <type>war</type>
             </dependency>
+            <dependency>
+                <groupId>org.wso2.carbon.device.mgt.iot</groupId>
+                <artifactId>org.wso2.carbon.device.mgt.iot.raspberrypi.api.api</artifactId>
+                <version>${device.mgt.iot.feature.version}</version>
+                <type>war</type>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.carbon.device.mgt.iot</groupId>
+                <artifactId>org.wso2.carbon.device.mgt.iot.digitaldisplay.api.api</artifactId>
+                <version>${device.mgt.iot.feature.version}</version>
+                <type>war</type>
+            </dependency>
+
             <dependency>
                 <groupId>javax</groupId>
                 <artifactId>javaee-web-api</artifactId>

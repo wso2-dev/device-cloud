@@ -25,7 +25,21 @@
                 <Name>jdbc/FireAlarmDM_DB</Name>
             </JndiLookupDefinition>
         </DataSourceConfiguration>
-        
+        <DataSourceConfiguration type="sensebot">
+            <JndiLookupDefinition>
+                <Name>jdbc/SensebotDM_DB</Name>
+            </JndiLookupDefinition>
+        </DataSourceConfiguration>
+        <DataSourceConfiguration type="digital_display">
+            <JndiLookupDefinition>
+                <Name>jdbc/DigitalDisplayDM_DB</Name>
+            </JndiLookupDefinition>
+        </DataSourceConfiguration>
+        <DataSourceConfiguration type="raspberrypi">
+            <JndiLookupDefinition>
+                <Name>jdbc/RaspberrypiDM_DB</Name>
+            </JndiLookupDefinition>
+        </DataSourceConfiguration>
     </DataSourceConfigurations>
     </ManagementRepository>
 

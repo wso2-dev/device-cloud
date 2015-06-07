@@ -30,19 +30,37 @@
     <artifactId>org.wso2.carbon.device.mgt.iot.feature</artifactId>
     <packaging>pom</packaging>
     <version>1.0.0-SNAPSHOT</version>
-    <name>WSO2 Carbon - IOT Implementation of Device Management</name>
+    <name>WSO2 Carbon - DC - Features</name>
     <url>http://wso2.org</url>
     <description>This feature contains the core bundles required for IoT Device Cloud </description>
 
     <dependencies>
+
+        <dependency>
+            <groupId>org.wso2.carbon.device.mgt.iot</groupId>
+            <artifactId>org.wso2.carbon.device.mgt.iot.common</artifactId>
+        </dependency>
+
+
+
         <dependency>
             <groupId>org.wso2.carbon.device.mgt.iot</groupId>
             <artifactId>org.wso2.carbon.device.mgt.iot.firealarm.impl</artifactId>
         </dependency>
         <dependency>
             <groupId>org.wso2.carbon.device.mgt.iot</groupId>
-            <artifactId>org.wso2.carbon.device.mgt.iot.common</artifactId>
+            <artifactId>org.wso2.carbon.device.mgt.iot.raspberrypi.impl</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.wso2.carbon.device.mgt.iot</groupId>
+            <artifactId>org.wso2.carbon.device.mgt.iot.sensebot.impl</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.wso2.carbon.device.mgt.iot</groupId>
+            <artifactId>org.wso2.carbon.device.mgt.iot.digitaldisplay.impl</artifactId>
+        </dependency>
+
+
         <dependency>
             <groupId>org.wso2.carbon.device.mgt.iot</groupId>
             <artifactId>org.wso2.carbon.device.mgt.iot.common.api</artifactId>
@@ -56,6 +74,18 @@
         <dependency>
             <groupId>org.wso2.carbon.device.mgt.iot</groupId>
             <artifactId>org.wso2.carbon.device.mgt.iot.sensebot.api</artifactId>
+            <type>war</type>
+        </dependency>
+        <dependency>
+            <groupId>org.wso2.carbon.device.mgt.iot</groupId>
+            <artifactId>org.wso2.carbon.device.mgt.iot.raspberrypi.api</artifactId>
+            <version>1.0.0</version>
+            <type>war</type>
+        </dependency>
+        <dependency>
+            <groupId>org.wso2.carbon.device.mgt.iot</groupId>
+            <artifactId>org.wso2.carbon.device.mgt.iot.digitaldisplay.api</artifactId>
+            <version>1.0.0</version>
             <type>war</type>
         </dependency>
     </dependencies>
@@ -122,6 +152,22 @@
                                     <outputDirectory>${basedir}/src/main/resources/webapps/</outputDirectory>
                                     <destFileName>sensebot.war</destFileName>
                                 </artifactItem>
+                                <artifactItem>
+                                    <groupId>org.wso2.carbon.device.mgt.iot</groupId>
+                                    <artifactId>org.wso2.carbon.device.mgt.iot.raspberrypi.api</artifactId>
+                                    <type>war</type>
+                                    <overWrite>true</overWrite>
+                                    <outputDirectory>${basedir}/src/main/resources/webapps/</outputDirectory>
+                                    <destFileName>raspberrypi.war</destFileName>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>org.wso2.carbon.device.mgt.iot</groupId>
+                                    <artifactId>org.wso2.carbon.device.mgt.iot.digitaldisplay.api</artifactId>
+                                    <type>war</type>
+                                    <overWrite>true</overWrite>
+                                    <outputDirectory>${basedir}/src/main/resources/webapps/</outputDirectory>
+                                    <destFileName>digitaldisplay.war</destFileName>
+                                </artifactItem>
                             </artifactItems>
                         </configuration>
                     </execution>
@@ -152,6 +198,15 @@
                                 </bundleDef>
                                 <bundleDef>
                                     org.wso2.carbon.device.mgt.iot:org.wso2.carbon.device.mgt.iot.firealarm.impl:${carbon.iot.device.mgt.version}
+                                </bundleDef>
+                                <bundleDef>
+                                    org.wso2.carbon.device.mgt.iot:org.wso2.carbon.device.mgt.iot.digitaldisplay.impl:${carbon.iot.device.mgt.version}
+                                </bundleDef>
+                                <bundleDef>
+                                    org.wso2.carbon.device.mgt.iot:org.wso2.carbon.device.mgt.iot.raspberrypi.impl:${carbon.iot.device.mgt.version}
+                                </bundleDef>
+                                <bundleDef>
+                                    org.wso2.carbon.device.mgt.iot:org.wso2.carbon.device.mgt.iot.sensebot.impl:${carbon.iot.device.mgt.version}
                                 </bundleDef>
                             </bundles>
                             <importFeatures>

@@ -26,16 +26,27 @@
 
 
 
-    <!--<jaxrs:server id="SenseBotController" address="/SenseBotController">-->
-        <!--<jaxrs:serviceBeans>-->
-            <!--<bean id="SenseBotControllerService"-->
-                  <!--class="org.wso2.carbon.device.mgt.iot.sensebot.service.SenseBotControllerService">-->
-            <!--</bean>-->
-        <!--</jaxrs:serviceBeans>-->
-        <!--<jaxrs:providers>-->
-            <!--<bean class="org.codehaus.jackson.jaxrs.JacksonJsonProvider" />-->
-        <!--</jaxrs:providers>-->
-    <!--</jaxrs:server>-->
+    <jaxrs:server id="SenseBotController" address="controller">
+        <jaxrs:serviceBeans>
+            <bean id="SenseBotControllerService"
+                  class="org.wso2.carbon.device.mgt.iot.sensebot.api.SensebotControllerService">
+            </bean>
+        </jaxrs:serviceBeans>
+        <jaxrs:providers>
+            <bean class="org.codehaus.jackson.jaxrs.JacksonJsonProvider" />
+        </jaxrs:providers>
+    </jaxrs:server>
+
+    <jaxrs:server id="SenseBotManager" address="manager">
+        <jaxrs:serviceBeans>
+            <bean id="SenseBotManagerService"
+                  class="org.wso2.carbon.device.mgt.iot.sensebot.api.SensebotManagerService">
+            </bean>
+        </jaxrs:serviceBeans>
+        <jaxrs:providers>
+            <bean class="org.codehaus.jackson.jaxrs.JacksonJsonProvider" />
+        </jaxrs:providers>
+    </jaxrs:server>
 
 
 

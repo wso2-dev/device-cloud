@@ -52,7 +52,7 @@ public class FirealarmManagementServiceComponent {
 
     protected void activate(ComponentContext ctx) {
     	if (log.isDebugEnabled()) {
-            log.debug("Activating Iot Device Management Service Component");
+            log.debug("Activating Firealarm Device Management Service Component");
         }
         try {
             BundleContext bundleContext = ctx.getBundleContext();
@@ -66,16 +66,16 @@ public class FirealarmManagementServiceComponent {
 
 
             if (log.isDebugEnabled()) {
-                log.debug("Iot Device Management Service Component has been successfully activated");
+                log.debug("Firealarm Device Management Service Component has been successfully activated");
             }
         } catch (Throwable e) {
-            log.error("Error occurred while activating Iot Device Management Service Component", e);
+            log.error("Error occurred while activating Firealarm Device Management Service Component", e);
         }
     }
 
     protected void deactivate(ComponentContext ctx) {
         if (log.isDebugEnabled()) {
-            log.debug("De-activating Iot Device Management Service Component");
+            log.debug("De-activating Firealarm Device Management Service Component");
         }
         try {
             if (firealarmServiceRegRef != null) {
@@ -84,10 +84,10 @@ public class FirealarmManagementServiceComponent {
 
             if (log.isDebugEnabled()) {
                 log.debug(
-                        "IOT Device Management Service Component has been successfully de-activated");
+                        "Firealarm Device Management Service Component has been successfully de-activated");
             }
         } catch (Throwable e) {
-            log.error("Error occurred while de-activating Iot Device Management bundle", e);
+            log.error("Error occurred while de-activating Firealarm Device Management bundle", e);
         }
     }
 
@@ -95,7 +95,7 @@ public class FirealarmManagementServiceComponent {
         /* This is to avoid iot device management component getting initialized before the underlying datasources
         are registered */
         if (log.isDebugEnabled()) {
-            log.debug("Data source service set to iot service component");
+            log.debug("Data source service set to Firealarm service component");
         }
     }
 

@@ -41,7 +41,7 @@ public class FireAlarmDAO extends IotDeviceManagementDAOFactory
     private static ThreadLocal<Connection> currentConnection = new ThreadLocal<Connection>();
 
     public FireAlarmDAO() {
-        this.dataSource = getDataSourceMap().get(FireAlarmConstants.DEVICE_TYPE);
+        dataSource = getDataSourceMap().get(FireAlarmConstants.DEVICE_TYPE);
     }
 
     @Override

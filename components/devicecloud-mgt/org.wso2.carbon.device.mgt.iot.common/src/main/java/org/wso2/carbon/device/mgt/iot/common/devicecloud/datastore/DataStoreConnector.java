@@ -36,7 +36,7 @@ public interface DataStoreConnector {
 	 * @return A status message according to the outcome of the
 	 *         method execution.
 	 */
-	public void initDataStore() throws DeviceControllerException;
+	void initDataStore() throws DeviceControllerException;
 
 	/**
 	 * Pushes the device/sensor data received from the devices into the
@@ -49,6 +49,6 @@ public interface DataStoreConnector {
 	 * @return A status message according to the outcome of the
 	 *         method execution.
 	 */
-	public void publishIoTData(HashMap<String, String> deviceData)
+	void publishIoTData(HashMap<String, String> deviceData)
 			throws DeviceControllerException;
 }

@@ -17,7 +17,8 @@
 package org.wso2.carbon.device.mgt.iot.firealarm.api;
 
 import org.apache.commons.httpclient.HttpStatus;
-import org.apache.log4j.Logger;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.device.mgt.common.DeviceManagementException;
 import org.wso2.carbon.device.mgt.iot.common.devicecloud.DeviceController;
 import org.wso2.carbon.device.mgt.iot.common.devicecloud.config.DeviceCloudConfigManager;
@@ -39,8 +40,8 @@ import java.util.NoSuchElementException;
 
 //@Path(value = "/FireAlarmController")
 public class FireAlarmControllerService {
+	private static Log log = LogFactory.getLog(FireAlarmControllerService.class);
 
-	private static Logger log = Logger.getLogger(FireAlarmControllerService.class);
 
 	public static final String CONTROL_QUEUE_ENDPOINT;
 	public static final HashMap<String, LinkedList<String>> replyMsgQueue;
@@ -86,7 +87,7 @@ public class FireAlarmControllerService {
 	 * @param mqttFireAlarmSubscriber the mqttFireAlarmSubscriber to set
 	 */
 	public void setMqttFireAlarmSubscriber(MQTTFireAlarmSubscriber mqttFireAlarmSubscriber) {
-		this.mqttFireAlarmSubscriber = mqttFireAlarmSubscriber;
+		FireAlarmControllerService.mqttFireAlarmSubscriber = mqttFireAlarmSubscriber;
 		try {
 			mqttFireAlarmSubscriber.subscribe();
 		} catch (DeviceManagementException e) {

@@ -48,13 +48,7 @@ public class DeviceValidator {
 
         if (value != null && !value.isEmpty()) {
 
-            if( value.equals(owner)){
-                return true;
-
-            }else{
-
-                return false;
-            }
+            return value.equals(owner);
 
         }else{
             DeviceManagement deviceManagement = new DeviceManagement();

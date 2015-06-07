@@ -36,6 +36,9 @@
     <modules>
         <module>org.wso2.carbon.device.mgt.iot.common</module>
         <module>org.wso2.carbon.device.mgt.iot.firealarm.impl</module>
+        <module>org.wso2.carbon.device.mgt.iot.raspberrypi.impl</module>
+        <module>org.wso2.carbon.device.mgt.iot.sensebot.impl</module>
+        <module>org.wso2.carbon.device.mgt.iot.digitaldisplay.impl</module>
     </modules>
 
     <repositories>

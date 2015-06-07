@@ -23,8 +23,8 @@
 	<artifactId>org.wso2.carbon.device.mgt.iot.firealarm.impl</artifactId>
 	<version>1.0.0-SNAPSHOT</version>
 	<packaging>bundle</packaging>
-	<name>WSO2 Carbon - IoT Device Management Impl</name>
-	<description>WSO2 Carbon - IoT Device Management and Control Implementation</description>
+	<name>WSO2 Carbon - Firealarm Management Impl</name>
+	<description>WSO2 Carbon - Firealarm Management and Control Implementation</description>
 	<url>http://wso2.org</url>
 
 	<build>

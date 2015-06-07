@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
-		 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<parent>
-		<artifactId>devicecloud-api</artifactId>
-		<groupId>org.wso2.carbon.device.mgt.iot</groupId>
-		<version>1.0.0</version>
-		<relativePath>../pom.xml</relativePath>
-	</parent>
-	<modelVersion>4.0.0</modelVersion>
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>devicecloud-api</artifactId>
+        <groupId>org.wso2.carbon.device.mgt.iot</groupId>
+        <version>1.0.0</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
 
 
-	<artifactId>org.wso2.carbon.device.mgt.iot.sensebot.api</artifactId>
-	<version>1.0.0</version>
+    <artifactId>org.wso2.carbon.device.mgt.iot.sensebot.api</artifactId>
+    <version>1.0.0</version>
 
-	<packaging>war</packaging>
-	<name>WSO2 Carbon - Device Cloud API - Sensebot API</name>
+    <packaging>war</packaging>
+    <name>WSO2 Carbon - Device Cloud API - Sensebot API</name>
 
     <dependencies>
         <!-- CDM -->
@@ -43,7 +43,7 @@
         <!--IOT -->
         <dependency>
             <groupId>org.wso2.carbon.device.mgt.iot</groupId>
-            <artifactId>org.wso2.carbon.device.mgt.iot.firealarm.impl</artifactId>
+            <artifactId>org.wso2.carbon.device.mgt.iot.sensebot.impl</artifactId>
             <scope>provided</scope>
         </dependency>
 
@@ -98,15 +98,15 @@
         </dependency>
     </dependencies>
 
-	<repositories>
-		<repository>
-			<id>Eclipse Paho Repo</id>
-			<url>http://repo.spring.io/plugins-release/</url>
-		</repository>
-	</repositories>
+    <repositories>
+        <repository>
+            <id>Eclipse Paho Repo</id>
+            <url>http://repo.spring.io/plugins-release/</url>
+        </repository>
+    </repositories>
 
-	<build>
-		<plugins>
+    <build>
+        <plugins>
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
@@ -115,14 +115,13 @@
                     <target>${wso2.maven.compiler.target}</target>
                 </configuration>
             </plugin>
-			<plugin>
-				<artifactId>maven-war-plugin</artifactId>
-				<configuration>
-					<warName>sensebot</warName><!--devices.war-->
-					<!--<packagingExcludes>WEB-INF/lib/*.jar</packagingExcludes>-->
-				</configuration>
-			</plugin>
-		</plugins>
-	</build>
+            <plugin>
+                <artifactId>maven-war-plugin</artifactId>
+                <configuration>
+                    <warName>sensebot</warName>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 
 </project>

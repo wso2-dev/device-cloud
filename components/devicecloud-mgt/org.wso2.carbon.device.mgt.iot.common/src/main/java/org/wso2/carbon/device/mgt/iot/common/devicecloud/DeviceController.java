@@ -85,7 +85,7 @@ public class DeviceController {
 			String deviceDataStoreKey = controllerConfig.getDeviceDataStore();
 			log.info("Active Data-Store: " + deviceDataStoreKey);
 
-			dataStoreConfig = (DeviceDataStoreConfig) config.getDataStoresMap().get(
+			dataStoreConfig = config.getDataStoresMap().get(
 					deviceDataStoreKey);
 			if (dataStoreConfig == null) {
 				log.error("Error occurred when trying to read data stores configurations");
@@ -94,7 +94,7 @@ public class DeviceController {
 			//initialization data store
 			try {
 				String handlerClass = dataStoreConfig.getHandlerClass().trim();
-				Class<?> dataStore = DeviceController.class.forName(handlerClass);
+				Class<?> dataStore = Class.forName(handlerClass);
 				if (DataStoreConnector.class.isAssignableFrom(dataStore)) {
 					iotDataStore = (DataStoreConnector) dataStore.newInstance();
 					iotDataStore.initDataStore();
@@ -107,7 +107,7 @@ public class DeviceController {
 
 			// reading control queue configurations
 			String controlQueueKey = controllerConfig.getDeviceControlQueue();
-			controlQueueConfig = (DeviceControlQueueConfig) config.getControlQueuesMap().get(
+			controlQueueConfig = config.getControlQueuesMap().get(
 					controlQueueKey);
 			if (controlQueueConfig == null) {
 				log.error("Error occurred when trying to read control queue configurations");
@@ -116,7 +116,7 @@ public class DeviceController {
 			//initialization control queue
 			try {
 				String handlerClass = controlQueueConfig.getHandlerClass().trim();
-				Class<?> controlQueue = DeviceController.class.forName(handlerClass);
+				Class<?> controlQueue = Class.forName(handlerClass);
 				if (ControlQueueConnector.class.isAssignableFrom(controlQueue)) {
 					iotControlQueue = (ControlQueueConnector) controlQueue.newInstance();
 					iotControlQueue.initControlQueue();

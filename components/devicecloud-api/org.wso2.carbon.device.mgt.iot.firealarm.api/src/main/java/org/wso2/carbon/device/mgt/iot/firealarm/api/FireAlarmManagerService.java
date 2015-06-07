@@ -208,7 +208,7 @@ public class FireAlarmManagerService {
 			return Response.status(500).entity("Error occurred while creating zip file").build();
 		}
 
-		Response.ResponseBuilder rb = Response.ok((Object) zipFile.getZipFile());
+		Response.ResponseBuilder rb = Response.ok(zipFile.getZipFile());
 		rb.header("Content-Disposition", "attachment; filename=\"" + zipFile.getFileName() + "\"");
 		return rb.build();
 	}

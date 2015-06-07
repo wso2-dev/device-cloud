@@ -36,7 +36,7 @@ public interface ControlQueueConnector {
 	 * @return A status message according to the outcome of the
 	 *         method execution.
 	 */
-	public void initControlQueue() throws DeviceControllerException;
+	void initControlQueue() throws DeviceControllerException;
 
 	/**
 	 * Pushes the control messages received to the implemented queue
@@ -48,6 +48,6 @@ public interface ControlQueueConnector {
 	 * @return A status message according to the outcome of the
 	 *         method execution.
 	 */
-	public void enqueueControls(HashMap<String, String> deviceControls) throws
+	void enqueueControls(HashMap<String, String> deviceControls) throws
 																		DeviceControllerException;
 }
