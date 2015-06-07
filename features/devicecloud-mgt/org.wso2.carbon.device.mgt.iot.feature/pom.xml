@@ -37,7 +37,11 @@
     <dependencies>
         <dependency>
             <groupId>org.wso2.carbon.device.mgt.iot</groupId>
-            <artifactId>org.wso2.carbon.device.mgt.iot.impl</artifactId>
+            <artifactId>org.wso2.carbon.device.mgt.iot.firealarm.impl</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.wso2.carbon.device.mgt.iot</groupId>
+            <artifactId>org.wso2.carbon.device.mgt.iot.common</artifactId>
         </dependency>
         <dependency>
             <groupId>org.wso2.carbon.device.mgt.iot</groupId>
@@ -144,7 +148,10 @@
                             </adviceFile>
                             <bundles>
                                 <bundleDef>
-                                    org.wso2.carbon.device.mgt.iot:org.wso2.carbon.device.mgt.iot.impl:${carbon.iot.device.mgt.version}
+                                    org.wso2.carbon.device.mgt.iot:org.wso2.carbon.device.mgt.iot.common:${carbon.iot.device.mgt.version}
+                                </bundleDef>
+                                <bundleDef>
+                                    org.wso2.carbon.device.mgt.iot:org.wso2.carbon.device.mgt.iot.firealarm.impl:${carbon.iot.device.mgt.version}
                                 </bundleDef>
                             </bundles>
                             <importFeatures>

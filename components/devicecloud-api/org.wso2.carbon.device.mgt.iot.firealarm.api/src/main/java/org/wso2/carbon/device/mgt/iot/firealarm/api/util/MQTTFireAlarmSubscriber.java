@@ -19,7 +19,7 @@ package org.wso2.carbon.device.mgt.iot.firealarm.api.util;
 import org.apache.log4j.Logger;
 import org.eclipse.paho.client.mqttv3.*;
 import org.wso2.carbon.device.mgt.common.DeviceManagementException;
-import org.wso2.carbon.device.mgt.iot.firealarm.api.service.FireAlarmControllerService;
+import org.wso2.carbon.device.mgt.iot.firealarm.api.FireAlarmControllerService;
 
 import java.io.File;
 import java.util.LinkedList;

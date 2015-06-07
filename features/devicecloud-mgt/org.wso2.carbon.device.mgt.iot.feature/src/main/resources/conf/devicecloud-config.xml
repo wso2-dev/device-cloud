@@ -8,7 +8,7 @@
 
     <DataStores>
         <DataStore type="WSO2-BAM">
-            <class>org.wso2.carbon.device.mgt.iot.commons.devicecloud.datastore.bam.BAMDataStore</class>
+            <class>org.wso2.carbon.device.mgt.iot.common.devicecloud.datastore.bam.BAMDataStore</class>
             <endpoint>tcp://10.100.7.31</endpoint>
             <!--<endpoint>tcp://10.100.7.38</endpoint>-->
             <port>7613</port>
@@ -29,7 +29,7 @@
 
     <ControlQueues>
         <ControlQueue type="MQTT">
-            <class>org.wso2.carbon.device.mgt.iot.commons.devicecloud.controlqueue.mqtt.MQTTControlQueue</class>
+            <class>org.wso2.carbon.device.mgt.iot.common.devicecloud.controlqueue.mqtt.MQTTControlQueue</class>
             <protocol>MQTT</protocol>
             <endpoint>tcp://10.100.7.31</endpoint>
             <!--<endpoint>tcp://212.72.74.21</endpoint>-->  <!-- broker.mqtt-dashboard.com -->
