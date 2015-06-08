@@ -62,52 +62,40 @@
 							javax.sql,
 							javax.xml.bind.annotation.*,
 							javax.xml.parsers,
-                            javax.net,
-                            javax.net.ssl,
+							javax.net,
+							javax.net.ssl,
 							org.w3c.dom,
-							org.wso2.carbon.core,
-							org.wso2.carbon.utils.*,
 							org.wso2.carbon.device.mgt.common.*,
-                            org.wso2.carbon.device.mgt.common,
-							org.wso2.carbon.device.mgt.core.*,
+							org.wso2.carbon.device.mgt.common,
 							org.wso2.carbon.user.core.service,
 							org.wso2.carbon.user.api,
-							org.wso2.carbon.device.mgt.user.core,
 							org.wso2.carbon.device.mgt.user.common,
-							org.apache.commons.collections.map.*,
-                            org.apache.commons.io.*,
-                            org.wso2.carbon.context.*,
-                            org.wso2.carbon.ndatasource.core,
-                            <!--org.eclipse.paho.client.mqttv3,-->
-                            <!--org.eclipse.paho.client.mqttv3.*,-->
-							org.wso2.carbon.databridge.agent.thrift,
-							org.wso2.carbon.databridge.agent.thrift.exception,
-							org.wso2.carbon.databridge.commons.exception,
-							org.wso2.carbon.device.mgt.iot.common.*,
-                            <!--org.apache.velocity.*-->
+							org.wso2.carbon.context.*,
+							org.wso2.carbon.ndatasource.core,
+							org.wso2.carbon.device.mgt.iot.common.*
+							<!--org.apache.velocity.*-->
 						</Import-Package>
 
 						<Export-Package>
 							!org.wso2.carbon.device.mgt.iot.firealarm.internal,
-							org.wso2.carbon.device.mgt.iot.firealarm.*,
-							org.eclipse.paho.client.mqttv3.*
+							org.wso2.carbon.device.mgt.iot.firealarm.*
 						</Export-Package>
 					</instructions>
 				</configuration>
 			</plugin>
 			<!--<plugin>-->
-				<!--<groupId>org.apache.maven.plugins</groupId>-->
-				<!--<artifactId>maven-surefire-plugin</artifactId>-->
-				<!--<version>2.18</version>-->
-				<!--<configuration>-->
-					<!--<systemPropertyVariables>-->
-						<!--<log4j.configuration>file:src/test/resources/log4j.properties-->
-						<!--</log4j.configuration>-->
-					<!--</systemPropertyVariables>-->
-					<!--<suiteXmlFiles>-->
-						<!--<suiteXmlFile>src/test/resources/testng.xml</suiteXmlFile>-->
-					<!--</suiteXmlFiles>-->
-				<!--</configuration>-->
+			<!--<groupId>org.apache.maven.plugins</groupId>-->
+			<!--<artifactId>maven-surefire-plugin</artifactId>-->
+			<!--<version>2.18</version>-->
+			<!--<configuration>-->
+			<!--<systemPropertyVariables>-->
+			<!--<log4j.configuration>file:src/test/resources/log4j.properties-->
+			<!--</log4j.configuration>-->
+			<!--</systemPropertyVariables>-->
+			<!--<suiteXmlFiles>-->
+			<!--<suiteXmlFile>src/test/resources/testng.xml</suiteXmlFile>-->
+			<!--</suiteXmlFiles>-->
+			<!--</configuration>-->
 			<!--</plugin>-->
 		</plugins>
 	</build>
@@ -121,107 +109,46 @@
 			<groupId>org.eclipse.osgi</groupId>
 			<artifactId>org.eclipse.osgi.services</artifactId>
 		</dependency>
-		<dependency>
-			<groupId>org.wso2.carbon</groupId>
-			<artifactId>org.wso2.carbon.core</artifactId>
-		</dependency>
+
 		<dependency>
 			<groupId>org.wso2.carbon</groupId>
 			<artifactId>org.wso2.carbon.logging</artifactId>
 		</dependency>
-		<dependency>
-			<groupId>org.wso2.carbon</groupId>
-			<artifactId>org.wso2.carbon.utils</artifactId>
-		</dependency>
+
 		<dependency>
 			<groupId>org.wso2.carbon.devicemgt</groupId>
 			<artifactId>org.wso2.carbon.device.mgt.common</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.wso2.carbon.devicemgt</groupId>
-    		<artifactId>org.wso2.carbon.device.mgt.user.core</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.wso2.carbon.devicemgt</groupId>
-			<artifactId>org.wso2.carbon.device.mgt.core</artifactId>
-		</dependency>
-		<dependency>
 			<groupId>org.wso2.carbon</groupId>
 			<artifactId>org.wso2.carbon.ndatasource.core</artifactId>
 		</dependency>
-		<dependency>
-			<groupId>org.testng</groupId>
-			<artifactId>testng</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.tomcat.wso2</groupId>
-			<artifactId>jdbc-pool</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.h2database.wso2</groupId>
-			<artifactId>h2-database-engine</artifactId>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.wso2.carbon</groupId>
-			<artifactId>org.wso2.carbon.registry.api</artifactId>
-		</dependency>
+		<!--<dependency>-->
+		<!--<groupId>org.testng</groupId>-->
+		<!--<artifactId>testng</artifactId>-->
+		<!--</dependency>-->
 
-		<dependency>
-			<groupId>org.wso2.carbon</groupId>
-			<artifactId>org.wso2.carbon.registry.core</artifactId>
-		</dependency>
-
-		<dependency>
-			<groupId>commons-collections</groupId>
-			<artifactId>commons-collections</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>commons-configuration</groupId>
-			<artifactId>commons-configuration</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.wso2.carbon</groupId>
-			<artifactId>org.wso2.carbon.databridge.agent.thrift</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.wso2.carbon</groupId>
-			<artifactId>org.wso2.carbon.databridge.commons</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.wso2.carbon</groupId>
-			<artifactId>org.wso2.carbon.databridge.commons.thrift</artifactId>
-		</dependency>
-
-		<dependency>
-			<groupId>org.wso2.carbon</groupId>
-			<artifactId>org.wso2.carbon.databridge.commons.thrift</artifactId>
-		</dependency>
-
+		<!--<dependency>-->
+		<!--<groupId>com.h2database.wso2</groupId>-->
+		<!--<artifactId>h2-database-engine</artifactId>-->
+		<!--<scope>test</scope>-->
+		<!--</dependency>-->
 		<dependency>
 			<groupId>org.wso2.carbon.device.mgt.iot</groupId>
 			<artifactId>org.wso2.carbon.device.mgt.iot.common</artifactId>
 		</dependency>
 
-
-
-		<dependency>
-			<groupId>org.eclipse.paho</groupId>
-			<artifactId>mqtt-client</artifactId>
-		</dependency>
-
-        <!--<dependency>-->
-            <!--<groupId>org.apache.velocity</groupId>-->
-            <!--<artifactId>velocity</artifactId>-->
-            <!--<version>1.7</version>-->
-            <!--<scope>provided</scope>-->
-        <!--</dependency>-->
 	</dependencies>
 
-	<repositories>
-		<repository>
-			<id>Eclipse Paho Repo</id>
-			<url>http://repo.spring.io/plugins-release/</url>
-		</repository>
-	</repositories>
+
 </project>
+<!--<repositories>-->
+<!--<repository>-->
+	<!--<id>Eclipse Paho Repo</id>-->
+	<!--<url>http://repo.spring.io/plugins-release/</url>-->
+<!--</repository>-->
+<!--</repositories>-->
+<!--<dependency>-->
+<!--<groupId>org.eclipse.paho</groupId>-->
+<!--<artifactId>mqtt-client</artifactId>-->
+<!--</dependency>-->

@@ -29,16 +29,6 @@
             <artifactId>org.wso2.carbon.device.mgt.core</artifactId>
             <scope>provided</scope>
         </dependency>
-        <dependency>
-            <groupId>org.wso2.carbon.devicemgt</groupId>
-            <artifactId>org.wso2.carbon.device.mgt.user.common</artifactId>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.wso2.carbon.devicemgt</groupId>
-            <artifactId>org.wso2.carbon.device.mgt.user.core</artifactId>
-            <scope>provided</scope>
-        </dependency>
 
         <!--IOT -->
 
@@ -48,29 +38,6 @@
             <scope>provided</scope>
         </dependency>
 
-        <!--CXF -->
-        <dependency>
-            <groupId>org.apache.cxf</groupId>
-            <artifactId>cxf-rt-frontend-jaxws</artifactId>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.cxf</groupId>
-            <artifactId>cxf-rt-frontend-jaxrs</artifactId>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.cxf</groupId>
-            <artifactId>cxf-rt-transports-http</artifactId>
-            <scope>provided</scope>
-        </dependency>
-
-        <!--MQTT -->
-        <dependency>
-            <groupId>org.eclipse.paho</groupId>
-            <artifactId>mqtt-client</artifactId>
-            <scope>provided</scope>
-        </dependency>
 
         <!--JAX-RS -->
         <dependency>
@@ -78,27 +45,9 @@
             <artifactId>jsr311-api</artifactId>
             <scope>provided</scope>
         </dependency>
-        <dependency>
-            <groupId>org.codehaus.jackson</groupId>
-            <artifactId>jackson-core-asl</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.codehaus.jackson</groupId>
-            <artifactId>jackson-jaxrs</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>javax</groupId>
-            <artifactId>javaee-web-api</artifactId>
-            <scope>provided</scope>
-        </dependency>
+
     </dependencies>
 
-	<repositories>
-		<repository>
-			<id>Eclipse Paho Repo</id>
-			<url>http://repo.spring.io/plugins-release/</url>
-		</repository>
-	</repositories>
 
 	<build>
 		<plugins>
