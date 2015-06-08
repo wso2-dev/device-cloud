@@ -24,6 +24,8 @@ import org.wso2.carbon.device.mgt.iot.firealarm.api.FireAlarmControllerService;
 import java.io.File;
 import java.util.LinkedList;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
+
 public class MQTTFireAlarmSubscriber implements MqttCallback {
 
     private static Logger log = Logger.getLogger(MQTTFireAlarmSubscriber.class);
@@ -58,7 +60,7 @@ public class MQTTFireAlarmSubscriber implements MqttCallback {
 
         options = new MqttConnectOptions();
         options.setCleanSession(false);
-        options.setWill(clientWillTopic, "connection crashed".getBytes(), 2, true);
+        options.setWill(clientWillTopic, "connection crashed".getBytes(UTF_8), 2, true);
         client.setCallback(this);
     }
 

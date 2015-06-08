@@ -28,7 +28,11 @@ import org.wso2.carbon.device.mgt.iot.common.devicecloud.controlqueue.ControlQue
 import org.wso2.carbon.device.mgt.iot.common.devicecloud.exception.DeviceControllerException;
 
 import java.io.File;
+import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
+
+import static java.nio.charset.StandardCharsets.UTF_8;
 
 // TODO: Auto-generated Javadoc
 
@@ -143,7 +147,7 @@ public class MQTTControlQueue implements ControlQueueConnector, MqttCallback {
         try {
             client = new MqttClient(CONTROL_QUEUE_ENDPOINT, clientId);
             options = new MqttConnectOptions();
-            options.setWill("iotDevice/clienterrors", "crashed".getBytes(), 2, true);
+            options.setWill("iotDevice/clienterrors", "crashed".getBytes(UTF_8), 2, true);
             client.setCallback(this);
             client.connect(options);
 
@@ -151,8 +155,8 @@ public class MQTTControlQueue implements ControlQueueConnector, MqttCallback {
                     ", with client ID - " + clientId);
 
             MqttMessage message = new MqttMessage();
-            message.setPayload(payLoad.getBytes());
-            client.publish(publishTopic, payLoad.getBytes(), 0, true);
+            message.setPayload(payLoad.getBytes(UTF_8));
+            client.publish(publishTopic, payLoad.getBytes(UTF_8), 0, true);
 
             log.info("MQTT Client successfully published to topic: " + publishTopic +
                     ", with payload - " + payLoad);

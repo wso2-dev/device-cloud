@@ -26,10 +26,7 @@ import org.wso2.carbon.device.mgt.iot.common.iotdevice.config.datasource.IotData
 import org.wso2.carbon.device.mgt.iot.common.iotdevice.dao.util.IotDeviceManagementDAOUtil;
 
 import javax.sql.DataSource;
-import java.util.HashMap;
-import java.util.Hashtable;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Factory class used to create IotDeviceManagement related DAO objects.
@@ -43,10 +40,10 @@ public abstract class IotDeviceManagementDAOFactory implements IotDeviceManageme
     public static void init(Map<String, IotDataSourceConfig> iotDataSourceConfigMap)
             throws IotDeviceMgtPluginException {
         DataSource dataSource;
-        for (String pluginType : iotDataSourceConfigMap.keySet()) {
+        for (Map.Entry<String, IotDataSourceConfig> plugin : iotDataSourceConfigMap.entrySet()) {
+            String pluginType = plugin.getKey();
             if (dataSourceMap.get(pluginType) == null) {
-                dataSource = IotDeviceManagementDAOFactory.resolveDataSource(iotDataSourceConfigMap.get
-                        (pluginType));
+                dataSource = IotDeviceManagementDAOFactory.resolveDataSource(iotDataSourceConfigMap.get(pluginType));
                 dataSourceMap.put(pluginType, dataSource);
             }
         }
