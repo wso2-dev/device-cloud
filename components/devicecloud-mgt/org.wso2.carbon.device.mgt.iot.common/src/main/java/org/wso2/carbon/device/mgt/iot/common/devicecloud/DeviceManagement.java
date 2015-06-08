@@ -29,6 +29,7 @@ import org.wso2.carbon.device.mgt.core.service.DeviceManagementServiceImpl;
 import org.wso2.carbon.device.mgt.core.service.DeviceManagementService;
 import org.wso2.carbon.device.mgt.iot.common.devicecloud.util.ZipArchive;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
@@ -116,8 +117,12 @@ public class DeviceManagement {
 			throws DeviceManagementException {
 		/*  create a context and add data */
 
-		return IotDeviceManagementUtil.getSketchArchive(archivesPath, templateSketchPath,
-														contextParams);
+		try {
+			return IotDeviceManagementUtil.getSketchArchive(archivesPath, templateSketchPath,
+															contextParams);
+		} catch (IOException e) {
+			throw new DeviceManagementException("Zip File Creation Failed",e);
+		}
 	}
 
 }
