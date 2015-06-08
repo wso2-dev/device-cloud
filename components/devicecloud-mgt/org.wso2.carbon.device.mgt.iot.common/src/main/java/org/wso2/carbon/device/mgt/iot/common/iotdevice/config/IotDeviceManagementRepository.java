@@ -35,7 +35,7 @@ import java.util.Map;
 public class IotDeviceManagementRepository {
 
     private Map<String, IotDataSourceConfig> iotDataSourceConfigMap;
-    private List<IotDataSourceConfig> iotDataSourceConfigs;
+//    private List<IotDataSourceConfig> iotDataSourceConfigs;
 
     public IotDataSourceConfig getIotDataSourceConfig(String provider) {
         return iotDataSourceConfigMap.get(provider);
@@ -51,8 +51,8 @@ public class IotDeviceManagementRepository {
         this.iotDataSourceConfigMap = iotDataSourceConfigMap;
     }
 
-    public List<IotDataSourceConfig> getIotDataSourceConfigs() {
-        return (List<IotDataSourceConfig>) iotDataSourceConfigMap.values();
-    }
+//    public List<IotDataSourceConfig> getIotDataSourceConfigs() {
+//        return (List<IotDataSourceConfig>) iotDataSourceConfigMap.values();
+//    }
 
 }
