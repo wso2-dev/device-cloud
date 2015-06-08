@@ -23,26 +23,31 @@ import org.apache.commons.logging.LogFactory;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.component.ComponentContext;
-import org.osgi.service.component.annotations.Activate;
-import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.annotations.Deactivate;
 import org.wso2.carbon.device.mgt.common.spi.DeviceMgtService;
 import org.wso2.carbon.device.mgt.iot.digitaldisplay.impl.DigitalDisplayManager;
 import org.wso2.carbon.ndatasource.core.DataSourceService;
 
-@Component(name="org.wso2.carbon.device.mgt.iot.digitaldisplay.internal.DigitalDisplayManagementServiceComponent",
-           immediate=true)
+
+
+//* @scr.reference name="org.wso2.carbon.ndatasource"
+//		* interface="org.wso2.carbon.ndatasource.core.DataSourceService"
+//		* cardinality="1..1"
+//		* policy="dynamic"
+//		* bind="setDataSourceService"
+//		* unbind="unsetDataSourceService"
+/**
+ * @scr.component name="org.wso2.carbon.device.mgt.iot.digitaldisplay.internal.DigitalDisplayManagementServiceComponent"
+ * immediate="true"
+ */
 public class DigitalDisplayManagementServiceComponent {
 	
 
-    private ServiceRegistration firealarmServiceRegRef;
+    private ServiceRegistration digitalDisplayServiceRegRef;
 
 
 
     private static final Log log = LogFactory.getLog(DigitalDisplayManagementServiceComponent.class);
 
-
-    @Activate
     protected void activate(ComponentContext ctx) {
     	if (log.isDebugEnabled()) {
             log.debug("Activating Digital Display Management Service Component");
@@ -51,7 +56,7 @@ public class DigitalDisplayManagementServiceComponent {
             BundleContext bundleContext = ctx.getBundleContext();
 
 
-            firealarmServiceRegRef =
+            digitalDisplayServiceRegRef =
                     bundleContext.registerService(DeviceMgtService.class.getName(), new
                                                           DigitalDisplayManager(),
 												  null);
@@ -67,14 +72,13 @@ public class DigitalDisplayManagementServiceComponent {
     }
 
 
-    @Deactivate
     protected void deactivate(ComponentContext ctx) {
         if (log.isDebugEnabled()) {
             log.debug("De-activating DigitalDisplay Management Service Component");
         }
         try {
-            if (firealarmServiceRegRef != null) {
-                firealarmServiceRegRef.unregister();
+            if (digitalDisplayServiceRegRef != null) {
+                digitalDisplayServiceRegRef.unregister();
             }
 
             if (log.isDebugEnabled()) {

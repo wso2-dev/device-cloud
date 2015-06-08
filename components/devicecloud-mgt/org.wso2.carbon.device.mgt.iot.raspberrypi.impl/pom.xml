@@ -52,7 +52,7 @@
 						<Bundle-Name>${project.artifactId}</Bundle-Name>
 						<Bundle-Version>${carbon.iot.device.mgt.version}</Bundle-Version>
 						<Bundle-Description>Device Cloud Impl Bundle</Bundle-Description>
-						<Private-Package>org.wso2.carbon.device.mgt.iot.firealarm.internal</Private-Package>
+						<Private-Package>org.wso2.carbon.device.mgt.iot.raspberrypi.internal</Private-Package>
 						<Import-Package>
 							org.osgi.framework,
 							org.osgi.service.component,
@@ -72,15 +72,13 @@
 							org.wso2.carbon.device.mgt.user.common,
 							org.wso2.carbon.context.*,
 							org.wso2.carbon.ndatasource.core,
-							org.wso2.carbon.device.mgt.iot.common.*
-							<!--org.apache.velocity.*-->
+							org.wso2.carbon.device.mgt.iot.common.*,
 						</Import-Package>
 
 						<Export-Package>
 							!org.wso2.carbon.device.mgt.iot.raspberrypi.internal,
 							org.wso2.carbon.device.mgt.iot.raspberrypi.*
 						</Export-Package>
-						<_dsannotations>*</_dsannotations>
 					</instructions>
 				</configuration>
 			</plugin>
@@ -139,11 +137,7 @@
 			<artifactId>org.wso2.carbon.device.mgt.iot.common</artifactId>
 		</dependency>
 
-		<dependency>
-			<groupId>org.apache.felix</groupId>
-			<artifactId>org.apache.felix.scr.annotations</artifactId>
-			<version>1.9.12</version>
-		</dependency>
+
 
 	</dependencies>
 </project>

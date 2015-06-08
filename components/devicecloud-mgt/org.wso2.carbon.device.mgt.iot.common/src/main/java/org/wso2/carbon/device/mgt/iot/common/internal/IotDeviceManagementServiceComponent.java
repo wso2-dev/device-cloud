@@ -22,9 +22,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.osgi.framework.BundleContext;
 import org.osgi.service.component.ComponentContext;
-import org.osgi.service.component.annotations.Activate;
-import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.annotations.Deactivate;
 import org.wso2.carbon.device.mgt.iot.common.iotdevice.exception.IotDeviceMgtPluginException;
 import org.wso2.carbon.device.mgt.iot.common.iotdevice.config.IotDeviceConfigurationManager;
 import org.wso2.carbon.device.mgt.iot.common.iotdevice.config.IotDeviceManagementConfig;
@@ -36,19 +33,19 @@ import org.wso2.carbon.ndatasource.core.DataSourceService;
 
 import java.util.Map;
 
-///**
-// * @scr.component name="org.wso2.carbon.device.mgt.iot.common.internal.IotDeviceManagementServiceComponent"
-// * immediate="true"
-// * @scr.reference name="org.wso2.carbon.ndatasource"
-// * interface="org.wso2.carbon.ndatasource.core.DataSourceService"
-// * cardinality="1..1"
-// * policy="dynamic"
-// * bind="setDataSourceService"
-// * unbind="unsetDataSourceService"
-// */
 
-@Component(name="org.wso2.carbon.device.mgt.iot.common.internal.IotDeviceManagementServiceComponent",
-		 immediate=true)
+
+
+/**
+ * @scr.component name="org.wso2.carbon.device.mgt.iot.common.internal.IotDeviceManagementServiceComponent"
+ * immediate="true"
+ * @scr.reference name="org.wso2.carbon.ndatasource"
+ * interface="org.wso2.carbon.ndatasource.core.DataSourceService"
+ * cardinality="1..1"
+ * policy="dynamic"
+ * bind="setDataSourceService"
+ * unbind="unsetDataSourceService"
+ */
 public class IotDeviceManagementServiceComponent {
 
 
@@ -56,13 +53,12 @@ public class IotDeviceManagementServiceComponent {
 
 	private static final Log log = LogFactory.getLog(IotDeviceManagementServiceComponent.class);
 
-	@Activate
 	protected void activate(ComponentContext ctx) {
 		if (log.isDebugEnabled()) {
 			log.debug("Activating Iot Device Management Service Component");
 		}
 		try {
-			BundleContext bundleContext = ctx.getBundleContext();
+
 
             /* Initialize the data source configuration */
 			IotDeviceConfigurationManager.getInstance().initConfig();
@@ -102,12 +98,23 @@ public class IotDeviceManagementServiceComponent {
 		}
 	}
 
-	@Deactivate
 	protected void deactivate(ComponentContext ctx) {
 		if (log.isDebugEnabled()) {
 			log.debug("De-activating Iot Device Management Service Component");
 		}
 
+	}
+
+	protected void setDataSourceService(DataSourceService dataSourceService) {
+        /* This is to avoid iot device management component getting initialized before the underlying datasources
+        are registered */
+		if (log.isDebugEnabled()) {
+			log.debug("Data source service set to mobile service component");
+		}
+	}
+
+	protected void unsetDataSourceService(DataSourceService dataSourceService) {
+		//do nothing
 	}
 
 

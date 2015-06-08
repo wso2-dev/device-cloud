@@ -23,15 +23,22 @@ import org.apache.commons.logging.LogFactory;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.component.ComponentContext;
-import org.osgi.service.component.annotations.Activate;
-import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.annotations.Deactivate;
 import org.wso2.carbon.device.mgt.common.spi.DeviceMgtService;
 import org.wso2.carbon.device.mgt.iot.raspberrypi.impl.RaspberrypiManager;
 import org.wso2.carbon.ndatasource.core.DataSourceService;
 
-@Component(name="org.wso2.carbon.device.mgt.iot.raspberrypi.internal.RaspberrypiManagementServiceComponent",
-           immediate=true)
+
+
+//* @scr.reference name="org.wso2.carbon.ndatasource"
+//		* interface="org.wso2.carbon.ndatasource.core.DataSourceService"
+//		* cardinality="1..1"
+//		* policy="dynamic"
+//		* bind="setDataSourceService"
+//		* unbind="unsetDataSourceService"
+/**
+ * @scr.component name="org.wso2.carbon.device.mgt.iot.raspberrypi.internal.RaspberrypiManagementServiceComponent"
+ * immediate="true"
+ */
 public class RaspberrypiManagementServiceComponent {
 	
 
@@ -41,8 +48,6 @@ public class RaspberrypiManagementServiceComponent {
 
     private static final Log log = LogFactory.getLog(RaspberrypiManagementServiceComponent.class);
 
-
-    @Activate
     protected void activate(ComponentContext ctx) {
     	if (log.isDebugEnabled()) {
             log.debug("Activating Raspberrypi Device Management Service Component");
@@ -66,8 +71,6 @@ public class RaspberrypiManagementServiceComponent {
         }
     }
 
-
-    @Deactivate
     protected void deactivate(ComponentContext ctx) {
         if (log.isDebugEnabled()) {
             log.debug("De-activating Raspberrypi Device Management Service Component");

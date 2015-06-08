@@ -41,8 +41,18 @@ import org.wso2.carbon.device.mgt.common.spi.DeviceMgtService;
 // * unbind="unsetDataSourceService"
 // */
 
-@Component(name="org.wso2.carbon.device.mgt.iot.firealarm.internal.FirealarmManagementServiceComponent",
-         immediate=true)
+
+
+//* @scr.reference name="org.wso2.carbon.ndatasource"
+//		* interface="org.wso2.carbon.ndatasource.core.DataSourceService"
+//		* cardinality="1..1"
+//		* policy="dynamic"
+//		* bind="setDataSourceService"
+//		* unbind="unsetDataSourceService"
+/**
+ * @scr.component name="org.wso2.carbon.device.mgt.iot.firealarm.internal.FirealarmManagementServiceComponent"
+ * immediate="true"
+ */
 public class FirealarmManagementServiceComponent {
 	
 
@@ -51,8 +61,6 @@ public class FirealarmManagementServiceComponent {
 
 
     private static final Log log = LogFactory.getLog(FirealarmManagementServiceComponent.class);
-
-    @Activate
     protected void activate(ComponentContext ctx) {
     	if (log.isDebugEnabled()) {
             log.debug("Activating Firealarm Device Management Service Component");
@@ -76,7 +84,6 @@ public class FirealarmManagementServiceComponent {
         }
     }
 
-    @Deactivate
     protected void deactivate(ComponentContext ctx) {
         if (log.isDebugEnabled()) {
             log.debug("De-activating Firealarm Device Management Service Component");

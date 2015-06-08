@@ -30,8 +30,18 @@ import org.wso2.carbon.device.mgt.common.spi.DeviceMgtService;
 import org.wso2.carbon.device.mgt.iot.sensebot.impl.SensebotManager;
 import org.wso2.carbon.ndatasource.core.DataSourceService;
 
-@Component(name="org.wso2.carbon.device.mgt.iot.sensebot.internal.SensebotManagementServiceComponent",
-           immediate=true)
+
+
+//* @scr.reference name="org.wso2.carbon.ndatasource"
+//		* interface="org.wso2.carbon.ndatasource.core.DataSourceService"
+//		* cardinality="1..1"
+//		* policy="dynamic"
+//		* bind="setDataSourceService"
+//		* unbind="unsetDataSourceService"
+/**
+ * @scr.component name="org.wso2.carbon.device.mgt.iot.sensebot.internal.SensebotManagementServiceComponent"
+ * immediate="true"
+ */
 public class SensebotManagementServiceComponent {
 	
 
@@ -41,7 +51,7 @@ public class SensebotManagementServiceComponent {
 
     private static final Log log = LogFactory.getLog(SensebotManagementServiceComponent.class);
 
-    @Activate
+
     protected void activate(ComponentContext ctx) {
     	if (log.isDebugEnabled()) {
             log.debug("Activating Sensebot Device Management Service Component");
@@ -66,7 +76,6 @@ public class SensebotManagementServiceComponent {
     }
 
 
-    @Deactivate
     protected void deactivate(ComponentContext ctx) {
         if (log.isDebugEnabled()) {
             log.debug("De-activating Sensebot Device Management Service Component");
