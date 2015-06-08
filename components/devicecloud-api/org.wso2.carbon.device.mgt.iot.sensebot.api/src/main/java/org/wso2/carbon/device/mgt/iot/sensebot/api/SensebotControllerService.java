@@ -16,7 +16,6 @@
 
 package org.wso2.carbon.device.mgt.iot.sensebot.api;
 
-
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -37,6 +36,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class SensebotControllerService {
+
     private static Log log = LogFactory.getLog(SensebotControllerService.class);
 
     private static final Map<String, String> deviceIPList = new HashMap<String, String>();
@@ -49,9 +49,7 @@ public class SensebotControllerService {
     private static final String RIGHT_URL = "/move/R";
     private static final String STOP_URL = "/move/S";
 
-
-    @Path("/forward")
-    @POST public String moveForward(@HeaderParam("owner") String owner,
+    @Path("/forward") @POST public String moveForward(@HeaderParam("owner") String owner,
             @HeaderParam("deviceId") String deviceId, @FormParam("ip") String deviceIp,
             @FormParam("port") int deviceServerPort) {
 
@@ -60,16 +58,13 @@ public class SensebotControllerService {
         return result;
     }
 
-
-    @Path("/backward")
-    @POST public String moveBackward(@HeaderParam("owner") String owner,
+    @Path("/backward") @POST public String moveBackward(@HeaderParam("owner") String owner,
             @HeaderParam("deviceId") String deviceId, @FormParam("ip") String deviceIp,
             @FormParam("port") int deviceServerPort) {
         String result = null;
         result = sendCommand(deviceIp, deviceServerPort, BACKWARD_URL);
         return result;
     }
-
 
     @Path("/left") @POST public String turnLeft(@HeaderParam("owner") String owner,
             @HeaderParam("deviceId") String deviceId, @FormParam("ip") String deviceIp,
@@ -95,136 +90,124 @@ public class SensebotControllerService {
         return result;
     }
 
-
-    @Path("/pushsensordata")
-    @POST
-    @Consumes(MediaType.APPLICATION_JSON)
-    public void pushAlarmData(final DeviceJSON dataMsg, @Context HttpServletResponse response) {
+    @Path("/pushsensordata") @POST @Consumes(MediaType.APPLICATION_JSON) public void pushAlarmData(
+            final DeviceJSON dataMsg, @Context HttpServletResponse response) {
         boolean result = false;
 
         String sensorValues = dataMsg.value;                            //TEMP-PIR-SONAR-LDR
         log.info("Recieved Sensor Data Values: " + sensorValues);
 
         String sensors[] = sensorValues.split(":");
-try{
-        if (sensors.length == 4) {
-            String temperature = sensors[0];
-            String motion = sensors[1];
-            String sonar = sensors[2];
-            String light = sensors[3];
+        try {
+            if (sensors.length == 4) {
+                String temperature = sensors[0];
+                String motion = sensors[1];
+                String sonar = sensors[2];
+                String light = sensors[3];
 
-            if (sonar.equals("-1")) {
-                sonar = "No Object";
-            }
+                if (sonar.equals("-1")) {
+                    sonar = "No Object";
+                }
 
-            sensorValues =
-                    "Temperature:" + temperature + "C\t\tMotion:" + motion + "\tSonar:" + sonar + "\tLight:" + light;
+                sensorValues = "Temperature:" + temperature + "C\t\tMotion:" + motion + "\tSonar:" + sonar + "\tLight:"
+                        + light;
 
-           if(log.isDebugEnabled())log.debug(sensorValues);
+                if (log.isDebugEnabled())
+                    log.debug(sensorValues);
 
-            result = DeviceController
-                    .pushData(dataMsg.owner, "SenseBot", dataMsg.deviceId, System.currentTimeMillis(), "DeviceData",
-                            temperature, "TEMP");
-
-
-
-            if (!result) {
-                response.setStatus(HttpStatus.SC_INTERNAL_SERVER_ERROR);
-                return ;
-            }
-
-
-            result = DeviceController
-                    .pushData(dataMsg.owner, "SenseBot", dataMsg.deviceId, System.currentTimeMillis(), "DeviceData",
-                            motion, "MOTION");
-
-            if (!result) {
-                response.setStatus(HttpStatus.SC_INTERNAL_SERVER_ERROR);
-                return ;
-            }
-
-
-            if (!sonar.equals("No Object")) {
                 result = DeviceController
                         .pushData(dataMsg.owner, "SenseBot", dataMsg.deviceId, System.currentTimeMillis(), "DeviceData",
-                                sonar, "SONAR");
+                                temperature, "TEMP");
 
                 if (!result) {
                     response.setStatus(HttpStatus.SC_INTERNAL_SERVER_ERROR);
-                    return ;
+                    return;
                 }
 
-            }
+                result = DeviceController
+                        .pushData(dataMsg.owner, "SenseBot", dataMsg.deviceId, System.currentTimeMillis(), "DeviceData",
+                                motion, "MOTION");
 
-            result = DeviceController
-                    .pushData(dataMsg.owner, "SenseBot", dataMsg.deviceId, System.currentTimeMillis(), "DeviceData",
-                            light, "LIGHT");
+                if (!result) {
+                    response.setStatus(HttpStatus.SC_INTERNAL_SERVER_ERROR);
+                    return;
+                }
 
-            if (!result) {
+                if (!sonar.equals("No Object")) {
+                    result = DeviceController
+                            .pushData(dataMsg.owner, "SenseBot", dataMsg.deviceId, System.currentTimeMillis(),
+                                    "DeviceData", sonar, "SONAR");
+
+                    if (!result) {
+                        response.setStatus(HttpStatus.SC_INTERNAL_SERVER_ERROR);
+                        return;
+                    }
+
+                }
+
+                result = DeviceController
+                        .pushData(dataMsg.owner, "SenseBot", dataMsg.deviceId, System.currentTimeMillis(), "DeviceData",
+                                light, "LIGHT");
+
+                if (!result) {
+                    response.setStatus(HttpStatus.SC_INTERNAL_SERVER_ERROR);
+                    return;
+                }
+
+            } else {
                 response.setStatus(HttpStatus.SC_INTERNAL_SERVER_ERROR);
-                return ;
+                return;
             }
-
-
-        } else {
-            response.setStatus(HttpStatus.SC_INTERNAL_SERVER_ERROR);
-            return ;
-        }
-
-} catch (UnauthorizedException e) {
-    response.setStatus(HttpStatus.SC_UNAUTHORIZED);
-
-}
-
-
-    }
-
-    @Path("/pushtempdata") @POST @Consumes(MediaType.APPLICATION_JSON) public void pushTempData(
-            final DeviceJSON dataMsg, @Context HttpServletResponse response) {
-
-
-        String temperature = dataMsg.value;                            //TEMP-PIR-SONAR-LDR
-        if(log.isDebugEnabled())log.debug(
-                "Recieved Tenperature Data Value: " + temperature + " degrees C");
-try{
-        boolean result = DeviceController
-                .pushData(dataMsg.owner, "SenseBot", dataMsg.deviceId, System.currentTimeMillis(),
-                          "DeviceData",
-                          temperature, "TEMP");
-
-        if (!result) {
-            response.setStatus(HttpStatus.SC_INTERNAL_SERVER_ERROR);
-            return ;
-        }
-
-
-} catch (UnauthorizedException e) {
-    response.setStatus(HttpStatus.SC_UNAUTHORIZED);
-
-}
-    }
-
-    @Path("/pushpirdata") @POST @Consumes(MediaType.APPLICATION_JSON) public void pushPIRData(
-            final DeviceJSON dataMsg, @Context HttpServletResponse response) {
-
-        String motion = dataMsg.value;                            //TEMP-PIR-SONAR-LDR
-        if(log.isDebugEnabled()) log.debug("Recieved PIR (Motion) Sensor Data Value: " + motion);
-        try {
-        boolean result = DeviceController
-                .pushData(dataMsg.owner, "SenseBot", dataMsg.deviceId, System.currentTimeMillis(),
-                          "DeviceData", motion,
-                          "MOTION");
-
-        if (!result) {
-            response.setStatus(HttpStatus.SC_INTERNAL_SERVER_ERROR);
-            return ;
-        }
 
         } catch (UnauthorizedException e) {
             response.setStatus(HttpStatus.SC_UNAUTHORIZED);
 
         }
 
+    }
+
+    @Path("/pushtempdata") @POST @Consumes(MediaType.APPLICATION_JSON) public void pushTempData(
+            final DeviceJSON dataMsg, @Context HttpServletResponse response) {
+
+        String temperature = dataMsg.value;                            //TEMP-PIR-SONAR-LDR
+        if (log.isDebugEnabled())
+            log.debug("Recieved Tenperature Data Value: " + temperature + " degrees C");
+        try {
+            boolean result = DeviceController
+                    .pushData(dataMsg.owner, "SenseBot", dataMsg.deviceId, System.currentTimeMillis(), "DeviceData",
+                            temperature, "TEMP");
+
+            if (!result) {
+                response.setStatus(HttpStatus.SC_INTERNAL_SERVER_ERROR);
+                return;
+            }
+
+        } catch (UnauthorizedException e) {
+            response.setStatus(HttpStatus.SC_UNAUTHORIZED);
+
+        }
+    }
+
+    @Path("/pushpirdata") @POST @Consumes(MediaType.APPLICATION_JSON) public void pushPIRData(final DeviceJSON dataMsg,
+            @Context HttpServletResponse response) {
+
+        String motion = dataMsg.value;                            //TEMP-PIR-SONAR-LDR
+        if (log.isDebugEnabled())
+            log.debug("Recieved PIR (Motion) Sensor Data Value: " + motion);
+        try {
+            boolean result = DeviceController
+                    .pushData(dataMsg.owner, "SenseBot", dataMsg.deviceId, System.currentTimeMillis(), "DeviceData",
+                            motion, "MOTION");
+
+            if (!result) {
+                response.setStatus(HttpStatus.SC_INTERNAL_SERVER_ERROR);
+                return;
+            }
+
+        } catch (UnauthorizedException e) {
+            response.setStatus(HttpStatus.SC_UNAUTHORIZED);
+
+        }
 
     }
 
@@ -234,28 +217,27 @@ try{
         String sonar = dataMsg.value;                            //TEMP-PIR-SONAR-LDR
 
         if (sonar.equals("-1")) {
-            if(log.isDebugEnabled())log.debug(
-                    "Recieved a 'No Obstacle' Sonar value. (Means there are no abstacles within 30cm)");
+            if (log.isDebugEnabled())
+                log.debug("Recieved a 'No Obstacle' Sonar value. (Means there are no abstacles within 30cm)");
         } else {
-            if(log.isDebugEnabled())log.debug("Recieved Sonar Sensor Data Value: " + sonar + " cm");
-            try{
-            boolean result = DeviceController
-                    .pushData(dataMsg.owner, "SenseBot", dataMsg.deviceId, System.currentTimeMillis(), "DeviceData",
-                            sonar, "SONAR");
+            if (log.isDebugEnabled())
+                log.debug("Recieved Sonar Sensor Data Value: " + sonar + " cm");
+            try {
+                boolean result = DeviceController
+                        .pushData(dataMsg.owner, "SenseBot", dataMsg.deviceId, System.currentTimeMillis(), "DeviceData",
+                                sonar, "SONAR");
 
-            if (!result) {
-                response.setStatus(HttpStatus.SC_INTERNAL_SERVER_ERROR);
-                return ;
-            }
+                if (!result) {
+                    response.setStatus(HttpStatus.SC_INTERNAL_SERVER_ERROR);
+                    return;
+                }
 
             } catch (UnauthorizedException e) {
                 response.setStatus(HttpStatus.SC_UNAUTHORIZED);
 
             }
 
-
         }
-
 
     }
 
@@ -263,24 +245,23 @@ try{
             final DeviceJSON dataMsg, @Context HttpServletResponse response) {
 
         String light = dataMsg.value;                            //TEMP-PIR-SONAR-LDR
-        if(log.isDebugEnabled()) log.debug("Recieved LDR (Light) Sensor Data Value: " + light);
+        if (log.isDebugEnabled())
+            log.debug("Recieved LDR (Light) Sensor Data Value: " + light);
 
-        try{
-        boolean result = DeviceController
-                .pushData(dataMsg.owner, "SenseBot", dataMsg.deviceId, System.currentTimeMillis(), "DeviceData", light,
-                        "LIGHT");
+        try {
+            boolean result = DeviceController
+                    .pushData(dataMsg.owner, "SenseBot", dataMsg.deviceId, System.currentTimeMillis(), "DeviceData",
+                            light, "LIGHT");
 
-        if (!result) {
-            response.setStatus(HttpStatus.SC_INTERNAL_SERVER_ERROR);
-            return ;
-        }
-
+            if (!result) {
+                response.setStatus(HttpStatus.SC_INTERNAL_SERVER_ERROR);
+                return;
+            }
 
         } catch (UnauthorizedException e) {
             response.setStatus(HttpStatus.SC_UNAUTHORIZED);
 
         }
-
 
     }
 
@@ -291,7 +272,8 @@ try{
         }
 
         String urlString = URL_PREFIX + deviceIp + ":" + deviceServerPort + motionType;
-        if(log.isDebugEnabled())log.debug(urlString);
+        if (log.isDebugEnabled())
+            log.debug(urlString);
 
         String result = null;
         URL url = null;
@@ -303,7 +285,9 @@ try{
             log.error("Invalid URL: " + urlString);
         }
         try {
-            httpConn = (HttpURLConnection) url.openConnection();
+            if (url != null) {
+                httpConn = (HttpURLConnection) url.openConnection();
+            }
         } catch (IOException e) {
             log.error("Error Connecting to HTTP Endpoint at: " + urlString);
         }
@@ -314,8 +298,10 @@ try{
             responseCode = httpConn.getResponseCode();
             result = "" + responseCode + HttpStatus.getStatusText(responseCode) + "(No reply from Robot)";
 
-            if(log.isDebugEnabled())log.debug("\nSending 'GET' request to URL : " + urlString);
-            if(log.isDebugEnabled())log.debug("Response Code : " + responseCode);
+            if (log.isDebugEnabled())
+                log.debug("\nSending 'GET' request to URL : " + urlString);
+            if (log.isDebugEnabled())
+                log.debug("Response Code : " + responseCode);
         } catch (ProtocolException e) {
             log.error("Protocol mismatch exception occured whilst trying to 'GET' resource");
         } catch (IOException e) {

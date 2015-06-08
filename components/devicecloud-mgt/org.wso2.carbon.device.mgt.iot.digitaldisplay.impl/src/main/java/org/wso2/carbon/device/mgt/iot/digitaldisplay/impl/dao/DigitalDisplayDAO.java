@@ -35,16 +35,20 @@ public class DigitalDisplayDAO extends IotDeviceManagementDAOFactory
         implements IotDeviceManagementDAOFactoryInterface {
 
     private static final Log log = LogFactory.getLog(DigitalDisplayDAO.class);
-    protected static DataSource dataSource;
+    static DataSource dataSource;           // package local variable
     private static ThreadLocal<Connection> currentConnection = new ThreadLocal<Connection>();
 
     public DigitalDisplayDAO() {
-        dataSource = getDataSourceMap().get(DigitalDisplayConstants.DEVICE_TYPE);
+        initDigitalDisplayDAO();
     }
 
     @Override
     public IotDeviceDAO getIotDeviceDAO() {
         return new DigitalDisplayDeviceDAOImpl();
+    }
+
+    public static void initDigitalDisplayDAO(){
+        dataSource = getDataSourceMap().get(DigitalDisplayConstants.DEVICE_TYPE);
     }
 
     public static void beginTransaction() throws IotDeviceManagementDAOException {

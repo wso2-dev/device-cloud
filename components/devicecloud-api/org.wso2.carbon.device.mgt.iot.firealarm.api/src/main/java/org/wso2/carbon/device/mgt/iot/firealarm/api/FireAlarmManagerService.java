@@ -35,6 +35,8 @@ import java.nio.ByteBuffer;
 import java.util.Date;
 import java.util.UUID;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
+
 //@Path("/FireAlarmDeviceManager")
 public class FireAlarmManagerService {
 
@@ -215,7 +217,7 @@ public class FireAlarmManagerService {
 
 	private static String shortUUID() {
 		UUID uuid = UUID.randomUUID();
-		long l = ByteBuffer.wrap(uuid.toString().getBytes()).getLong();
+		long l = ByteBuffer.wrap(uuid.toString().getBytes(UTF_8)).getLong();
 		return Long.toString(l, Character.MAX_RADIX);
 	}
 

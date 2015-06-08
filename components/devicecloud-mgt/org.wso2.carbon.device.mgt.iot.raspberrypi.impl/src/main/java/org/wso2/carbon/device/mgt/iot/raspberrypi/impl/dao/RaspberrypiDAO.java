@@ -31,20 +31,22 @@ import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-public class RaspberrypiDAO extends IotDeviceManagementDAOFactory
-        implements IotDeviceManagementDAOFactoryInterface {
+public class RaspberrypiDAO extends IotDeviceManagementDAOFactory implements IotDeviceManagementDAOFactoryInterface {
 
     private static final Log log = LogFactory.getLog(RaspberrypiDAO.class);
-    protected static DataSource dataSource;
+    static DataSource dataSource;
     private static ThreadLocal<Connection> currentConnection = new ThreadLocal<Connection>();
 
     public RaspberrypiDAO() {
-        dataSource = getDataSourceMap().get(RaspberrypiConstants.DEVICE_TYPE);
+        initRaspberrypiDAO();
     }
 
-    @Override
-    public IotDeviceDAO getIotDeviceDAO() {
+    @Override public IotDeviceDAO getIotDeviceDAO() {
         return new RaspberrypiDeviceDAOImpl();
+    }
+
+    public static void initRaspberrypiDAO() {
+        dataSource = getDataSourceMap().get(RaspberrypiConstants.DEVICE_TYPE);
     }
 
     public static void beginTransaction() throws IotDeviceManagementDAOException {
@@ -62,8 +64,7 @@ public class RaspberrypiDAO extends IotDeviceManagementDAOFactory
             try {
                 currentConnection.set(dataSource.getConnection());
             } catch (SQLException e) {
-                throw new IotDeviceManagementDAOException("Error occurred while retrieving data source connection",
-                        e);
+                throw new IotDeviceManagementDAOException("Error occurred while retrieving data source connection", e);
             }
         }
         return currentConnection.get();
@@ -76,8 +77,8 @@ public class RaspberrypiDAO extends IotDeviceManagementDAOFactory
                 conn.commit();
             } else {
                 if (log.isDebugEnabled()) {
-                    log.debug("Datasource connection associated with the current thread is null, hence commit " +
-                            "has not been attempted");
+                    log.debug("Datasource connection associated with the current thread is null, hence commit "
+                            + "has not been attempted");
                 }
             }
         } catch (SQLException e) {
@@ -89,14 +90,14 @@ public class RaspberrypiDAO extends IotDeviceManagementDAOFactory
 
     public static void closeConnection() throws IotDeviceManagementDAOException {
 
-		Connection con = currentConnection.get();
-		if(con != null){
-			try {
-				con.close();
-			} catch (SQLException e) {
-				log.error("Error occurred while close the connection");
-			}
-		}
+        Connection con = currentConnection.get();
+        if (con != null) {
+            try {
+                con.close();
+            } catch (SQLException e) {
+                log.error("Error occurred while close the connection");
+            }
+        }
         currentConnection.remove();
     }
 
@@ -107,8 +108,8 @@ public class RaspberrypiDAO extends IotDeviceManagementDAOFactory
                 conn.rollback();
             } else {
                 if (log.isDebugEnabled()) {
-                    log.debug("Datasource connection associated with the current thread is null, hence rollback " +
-                            "has not been attempted");
+                    log.debug("Datasource connection associated with the current thread is null, hence rollback "
+                            + "has not been attempted");
                 }
             }
         } catch (SQLException e) {

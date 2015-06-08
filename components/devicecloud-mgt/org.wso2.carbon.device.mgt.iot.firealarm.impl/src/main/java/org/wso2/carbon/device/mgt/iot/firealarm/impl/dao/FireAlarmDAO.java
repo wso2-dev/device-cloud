@@ -20,32 +20,32 @@ package org.wso2.carbon.device.mgt.iot.firealarm.impl.dao;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.wso2.carbon.device.mgt.iot.firealarm.constants.FireAlarmConstants;
-import org.wso2.carbon.device.mgt.iot.firealarm.impl.dao.impl.FireAlarmDeviceDAOImpl;
-
 import org.wso2.carbon.device.mgt.iot.common.iotdevice.dao.IotDeviceDAO;
 import org.wso2.carbon.device.mgt.iot.common.iotdevice.dao.IotDeviceManagementDAOException;
 import org.wso2.carbon.device.mgt.iot.common.iotdevice.dao.IotDeviceManagementDAOFactory;
 import org.wso2.carbon.device.mgt.iot.common.iotdevice.dao.IotDeviceManagementDAOFactoryInterface;
+import org.wso2.carbon.device.mgt.iot.firealarm.constants.FireAlarmConstants;
+import org.wso2.carbon.device.mgt.iot.firealarm.impl.dao.impl.FireAlarmDeviceDAOImpl;
 
 import javax.sql.DataSource;
-
 import java.sql.Connection;
 import java.sql.SQLException;
 
-public class FireAlarmDAO extends IotDeviceManagementDAOFactory
-        implements IotDeviceManagementDAOFactoryInterface {
+public class FireAlarmDAO extends IotDeviceManagementDAOFactory implements IotDeviceManagementDAOFactoryInterface {
 
     private static final Log log = LogFactory.getLog(FireAlarmDAO.class);
-    protected static DataSource dataSource;
+    static DataSource dataSource;
     private static ThreadLocal<Connection> currentConnection = new ThreadLocal<Connection>();
 
     public FireAlarmDAO() {
+        initFireAlarmDAO();
+    }
+
+    public static void initFireAlarmDAO() {
         dataSource = getDataSourceMap().get(FireAlarmConstants.DEVICE_TYPE);
     }
 
-    @Override
-    public IotDeviceDAO getIotDeviceDAO() {
+    @Override public IotDeviceDAO getIotDeviceDAO() {
         return new FireAlarmDeviceDAOImpl();
     }
 
@@ -64,8 +64,7 @@ public class FireAlarmDAO extends IotDeviceManagementDAOFactory
             try {
                 currentConnection.set(dataSource.getConnection());
             } catch (SQLException e) {
-                throw new IotDeviceManagementDAOException("Error occurred while retrieving data source connection",
-                        e);
+                throw new IotDeviceManagementDAOException("Error occurred while retrieving data source connection", e);
             }
         }
         return currentConnection.get();
@@ -78,8 +77,8 @@ public class FireAlarmDAO extends IotDeviceManagementDAOFactory
                 conn.commit();
             } else {
                 if (log.isDebugEnabled()) {
-                    log.debug("Datasource connection associated with the current thread is null, hence commit " +
-                            "has not been attempted");
+                    log.debug("Datasource connection associated with the current thread is null, hence commit "
+                            + "has not been attempted");
                 }
             }
         } catch (SQLException e) {
@@ -91,14 +90,14 @@ public class FireAlarmDAO extends IotDeviceManagementDAOFactory
 
     public static void closeConnection() throws IotDeviceManagementDAOException {
 
-		Connection con = currentConnection.get();
-		if(con != null){
-			try {
-				con.close();
-			} catch (SQLException e) {
-				log.error("Error occurred while close the connection");
-			}
-		}
+        Connection con = currentConnection.get();
+        if (con != null) {
+            try {
+                con.close();
+            } catch (SQLException e) {
+                log.error("Error occurred while close the connection");
+            }
+        }
         currentConnection.remove();
     }
 
@@ -109,8 +108,8 @@ public class FireAlarmDAO extends IotDeviceManagementDAOFactory
                 conn.rollback();
             } else {
                 if (log.isDebugEnabled()) {
-                    log.debug("Datasource connection associated with the current thread is null, hence rollback " +
-                            "has not been attempted");
+                    log.debug("Datasource connection associated with the current thread is null, hence rollback "
+                            + "has not been attempted");
                 }
             }
         } catch (SQLException e) {

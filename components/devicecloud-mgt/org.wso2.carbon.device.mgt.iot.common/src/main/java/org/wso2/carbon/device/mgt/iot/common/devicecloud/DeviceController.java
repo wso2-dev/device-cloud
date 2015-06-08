@@ -16,7 +16,6 @@
 
 package org.wso2.carbon.device.mgt.iot.common.devicecloud;
 
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.device.mgt.common.DeviceIdentifier;
@@ -27,10 +26,10 @@ import org.wso2.carbon.device.mgt.iot.common.devicecloud.config.DeviceCloudManag
 import org.wso2.carbon.device.mgt.iot.common.devicecloud.config.DeviceCloudManagementSecurityConfig;
 import org.wso2.carbon.device.mgt.iot.common.devicecloud.config.controlqueue.DeviceControlQueueConfig;
 import org.wso2.carbon.device.mgt.iot.common.devicecloud.config.datastore.DeviceDataStoreConfig;
-import org.wso2.carbon.device.mgt.iot.common.devicecloud.exception.DeviceControllerException;
-import org.wso2.carbon.device.mgt.iot.common.devicecloud.exception.UnauthorizedException;
 import org.wso2.carbon.device.mgt.iot.common.devicecloud.controlqueue.ControlQueueConnector;
 import org.wso2.carbon.device.mgt.iot.common.devicecloud.datastore.DataStoreConnector;
+import org.wso2.carbon.device.mgt.iot.common.devicecloud.exception.DeviceControllerException;
+import org.wso2.carbon.device.mgt.iot.common.devicecloud.exception.UnauthorizedException;
 import org.wso2.carbon.device.mgt.iot.common.devicecloud.util.ResourceFileLoader;
 
 import java.io.File;
@@ -38,196 +37,187 @@ import java.util.HashMap;
 
 public class DeviceController {
 
-	private static final Log log = LogFactory.getLog(DeviceController.class);
-	private static DataStoreConnector iotDataStore = null;
-	private static ControlQueueConnector iotControlQueue = null;
-	private static DeviceDataStoreConfig dataStoreConfig = null;
-	private static DeviceControlQueueConfig controlQueueConfig = null;
+    private static final Log log = LogFactory.getLog(DeviceController.class);
+    private static DataStoreConnector iotDataStore = null;
+    private static ControlQueueConnector iotControlQueue = null;
+    private static DeviceDataStoreConfig dataStoreConfig = null;
+    private static DeviceControlQueueConfig controlQueueConfig = null;
 
-	static {
+    static {
 
-		String trustStoreFile = null;
-		String trustStorePassword = null;
-		File certificateFile = null;
+        String trustStoreFile = null;
+        String trustStorePassword = null;
+        File certificateFile = null;
 
-		DeviceCloudManagementConfig config = null;
+        DeviceCloudManagementConfig config = null;
 
-		try {
-			config = DeviceCloudConfigManager.getInstance().getDeviceCloudMgtConfig();
-		} catch (DeviceControllerException ex) {
-			log.error(ex.getMessage(), ex);
-		}
+        try {
+            config = DeviceCloudConfigManager.getInstance().getDeviceCloudMgtConfig();
+        } catch (DeviceControllerException ex) {
+            log.error(ex.getMessage(), ex);
+        }
 
-		if (config != null) {
-			/* reading security configurations */
-			DeviceCloudManagementSecurityConfig securityConfig =
-					config.getDeviceCloudManagementSecurityConfig();
-			trustStoreFile = securityConfig.getClient();
-			trustStorePassword = securityConfig.getTrustStorePassword();
-			certificateFile = new ResourceFileLoader("/resources/security/" + trustStoreFile)
-					.getFile();
+        if (config != null) {
+            /* reading security configurations */
+            DeviceCloudManagementSecurityConfig securityConfig = config.getDeviceCloudManagementSecurityConfig();
+            trustStoreFile = securityConfig.getClient();
+            trustStorePassword = securityConfig.getTrustStorePassword();
+            certificateFile = new ResourceFileLoader("/resources/security/" + trustStoreFile).getFile();
 
-			if (certificateFile.exists()) {
-				trustStoreFile = certificateFile.getAbsolutePath();
-				log.info("Trust Store Path : " + trustStoreFile);
+            if (certificateFile.exists()) {
+                trustStoreFile = certificateFile.getAbsolutePath();
+                log.info("Trust Store Path : " + trustStoreFile);
 
-				System.setProperty("javax.net.ssl.trustStore", trustStoreFile);
-				System.setProperty("javax.net.ssl.trustStorePassword", trustStorePassword);
-			} else {
-				log.error("Trust Store not found in path : " + trustStoreFile);
-			}
+                System.setProperty("javax.net.ssl.trustStore", trustStoreFile);
+                System.setProperty("javax.net.ssl.trustStorePassword", trustStorePassword);
+            } else {
+                log.error("Trust Store not found in path : " + trustStoreFile);
+            }
 
-			// controller configurations
-			DeviceCloudManagementControllerConfig controllerConfig =
-					config.getDeviceCloudManagementControllerConfig();
+            // controller configurations
+            DeviceCloudManagementControllerConfig controllerConfig = config.getDeviceCloudManagementControllerConfig();
 
-			// reading data store configurations
-			String deviceDataStoreKey = controllerConfig.getDeviceDataStore();
-			log.info("Active Data-Store: " + deviceDataStoreKey);
+            // reading data store configurations
+            String deviceDataStoreKey = controllerConfig.getDeviceDataStore();
+            log.info("Active Data-Store: " + deviceDataStoreKey);
 
-			dataStoreConfig = config.getDataStoresMap().get(
-					deviceDataStoreKey);
-			if (dataStoreConfig == null) {
-				log.error("Error occurred when trying to read data stores configurations");
-			}
+            dataStoreConfig = config.getDataStoresMap().get(deviceDataStoreKey);
+            if (dataStoreConfig == null) {
+                log.error("Error occurred when trying to read data stores configurations");
+            }
 
-			//initialization data store
-			try {
-				String handlerClass = dataStoreConfig.getHandlerClass().trim();
-				Class<?> dataStore = Class.forName(handlerClass);
-				if (DataStoreConnector.class.isAssignableFrom(dataStore)) {
-					iotDataStore = (DataStoreConnector) dataStore.newInstance();
-					iotDataStore.initDataStore();
-				}
-			} catch (ClassNotFoundException | IllegalAccessException | InstantiationException ex) {
-				log.error("Error occurred when trying to initiate data store", ex);
-			} catch (DeviceControllerException ex) {
-				log.error(ex.getMessage(), ex);
-			}
+            //initialization data store
+            try {
+                String handlerClass = "";
+                if (dataStoreConfig != null) {
+                    handlerClass = dataStoreConfig.getHandlerClass().trim();
+                }
 
-			// reading control queue configurations
-			String controlQueueKey = controllerConfig.getDeviceControlQueue();
-			controlQueueConfig = config.getControlQueuesMap().get(
-					controlQueueKey);
-			if (controlQueueConfig == null) {
-				log.error("Error occurred when trying to read control queue configurations");
-			}
+                Class<?> dataStore = Class.forName(handlerClass);
+                if (DataStoreConnector.class.isAssignableFrom(dataStore)) {
+                    iotDataStore = (DataStoreConnector) dataStore.newInstance();
+                    iotDataStore.initDataStore();
+                }
+            } catch (ClassNotFoundException | IllegalAccessException | InstantiationException ex) {
+                log.error("Error occurred when trying to initiate data store", ex);
+            } catch (DeviceControllerException ex) {
+                log.error(ex.getMessage(), ex);
+            }
 
-			//initialization control queue
-			try {
-				String handlerClass = controlQueueConfig.getHandlerClass().trim();
-				Class<?> controlQueue = Class.forName(handlerClass);
-				if (ControlQueueConnector.class.isAssignableFrom(controlQueue)) {
-					iotControlQueue = (ControlQueueConnector) controlQueue.newInstance();
-					iotControlQueue.initControlQueue();
-				}
-			} catch (ClassNotFoundException | IllegalAccessException | InstantiationException ex) {
-				log.error("Error occurred when trying to initiate control queue", ex);
-			} catch (DeviceControllerException ex) {
-				log.error(ex.getMessage(), ex);
-			}
-		}
-	}
+            // reading control queue configurations
+            String controlQueueKey = controllerConfig.getDeviceControlQueue();
+            controlQueueConfig = config.getControlQueuesMap().get(controlQueueKey);
+            if (controlQueueConfig == null) {
+                log.error("Error occurred when trying to read control queue configurations");
+            }
 
+            //initialization control queue
+            try {
+                String handlerClass = "";
+                if (controlQueueConfig != null) {
+                    handlerClass = controlQueueConfig.getHandlerClass().trim();
+                }
 
-	public static boolean pushData(String owner, String deviceType,
-								   String deviceId, Long time, String key,
-								   String value, String description) throws UnauthorizedException {
+                Class<?> controlQueue = Class.forName(handlerClass);
+                if (ControlQueueConnector.class.isAssignableFrom(controlQueue)) {
+                    iotControlQueue = (ControlQueueConnector) controlQueue.newInstance();
+                    iotControlQueue.initControlQueue();
+                }
+            } catch (ClassNotFoundException | IllegalAccessException | InstantiationException ex) {
+                log.error("Error occurred when trying to initiate control queue", ex);
+            } catch (DeviceControllerException ex) {
+                log.error(ex.getMessage(), ex);
+            }
+        }
+    }
 
-		HashMap<String, String> deviceDataMap = new HashMap<String, String>();
+    public static boolean pushData(String owner, String deviceType, String deviceId, Long time, String key,
+            String value, String description) throws UnauthorizedException {
 
-		deviceDataMap.put("owner", owner);
-		deviceDataMap.put("deviceType", deviceType);
-		deviceDataMap.put("deviceId", deviceId);
-		deviceDataMap.put("time", "" + time);
-		deviceDataMap.put("key", key);
-		deviceDataMap.put("value", value);
-		deviceDataMap.put("description", description);
+        HashMap<String, String> deviceDataMap = new HashMap<String, String>();
 
-		DeviceValidator deviceChecker = new DeviceValidator();
+        deviceDataMap.put("owner", owner);
+        deviceDataMap.put("deviceType", deviceType);
+        deviceDataMap.put("deviceId", deviceId);
+        deviceDataMap.put("time", "" + time);
+        deviceDataMap.put("key", key);
+        deviceDataMap.put("value", value);
+        deviceDataMap.put("description", description);
 
-		DeviceIdentifier dId = new DeviceIdentifier(deviceId,deviceType);
+        DeviceValidator deviceChecker = new DeviceValidator();
 
+        DeviceIdentifier dId = new DeviceIdentifier(deviceId, deviceType);
 
-		try {
-			boolean exists = deviceChecker.isExist(owner, dId);
+        try {
+            boolean exists = deviceChecker.isExist(owner, dId);
 
-			if (exists) {
+            if (exists) {
 
-				iotDataStore.publishIoTData(deviceDataMap);
-				return true;
+                iotDataStore.publishIoTData(deviceDataMap);
+                return true;
 
-			}else{
+            } else {
 
-				throw new UnauthorizedException(
-						"There is no mapping between owner:" + owner + " and device id:" + deviceId);
-			}
+                throw new UnauthorizedException(
+                        "There is no mapping between owner:" + owner + " and device id:" + deviceId);
+            }
 
-		} catch (DeviceControllerException e) {
+        } catch (DeviceControllerException e) {
 
-				log.error(
-						"Failed to push " + description + " data to dataStore at " +
+            log.error("Failed to push " + description + " data to dataStore at " +
 
-								dataStoreConfig.getEndPoint() + ":"
-								+ dataStoreConfig.getPort());
+                    dataStoreConfig.getEndPoint() + ":" + dataStoreConfig.getPort());
 
-			return false;
+            return false;
 
-		} catch (DeviceManagementException e) {
+        } catch (DeviceManagementException e) {
 
-			log.error("Error whilst trying to authenticate the owner with device");
-			return false;
+            log.error("Error whilst trying to authenticate the owner with device");
+            return false;
 
+        }
 
-		}
+    }
 
-	}
+    public static boolean setControl(String owner, String deviceType, String deviceId, String key, String value)
+            throws UnauthorizedException {
+        HashMap<String, String> deviceControlsMap = new HashMap<String, String>();
 
-	public static boolean setControl(String owner, String deviceType, String deviceId, String key,
-									 String value) throws UnauthorizedException{
-		HashMap<String, String> deviceControlsMap = new HashMap<String, String>();
+        deviceControlsMap.put("owner", owner);
+        deviceControlsMap.put("deviceType", deviceType);
+        deviceControlsMap.put("deviceId", deviceId);
+        deviceControlsMap.put("key", key);
+        deviceControlsMap.put("value", value);
 
-		deviceControlsMap.put("owner", owner);
-		deviceControlsMap.put("deviceType", deviceType);
-		deviceControlsMap.put("deviceId", deviceId);
-		deviceControlsMap.put("key", key);
-		deviceControlsMap.put("value", value);
+        DeviceValidator deviceChecker = new DeviceValidator();
+        DeviceIdentifier dId = new DeviceIdentifier(deviceId, deviceType);
 
-		DeviceValidator deviceChecker = new DeviceValidator();
-		DeviceIdentifier dId = new DeviceIdentifier(deviceId,deviceType);
+        try {
+            boolean exists = deviceChecker.isExist(owner, dId);
 
+            if (exists) {
+                iotControlQueue.enqueueControls(deviceControlsMap);
+                return true;
+            } else {
 
-		try {
-			boolean exists = deviceChecker.isExist(owner, dId);
+                throw new UnauthorizedException(
+                        "There is no mapping between owner:" + owner + " and device id:" + deviceId);
 
-			if (exists) {
-				iotControlQueue.enqueueControls(deviceControlsMap);
-				return true;
-			}else{
+            }
+        } catch (DeviceControllerException e) {
 
-				throw new UnauthorizedException(
-						"There is no mapping between owner:" + owner + " and device id:" + deviceId);
+            log.error("Failed to enqueue data to queue at " +
+                    controlQueueConfig.getEndPoint() + ":" +
+                    controlQueueConfig.getPort());
 
-			}
-		} catch (DeviceControllerException e) {
+            return false;
+        } catch (DeviceManagementException e) {
 
-				log.error("Failed to enqueue data to queue at " +
-								  controlQueueConfig.getEndPoint() + ":" +
-								  controlQueueConfig.getPort());
+            log.error("Error whilst trying to authenticate the owner with device");
+            return false;
 
+        }
 
-
-
-			return false;
-		} catch (DeviceManagementException e) {
-
-			log.error("Error whilst trying to authenticate the owner with device");
-			return false;
-
-
-		}
-
-	}
-
+    }
 
 }
