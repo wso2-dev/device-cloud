@@ -25,19 +25,20 @@ import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.component.ComponentContext;
 import org.wso2.carbon.device.mgt.common.spi.DeviceMgtService;
 import org.wso2.carbon.device.mgt.iot.digitaldisplay.impl.DigitalDisplayManager;
-import org.wso2.carbon.ndatasource.core.DataSourceService;
+import org.wso2.carbon.device.mgt.iot.common.DeviceTypeService;
 
 
 
-//* @scr.reference name="org.wso2.carbon.ndatasource"
-//		* interface="org.wso2.carbon.ndatasource.core.DataSourceService"
-//		* cardinality="1..1"
-//		* policy="dynamic"
-//		* bind="setDataSourceService"
-//		* unbind="unsetDataSourceService"
+
 /**
  * @scr.component name="org.wso2.carbon.device.mgt.iot.digitaldisplay.internal.DigitalDisplayManagementServiceComponent"
  * immediate="true"
+ * @scr.reference name="wso2.carbon.device.mgt.iot.common.DeviceTypeService"
+ * interface="org.wso2.carbon.device.mgt.iot.common.DeviceTypeService"
+ * cardinality="1..1"
+ * policy="dynamic"
+ * bind="setDeviceTypeService"
+ * unbind="unsetDeviceTypeService"
  */
 public class DigitalDisplayManagementServiceComponent {
 	
@@ -91,6 +92,19 @@ public class DigitalDisplayManagementServiceComponent {
     }
 
 
-    
-    
+    protected void setDeviceTypeService(DeviceTypeService deviceTypeService) {
+		/* This is to avoid this component getting initialized before the
+		common registered */
+        if (log.isDebugEnabled()) {
+            log.debug("Data source service set to mobile service component");
+        }
+    }
+
+    protected void unsetDeviceTypeService(DeviceTypeService deviceTypeService)  {
+        //do nothing
+    }
+
+
+
+
 }

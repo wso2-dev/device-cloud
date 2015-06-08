@@ -24,6 +24,7 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.component.ComponentContext;
 import org.wso2.carbon.device.mgt.common.spi.DeviceMgtService;
+import org.wso2.carbon.device.mgt.iot.common.DeviceTypeService;
 import org.wso2.carbon.device.mgt.iot.raspberrypi.impl.RaspberrypiManager;
 import org.wso2.carbon.ndatasource.core.DataSourceService;
 
@@ -38,6 +39,12 @@ import org.wso2.carbon.ndatasource.core.DataSourceService;
 /**
  * @scr.component name="org.wso2.carbon.device.mgt.iot.raspberrypi.internal.RaspberrypiManagementServiceComponent"
  * immediate="true"
+ * @scr.reference name="wso2.carbon.device.mgt.iot.common.DeviceTypeService"
+ * interface="org.wso2.carbon.device.mgt.iot.common.DeviceTypeService"
+ * cardinality="1..1"
+ * policy="dynamic"
+ * bind="setDeviceTypeService"
+ * unbind="unsetDeviceTypeService"
  */
 public class RaspberrypiManagementServiceComponent {
 	
@@ -87,6 +94,18 @@ public class RaspberrypiManagementServiceComponent {
         } catch (Throwable e) {
             log.error("Error occurred while de-activating Raspberrypi Device Management bundle", e);
         }
+    }
+
+    protected void setDeviceTypeService(DeviceTypeService deviceTypeService) {
+		/* This is to avoid this component getting initialized before the
+		common registered */
+        if (log.isDebugEnabled()) {
+            log.debug("Data source service set to mobile service component");
+        }
+    }
+
+    protected void unsetDeviceTypeService(DeviceTypeService deviceTypeService)  {
+        //do nothing
     }
 
     

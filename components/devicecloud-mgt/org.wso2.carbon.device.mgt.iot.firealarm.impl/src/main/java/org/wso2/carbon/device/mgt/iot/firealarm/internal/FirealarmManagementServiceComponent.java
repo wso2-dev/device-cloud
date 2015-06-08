@@ -26,6 +26,7 @@ import org.osgi.service.component.ComponentContext;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Deactivate;
+import org.wso2.carbon.device.mgt.iot.common.DeviceTypeService;
 import org.wso2.carbon.device.mgt.iot.firealarm.impl.FireAlarmManager;
 import org.wso2.carbon.ndatasource.core.DataSourceService;
 import org.wso2.carbon.device.mgt.common.spi.DeviceMgtService;
@@ -52,6 +53,12 @@ import org.wso2.carbon.device.mgt.common.spi.DeviceMgtService;
 /**
  * @scr.component name="org.wso2.carbon.device.mgt.iot.firealarm.internal.FirealarmManagementServiceComponent"
  * immediate="true"
+ * @scr.reference name="wso2.carbon.device.mgt.iot.common.DeviceTypeService"
+ * interface="org.wso2.carbon.device.mgt.iot.common.DeviceTypeService"
+ * cardinality="1..1"
+ * policy="dynamic"
+ * bind="setDeviceTypeService"
+ * unbind="unsetDeviceTypeService"
  */
 public class FirealarmManagementServiceComponent {
 	
@@ -100,6 +107,18 @@ public class FirealarmManagementServiceComponent {
         } catch (Throwable e) {
             log.error("Error occurred while de-activating Firealarm Device Management bundle", e);
         }
+    }
+
+    protected void setDeviceTypeService(DeviceTypeService deviceTypeService) {
+		/* This is to avoid this component getting initialized before the
+		common registered */
+        if (log.isDebugEnabled()) {
+            log.debug("Data source service set to mobile service component");
+        }
+    }
+
+    protected void unsetDeviceTypeService(DeviceTypeService deviceTypeService)  {
+        //do nothing
     }
 
 

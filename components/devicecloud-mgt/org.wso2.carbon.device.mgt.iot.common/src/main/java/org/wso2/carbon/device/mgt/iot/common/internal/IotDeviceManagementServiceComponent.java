@@ -22,6 +22,8 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.osgi.framework.BundleContext;
 import org.osgi.service.component.ComponentContext;
+import org.wso2.carbon.device.mgt.iot.common.DeviceTypeService;
+import org.wso2.carbon.device.mgt.iot.common.DeviceTypeServiceImpl;
 import org.wso2.carbon.device.mgt.iot.common.iotdevice.exception.IotDeviceMgtPluginException;
 import org.wso2.carbon.device.mgt.iot.common.iotdevice.config.IotDeviceConfigurationManager;
 import org.wso2.carbon.device.mgt.iot.common.iotdevice.config.IotDeviceManagementConfig;
@@ -59,8 +61,7 @@ public class IotDeviceManagementServiceComponent {
 		}
 		try {
 
-
-            /* Initialize the data source configuration */
+ 			BundleContext bundleContext = ctx.getBundleContext();              /* Initialize the data source configuration */
 			IotDeviceConfigurationManager.getInstance().initConfig();
 			IotDeviceManagementConfig config = IotDeviceConfigurationManager.getInstance()
 					.getIotDeviceManagementConfig();
@@ -79,16 +80,20 @@ public class IotDeviceManagementServiceComponent {
 				try {
 					for (String pluginType : dsConfigMap.keySet()){
 						IotDeviceManagementDAOUtil
-								.setupIotDeviceManagementSchema(IotDeviceManagementDAOFactory.getDataSourceMap
-										().get(pluginType));
+								.setupIotDeviceManagementSchema(
+										IotDeviceManagementDAOFactory.getDataSourceMap
+												().get(pluginType));
 					}
 				} catch (IotDeviceMgtPluginException e) {
-					log.error("Exception occurred while initializing mobile device management database schema", e);
+					log.error(
+							"Exception occurred while initializing mobile device management database schem ",
+							e);
 				}
 			}
 
-
+			bundleContext.registerService(DeviceTypeService.class.getName(),new DeviceTypeServiceImpl(), null);
 			IoTUsageStatisticsClient.initializeDataSource();
+
 
 			if (log.isDebugEnabled()) {
 				log.debug("Iot Device Management Service Component has been successfully activated");
@@ -106,7 +111,8 @@ public class IotDeviceManagementServiceComponent {
 	}
 
 	protected void setDataSourceService(DataSourceService dataSourceService) {
-        /* This is to avoid iot device management component getting initialized before the underlying datasources
+		/* This is to avoid iot device management component getting initialized before the
+		underlying datasources
         are registered */
 		if (log.isDebugEnabled()) {
 			log.debug("Data source service set to mobile service component");
