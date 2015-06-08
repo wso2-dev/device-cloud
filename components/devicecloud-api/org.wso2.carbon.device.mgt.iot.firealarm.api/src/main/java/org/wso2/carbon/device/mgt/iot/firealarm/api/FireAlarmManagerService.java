@@ -32,6 +32,7 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import java.nio.ByteBuffer;
+import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import java.util.UUID;
 
@@ -217,7 +218,7 @@ public class FireAlarmManagerService {
 
 	private static String shortUUID() {
 		UUID uuid = UUID.randomUUID();
-		long l = ByteBuffer.wrap(uuid.toString().getBytes(UTF_8)).getLong();
+		long l = ByteBuffer.wrap(uuid.toString().getBytes(StandardCharsets.UTF_8)).getLong();
 		return Long.toString(l, Character.MAX_RADIX);
 	}
 
