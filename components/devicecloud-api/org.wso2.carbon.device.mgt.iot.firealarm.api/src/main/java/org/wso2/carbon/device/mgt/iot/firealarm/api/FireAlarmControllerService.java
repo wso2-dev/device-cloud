@@ -44,8 +44,8 @@ public class FireAlarmControllerService {
 
 
 	public static final String CONTROL_QUEUE_ENDPOINT;
-	public static final HashMap<String, LinkedList<String>> replyMsgQueue;
-	public static final HashMap<String, LinkedList<String>> internalControlsQueue;
+	public static HashMap<String, LinkedList<String>> replyMsgQueue;
+	public static HashMap<String, LinkedList<String>> internalControlsQueue;
 	private static MQTTFireAlarmSubscriber mqttFireAlarmSubscriber;
 
 	static {
@@ -70,7 +70,11 @@ public class FireAlarmControllerService {
 				log.error("Error occurred when trying to read control queue configurations");
 			}
 
-			String mqttUrl = controlQueueConfig.getEndPoint();
+            String mqttUrl = "";
+            if (controlQueueConfig != null) {
+                mqttUrl = controlQueueConfig.getEndPoint();
+            }
+
 			String mqttPort = controlQueueConfig.getPort();
 			CONTROL_QUEUE_ENDPOINT = mqttUrl + ":" + mqttPort;
 			log.info("CONTROL_QUEUE_ENDPOINT Successfully initialized.");
@@ -86,7 +90,7 @@ public class FireAlarmControllerService {
 	/**
 	 * @param mqttFireAlarmSubscriber the mqttFireAlarmSubscriber to set
 	 */
-	public void setMqttFireAlarmSubscriber(MQTTFireAlarmSubscriber mqttFireAlarmSubscriber) {
+    public void setMqttFireAlarmSubscriber(MQTTFireAlarmSubscriber mqttFireAlarmSubscriber) {
 		FireAlarmControllerService.mqttFireAlarmSubscriber = mqttFireAlarmSubscriber;
 		try {
 			mqttFireAlarmSubscriber.subscribe();

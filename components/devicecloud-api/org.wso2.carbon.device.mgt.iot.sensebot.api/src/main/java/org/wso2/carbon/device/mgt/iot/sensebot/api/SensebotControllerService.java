@@ -285,7 +285,9 @@ public class SensebotControllerService {
             log.error("Invalid URL: " + urlString);
         }
         try {
-            httpConn = (HttpURLConnection) url.openConnection();
+            if (url != null) {
+                httpConn = (HttpURLConnection) url.openConnection();
+            }
         } catch (IOException e) {
             log.error("Error Connecting to HTTP Endpoint at: " + urlString);
         }

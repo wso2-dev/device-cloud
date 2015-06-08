@@ -45,26 +45,16 @@ public class DeviceCloudConfigManager {
                     IOT_DC_ROOT_DIRECTORY + File.separator + IOT_DEVICE_CONFIG_XML_NAME;
 
     private DeviceCloudManagementConfig currentDeviceCloudMgtConfig;
-    private static DeviceCloudConfigManager deviceConfigurationManager;
+    private static DeviceCloudConfigManager deviceConfigurationManager = new DeviceCloudConfigManager();
 
     private DeviceCloudConfigManager() {
     }
 
     public static DeviceCloudConfigManager getInstance() throws DeviceControllerException {
-        if (deviceConfigurationManager == null) {
-            synchronized (DeviceCloudConfigManager.class) {
-                if (deviceConfigurationManager == null) {
-                    DeviceCloudConfigManager result = new DeviceCloudConfigManager();
-                    result.initConfig();
-                    deviceConfigurationManager = result;
-                }
-            }
-
-        }
         return deviceConfigurationManager;
     }
 
-    private void initConfig() throws DeviceControllerException {
+    public void initConfig() throws DeviceControllerException {
         try {
             File deviceCloudMgtConfig = new File(CONFIGS_FILE_LOCATION);
             Document doc = IotDeviceManagementUtil.convertToDocument(deviceCloudMgtConfig);

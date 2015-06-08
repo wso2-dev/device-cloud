@@ -173,6 +173,9 @@ public class BAMDataStore implements DataStoreConnector {
                 }
                 DEVICE_DATA_STREAM = BAM_DATA_PUBLISHER.defineStream(BAMStreamDefinitions.FAN_STREAM_DEFINITION);
                 break;
+            default:
+                //  will leave the stream definition to be the default one
+                break;
             }
         } catch (AgentException | MalformedStreamDefinitionException | StreamDefinitionException
                 | DifferentStreamDefinitionAlreadyDefinedException e) {
@@ -182,7 +185,7 @@ public class BAMDataStore implements DataStoreConnector {
         }
 
         try {
-            if (deviceType.equalsIgnoreCase("FireAlarm") | deviceType.equalsIgnoreCase("SenseBot")) {
+            if (deviceType.equalsIgnoreCase("FireAlarm") || deviceType.equalsIgnoreCase("SenseBot")) {
                 if (log.isDebugEnabled()) {
                     log.info("Publishing FireAlarm specific data");
                 }
