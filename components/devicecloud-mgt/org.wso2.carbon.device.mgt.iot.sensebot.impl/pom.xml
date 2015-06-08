@@ -80,6 +80,7 @@
 							!org.wso2.carbon.device.mgt.iot.sensebot.internal,
 							org.wso2.carbon.device.mgt.iot.sensebot.*
 						</Export-Package>
+						<_dsannotations>*</_dsannotations>
 					</instructions>
 				</configuration>
 			</plugin>
@@ -137,6 +138,12 @@
 		<groupId>org.wso2.carbon.device.mgt.iot</groupId>
 		<artifactId>org.wso2.carbon.device.mgt.iot.common</artifactId>
 	</dependency>
+
+		<dependency>
+			<groupId>org.apache.felix</groupId>
+			<artifactId>org.apache.felix.scr.annotations</artifactId>
+			<version>1.9.12</version>
+		</dependency>
 
 	</dependencies>
 </project>

@@ -23,24 +23,15 @@ import org.apache.commons.logging.LogFactory;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.component.ComponentContext;
+import org.osgi.service.component.annotations.Activate;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Deactivate;
 import org.wso2.carbon.device.mgt.common.spi.DeviceMgtService;
 import org.wso2.carbon.device.mgt.iot.sensebot.impl.SensebotManager;
 import org.wso2.carbon.ndatasource.core.DataSourceService;
 
-/**
- * @scr.component name="org.wso2.carbon.device.mgt.iot.sensebot.internal.SensebotManagementServiceComponent"
- * immediate="true"
- * @scr.reference name="org.wso2.carbon.ndatasource"
- * interface="org.wso2.carbon.ndatasource.core.DataSourceService"
- * cardinality="1..1"
- * policy="dynamic"
- * bind="setDataSourceService"
- * unbind="unsetDataSourceService"
- * <p/>
- * Adding reference to API Manager Configuration service is an unavoidable hack to get rid of NPEs thrown while
- * initializing APIMgtDAOs attempting to register APIs programmatically. APIMgtDAO needs to be proper cleaned up
- * to avoid as an ideal fix
- */
+@Component(name="org.wso2.carbon.device.mgt.iot.sensebot.internal.SensebotManagementServiceComponent",
+           immediate=true)
 public class SensebotManagementServiceComponent {
 	
 
@@ -50,6 +41,7 @@ public class SensebotManagementServiceComponent {
 
     private static final Log log = LogFactory.getLog(SensebotManagementServiceComponent.class);
 
+    @Activate
     protected void activate(ComponentContext ctx) {
     	if (log.isDebugEnabled()) {
             log.debug("Activating Sensebot Device Management Service Component");
@@ -73,6 +65,8 @@ public class SensebotManagementServiceComponent {
         }
     }
 
+
+    @Deactivate
     protected void deactivate(ComponentContext ctx) {
         if (log.isDebugEnabled()) {
             log.debug("De-activating Sensebot Device Management Service Component");
@@ -91,17 +85,5 @@ public class SensebotManagementServiceComponent {
         }
     }
 
-    protected void setDataSourceService(DataSourceService dataSourceService) {
-        /* This is to avoid iot device management component getting initialized before the underlying datasources
-        are registered */
-        if (log.isDebugEnabled()) {
-            log.debug("Data source service set to Sensebot service component");
-        }
-    }
-
-    protected void unsetDataSourceService(DataSourceService dataSourceService) {
-        //do nothing
-    }
-    
     
 }

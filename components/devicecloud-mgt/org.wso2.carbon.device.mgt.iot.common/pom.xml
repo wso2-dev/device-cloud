@@ -66,12 +66,10 @@
 							org.apache.commons.io.*,
 							org.wso2.carbon.context.*,
 							org.wso2.carbon.ndatasource.core,
-							<!--org.eclipse.paho.client.mqttv3,-->
-							<!--org.eclipse.paho.client.mqttv3.*,-->
 							org.wso2.carbon.databridge.agent.thrift,
 							org.wso2.carbon.databridge.agent.thrift.exception,
 							org.wso2.carbon.databridge.commons.exception
-							<!--org.apache.velocity.*-->
+
 						</Import-Package>
 
 						<Export-Package>
@@ -79,6 +77,7 @@
 							org.wso2.carbon.device.mgt.iot.common.*,
 							org.eclipse.paho.client.mqttv3.*
 						</Export-Package>
+						<_dsannotations>*</_dsannotations>
 					</instructions>
 				</configuration>
 			</plugin>
@@ -127,6 +126,12 @@
 		<dependency>
 			<groupId>org.wso2.carbon</groupId>
 			<artifactId>org.wso2.carbon.ndatasource.core</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.felix</groupId>
+			<artifactId>org.apache.felix.scr.annotations</artifactId>
+			<version>1.9.12</version>
 		</dependency>
 		<!--<dependency>-->
 			<!--<groupId>org.testng</groupId>-->
