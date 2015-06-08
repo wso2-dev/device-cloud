@@ -12,6 +12,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import java.util.ArrayList;
 import java.util.List;
 
 public class DevicesManagerService {
@@ -48,15 +49,20 @@ public class DevicesManagerService {
 	@GET
 	@Consumes("application/json")
 	@Produces("application/json")
-	public DeviceType[] getDeviceTypes()
+	public String[] getDeviceTypes()
 			throws DeviceManagementDAOException {
 
 		DeviceManagement deviceManagement = new DeviceManagement();
 
 		List<DeviceType> deviceTypes = deviceManagement.getDeviceTypes();
+		String dTypes[]= new String[deviceTypes.size()];
+		int iter=0;
+		for(DeviceType type: deviceTypes){
+			dTypes[iter]=type.getName();
+			iter++;
 
-
-		return deviceTypes.toArray(new DeviceType[]{});
+		}
+		return dTypes;
 
 
 	}
