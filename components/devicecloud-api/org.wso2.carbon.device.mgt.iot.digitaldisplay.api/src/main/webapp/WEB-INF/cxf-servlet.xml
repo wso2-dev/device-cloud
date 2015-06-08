@@ -37,7 +37,7 @@
         <!--</jaxrs:providers>-->
     <!--</jaxrs:server>-->
 
-    <jaxrs:server id="DigitalDisplayManager" address="manager">
+    <jaxrs:server id="DigitalDisplayManager" address="/manager">
         <jaxrs:serviceBeans>
             <bean id="DigitalDisplayManagerService"
                   class="org.wso2.carbon.device.mgt.iot.digitaldisplay.api.DigitalDisplayManagerService">

@@ -37,7 +37,7 @@
         <!--</jaxrs:providers>-->
     <!--</jaxrs:server>-->
 
-    <jaxrs:server id="RaspberrypiManager" address="manager">
+    <jaxrs:server id="RaspberrypiManager" address="/manager">
         <jaxrs:serviceBeans>
             <bean id="RaspberrypiManagerService"
                   class="org.wso2.carbon.device.mgt.iot.raspberrypi.api.RaspberrypiManagerService">

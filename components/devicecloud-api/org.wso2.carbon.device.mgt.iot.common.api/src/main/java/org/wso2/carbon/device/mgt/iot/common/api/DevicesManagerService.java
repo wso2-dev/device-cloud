@@ -5,6 +5,7 @@ import org.wso2.carbon.device.mgt.common.DeviceManagementException;
 import org.wso2.carbon.device.mgt.core.dao.DeviceManagementDAOException;
 import org.wso2.carbon.device.mgt.core.dto.DeviceType;
 
+import org.wso2.carbon.device.mgt.iot.common.api.util.DeviceTypes;
 import org.wso2.carbon.device.mgt.iot.common.devicecloud.DeviceManagement;
 
 import javax.ws.rs.Consumes;
@@ -12,12 +13,11 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
-import java.util.ArrayList;
 import java.util.List;
 
 public class DevicesManagerService {
 
-	@Path("/getDevices")
+	@Path("/devices")
 	@GET
 	@Consumes("application/json")
 	@Produces("application/json")
@@ -31,7 +31,7 @@ public class DevicesManagerService {
 		return devices.toArray(new Device[]{});
 	}
 
-	@Path("/getDevicesByType")
+	@Path("/devices/{type}")
 	@GET
 	@Consumes("application/json")
 	@Produces("application/json")
@@ -45,20 +45,23 @@ public class DevicesManagerService {
 		return devices.toArray(new Device[]{});
 	}
 
-	@Path("/getDeviceTypes")
+	@Path("/devices/types/")
 	@GET
 	@Consumes("application/json")
 	@Produces("application/json")
-	public String[] getDeviceTypes()
+	public DeviceTypes[] getDeviceTypes()
 			throws DeviceManagementDAOException {
 
 		DeviceManagement deviceManagement = new DeviceManagement();
 
 		List<DeviceType> deviceTypes = deviceManagement.getDeviceTypes();
-		String dTypes[]= new String[deviceTypes.size()];
+		DeviceTypes dTypes[]= new DeviceTypes[deviceTypes.size()];
 		int iter=0;
 		for(DeviceType type: deviceTypes){
-			dTypes[iter]=type.getName();
+
+			DeviceTypes dt =new DeviceTypes();
+			dt.setName(type.getName());
+			dTypes[iter]=dt;
 			iter++;
 
 		}
