@@ -22,6 +22,7 @@ import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.device.mgt.iot.common.devicecloud.DeviceController;
 import org.wso2.carbon.device.mgt.iot.common.devicecloud.exception.UnauthorizedException;
 import org.wso2.carbon.device.mgt.iot.sensebot.api.util.DeviceJSON;
+import org.wso2.carbon.device.mgt.iot.sensebot.constants.SensebotConstants;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.*;
@@ -116,7 +117,7 @@ public class SensebotControllerService {
                     log.debug(sensorValues);
 
                 result = DeviceController
-                        .pushData(dataMsg.owner, "SenseBot", dataMsg.deviceId, System.currentTimeMillis(), "DeviceData",
+                        .pushData(dataMsg.owner, SensebotConstants.DEVICE_TYPE, dataMsg.deviceId, System.currentTimeMillis(), "DeviceData",
                                 temperature, "TEMP");
 
                 if (!result) {
@@ -125,7 +126,7 @@ public class SensebotControllerService {
                 }
 
                 result = DeviceController
-                        .pushData(dataMsg.owner, "SenseBot", dataMsg.deviceId, System.currentTimeMillis(), "DeviceData",
+                        .pushData(dataMsg.owner, SensebotConstants.DEVICE_TYPE, dataMsg.deviceId, System.currentTimeMillis(), "DeviceData",
                                 motion, "MOTION");
 
                 if (!result) {
@@ -135,7 +136,7 @@ public class SensebotControllerService {
 
                 if (!sonar.equals("No Object")) {
                     result = DeviceController
-                            .pushData(dataMsg.owner, "SenseBot", dataMsg.deviceId, System.currentTimeMillis(),
+                            .pushData(dataMsg.owner, SensebotConstants.DEVICE_TYPE, dataMsg.deviceId, System.currentTimeMillis(),
                                     "DeviceData", sonar, "SONAR");
 
                     if (!result) {
@@ -146,7 +147,7 @@ public class SensebotControllerService {
                 }
 
                 result = DeviceController
-                        .pushData(dataMsg.owner, "SenseBot", dataMsg.deviceId, System.currentTimeMillis(), "DeviceData",
+                        .pushData(dataMsg.owner, SensebotConstants.DEVICE_TYPE, dataMsg.deviceId, System.currentTimeMillis(), "DeviceData",
                                 light, "LIGHT");
 
                 if (!result) {
@@ -174,7 +175,7 @@ public class SensebotControllerService {
             log.debug("Recieved Tenperature Data Value: " + temperature + " degrees C");
         try {
             boolean result = DeviceController
-                    .pushData(dataMsg.owner, "SenseBot", dataMsg.deviceId, System.currentTimeMillis(), "DeviceData",
+                    .pushData(dataMsg.owner, SensebotConstants.DEVICE_TYPE, dataMsg.deviceId, System.currentTimeMillis(), "DeviceData",
                             temperature, "TEMP");
 
             if (!result) {
@@ -196,7 +197,7 @@ public class SensebotControllerService {
             log.debug("Recieved PIR (Motion) Sensor Data Value: " + motion);
         try {
             boolean result = DeviceController
-                    .pushData(dataMsg.owner, "SenseBot", dataMsg.deviceId, System.currentTimeMillis(), "DeviceData",
+                    .pushData(dataMsg.owner, SensebotConstants.DEVICE_TYPE, dataMsg.deviceId, System.currentTimeMillis(), "DeviceData",
                             motion, "MOTION");
 
             if (!result) {
@@ -224,7 +225,7 @@ public class SensebotControllerService {
                 log.debug("Recieved Sonar Sensor Data Value: " + sonar + " cm");
             try {
                 boolean result = DeviceController
-                        .pushData(dataMsg.owner, "SenseBot", dataMsg.deviceId, System.currentTimeMillis(), "DeviceData",
+                        .pushData(dataMsg.owner, SensebotConstants.DEVICE_TYPE, dataMsg.deviceId, System.currentTimeMillis(), "DeviceData",
                                 sonar, "SONAR");
 
                 if (!result) {
@@ -250,7 +251,7 @@ public class SensebotControllerService {
 
         try {
             boolean result = DeviceController
-                    .pushData(dataMsg.owner, "SenseBot", dataMsg.deviceId, System.currentTimeMillis(), "DeviceData",
+                    .pushData(dataMsg.owner, SensebotConstants.DEVICE_TYPE, dataMsg.deviceId, System.currentTimeMillis(), "DeviceData",
                             light, "LIGHT");
 
             if (!result) {
