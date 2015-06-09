@@ -9,7 +9,8 @@ import java.util.List;
 
 @XmlRootElement
 public class DeviceTypes implements Serializable{
-	private static final long serialVersionUID = 5427802716452548282L;
+
+	//private static final long serialVersionUID = 7526472295622776147L;
 
 	private String name;
 
