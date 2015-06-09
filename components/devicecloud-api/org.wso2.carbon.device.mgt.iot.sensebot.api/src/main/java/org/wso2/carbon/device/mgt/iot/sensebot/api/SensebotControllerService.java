@@ -275,7 +275,7 @@ public class SensebotControllerService {
         if (log.isDebugEnabled())
             log.debug(urlString);
 
-        String result = null;
+        String result = "";
         URL url = null;
         int responseCode = 200;
 
@@ -287,29 +287,31 @@ public class SensebotControllerService {
         try {
             if (url != null) {
                 httpConn = (HttpURLConnection) url.openConnection();
+
+                try {
+                    httpConn.setRequestMethod(HttpMethod.GET);
+                    httpConn.setRequestProperty("User-Agent", "WSO2 Carbon Server");
+                    responseCode = httpConn.getResponseCode();
+                    result = "" + responseCode + HttpStatus.getStatusText(responseCode) + "(No reply from Robot)";
+
+                    if (log.isDebugEnabled())
+                        log.debug("\nSending 'GET' request to URL : " + urlString);
+                    if (log.isDebugEnabled())
+                        log.debug("Response Code : " + responseCode);
+                } catch (ProtocolException e) {
+                    log.error("Protocol mismatch exception occured whilst trying to 'GET' resource");
+                } catch (IOException e) {
+                    log.error(
+                            "Error occured whilst reading return code from server. This could be because the server did not return anything");
+                    result = "" + responseCode + " " + HttpStatus.getStatusText(responseCode) + "(No reply from Robot)";
+                    return result;
+                }
             }
         } catch (IOException e) {
             log.error("Error Connecting to HTTP Endpoint at: " + urlString);
         }
 
-        try {
-            httpConn.setRequestMethod(HttpMethod.GET);
-            httpConn.setRequestProperty("User-Agent", "WSO2 Carbon Server");
-            responseCode = httpConn.getResponseCode();
-            result = "" + responseCode + HttpStatus.getStatusText(responseCode) + "(No reply from Robot)";
 
-            if (log.isDebugEnabled())
-                log.debug("\nSending 'GET' request to URL : " + urlString);
-            if (log.isDebugEnabled())
-                log.debug("Response Code : " + responseCode);
-        } catch (ProtocolException e) {
-            log.error("Protocol mismatch exception occured whilst trying to 'GET' resource");
-        } catch (IOException e) {
-            log.error(
-                    "Error occured whilst reading return code from server. This could be because the server did not return anything");
-            result = "" + responseCode + " " + HttpStatus.getStatusText(responseCode) + "(No reply from Robot)";
-            return result;
-        }
 
         return result;
     }
