@@ -23,18 +23,15 @@
          http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
          http://cxf.apache.org/jaxrs http://cxf.apache.org/schemas/jaxrs.xsd">
 
-
-
-
     <!--<jaxrs:server id="SenseBotController" address="/SenseBotController">-->
-        <!--<jaxrs:serviceBeans>-->
-            <!--<bean id="SenseBotControllerService"-->
-                  <!--class="org.wso2.carbon.device.mgt.iot.sensebot.service.SenseBotControllerService">-->
-            <!--</bean>-->
-        <!--</jaxrs:serviceBeans>-->
-        <!--<jaxrs:providers>-->
-            <!--<bean class="org.codehaus.jackson.jaxrs.JacksonJsonProvider" />-->
-        <!--</jaxrs:providers>-->
+    <!--<jaxrs:serviceBeans>-->
+    <!--<bean id="SenseBotControllerService"-->
+    <!--class="org.wso2.carbon.device.mgt.iot.sensebot.service.SenseBotControllerService">-->
+    <!--</bean>-->
+    <!--</jaxrs:serviceBeans>-->
+    <!--<jaxrs:providers>-->
+    <!--<bean class="org.codehaus.jackson.jaxrs.JacksonJsonProvider" />-->
+    <!--</jaxrs:providers>-->
     <!--</jaxrs:server>-->
 
     <jaxrs:server id="FireAlarmController" address="/controller">
@@ -45,7 +42,7 @@
             </bean>
         </jaxrs:serviceBeans>
         <jaxrs:providers>
-            <bean class="org.codehaus.jackson.jaxrs.JacksonJsonProvider" />
+            <bean class="org.codehaus.jackson.jaxrs.JacksonJsonProvider"/>
         </jaxrs:providers>
     </jaxrs:server>
 
@@ -57,10 +54,10 @@
     </jaxrs:server>
 
 
-
-    <bean id="mqttFireAlarmSubscriber" class="org.wso2.carbon.device.mgt.iot.firealarm.api.util.MQTTFireAlarmSubscriber">
-        <constructor-arg index="0" value="Subscriber"></constructor-arg>
-        <constructor-arg index="1" value="FireAlarm"></constructor-arg>
+    <bean id="mqttFireAlarmSubscriber"
+          class="org.wso2.carbon.device.mgt.iot.firealarm.api.util.MQTTFireAlarmSubscriber">
+        <constructor-arg index="0" value="Subscriber"/>
+        <constructor-arg index="1" value="FireAlarm"/>
     </bean>
 
 
