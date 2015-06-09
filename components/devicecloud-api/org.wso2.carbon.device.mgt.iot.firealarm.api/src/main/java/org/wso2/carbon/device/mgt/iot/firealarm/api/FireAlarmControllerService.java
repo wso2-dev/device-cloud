@@ -34,18 +34,15 @@ import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.NoSuchElementException;
+import java.util.*;
 
-//@Path(value = "/FireAlarmController")
 public class FireAlarmControllerService {
 	private static Log log = LogFactory.getLog(FireAlarmControllerService.class);
 
 
 	public static final String CONTROL_QUEUE_ENDPOINT;
-	public static final HashMap<String, LinkedList<String>> replyMsgQueue = new HashMap<String, LinkedList<String>>();
-	public static final HashMap<String, LinkedList<String>> internalControlsQueue = new HashMap<String, LinkedList<String>>();
+	private static Map<String, LinkedList<String>> replyMsgQueue = new HashMap<String, LinkedList<String>>();
+    private static Map<String, LinkedList<String>> internalControlsQueue = new HashMap<String, LinkedList<String>>();
 	private static MQTTFireAlarmSubscriber mqttFireAlarmSubscriber;
 
 	static {
@@ -100,6 +97,14 @@ public class FireAlarmControllerService {
 	public static MQTTFireAlarmSubscriber getMqttFireAlarmSubscriber() {
 		return mqttFireAlarmSubscriber;
 	}
+
+    public static Map<String, LinkedList<String>> getReplyMsgQueue() {
+        return Collections.unmodifiableMap(replyMsgQueue);
+    }
+
+    public static Map<String, LinkedList<String>> getInternalControlsQueue() {
+        return Collections.unmodifiableMap(internalControlsQueue);
+    }
 
 	/*    Service to switch "ON" and "OFF" the FireAlarm bulb
 			   Called by an external client intended to control the FireAlarm bulb */
