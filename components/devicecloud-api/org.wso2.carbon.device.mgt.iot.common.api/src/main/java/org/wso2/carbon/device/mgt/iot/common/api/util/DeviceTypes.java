@@ -4,11 +4,12 @@ import org.wso2.carbon.device.mgt.common.Feature;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import java.io.Serializable;
 import java.util.List;
 
 @XmlRootElement
-public class DeviceTypes {
-
+public class DeviceTypes implements Serializable{
+	private static final long serialVersionUID = 5427802716452548282L;
 
 	private String name;
 

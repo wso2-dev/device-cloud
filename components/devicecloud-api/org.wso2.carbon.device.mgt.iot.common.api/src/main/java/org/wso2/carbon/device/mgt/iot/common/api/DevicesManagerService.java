@@ -11,17 +11,18 @@ import org.wso2.carbon.device.mgt.iot.common.devicecloud.DeviceManagement;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import java.util.List;
 
 public class DevicesManagerService {
 
-	@Path("/devices")
+	@Path("/devices/username/{username}")
 	@GET
 	@Consumes("application/json")
 	@Produces("application/json")
-	public Device[] getDevices(@QueryParam("username") String username)
+	public Device[] getDevices(@PathParam("username") String username)
 			throws DeviceManagementException {
 
 		DeviceManagement deviceManagement = new DeviceManagement();
@@ -31,11 +32,11 @@ public class DevicesManagerService {
 		return devices.toArray(new Device[]{});
 	}
 
-	@Path("/devices/{type}")
+	@Path("/devices/types/{type}")
 	@GET
 	@Consumes("application/json")
 	@Produces("application/json")
-	public Device[] getDevicesByType(@QueryParam("type") String deviceType)
+	public Device[] getDevicesByType(@PathParam("type") String deviceType)
 			throws DeviceManagementException {
 
 		DeviceManagement deviceManagement = new DeviceManagement();
