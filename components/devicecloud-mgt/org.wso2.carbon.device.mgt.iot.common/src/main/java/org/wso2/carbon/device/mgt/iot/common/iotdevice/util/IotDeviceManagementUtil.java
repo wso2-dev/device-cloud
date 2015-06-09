@@ -247,6 +247,11 @@ public class IotDeviceManagementUtil {
             //list all the directory contents
             String files[] = src.list();
 
+            if (files == null) {
+                log.warn("There are no files insides the directory " + src.getAbsolutePath());
+                return;
+            }
+
             for (String file : files) {
                 //construct the src and dest file structure
                 File srcFile = new File(src, file);
@@ -324,11 +329,22 @@ public class IotDeviceManagementUtil {
 
             File subDir = new File(srcFolder);
             String subdirList[] = subDir.list();
+
+            if (subdirList == null) {
+                log.warn("The sub directory " + subDir.getAbsolutePath() + " is empty");
+                return false;
+            }
+
             for (String sd : subdirList) {
                 // get a list of files from current directory
                 File f = new File(srcFolder + "/" + sd);
                 if (f.isDirectory()) {
                     String files[] = f.list();
+
+                    if (files == null) {
+                        log.warn("The current directory " + f.getAbsolutePath() + " is empty. Has no files");
+                        return false;
+                    }
 
                     for (int i = 0; i < files.length; i++) {
                         FileInputStream fi = new FileInputStream(srcFolder + "/" + sd + "/" + files[i]);
