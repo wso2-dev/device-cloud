@@ -15,10 +15,10 @@
     <version>1.0.0</version>
     <modules>
         <module>org.wso2.carbon.device.mgt.iot.common.api</module>
-        <!--<module>org.wso2.carbon.device.mgt.iot.sensebot.api</module>-->
-        <!--<module>org.wso2.carbon.device.mgt.iot.firealarm.api</module>-->
-        <!--<module>org.wso2.carbon.device.mgt.iot.digitaldisplay.api</module>-->
-        <!--<module>org.wso2.carbon.device.mgt.iot.raspberrypi.api</module>-->
+        <module>org.wso2.carbon.device.mgt.iot.sensebot.api</module>
+        <module>org.wso2.carbon.device.mgt.iot.firealarm.api</module>
+        <module>org.wso2.carbon.device.mgt.iot.digitaldisplay.api</module>
+        <module>org.wso2.carbon.device.mgt.iot.raspberrypi.api</module>
     </modules>
     <packaging>pom</packaging>
     <name>WSO2 Carbon - Device Cloud API - Aggregate POM</name>
