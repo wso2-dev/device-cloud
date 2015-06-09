@@ -23,15 +23,9 @@ import org.apache.commons.logging.LogFactory;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.component.ComponentContext;
-import org.osgi.service.component.annotations.Activate;
-import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.annotations.Deactivate;
 import org.wso2.carbon.device.mgt.common.spi.DeviceMgtService;
 import org.wso2.carbon.device.mgt.iot.common.DeviceTypeService;
 import org.wso2.carbon.device.mgt.iot.sensebot.impl.SensebotManager;
-import org.wso2.carbon.ndatasource.core.DataSourceService;
-
-
 
 //* @scr.reference name="org.wso2.carbon.ndatasource"
 //		* interface="org.wso2.carbon.ndatasource.core.DataSourceService"
@@ -39,6 +33,7 @@ import org.wso2.carbon.ndatasource.core.DataSourceService;
 //		* policy="dynamic"
 //		* bind="setDataSourceService"
 //		* unbind="unsetDataSourceService"
+
 /**
  * @scr.component name="org.wso2.carbon.device.mgt.iot.sensebot.internal.SensebotManagementServiceComponent"
  * immediate="true"
@@ -50,29 +45,20 @@ import org.wso2.carbon.ndatasource.core.DataSourceService;
  * unbind="unsetDeviceTypeService"
  */
 public class SensebotManagementServiceComponent {
-	
 
     private ServiceRegistration sensebotServiceRegRef;
 
-
-
     private static final Log log = LogFactory.getLog(SensebotManagementServiceComponent.class);
 
-
     protected void activate(ComponentContext ctx) {
-    	if (log.isDebugEnabled()) {
+        if (log.isDebugEnabled()) {
             log.debug("Activating Sensebot Device Management Service Component");
         }
         try {
             BundleContext bundleContext = ctx.getBundleContext();
 
-
-            sensebotServiceRegRef =
-                    bundleContext.registerService(DeviceMgtService.class.getName(), new
-					SensebotManager(),
-												  null);
-
-
+            sensebotServiceRegRef = bundleContext
+                    .registerService(DeviceMgtService.class.getName(), new SensebotManager(), null);
 
             if (log.isDebugEnabled()) {
                 log.debug("Sensebot Device Management Service Component has been successfully activated");
@@ -81,7 +67,6 @@ public class SensebotManagementServiceComponent {
             log.error("Error occurred while activating Sensebot Device Management Service Component", e);
         }
     }
-
 
     protected void deactivate(ComponentContext ctx) {
         if (log.isDebugEnabled()) {
@@ -93,8 +78,7 @@ public class SensebotManagementServiceComponent {
             }
 
             if (log.isDebugEnabled()) {
-                log.debug(
-                        "Sensebot Device Management Service Component has been successfully de-activated");
+                log.debug("Sensebot Device Management Service Component has been successfully de-activated");
             }
         } catch (Throwable e) {
             log.error("Error occurred while de-activating Sensebot Device Management bundle", e);
@@ -102,16 +86,15 @@ public class SensebotManagementServiceComponent {
     }
 
     protected void setDeviceTypeService(DeviceTypeService deviceTypeService) {
-		/* This is to avoid this component getting initialized before the
+        /* This is to avoid this component getting initialized before the
 		common registered */
         if (log.isDebugEnabled()) {
             log.debug("Data source service set to mobile service component");
         }
     }
 
-    protected void unsetDeviceTypeService(DeviceTypeService deviceTypeService)  {
+    protected void unsetDeviceTypeService(DeviceTypeService deviceTypeService) {
         //do nothing
     }
 
-    
 }

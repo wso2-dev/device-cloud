@@ -44,8 +44,8 @@ public class FireAlarmControllerService {
 
 
 	public static final String CONTROL_QUEUE_ENDPOINT;
-	public static HashMap<String, LinkedList<String>> replyMsgQueue;
-	public static HashMap<String, LinkedList<String>> internalControlsQueue;
+	public static final HashMap<String, LinkedList<String>> replyMsgQueue = new HashMap<String, LinkedList<String>>();
+	public static final HashMap<String, LinkedList<String>> internalControlsQueue = new HashMap<String, LinkedList<String>>();
 	private static MQTTFireAlarmSubscriber mqttFireAlarmSubscriber;
 
 	static {
@@ -71,26 +71,24 @@ public class FireAlarmControllerService {
 			}
 
             String mqttUrl = "";
+            String mqttPort = "";
             if (controlQueueConfig != null) {
                 mqttUrl = controlQueueConfig.getEndPoint();
+                mqttPort = controlQueueConfig.getPort();
             }
 
-			String mqttPort = controlQueueConfig.getPort();
 			CONTROL_QUEUE_ENDPOINT = mqttUrl + ":" + mqttPort;
 			log.info("CONTROL_QUEUE_ENDPOINT Successfully initialized.");
 		} else {
 			CONTROL_QUEUE_ENDPOINT = null;
 			log.error("CONTROL_QUEUE_ENDPOINT initialization failed.");
 		}
-
-		replyMsgQueue = new HashMap<String, LinkedList<String>>();
-		internalControlsQueue = new HashMap<String, LinkedList<String>>();
 	}
 
 	/**
 	 * @param mqttFireAlarmSubscriber the mqttFireAlarmSubscriber to set
 	 */
-    public void setMqttFireAlarmSubscriber(MQTTFireAlarmSubscriber mqttFireAlarmSubscriber) {
+    public static void setMqttFireAlarmSubscriber(MQTTFireAlarmSubscriber mqttFireAlarmSubscriber) {
 		FireAlarmControllerService.mqttFireAlarmSubscriber = mqttFireAlarmSubscriber;
 		try {
 			mqttFireAlarmSubscriber.subscribe();
