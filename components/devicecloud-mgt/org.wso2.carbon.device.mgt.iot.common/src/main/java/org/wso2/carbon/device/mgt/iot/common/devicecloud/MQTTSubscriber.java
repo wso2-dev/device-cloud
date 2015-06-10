@@ -16,7 +16,7 @@ import java.io.File;
 import java.nio.charset.StandardCharsets;
 
 
-public class MQTTSubscriber implements MqttCallback {
+public abstract class MQTTSubscriber implements MqttCallback {
 
 	private static Log log = LogFactory.getLog(MQTTSubscriber.class);
 
@@ -146,10 +146,11 @@ public class MQTTSubscriber implements MqttCallback {
 		log.info("Message for client " + this.clientId + "delivered successfully.");
 	}
 
-	@Override public void messageArrived(final String arg0, final MqttMessage arg1){
-		throw new NotImplementedException("Callback method - 'messageArrived' is not implemented.");
-
+	@Override public void messageArrived(final String topic, final MqttMessage message){
+		postMessageArrived(topic,message);
 	}
+
+	protected abstract void postMessageArrived(String topic,MqttMessage message);
 
 
 

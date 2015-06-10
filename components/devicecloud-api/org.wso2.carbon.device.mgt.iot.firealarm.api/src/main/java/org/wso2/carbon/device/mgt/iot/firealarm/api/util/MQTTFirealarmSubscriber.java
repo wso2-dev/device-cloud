@@ -43,25 +43,28 @@ public class MQTTFirealarmSubscriber extends MQTTSubscriber {
 	}
 
 
+
+
+
 	@Override
-	public void messageArrived(final String arg0, final MqttMessage arg1) {
+	protected void postMessageArrived(final String topic,final MqttMessage message) {
 		Thread subscriberThread = new Thread() {
 
 			public void run() {
 
-				int lastIndex = arg0.lastIndexOf("/");
-				String deviceId = arg0.substring(lastIndex + 1);
+				int lastIndex = topic.lastIndexOf("/");
+				String deviceId = topic.substring(lastIndex + 1);
 
-				lastIndex = arg1.toString().lastIndexOf(":");
-				String msgContext = arg1.toString().substring(lastIndex + 1);
+				lastIndex = message.toString().lastIndexOf(":");
+				String msgContext = message.toString().substring(lastIndex + 1);
 
 				LinkedList<String> deviceControlList = null;
 				LinkedList<String> replyMessageList = null;
 
 				if (msgContext.equals("IN")) {
 					log.info("Recieved a control message: ");
-					log.info("Control message topic: " + arg0);
-					log.info("Control message: " + arg1.toString());
+					log.info("Control message topic: " + topic);
+					log.info("Control message: " + message.toString());
 //                    synchronized (FireAlarmControllerService.internalControlsQueue) {
 //                        deviceControlList = FireAlarmControllerService.internalControlsQueue.get(deviceId);
 					synchronized (FireAlarmControllerService.getInternalControlsQueue()) {
@@ -74,11 +77,11 @@ public class MQTTFirealarmSubscriber extends MQTTSubscriber {
 									.put(deviceId, deviceControlList = new LinkedList<String>());
 						}
 					}
-					deviceControlList.add(arg1.toString());
+					deviceControlList.add(message.toString());
 				} else if (msgContext.equals("OUT")) {
 					log.info("Recieved reply from a device: ");
-					log.info("Reply message topic: " + arg0);
-					log.info("Reply message: " + arg1.toString().substring(0, lastIndex));
+					log.info("Reply message topic: " + topic);
+					log.info("Reply message: " + message.toString().substring(0, lastIndex));
 //                    synchronized (FireAlarmControllerService.replyMsgQueue) {
 //                        replyMessageList = FireAlarmControllerService.replyMsgQueue.get(deviceId);
 					synchronized (FireAlarmControllerService.getReplyMsgQueue()) {
@@ -90,13 +93,12 @@ public class MQTTFirealarmSubscriber extends MQTTSubscriber {
 									.put(deviceId, replyMessageList = new LinkedList<String>());
 						}
 					}
-					replyMessageList.add(arg1.toString());
+					replyMessageList.add(message.toString());
 				}
 
 			}
 		};
 
 		subscriberThread.start();
-
 	}
 }
