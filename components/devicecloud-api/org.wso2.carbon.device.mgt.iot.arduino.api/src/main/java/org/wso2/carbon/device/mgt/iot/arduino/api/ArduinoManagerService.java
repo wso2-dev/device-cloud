@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.wso2.carbon.device.mgt.iot.arduino.api.src.main.java.org.wso2.carbon.device.mgt.iot.digitaldisplay.api;
+package org.wso2.carbon.device.mgt.iot.arduino.api;
 
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.logging.Log;
@@ -43,8 +43,6 @@ import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import java.util.UUID;
-
-import static java.nio.charset.StandardCharsets.UTF_8;
 
 public class ArduinoManagerService {
 
