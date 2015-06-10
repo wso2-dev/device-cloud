@@ -287,6 +287,11 @@
             </dependency>
             <dependency>
                 <groupId>org.wso2.carbon.device.mgt.iot</groupId>
+                <artifactId>org.wso2.carbon.device.mgt.iot.arduino.impl</artifactId>
+                <version>${carbon.iot.device.mgt.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.carbon.device.mgt.iot</groupId>
                 <artifactId>org.wso2.carbon.device.mgt.iot.sensebot.impl</artifactId>
                 <version>${carbon.iot.device.mgt.version}</version>
             </dependency>
@@ -334,6 +339,12 @@
             <dependency>
                 <groupId>org.wso2.carbon.device.mgt.iot</groupId>
                 <artifactId>org.wso2.carbon.device.mgt.iot.digitaldisplay.api.api</artifactId>
+                <version>${device.mgt.iot.feature.version}</version>
+                <type>war</type>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.carbon.device.mgt.iot</groupId>
+                <artifactId>org.wso2.carbon.device.mgt.iot.arduino.api.api</artifactId>
                 <version>${device.mgt.iot.feature.version}</version>
                 <type>war</type>
             </dependency>

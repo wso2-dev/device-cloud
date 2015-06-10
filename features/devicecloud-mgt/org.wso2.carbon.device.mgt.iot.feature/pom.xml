@@ -49,6 +49,10 @@
         </dependency>
         <dependency>
             <groupId>org.wso2.carbon.device.mgt.iot</groupId>
+            <artifactId>org.wso2.carbon.device.mgt.iot.arduino.impl</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.wso2.carbon.device.mgt.iot</groupId>
             <artifactId>org.wso2.carbon.device.mgt.iot.raspberrypi.impl</artifactId>
         </dependency>
         <dependency>
@@ -69,6 +73,12 @@
         <dependency>
             <groupId>org.wso2.carbon.device.mgt.iot</groupId>
             <artifactId>org.wso2.carbon.device.mgt.iot.firealarm.api</artifactId>
+            <type>war</type>
+        </dependency>
+        <dependency>
+            <groupId>org.wso2.carbon.device.mgt.iot</groupId>
+            <artifactId>org.wso2.carbon.device.mgt.iot.arduino.api</artifactId>
+            <version>1.0.0</version>
             <type>war</type>
         </dependency>
         <dependency>
@@ -143,6 +153,14 @@
                                     <overWrite>true</overWrite>
                                     <outputDirectory>${basedir}/src/main/resources/webapps/</outputDirectory>
                                     <destFileName>firealarm.war</destFileName>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>org.wso2.carbon.device.mgt.iot</groupId>
+                                    <artifactId>org.wso2.carbon.device.mgt.iot.arduino.api</artifactId>
+                                    <type>war</type>
+                                    <overWrite>true</overWrite>
+                                    <outputDirectory>${basedir}/src/main/resources/webapps/</outputDirectory>
+                                    <destFileName>arduino.war</destFileName>
                                 </artifactItem>
                                 <artifactItem>
                                     <groupId>org.wso2.carbon.device.mgt.iot</groupId>

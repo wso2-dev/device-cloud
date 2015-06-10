@@ -25,6 +25,11 @@
                 <Name>jdbc/FireAlarmDM_DB</Name>
             </JndiLookupDefinition>
         </DataSourceConfiguration>
+        <DataSourceConfiguration type="arduino">
+            <JndiLookupDefinition>
+                <Name>jdbc/ArduinoDM_DB</Name>
+            </JndiLookupDefinition>
+        </DataSourceConfiguration>
         <DataSourceConfiguration type="sensebot">
             <JndiLookupDefinition>
                 <Name>jdbc/SensebotDM_DB</Name>
