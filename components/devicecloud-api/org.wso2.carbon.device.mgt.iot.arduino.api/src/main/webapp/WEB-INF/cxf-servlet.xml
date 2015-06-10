@@ -30,7 +30,7 @@
     <jaxrs:server id="ArduinoManager" address="/manager">
         <jaxrs:serviceBeans>
             <bean id="ArduinoManagerService"
-                  class="org.wso2.carbon.device.mgt.iot.arduino.api.DigitalDisplayManagerService">
+                  class="org.wso2.carbon.device.mgt.iot.arduino.api.ArduinoManagerService">
             </bean>
         </jaxrs:serviceBeans>
         <jaxrs:providers>
