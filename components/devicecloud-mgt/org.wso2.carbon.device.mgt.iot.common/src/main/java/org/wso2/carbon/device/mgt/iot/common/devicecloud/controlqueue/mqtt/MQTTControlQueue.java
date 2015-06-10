@@ -102,7 +102,7 @@ public class MQTTControlQueue implements ControlQueueConnector, MqttCallback {
             log.info("CONTROL_QUEUE_ENDPOINT : " + CONTROL_QUEUE_ENDPOINT);
 
         } catch (DeviceControllerException ex) {
-            String error = "Error occurred when trying to read configurations file: firealarm-config.xml";
+            String error = "Error occurred when trying to read configurations file: devicecloud-config.xml";
             log.error(error, ex);
             throw new DeviceControllerException(error, ex);
         }

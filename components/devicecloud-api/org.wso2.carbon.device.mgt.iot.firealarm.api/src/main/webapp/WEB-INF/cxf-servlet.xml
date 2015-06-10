@@ -38,7 +38,7 @@
         <jaxrs:serviceBeans>
             <bean id="FireAlarmControllerService"
                   class="org.wso2.carbon.device.mgt.iot.firealarm.api.FireAlarmControllerService">
-                <property name="mqttFireAlarmSubscriber" ref="mqttFireAlarmSubscriber"/>
+                <property name="mqttSubscriber" ref="mqttSubscriber"/>
             </bean>
         </jaxrs:serviceBeans>
         <jaxrs:providers>
@@ -54,9 +54,8 @@
     </jaxrs:server>
 
 
-    <bean id="mqttFireAlarmSubscriber" class="org.wso2.carbon.device.mgt.iot.firealarm.api.util.MQTTFireAlarmSubscriber">
-        <constructor-arg index="0" value="Subscriber"></constructor-arg>
-        <constructor-arg index="1" value="FireAlarm"></constructor-arg>
+    <bean id="mqttSubscriber" class="org.wso2.carbon.device.mgt.iot.firealarm.api.util.MQTTFirealarmSubscriber">
+        
     </bean>
 </beans>
 

@@ -28,7 +28,7 @@ import org.wso2.carbon.device.mgt.iot.common.devicecloud.config.controlqueue.Dev
 import org.wso2.carbon.device.mgt.iot.common.devicecloud.exception.DeviceControllerException;
 import org.wso2.carbon.device.mgt.iot.common.devicecloud.exception.UnauthorizedException;
 import org.wso2.carbon.device.mgt.iot.firealarm.api.util.DeviceJSON;
-import org.wso2.carbon.device.mgt.iot.firealarm.api.util.MQTTFireAlarmSubscriber;
+import org.wso2.carbon.device.mgt.iot.firealarm.api.util.MQTTFirealarmSubscriber;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.*;
@@ -44,7 +44,7 @@ public class FireAlarmControllerService {
     public static final String CONTROL_QUEUE_ENDPOINT;
     private static Map<String, LinkedList<String>> replyMsgQueue;
     private static Map<String, LinkedList<String>> internalControlsQueue;
-    private static MQTTFireAlarmSubscriber mqttFireAlarmSubscriber;
+    private static MQTTFirealarmSubscriber mqttSubscriber;
 
     static {
 
@@ -85,19 +85,19 @@ public class FireAlarmControllerService {
     }
 
     /**
-     * @param mqttFireAlarmSubscriber the mqttFireAlarmSubscriber to set
+     * @param mqttSubscriber the mqttSubscriber to set
      */
-    public static void setMqttFireAlarmSubscriber(MQTTFireAlarmSubscriber mqttFireAlarmSubscriber) {
-        FireAlarmControllerService.mqttFireAlarmSubscriber = mqttFireAlarmSubscriber;
+    public static void setMqttSubscriber(MQTTFirealarmSubscriber mqttSubscriber) {
+        FireAlarmControllerService.mqttSubscriber = mqttSubscriber;
         try {
-            mqttFireAlarmSubscriber.subscribe();
+            mqttSubscriber.subscribe();
         } catch (DeviceManagementException e) {
             log.error(e.getErrorMessage());
         }
     }
 
-    public static MQTTFireAlarmSubscriber getMqttFireAlarmSubscriber() {
-        return mqttFireAlarmSubscriber;
+    public static MQTTFirealarmSubscriber getMqttSubscriber() {
+        return mqttSubscriber;
     }
 
     public static Map<String, LinkedList<String>> getReplyMsgQueue() {
