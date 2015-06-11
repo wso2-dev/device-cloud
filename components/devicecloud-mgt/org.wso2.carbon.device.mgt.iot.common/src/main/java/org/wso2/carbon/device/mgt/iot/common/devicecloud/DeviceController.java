@@ -31,6 +31,7 @@ import org.wso2.carbon.device.mgt.iot.common.devicecloud.datastore.DataStoreConn
 import org.wso2.carbon.device.mgt.iot.common.devicecloud.exception.DeviceControllerException;
 import org.wso2.carbon.device.mgt.iot.common.devicecloud.exception.UnauthorizedException;
 import org.wso2.carbon.device.mgt.iot.common.devicecloud.util.ResourceFileLoader;
+import org.wso2.carbon.utils.CarbonUtils;
 
 import java.io.File;
 import java.util.HashMap;
@@ -62,8 +63,11 @@ public class DeviceController {
             DeviceCloudManagementSecurityConfig securityConfig = config.getDeviceCloudManagementSecurityConfig();
             trustStoreFile = securityConfig.getClient();
             trustStorePassword = securityConfig.getTrustStorePassword();
-            certificateFile = new ResourceFileLoader("/resources/security/" + trustStoreFile).getFile();
+            String certificatePath =
+                    CarbonUtils.getCarbonHome() + File.separator + "repository" + File.separator + "resources"
+                            + File.separator + "security" + File.separator;
 
+            certificateFile = new ResourceFileLoader(certificatePath + trustStoreFile).getFile();
             if (certificateFile.exists()) {
                 trustStoreFile = certificateFile.getAbsolutePath();
                 log.info("Trust Store Path : " + trustStoreFile);
@@ -71,7 +75,7 @@ public class DeviceController {
                 System.setProperty("javax.net.ssl.trustStore", trustStoreFile);
                 System.setProperty("javax.net.ssl.trustStorePassword", trustStorePassword);
             } else {
-                log.error("Trust Store not found in path : " + trustStoreFile);
+                log.error("Trust Store not found in path : " + certificateFile.getAbsolutePath());
             }
 
             // controller configurations

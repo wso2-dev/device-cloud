@@ -91,7 +91,7 @@ public class SensebotControllerService {
         return result;
     }
 
-    @Path("/pushsensordata") @POST @Consumes(MediaType.APPLICATION_JSON) public void pushAlarmData(
+    @Path("/pushsensordata") @POST @Consumes(MediaType.APPLICATION_JSON) public void pushSensorData(
             final DeviceJSON dataMsg, @Context HttpServletResponse response) {
         boolean result = false;
 
