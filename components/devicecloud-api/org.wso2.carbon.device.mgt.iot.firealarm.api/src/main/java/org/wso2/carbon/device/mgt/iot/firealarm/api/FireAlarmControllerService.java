@@ -85,7 +85,7 @@ public class FireAlarmControllerService {
     }
 
 
-    public static void setMqttFireAlarmSubscriber(MQTTFirealarmSubscriber mqttFireAlarmSubscriber) {
+    public  void setMqttFireAlarmSubscriber(MQTTFirealarmSubscriber mqttFireAlarmSubscriber) {
         FireAlarmControllerService.mqttFireAlarmSubscriber = mqttFireAlarmSubscriber;
         try {
             mqttFireAlarmSubscriber.subscribe();
@@ -94,7 +94,7 @@ public class FireAlarmControllerService {
         }
     }
 
-    public static MQTTFirealarmSubscriber getMqttFireAlarmSubscriber() {
+    public  MQTTFirealarmSubscriber getMqttFireAlarmSubscriber() {
         return mqttFireAlarmSubscriber;
     }
 

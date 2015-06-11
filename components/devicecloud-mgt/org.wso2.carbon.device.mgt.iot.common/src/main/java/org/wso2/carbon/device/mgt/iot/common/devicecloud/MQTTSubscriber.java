@@ -150,6 +150,9 @@ public abstract class MQTTSubscriber implements MqttCallback {
 		postMessageArrived(topic,message);
 	}
 
+	/*
+	This method is used for post processing of a message.
+	 */
 	protected abstract void postMessageArrived(String topic,MqttMessage message);
 
 
