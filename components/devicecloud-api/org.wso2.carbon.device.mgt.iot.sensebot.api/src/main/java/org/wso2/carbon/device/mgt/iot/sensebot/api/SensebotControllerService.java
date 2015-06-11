@@ -19,6 +19,10 @@ package org.wso2.carbon.device.mgt.iot.sensebot.api;
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.nio.client.CloseableHttpAsyncClient;
+import org.apache.http.impl.nio.client.HttpAsyncClients;
 import org.wso2.carbon.device.mgt.iot.common.devicecloud.DeviceController;
 import org.wso2.carbon.device.mgt.iot.common.devicecloud.exception.UnauthorizedException;
 import org.wso2.carbon.device.mgt.iot.sensebot.api.util.DeviceJSON;
@@ -32,9 +36,12 @@ import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
+//import java.net.URL;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
 
 public class SensebotControllerService {
 
@@ -49,6 +56,12 @@ public class SensebotControllerService {
     private static final String LEFT_URL = "/move/L";
     private static final String RIGHT_URL = "/move/R";
     private static final String STOP_URL = "/move/S";
+    private static CloseableHttpAsyncClient httpclient;
+
+    static {
+        httpclient = HttpAsyncClients.createDefault();
+        httpclient.start();
+    }
 
     @Path("/forward") @POST public String moveForward(@HeaderParam("owner") String owner,
             @HeaderParam("deviceId") String deviceId, @FormParam("ip") String deviceIp,
@@ -273,48 +286,61 @@ public class SensebotControllerService {
         }
 
         String urlString = URL_PREFIX + deviceIp + ":" + deviceServerPort + motionType;
-        if (log.isDebugEnabled())
+        if (log.isDebugEnabled()) {
             log.debug(urlString);
-
-        String result = "";
-        URL url = null;
-        int responseCode = 200;
-
-        try {
-            url = new URL(urlString);
-        } catch (MalformedURLException e) {
-            log.error("Invalid URL: " + urlString);
         }
-        try {
-            if (url != null) {
-                httpConn = (HttpURLConnection) url.openConnection();
+//        String result = "";
+//        URL url = null;
+//        int responseCode = 200;
 
-                try {
-                    httpConn.setRequestMethod(HttpMethod.GET);
-                    httpConn.setRequestProperty("User-Agent", "WSO2 Carbon Server");
-                    responseCode = httpConn.getResponseCode();
-                    result = "" + responseCode + HttpStatus.getStatusText(responseCode) + "(No reply from Robot)";
+//        try {
+//            url = new URL(urlString);
+//        } catch (MalformedURLException e) {
+//            log.error("Invalid URL: " + urlString);
+//        }
+//        try {
+//            if (url != null) {
+//                httpConn = (HttpURLConnection) url.openConnection();
+//
+//                try {
+////                    httpConn.setRequestMethod(HttpMethod.GET);
+////                    httpConn.setRequestProperty("User-Agent", "WSO2 Carbon Server");
+////                    responseCode = httpConn.getResponseCode();
+////                    result = "" + responseCode + HttpStatus.getStatusText(responseCode) + "(No reply from Robot)";
+//
+//                    if (log.isDebugEnabled())
+//                        log.debug("\nSending 'GET' request to URL : " + urlString);
+//                    if (log.isDebugEnabled())
+//                        log.debug("Response Code : " + responseCode);
+//                } catch (ProtocolException e) {
+//                    log.error("Protocol mismatch exception occured whilst trying to 'GET' resource");
+//                } catch (IOException e) {
+//                    log.error(
+//                            "Error occured whilst reading return code from server. This could be because the server did not return anything");
+//                    result = "" + responseCode + " " + HttpStatus.getStatusText(responseCode) + "(No reply from Robot)";
+//                    return result;
+//                }
+//            }
+//        } catch (IOException e) {
+//            log.error("Error Connecting to HTTP Endpoint at: " + urlString);
+//        }
 
-                    if (log.isDebugEnabled())
-                        log.debug("\nSending 'GET' request to URL : " + urlString);
-                    if (log.isDebugEnabled())
-                        log.debug("Response Code : " + responseCode);
-                } catch (ProtocolException e) {
-                    log.error("Protocol mismatch exception occured whilst trying to 'GET' resource");
-                } catch (IOException e) {
-                    log.error(
-                            "Error occured whilst reading return code from server. This could be because the server did not return anything");
-                    result = "" + responseCode + " " + HttpStatus.getStatusText(responseCode) + "(No reply from Robot)";
-                    return result;
-                }
-            }
-        } catch (IOException e) {
-            log.error("Error Connecting to HTTP Endpoint at: " + urlString);
-        }
 
 
+        HttpGet request = new HttpGet(urlString);
+        Future<HttpResponse> future = httpclient.execute(request, null);
+//        try {
+//            HttpResponse resp = future.get();
+//            httpclient.close();
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        } catch (ExecutionException e) {
+//            e.printStackTrace();
+//        }catch (IOException e) {
+//            e.printStackTrace();
+//        }
 
-        return result;
+        return urlString;
     }
 
 }
