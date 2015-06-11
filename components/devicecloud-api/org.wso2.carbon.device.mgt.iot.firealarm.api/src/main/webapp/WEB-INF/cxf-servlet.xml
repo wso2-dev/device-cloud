@@ -19,31 +19,17 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:jaxrs="http://cxf.apache.org/jaxrs"
-       xsi:schemaLocation="
-         http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
          http://cxf.apache.org/jaxrs http://cxf.apache.org/schemas/jaxrs.xsd">
 
-    <!--<jaxrs:server id="SenseBotController" address="/SenseBotController">-->
-    <!--<jaxrs:serviceBeans>-->
-    <!--<bean id="SenseBotControllerService"-->
-    <!--class="org.wso2.carbon.device.mgt.iot.sensebot.service.SenseBotControllerService">-->
-    <!--</bean>-->
-    <!--</jaxrs:serviceBeans>-->
-    <!--<jaxrs:providers>-->
-    <!--<bean class="org.codehaus.jackson.jaxrs.JacksonJsonProvider" />-->
-    <!--</jaxrs:providers>-->
-    <!--</jaxrs:server>-->
 
     <jaxrs:server id="FireAlarmController" address="/controller">
         <jaxrs:serviceBeans>
             <bean id="FireAlarmControllerService"
                   class="org.wso2.carbon.device.mgt.iot.firealarm.api.FireAlarmControllerService">
-                <property name="mqttSubscriber" value="org.wso2.carbon.device.mgt.iot.firealarm.api.util.MQTTFirealarmSubscriber"/>
+                <property name="mqttFireAlarmSubscriber" value="org.wso2.carbon.device.mgt.iot.firealarm.api.util.MQTTFirealarmSubscriber"/>
             </bean>
         </jaxrs:serviceBeans>
-        <jaxrs:providers>
-            <bean class="org.codehaus.jackson.jaxrs.JacksonJsonProvider"/>
-        </jaxrs:providers>
     </jaxrs:server>
 
     <jaxrs:server id="FireAlarmManager" address="/manager">

@@ -44,7 +44,7 @@ public class FireAlarmControllerService {
     public static final String CONTROL_QUEUE_ENDPOINT;
     private static Map<String, LinkedList<String>> replyMsgQueue;
     private static Map<String, LinkedList<String>> internalControlsQueue;
-    private static MQTTFirealarmSubscriber mqttSubscriber;
+    private static MQTTFirealarmSubscriber mqttFireAlarmSubscriber;
 
     static {
 
@@ -84,20 +84,18 @@ public class FireAlarmControllerService {
         internalControlsQueue = new HashMap<>();
     }
 
-    /**
-     * @param mqttSubscriber the mqttSubscriber to set
-     */
-    public static void setMqttSubscriber(MQTTFirealarmSubscriber mqttSubscriber) {
-        FireAlarmControllerService.mqttSubscriber = mqttSubscriber;
+
+    public static void setMqttFireAlarmSubscriber(MQTTFirealarmSubscriber mqttFireAlarmSubscriber) {
+        FireAlarmControllerService.mqttFireAlarmSubscriber = mqttFireAlarmSubscriber;
         try {
-            mqttSubscriber.subscribe();
+            mqttFireAlarmSubscriber.subscribe();
         } catch (DeviceManagementException e) {
             log.error(e.getErrorMessage());
         }
     }
 
-    public static MQTTFirealarmSubscriber getMqttSubscriber() {
-        return mqttSubscriber;
+    public static MQTTFirealarmSubscriber getMqttFireAlarmSubscriber() {
+        return mqttFireAlarmSubscriber;
     }
 
     public static Map<String, LinkedList<String>> getReplyMsgQueue() {

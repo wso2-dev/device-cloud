@@ -38,6 +38,7 @@ public class MQTTFirealarmSubscriber extends MQTTSubscriber {
 
 	private MQTTFirealarmSubscriber() {
 
+
 		super("Subscriber", FireAlarmConstants.DEVICE_TYPE,
 			  FireAlarmControllerService.CONTROL_QUEUE_ENDPOINT, subscribetopic);
 	}
