@@ -32,22 +32,18 @@ import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
-import java.io.IOException;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.ProtocolException;
-//import java.net.URL;
-import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
+
+//import java.net.URL;
 
 public class SensebotControllerService {
 
     private static Log log = LogFactory.getLog(SensebotControllerService.class);
 
-    private static final Map<String, String> deviceIPList = new HashMap<String, String>();
+    private static final Map<String, String> deviceIPList = new HashMap<>();
 
     private static HttpURLConnection httpConn;
     private static final String URL_PREFIX = "http://";
@@ -63,43 +59,43 @@ public class SensebotControllerService {
         httpclient.start();
     }
 
-    @Path("/forward") @POST public String moveForward(@HeaderParam("owner") String owner,
+    @Path("/forward") @POST public boolean moveForward(@HeaderParam("owner") String owner,
             @HeaderParam("deviceId") String deviceId, @FormParam("ip") String deviceIp,
             @FormParam("port") int deviceServerPort) {
 
-        String result = null;
+        boolean result;
         result = sendCommand(deviceIp, deviceServerPort, FORWARD_URL);
         return result;
     }
 
-    @Path("/backward") @POST public String moveBackward(@HeaderParam("owner") String owner,
+    @Path("/backward") @POST public boolean moveBackward(@HeaderParam("owner") String owner,
             @HeaderParam("deviceId") String deviceId, @FormParam("ip") String deviceIp,
             @FormParam("port") int deviceServerPort) {
-        String result = null;
+        boolean result;
         result = sendCommand(deviceIp, deviceServerPort, BACKWARD_URL);
         return result;
     }
 
-    @Path("/left") @POST public String turnLeft(@HeaderParam("owner") String owner,
+    @Path("/left") @POST public boolean turnLeft(@HeaderParam("owner") String owner,
             @HeaderParam("deviceId") String deviceId, @FormParam("ip") String deviceIp,
             @FormParam("port") int deviceServerPort) {
-        String result = null;
+        boolean result;
         result = sendCommand(deviceIp, deviceServerPort, LEFT_URL);
         return result;
     }
 
-    @Path("/right") @POST public String turnRight(@HeaderParam("owner") String owner,
+    @Path("/right") @POST public boolean turnRight(@HeaderParam("owner") String owner,
             @HeaderParam("deviceId") String deviceId, @FormParam("ip") String deviceIp,
             @FormParam("port") int deviceServerPort) {
-        String result = null;
+        boolean result;
         result = sendCommand(deviceIp, deviceServerPort, RIGHT_URL);
         return result;
     }
 
-    @Path("/stop") @POST public String stop(@HeaderParam("owner") String owner,
+    @Path("/stop") @POST public boolean stop(@HeaderParam("owner") String owner,
             @HeaderParam("deviceId") String deviceId, @FormParam("ip") String deviceIp,
             @FormParam("port") int deviceServerPort) {
-        String result = null;
+        boolean result;
         result = sendCommand(deviceIp, deviceServerPort, STOP_URL);
         return result;
     }
@@ -129,18 +125,16 @@ public class SensebotControllerService {
                 if (log.isDebugEnabled())
                     log.debug(sensorValues);
 
-                result = DeviceController
-                        .pushData(dataMsg.owner, SensebotConstants.DEVICE_TYPE, dataMsg.deviceId, System.currentTimeMillis(), "DeviceData",
-                                temperature, "TEMP");
+                result = DeviceController.pushData(dataMsg.owner, SensebotConstants.DEVICE_TYPE, dataMsg.deviceId,
+                        System.currentTimeMillis(), "DeviceData", temperature, "TEMP");
 
                 if (!result) {
                     response.setStatus(HttpStatus.SC_INTERNAL_SERVER_ERROR);
                     return;
                 }
 
-                result = DeviceController
-                        .pushData(dataMsg.owner, SensebotConstants.DEVICE_TYPE, dataMsg.deviceId, System.currentTimeMillis(), "DeviceData",
-                                motion, "MOTION");
+                result = DeviceController.pushData(dataMsg.owner, SensebotConstants.DEVICE_TYPE, dataMsg.deviceId,
+                        System.currentTimeMillis(), "DeviceData", motion, "MOTION");
 
                 if (!result) {
                     response.setStatus(HttpStatus.SC_INTERNAL_SERVER_ERROR);
@@ -148,9 +142,8 @@ public class SensebotControllerService {
                 }
 
                 if (!sonar.equals("No Object")) {
-                    result = DeviceController
-                            .pushData(dataMsg.owner, SensebotConstants.DEVICE_TYPE, dataMsg.deviceId, System.currentTimeMillis(),
-                                    "DeviceData", sonar, "SONAR");
+                    result = DeviceController.pushData(dataMsg.owner, SensebotConstants.DEVICE_TYPE, dataMsg.deviceId,
+                            System.currentTimeMillis(), "DeviceData", sonar, "SONAR");
 
                     if (!result) {
                         response.setStatus(HttpStatus.SC_INTERNAL_SERVER_ERROR);
@@ -159,18 +152,15 @@ public class SensebotControllerService {
 
                 }
 
-                result = DeviceController
-                        .pushData(dataMsg.owner, SensebotConstants.DEVICE_TYPE, dataMsg.deviceId, System.currentTimeMillis(), "DeviceData",
-                                light, "LIGHT");
+                result = DeviceController.pushData(dataMsg.owner, SensebotConstants.DEVICE_TYPE, dataMsg.deviceId,
+                        System.currentTimeMillis(), "DeviceData", light, "LIGHT");
 
                 if (!result) {
                     response.setStatus(HttpStatus.SC_INTERNAL_SERVER_ERROR);
-                    return;
                 }
 
             } else {
                 response.setStatus(HttpStatus.SC_INTERNAL_SERVER_ERROR);
-                return;
             }
 
         } catch (UnauthorizedException e) {
@@ -187,13 +177,11 @@ public class SensebotControllerService {
         if (log.isDebugEnabled())
             log.debug("Recieved Tenperature Data Value: " + temperature + " degrees C");
         try {
-            boolean result = DeviceController
-                    .pushData(dataMsg.owner, SensebotConstants.DEVICE_TYPE, dataMsg.deviceId, System.currentTimeMillis(), "DeviceData",
-                            temperature, "TEMP");
+            boolean result = DeviceController.pushData(dataMsg.owner, SensebotConstants.DEVICE_TYPE, dataMsg.deviceId,
+                    System.currentTimeMillis(), "DeviceData", temperature, "TEMP");
 
             if (!result) {
                 response.setStatus(HttpStatus.SC_INTERNAL_SERVER_ERROR);
-                return;
             }
 
         } catch (UnauthorizedException e) {
@@ -209,13 +197,11 @@ public class SensebotControllerService {
         if (log.isDebugEnabled())
             log.debug("Recieved PIR (Motion) Sensor Data Value: " + motion);
         try {
-            boolean result = DeviceController
-                    .pushData(dataMsg.owner, SensebotConstants.DEVICE_TYPE, dataMsg.deviceId, System.currentTimeMillis(), "DeviceData",
-                            motion, "MOTION");
+            boolean result = DeviceController.pushData(dataMsg.owner, SensebotConstants.DEVICE_TYPE, dataMsg.deviceId,
+                    System.currentTimeMillis(), "DeviceData", motion, "MOTION");
 
             if (!result) {
                 response.setStatus(HttpStatus.SC_INTERNAL_SERVER_ERROR);
-                return;
             }
 
         } catch (UnauthorizedException e) {
@@ -238,12 +224,11 @@ public class SensebotControllerService {
                 log.debug("Recieved Sonar Sensor Data Value: " + sonar + " cm");
             try {
                 boolean result = DeviceController
-                        .pushData(dataMsg.owner, SensebotConstants.DEVICE_TYPE, dataMsg.deviceId, System.currentTimeMillis(), "DeviceData",
-                                sonar, "SONAR");
+                        .pushData(dataMsg.owner, SensebotConstants.DEVICE_TYPE, dataMsg.deviceId,
+                                System.currentTimeMillis(), "DeviceData", sonar, "SONAR");
 
                 if (!result) {
                     response.setStatus(HttpStatus.SC_INTERNAL_SERVER_ERROR);
-                    return;
                 }
 
             } catch (UnauthorizedException e) {
@@ -263,13 +248,11 @@ public class SensebotControllerService {
             log.debug("Recieved LDR (Light) Sensor Data Value: " + light);
 
         try {
-            boolean result = DeviceController
-                    .pushData(dataMsg.owner, SensebotConstants.DEVICE_TYPE, dataMsg.deviceId, System.currentTimeMillis(), "DeviceData",
-                            light, "LIGHT");
+            boolean result = DeviceController.pushData(dataMsg.owner, SensebotConstants.DEVICE_TYPE, dataMsg.deviceId,
+                    System.currentTimeMillis(), "DeviceData", light, "LIGHT");
 
             if (!result) {
                 response.setStatus(HttpStatus.SC_INTERNAL_SERVER_ERROR);
-                return;
             }
 
         } catch (UnauthorizedException e) {
@@ -279,7 +262,7 @@ public class SensebotControllerService {
 
     }
 
-    private String sendCommand(String deviceIp, int deviceServerPort, String motionType) {
+    private boolean sendCommand(String deviceIp, int deviceServerPort, String motionType) {
 
         if (deviceServerPort == 0) {
             deviceServerPort = 80;
@@ -289,58 +272,9 @@ public class SensebotControllerService {
         if (log.isDebugEnabled()) {
             log.debug(urlString);
         }
-//        String result = "";
-//        URL url = null;
-//        int responseCode = 200;
-
-//        try {
-//            url = new URL(urlString);
-//        } catch (MalformedURLException e) {
-//            log.error("Invalid URL: " + urlString);
-//        }
-//        try {
-//            if (url != null) {
-//                httpConn = (HttpURLConnection) url.openConnection();
-//
-//                try {
-////                    httpConn.setRequestMethod(HttpMethod.GET);
-////                    httpConn.setRequestProperty("User-Agent", "WSO2 Carbon Server");
-////                    responseCode = httpConn.getResponseCode();
-////                    result = "" + responseCode + HttpStatus.getStatusText(responseCode) + "(No reply from Robot)";
-//
-//                    if (log.isDebugEnabled())
-//                        log.debug("\nSending 'GET' request to URL : " + urlString);
-//                    if (log.isDebugEnabled())
-//                        log.debug("Response Code : " + responseCode);
-//                } catch (ProtocolException e) {
-//                    log.error("Protocol mismatch exception occured whilst trying to 'GET' resource");
-//                } catch (IOException e) {
-//                    log.error(
-//                            "Error occured whilst reading return code from server. This could be because the server did not return anything");
-//                    result = "" + responseCode + " " + HttpStatus.getStatusText(responseCode) + "(No reply from Robot)";
-//                    return result;
-//                }
-//            }
-//        } catch (IOException e) {
-//            log.error("Error Connecting to HTTP Endpoint at: " + urlString);
-//        }
-
-
-
         HttpGet request = new HttpGet(urlString);
         Future<HttpResponse> future = httpclient.execute(request, null);
-//        try {
-//            HttpResponse resp = future.get();
-//            httpclient.close();
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//        } catch (ExecutionException e) {
-//            e.printStackTrace();
-//        }catch (IOException e) {
-//            e.printStackTrace();
-//        }
-
-        return urlString;
+        return future.isDone();
     }
 
 }

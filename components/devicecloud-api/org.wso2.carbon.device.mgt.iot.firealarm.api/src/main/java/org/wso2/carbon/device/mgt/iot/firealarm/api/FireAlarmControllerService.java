@@ -36,7 +36,6 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import java.util.*;
 
-
 public class FireAlarmControllerService {
 
     private static Log log = LogFactory.getLog(FireAlarmControllerService.class);
@@ -84,8 +83,7 @@ public class FireAlarmControllerService {
         internalControlsQueue = new HashMap<>();
     }
 
-
-    public  void setMqttFireAlarmSubscriber(MQTTFirealarmSubscriber mqttFireAlarmSubscriber) {
+    public void setMqttFireAlarmSubscriber(MQTTFirealarmSubscriber mqttFireAlarmSubscriber) {
         FireAlarmControllerService.mqttFireAlarmSubscriber = mqttFireAlarmSubscriber;
         try {
             mqttFireAlarmSubscriber.subscribe();
@@ -94,7 +92,7 @@ public class FireAlarmControllerService {
         }
     }
 
-    public  MQTTFirealarmSubscriber getMqttFireAlarmSubscriber() {
+    public MQTTFirealarmSubscriber getMqttFireAlarmSubscriber() {
         return mqttFireAlarmSubscriber;
     }
 
