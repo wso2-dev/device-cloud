@@ -15,9 +15,9 @@ import java.io.File;
 import java.nio.charset.StandardCharsets;
 
 
-public abstract class MQTTSubscriber implements MqttCallback {
+public abstract class MqttSubscriber implements MqttCallback {
 
-	private static Log log = LogFactory.getLog(MQTTSubscriber.class);
+	private static Log log = LogFactory.getLog(MqttSubscriber.class);
 
 	private MqttClient client;
 	private String clientId;
@@ -27,7 +27,8 @@ public abstract class MQTTSubscriber implements MqttCallback {
 	// topic needs to be set from outside
 	private String controlQueueEndpoint;
 
-	protected MQTTSubscriber(String owner, String deviceType, String controlQueueEndpoint,String subscribeTopic){
+	protected MqttSubscriber(String owner, String deviceType, String controlQueueEndpoint,
+							 String subscribeTopic){
 	    this.clientId = owner + ":" + deviceType;
 		this.subscribeTopic = subscribeTopic;
 		this.clientWillTopic = deviceType + File.separator + "disconnection";

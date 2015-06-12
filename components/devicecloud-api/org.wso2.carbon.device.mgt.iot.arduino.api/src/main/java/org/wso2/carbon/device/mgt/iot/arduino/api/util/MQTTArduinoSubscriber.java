@@ -19,14 +19,14 @@ package org.wso2.carbon.device.mgt.iot.arduino.api.util;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
-import org.wso2.carbon.device.mgt.iot.common.devicecloud.controlqueue.mqtt.MQTTSubscriber;
+import org.wso2.carbon.device.mgt.iot.common.devicecloud.controlqueue.mqtt.MqttSubscriber;
 import org.wso2.carbon.device.mgt.iot.arduino.api.ArduinoControllerService;
 import org.wso2.carbon.device.mgt.iot.arduino.constants.ArduinoConstants;
 
 import java.io.File;
 import java.util.LinkedList;
 
-public class MQTTArduinoSubscriber extends MQTTSubscriber {
+public class MQTTArduinoSubscriber extends MqttSubscriber {
 
 
 	private static Log log = LogFactory.getLog(MQTTArduinoSubscriber.class);

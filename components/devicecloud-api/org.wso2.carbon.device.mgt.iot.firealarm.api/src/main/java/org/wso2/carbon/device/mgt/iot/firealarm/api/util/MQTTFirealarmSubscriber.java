@@ -19,14 +19,14 @@ package org.wso2.carbon.device.mgt.iot.firealarm.api.util;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.eclipse.paho.client.mqttv3.*;
-import org.wso2.carbon.device.mgt.iot.common.devicecloud.controlqueue.mqtt.MQTTSubscriber;
+import org.wso2.carbon.device.mgt.iot.common.devicecloud.controlqueue.mqtt.MqttSubscriber;
 import org.wso2.carbon.device.mgt.iot.firealarm.api.FireAlarmControllerService;
 import org.wso2.carbon.device.mgt.iot.firealarm.constants.FireAlarmConstants;
 
 import java.io.File;
 import java.util.LinkedList;
 
-public class MQTTFirealarmSubscriber extends MQTTSubscriber {
+public class MQTTFirealarmSubscriber extends MqttSubscriber {
 
 
 	private static Log log = LogFactory.getLog(MQTTFirealarmSubscriber.class);
