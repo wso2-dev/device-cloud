@@ -1,4 +1,4 @@
-package org.wso2.carbon.device.mgt.iot.common.devicecloud;
+package org.wso2.carbon.device.mgt.iot.common.devicecloud.controlqueue.mqtt;
 
 
 import org.apache.commons.logging.Log;
@@ -10,7 +10,6 @@ import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttSecurityException;
 import org.wso2.carbon.device.mgt.common.DeviceManagementException;
 import org.eclipse.paho.client.mqttv3.*;
-import org.wso2.carbon.device.mgt.iot.common.devicecloud.exception.NotImplementedException;
 
 import java.io.File;
 import java.nio.charset.StandardCharsets;
@@ -147,7 +146,14 @@ public abstract class MQTTSubscriber implements MqttCallback {
 	}
 
 	@Override public void messageArrived(final String topic, final MqttMessage message){
+		Thread subscriberThread = new Thread() {
+
+			public void run() {
 		postMessageArrived(topic,message);
+			}
+		};
+
+		subscriberThread.start();
 	}
 
 	/*

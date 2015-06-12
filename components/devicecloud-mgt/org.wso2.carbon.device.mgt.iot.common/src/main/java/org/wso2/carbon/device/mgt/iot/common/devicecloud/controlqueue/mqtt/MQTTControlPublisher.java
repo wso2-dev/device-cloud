@@ -28,8 +28,6 @@ import org.wso2.carbon.device.mgt.iot.common.devicecloud.controlqueue.ControlQue
 import org.wso2.carbon.device.mgt.iot.common.devicecloud.exception.DeviceControllerException;
 
 import java.io.File;
-import java.io.UnsupportedEncodingException;
-import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
@@ -37,7 +35,7 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 // TODO: Auto-generated Javadoc
 
 /**
- * The Class MQTTControlQueue. It is an implementation of the interface
+ * The Class MqttControlPublisher. It is an implementation of the interface
  * ControlQueueConnector.
  * This implementation supports publishing of control signals received to an
  * MQTT end-point.
@@ -49,11 +47,13 @@ import static java.nio.charset.StandardCharsets.UTF_8;
  *
  * @author smean-MAC
  */
-public class MQTTControlQueue implements ControlQueueConnector, MqttCallback {
+public class MqttControlPublisher implements ControlQueueConnector, MqttCallback {
 
     /** The logger for this class. */
 
-    private static final Log log = LogFactory.getLog(MQTTControlQueue.class);
+
+
+    private static final Log log = LogFactory.getLog(MqttControlPublisher.class);
     /** The control queue (mqtt) endpoint to publish control messages. */
     private String CONTROL_QUEUE_ENDPOINT = "";
 
@@ -66,8 +66,10 @@ public class MQTTControlQueue implements ControlQueueConnector, MqttCallback {
     /**
      * Instantiates a new MQTT control queue.
      */
-    public MQTTControlQueue() {
+    public MqttControlPublisher() {
     }
+
+
 
     /*
      * (non-Javadoc)
@@ -107,6 +109,8 @@ public class MQTTControlQueue implements ControlQueueConnector, MqttCallback {
             throw new DeviceControllerException(error, ex);
         }
     }
+
+
 
     /*
      * (non-Javadoc)
@@ -193,9 +197,9 @@ public class MQTTControlQueue implements ControlQueueConnector, MqttCallback {
      * org.eclipse.paho.client.mqttv3.MqttCallback#deliveryComplete(org.eclipse
      * .paho.client.mqttv3.IMqttDeliveryToken)
      */
-    @Override public void deliveryComplete(IMqttDeliveryToken arg0) {
-        log.info("Published topic: '" + arg0.getTopics()[0] + "' successfully to client: '" +
-                arg0.getClient().getClientId() + "'");
+    @Override public void deliveryComplete(IMqttDeliveryToken topic) {
+        log.info("Published topic: '" + topic.getTopics()[0] + "' successfully to client: '" +
+                topic.getClient().getClientId() + "'");
     }
 
     /*
@@ -218,7 +222,7 @@ public class MQTTControlQueue implements ControlQueueConnector, MqttCallback {
     // myMap.put("key", "TempSensor");
     // myMap.put("value", "123");
     //
-    // MQTTControlQueue newInst = new MQTTControlQueue();
+    // MqttControlPublisher newInst = new MqttControlPublisher();
     // System.out.println(newInst.initControlQueue());
     // System.out.println(newInst.enqueueControls(myMap));
     // }

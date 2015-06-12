@@ -14,43 +14,36 @@
  * limitations under the License.
  */
 
-package org.wso2.carbon.device.mgt.iot.firealarm.api.util;
+package org.wso2.carbon.device.mgt.iot.arduino.api.util;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.eclipse.paho.client.mqttv3.*;
+import org.eclipse.paho.client.mqttv3.MqttMessage;
 import org.wso2.carbon.device.mgt.iot.common.devicecloud.controlqueue.mqtt.MQTTSubscriber;
-import org.wso2.carbon.device.mgt.iot.firealarm.api.FireAlarmControllerService;
-import org.wso2.carbon.device.mgt.iot.firealarm.constants.FireAlarmConstants;
+import org.wso2.carbon.device.mgt.iot.arduino.api.ArduinoControllerService;
+import org.wso2.carbon.device.mgt.iot.arduino.constants.ArduinoConstants;
 
 import java.io.File;
 import java.util.LinkedList;
 
-public class MQTTFirealarmSubscriber extends MQTTSubscriber {
+public class MQTTArduinoSubscriber extends MQTTSubscriber {
 
 
-	private static Log log = LogFactory.getLog(MQTTFirealarmSubscriber.class);
+	private static Log log = LogFactory.getLog(MQTTArduinoSubscriber.class);
 	private static final String subscribetopic =
 			"wso2" + File.separator + "iot" + File.separator + "+" + File.separator +
-					FireAlarmConstants.DEVICE_TYPE + File.separator + "#";
+					ArduinoConstants.DEVICE_TYPE + File.separator + "#";
 
 
 
-	private MQTTFirealarmSubscriber() {
+	private MQTTArduinoSubscriber() {
 
-
-		super("Subscriber", FireAlarmConstants.DEVICE_TYPE,
-			  FireAlarmControllerService.CONTROL_QUEUE_ENDPOINT, subscribetopic);
+		super("Subscriber", ArduinoConstants.DEVICE_TYPE,
+			  ArduinoControllerService.CONTROL_QUEUE_ENDPOINT, subscribetopic);
 	}
-
-
-
-
 
 	@Override
 	protected void postMessageArrived(final String topic,final MqttMessage message) {
-
-
 				int lastIndex = topic.lastIndexOf("/");
 				String deviceId = topic.substring(lastIndex + 1);
 
@@ -64,15 +57,15 @@ public class MQTTFirealarmSubscriber extends MQTTSubscriber {
 					log.info("Recieved a control message: ");
 					log.info("Control message topic: " + topic);
 					log.info("Control message: " + message.toString());
-//                    synchronized (FireAlarmControllerService.internalControlsQueue) {
-//                        deviceControlList = FireAlarmControllerService.internalControlsQueue.get(deviceId);
-					synchronized (FireAlarmControllerService.getInternalControlsQueue()) {
+//                    synchronized (ArduinoControllerService.internalControlsQueue) {
+//                        deviceControlList = ArduinoControllerService.internalControlsQueue.get(deviceId);
+					synchronized (ArduinoControllerService.getInternalControlsQueue()) {
 						deviceControlList =
-								FireAlarmControllerService.getInternalControlsQueue().get
+								ArduinoControllerService.getInternalControlsQueue().get
 										(deviceId);
 						if (deviceControlList == null) {
-//                            FireAlarmControllerService.internalControlsQueue
-							FireAlarmControllerService.getInternalControlsQueue()
+//                            ArduinoControllerService.internalControlsQueue
+							ArduinoControllerService.getInternalControlsQueue()
 									.put(deviceId, deviceControlList = new LinkedList<String>());
 						}
 					}
@@ -81,20 +74,20 @@ public class MQTTFirealarmSubscriber extends MQTTSubscriber {
 					log.info("Recieved reply from a device: ");
 					log.info("Reply message topic: " + topic);
 					log.info("Reply message: " + message.toString().substring(0, lastIndex));
-//                    synchronized (FireAlarmControllerService.replyMsgQueue) {
-//                        replyMessageList = FireAlarmControllerService.replyMsgQueue.get(deviceId);
-					synchronized (FireAlarmControllerService.getReplyMsgQueue()) {
-						replyMessageList = FireAlarmControllerService.getReplyMsgQueue().get(
+//                    synchronized (ArduinoControllerService.replyMsgQueue) {
+//                        replyMessageList = ArduinoControllerService.replyMsgQueue.get(deviceId);
+					synchronized (ArduinoControllerService.getReplyMsgQueue()) {
+						replyMessageList = ArduinoControllerService.getReplyMsgQueue().get(
 								deviceId);
 						if (replyMessageList == null) {
-//                            FireAlarmControllerService.replyMsgQueue
-							FireAlarmControllerService.getReplyMsgQueue()
+//                            ArduinoControllerService.replyMsgQueue
+							ArduinoControllerService.getReplyMsgQueue()
 									.put(deviceId, replyMessageList = new LinkedList<String>());
 						}
 					}
 					replyMessageList.add(message.toString());
 				}
 
-	}
 
+	}
 }
