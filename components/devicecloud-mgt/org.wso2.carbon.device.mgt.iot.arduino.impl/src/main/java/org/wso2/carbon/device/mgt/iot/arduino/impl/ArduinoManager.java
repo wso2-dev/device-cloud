@@ -23,9 +23,10 @@ import org.wso2.carbon.device.mgt.common.Device;
 import org.wso2.carbon.device.mgt.common.DeviceIdentifier;
 import org.wso2.carbon.device.mgt.common.DeviceManagementException;
 import org.wso2.carbon.device.mgt.common.FeatureManager;
-import org.wso2.carbon.device.mgt.common.app.mgt.AppManagerConnectorException;
+import org.wso2.carbon.device.mgt.common.app.mgt.Application;
+import org.wso2.carbon.device.mgt.common.app.mgt.ApplicationManagementException;
 import org.wso2.carbon.device.mgt.common.operation.mgt.Operation;
-import org.wso2.carbon.device.mgt.common.spi.DeviceMgtService;
+import org.wso2.carbon.device.mgt.common.spi.DeviceManagementService;
 import org.wso2.carbon.device.mgt.iot.common.iotdevice.dao.IotDeviceManagementDAOException;
 import org.wso2.carbon.device.mgt.iot.common.iotdevice.dao.IotDeviceManagementDAOFactory;
 import org.wso2.carbon.device.mgt.iot.common.iotdevice.dto.IotDevice;
@@ -40,7 +41,7 @@ import java.util.List;
 /**
  * This represents the Arduino implementation of DeviceManagerService.
  */
-public class ArduinoManager implements DeviceMgtService {
+public class ArduinoManager implements DeviceManagementService {
 
     private static final IotDeviceManagementDAOFactory iotDeviceManagementDAOFactory = new ArduinoDAO();
     private static final Log log = LogFactory.getLog(ArduinoManager.class);
@@ -244,11 +245,29 @@ public class ArduinoManager implements DeviceMgtService {
         }
         return devices;
     }
-    
+
     @Override
-    public void installApplication(Operation operation, List<DeviceIdentifier> deviceIdentifiers) throws AppManagerConnectorException {
-	    // TODO Auto-generated method stub
-	    
+    public Application[] getApplications(String s, int i, int i1)
+            throws ApplicationManagementException {
+        return new Application[0];
+    }
+
+    @Override
+    public void updateApplicationStatus(DeviceIdentifier deviceIdentifier, Application application,
+                                        String s) throws ApplicationManagementException {
+
+    }
+
+    @Override
+    public String getApplicationStatus(DeviceIdentifier deviceIdentifier, Application application)
+            throws ApplicationManagementException {
+        return null;
+    }
+
+    @Override
+    public void installApplication(Operation operation, List<DeviceIdentifier> list)
+            throws ApplicationManagementException {
+
     }
 
     

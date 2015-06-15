@@ -21,7 +21,7 @@ import org.apache.commons.logging.LogFactory;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.component.ComponentContext;
-import org.wso2.carbon.device.mgt.common.spi.DeviceMgtService;
+import org.wso2.carbon.device.mgt.common.spi.DeviceManagementService;
 import org.wso2.carbon.device.mgt.iot.common.DeviceTypeService;
 import org.wso2.carbon.device.mgt.iot.arduino.impl.ArduinoManager;
 
@@ -72,7 +72,7 @@ public class ArduinoManagementServiceComponent {
 
 
             arduinoServiceRegRef =
-                    bundleContext.registerService(DeviceMgtService.class.getName(), new
+                    bundleContext.registerService(DeviceManagementService.class.getName(), new
 					ArduinoManager(),
 												  null);
 

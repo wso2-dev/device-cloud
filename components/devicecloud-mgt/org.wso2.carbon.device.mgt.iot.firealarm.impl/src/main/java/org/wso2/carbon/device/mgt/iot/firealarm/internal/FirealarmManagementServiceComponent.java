@@ -23,33 +23,11 @@ import org.apache.commons.logging.LogFactory;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.component.ComponentContext;
-import org.osgi.service.component.annotations.Activate;
-import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.annotations.Deactivate;
+import org.wso2.carbon.device.mgt.common.spi.DeviceManagementService;
 import org.wso2.carbon.device.mgt.iot.common.DeviceTypeService;
 import org.wso2.carbon.device.mgt.iot.firealarm.impl.FireAlarmManager;
-import org.wso2.carbon.ndatasource.core.DataSourceService;
-import org.wso2.carbon.device.mgt.common.spi.DeviceMgtService;
-
-///**
-// * @scr.component name="org.wso2.carbon.device.mgt.iot.firealarm.internal.FirealarmManagementServiceComponent"
-// * immediate="true"
-// * @scr.reference name="org.wso2.carbon.ndatasource"
-// * interface="org.wso2.carbon.ndatasource.core.DataSourceService"
-// * cardinality="1..1"
-// * policy="dynamic"
-// * bind="setDataSourceService"
-// * unbind="unsetDataSourceService"
-// */
 
 
-
-//* @scr.reference name="org.wso2.carbon.ndatasource"
-//		* interface="org.wso2.carbon.ndatasource.core.DataSourceService"
-//		* cardinality="1..1"
-//		* policy="dynamic"
-//		* bind="setDataSourceService"
-//		* unbind="unsetDataSourceService"
 /**
  * @scr.component name="org.wso2.carbon.device.mgt.iot.firealarm.internal.FirealarmManagementServiceComponent"
  * immediate="true"
@@ -77,7 +55,7 @@ public class FirealarmManagementServiceComponent {
 
 
             firealarmServiceRegRef =
-                    bundleContext.registerService(DeviceMgtService.class.getName(), new
+                    bundleContext.registerService(DeviceManagementService.class.getName(), new
 					FireAlarmManager(),
 												  null);
 
