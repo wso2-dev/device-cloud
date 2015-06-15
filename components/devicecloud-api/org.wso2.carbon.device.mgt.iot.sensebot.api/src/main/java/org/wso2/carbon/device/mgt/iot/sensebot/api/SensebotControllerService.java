@@ -173,7 +173,9 @@ public class SensebotControllerService {
     @Path("/pushtempdata") @POST @Consumes(MediaType.APPLICATION_JSON) public void pushTempData(
             final DeviceJSON dataMsg, @Context HttpServletResponse response) {
 
-        String temperature = dataMsg.value;                            //TEMP-PIR-SONAR-LDR
+        String temperature = dataMsg.value;                            //TEMP
+        log.info("Recieved Sensor Data Values: " + temperature);
+
         if (log.isDebugEnabled())
             log.debug("Recieved Tenperature Data Value: " + temperature + " degrees C");
         try {
@@ -193,7 +195,9 @@ public class SensebotControllerService {
     @Path("/pushpirdata") @POST @Consumes(MediaType.APPLICATION_JSON) public void pushPIRData(final DeviceJSON dataMsg,
             @Context HttpServletResponse response) {
 
-        String motion = dataMsg.value;                            //TEMP-PIR-SONAR-LDR
+        String motion = dataMsg.value;                            //PIR
+        log.info("Recieved Sensor Data Values: " + motion);
+
         if (log.isDebugEnabled())
             log.debug("Recieved PIR (Motion) Sensor Data Value: " + motion);
         try {
@@ -214,7 +218,8 @@ public class SensebotControllerService {
     @Path("/pushsonardata") @POST @Consumes(MediaType.APPLICATION_JSON) public void pushSonarData(
             final DeviceJSON dataMsg, @Context HttpServletResponse response) {
 
-        String sonar = dataMsg.value;                            //TEMP-PIR-SONAR-LDR
+        String sonar = dataMsg.value;                            //SONAR
+        log.info("Recieved Sensor Data Values: " + sonar);
 
         if (sonar.equals("-1")) {
             if (log.isDebugEnabled())
@@ -243,7 +248,9 @@ public class SensebotControllerService {
     @Path("/pushlightdata") @POST @Consumes(MediaType.APPLICATION_JSON) public void pushlightData(
             final DeviceJSON dataMsg, @Context HttpServletResponse response) {
 
-        String light = dataMsg.value;                            //TEMP-PIR-SONAR-LDR
+        String light = dataMsg.value;                            //LDR
+        log.info("Recieved Sensor Data Values: " + light);
+
         if (log.isDebugEnabled())
             log.debug("Recieved LDR (Light) Sensor Data Value: " + light);
 
