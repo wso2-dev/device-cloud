@@ -21,5 +21,6 @@ public class ArduinoConstants {
     public final static String DEVICE_TYPE = "arduino";
     public final static String DEVICE_PLUGIN_DEVICE_NAME = "DEVICE_NAME";
     public final static String DEVICE_PLUGIN_DEVICE_ID = "ARDUINO_DEVICE_ID";
-
+    public final static String STATE_ON = "ON";
+    public final static String STATE_OFF = "OFF";
 }

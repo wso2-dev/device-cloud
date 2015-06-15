@@ -137,7 +137,7 @@ public class BAMDataStore implements DataStoreConnector {
 
         try {
             switch (description) {
-            case "TEMP":
+            case "TEMPERATURE":
                 if (log.isDebugEnabled()) {
                     log.info("Stream definition set to Temperature");
                 }

@@ -23,10 +23,8 @@ import org.wso2.carbon.device.mgt.common.DeviceManagementException;
 import org.wso2.carbon.device.mgt.iot.common.devicecloud.DeviceController;
 import org.wso2.carbon.device.mgt.iot.common.devicecloud.config.DeviceCloudConfigManager;
 import org.wso2.carbon.device.mgt.iot.common.devicecloud.config.DeviceCloudManagementConfig;
-import org.wso2.carbon.device.mgt.iot.common.devicecloud.config
-		.DeviceCloudManagementControllerConfig;
-import org.wso2.carbon.device.mgt.iot.common.devicecloud.config.controlqueue
-		.DeviceControlQueueConfig;
+import org.wso2.carbon.device.mgt.iot.common.devicecloud.config.DeviceCloudManagementControllerConfig;
+import org.wso2.carbon.device.mgt.iot.common.devicecloud.config.controlqueue.DeviceControlQueueConfig;
 import org.wso2.carbon.device.mgt.iot.common.devicecloud.exception.DeviceControllerException;
 import org.wso2.carbon.device.mgt.iot.common.devicecloud.exception.UnauthorizedException;
 import org.wso2.carbon.device.mgt.iot.firealarm.api.util.DeviceJSON;
@@ -40,7 +38,6 @@ import javax.ws.rs.core.MediaType;
 import java.util.*;
 
 public class FireAlarmControllerService {
-
 
     private static Log log = LogFactory.getLog(FireAlarmControllerService.class);
 
@@ -111,10 +108,20 @@ public class FireAlarmControllerService {
     /*    Service to switch "ON" and "OFF" the FireAlarm bulb
                Called by an external client intended to control the FireAlarm bulb */
     @Path("/switchbulb") @POST public void switchBulb(@HeaderParam("owner") String owner,
-            @HeaderParam("deviceId") String deviceId, @Context HttpServletResponse response) {
+            @HeaderParam("deviceId") String deviceId, @FormParam("state") String state,
+            @Context HttpServletResponse response) {
+
+        String switchToState = state.toUpperCase();
+
+        if (!switchToState.equals(FireAlarmConstants.STATE_ON) && !switchToState.equals(FireAlarmConstants.STATE_OFF)) {
+            log.error("The requested state change shoud be either - 'ON' or 'OFF'");
+            response.setStatus(HttpStatus.SC_BAD_REQUEST);
+            return;
+        }
 
         try {
-            boolean result = DeviceController.setControl(owner, FireAlarmConstants.DEVICE_TYPE, deviceId, "BULB", "IN");
+            boolean result = DeviceController
+                    .setControl(owner, FireAlarmConstants.DEVICE_TYPE, deviceId, "BULB", switchToState);
             if (result) {
                 response.setStatus(HttpStatus.SC_ACCEPTED);
 
@@ -134,7 +141,8 @@ public class FireAlarmControllerService {
             @HeaderParam("deviceId") String deviceId, @Context HttpServletResponse response) {
         String replyMsg;
         try {
-            boolean result = DeviceController.setControl(owner, FireAlarmConstants.DEVICE_TYPE, deviceId, "TEMPERATURE", "IN");
+            boolean result = DeviceController
+                    .setControl(owner, FireAlarmConstants.DEVICE_TYPE, deviceId, "TEMPERATURE", "IN");
             if (result) {
                 response.setStatus(HttpStatus.SC_ACCEPTED);
                 replyMsg = "Request to read temperature sent to controls queue. Please wait...";
@@ -155,10 +163,20 @@ public class FireAlarmControllerService {
     /*    Service to toggle the FireAlarm fan between "ON" and "OFF"
                Called by an external client intended to control the FireAlarm fan */
     @Path("/togglefan") @POST public void switchFan(@HeaderParam("owner") String owner,
-            @HeaderParam("deviceId") String deviceId, @Context HttpServletResponse response) {
+            @HeaderParam("deviceId") String deviceId, @FormParam("state") String state,
+            @Context HttpServletResponse response) {
+
+        String switchToState = state.toUpperCase();
+
+        if (!switchToState.equals(FireAlarmConstants.STATE_ON) && !switchToState.equals(FireAlarmConstants.STATE_OFF)) {
+            log.error("The requested state change shoud be either - 'ON' or 'OFF'");
+            response.setStatus(HttpStatus.SC_BAD_REQUEST);
+            return;
+        }
 
         try {
-            boolean result = DeviceController.setControl(owner, FireAlarmConstants.DEVICE_TYPE, deviceId, "FAN", "IN");
+            boolean result = DeviceController
+                    .setControl(owner, FireAlarmConstants.DEVICE_TYPE, deviceId, "FAN", switchToState);
             if (result) {
                 response.setStatus(HttpStatus.SC_ACCEPTED);
 
@@ -208,7 +226,8 @@ public class FireAlarmControllerService {
             @Context HttpServletResponse response) {
         try {
             boolean result = DeviceController
-                    .setControl(replyMsg.owner, FireAlarmConstants.DEVICE_TYPE, replyMsg.deviceId, replyMsg.reply, "OUT");
+                    .setControl(replyMsg.owner, FireAlarmConstants.DEVICE_TYPE, replyMsg.deviceId, replyMsg.reply,
+                            "OUT");
             if (result) {
                 response.setStatus(HttpStatus.SC_ACCEPTED);
 
@@ -244,36 +263,32 @@ public class FireAlarmControllerService {
                         fan;
                 log.info(sensorValues);
 
-                result = DeviceController
-                        .pushData(dataMsg.owner, FireAlarmConstants.DEVICE_TYPE, dataMsg.deviceId, System.currentTimeMillis(),
-                                "DeviceData", temperature, "TEMP");
+                result = DeviceController.pushData(dataMsg.owner, FireAlarmConstants.DEVICE_TYPE, dataMsg.deviceId,
+                        System.currentTimeMillis(), "DeviceData", temperature, "TEMPERATURE");
 
                 if (!result) {
                     response.setStatus(HttpStatus.SC_INTERNAL_SERVER_ERROR);
                     return;
                 }
 
-                result = DeviceController
-                        .pushData(dataMsg.owner, FireAlarmConstants.DEVICE_TYPE, dataMsg.deviceId, System.currentTimeMillis(),
-                                "DeviceData", bulb, "BULB");
+                result = DeviceController.pushData(dataMsg.owner, FireAlarmConstants.DEVICE_TYPE, dataMsg.deviceId,
+                        System.currentTimeMillis(), "DeviceData", bulb, "BULB");
 
                 if (!result) {
                     response.setStatus(HttpStatus.SC_INTERNAL_SERVER_ERROR);
                     return;
                 }
 
-                result = DeviceController
-                        .pushData(dataMsg.owner, FireAlarmConstants.DEVICE_TYPE, dataMsg.deviceId, System.currentTimeMillis(),
-                                "DeviceData", fan, "FAN");
+                result = DeviceController.pushData(dataMsg.owner, FireAlarmConstants.DEVICE_TYPE, dataMsg.deviceId,
+                        System.currentTimeMillis(), "DeviceData", fan, "FAN");
 
                 if (!result) {
                     response.setStatus(HttpStatus.SC_INTERNAL_SERVER_ERROR);
                 }
 
             } else {
-                result = DeviceController
-                        .pushData(dataMsg.owner, FireAlarmConstants.DEVICE_TYPE, dataMsg.deviceId, System.currentTimeMillis(),
-                                "DeviceData", dataMsg.value, dataMsg.reply);
+                result = DeviceController.pushData(dataMsg.owner, FireAlarmConstants.DEVICE_TYPE, dataMsg.deviceId,
+                        System.currentTimeMillis(), "DeviceData", dataMsg.value, dataMsg.reply);
                 if (!result) {
                     response.setStatus(HttpStatus.SC_INTERNAL_SERVER_ERROR);
                 }

@@ -59,45 +59,39 @@ public class SensebotControllerService {
         httpclient.start();
     }
 
-    @Path("/forward") @POST public boolean moveForward(@HeaderParam("owner") String owner,
+    @Path("/forward") @POST public void moveForward(@HeaderParam("owner") String owner,
             @HeaderParam("deviceId") String deviceId, @FormParam("ip") String deviceIp,
             @FormParam("port") int deviceServerPort) {
 
-        boolean result;
-        result = sendCommand(deviceIp, deviceServerPort, FORWARD_URL);
-        return result;
+        sendCommand(deviceIp, deviceServerPort, FORWARD_URL);
     }
 
-    @Path("/backward") @POST public boolean moveBackward(@HeaderParam("owner") String owner,
+    @Path("/backward") @POST public void moveBackward(@HeaderParam("owner") String owner,
             @HeaderParam("deviceId") String deviceId, @FormParam("ip") String deviceIp,
             @FormParam("port") int deviceServerPort) {
-        boolean result;
-        result = sendCommand(deviceIp, deviceServerPort, BACKWARD_URL);
-        return result;
+
+        sendCommand(deviceIp, deviceServerPort, BACKWARD_URL);
     }
 
-    @Path("/left") @POST public boolean turnLeft(@HeaderParam("owner") String owner,
+    @Path("/left") @POST public void turnLeft(@HeaderParam("owner") String owner,
             @HeaderParam("deviceId") String deviceId, @FormParam("ip") String deviceIp,
             @FormParam("port") int deviceServerPort) {
-        boolean result;
-        result = sendCommand(deviceIp, deviceServerPort, LEFT_URL);
-        return result;
+
+        sendCommand(deviceIp, deviceServerPort, LEFT_URL);
     }
 
-    @Path("/right") @POST public boolean turnRight(@HeaderParam("owner") String owner,
+    @Path("/right") @POST public void turnRight(@HeaderParam("owner") String owner,
             @HeaderParam("deviceId") String deviceId, @FormParam("ip") String deviceIp,
             @FormParam("port") int deviceServerPort) {
-        boolean result;
-        result = sendCommand(deviceIp, deviceServerPort, RIGHT_URL);
-        return result;
+
+        sendCommand(deviceIp, deviceServerPort, RIGHT_URL);
     }
 
-    @Path("/stop") @POST public boolean stop(@HeaderParam("owner") String owner,
+    @Path("/stop") @POST public void stop(@HeaderParam("owner") String owner,
             @HeaderParam("deviceId") String deviceId, @FormParam("ip") String deviceIp,
             @FormParam("port") int deviceServerPort) {
-        boolean result;
-        result = sendCommand(deviceIp, deviceServerPort, STOP_URL);
-        return result;
+
+        sendCommand(deviceIp, deviceServerPort, STOP_URL);
     }
 
     @Path("/pushsensordata") @POST @Consumes(MediaType.APPLICATION_JSON) public void pushSensorData(
@@ -177,7 +171,7 @@ public class SensebotControllerService {
         log.info("Recieved Sensor Data Values: " + temperature);
 
         if (log.isDebugEnabled())
-            log.debug("Recieved Tenperature Data Value: " + temperature + " degrees C");
+            log.debug("Recieved Temperature Data Value: " + temperature + " degrees C");
         try {
             boolean result = DeviceController.pushData(dataMsg.owner, SensebotConstants.DEVICE_TYPE, dataMsg.deviceId,
                     System.currentTimeMillis(), "DeviceData", temperature, "TEMP");
@@ -269,7 +263,7 @@ public class SensebotControllerService {
 
     }
 
-    private boolean sendCommand(String deviceIp, int deviceServerPort, String motionType) {
+    private void sendCommand(String deviceIp, int deviceServerPort, String motionType) {
 
         if (deviceServerPort == 0) {
             deviceServerPort = 80;
@@ -281,7 +275,6 @@ public class SensebotControllerService {
         }
         HttpGet request = new HttpGet(urlString);
         Future<HttpResponse> future = httpclient.execute(request, null);
-        return future.isDone();
     }
 
 }

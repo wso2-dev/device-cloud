@@ -203,20 +203,16 @@ public class DeviceController {
                 iotControlQueue.enqueueControls(deviceControlsMap);
                 return true;
             } else {
-
                 throw new UnauthorizedException(
                         "There is no mapping between owner:" + owner + " and device id:" + deviceId);
-
             }
         } catch (DeviceControllerException e) {
 
             log.error("Failed to enqueue data to queue at " +
                     controlQueueConfig.getEndPoint() + ":" +
                     controlQueueConfig.getPort());
-
             return false;
         } catch (DeviceManagementException e) {
-
             log.error("Error whilst trying to authenticate the owner with device");
             return false;
 

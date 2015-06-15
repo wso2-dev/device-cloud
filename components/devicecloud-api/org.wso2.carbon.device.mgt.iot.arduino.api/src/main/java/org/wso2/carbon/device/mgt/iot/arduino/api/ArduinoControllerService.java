@@ -20,41 +20,30 @@ import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.device.mgt.common.DeviceManagementException;
+import org.wso2.carbon.device.mgt.iot.arduino.api.util.DeviceJSON;
+import org.wso2.carbon.device.mgt.iot.arduino.api.util.MQTTArduinoSubscriber;
+import org.wso2.carbon.device.mgt.iot.arduino.constants.ArduinoConstants;
 import org.wso2.carbon.device.mgt.iot.common.devicecloud.DeviceController;
 import org.wso2.carbon.device.mgt.iot.common.devicecloud.config.DeviceCloudConfigManager;
 import org.wso2.carbon.device.mgt.iot.common.devicecloud.config.DeviceCloudManagementConfig;
-import org.wso2.carbon.device.mgt.iot.common.devicecloud.config
-        .DeviceCloudManagementControllerConfig;
-import org.wso2.carbon.device.mgt.iot.common.devicecloud.config.controlqueue
-        .DeviceControlQueueConfig;
+import org.wso2.carbon.device.mgt.iot.common.devicecloud.config.DeviceCloudManagementControllerConfig;
+import org.wso2.carbon.device.mgt.iot.common.devicecloud.config.controlqueue.DeviceControlQueueConfig;
 import org.wso2.carbon.device.mgt.iot.common.devicecloud.exception.DeviceControllerException;
 import org.wso2.carbon.device.mgt.iot.common.devicecloud.exception.UnauthorizedException;
-import org.wso2.carbon.device.mgt.iot.arduino.api.util.DeviceJSON;
-import org.wso2.carbon.device.mgt.iot.arduino.api.util.MQTTArduinoSubscriber;
 
 import javax.servlet.http.HttpServletResponse;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
-import javax.ws.rs.HeaderParam;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
+import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.Map;
-import java.util.NoSuchElementException;
-
+import java.util.*;
 
 public class ArduinoControllerService {
 
     private static Log log = LogFactory.getLog(ArduinoControllerService.class);
 
     public static final String CONTROL_QUEUE_ENDPOINT;
-    private static Map<String, LinkedList<String>> replyMsgQueue =new HashMap<>();;
-    private static Map<String, LinkedList<String>> internalControlsQueue=new HashMap<>();
+    private static Map<String, LinkedList<String>> replyMsgQueue = new HashMap<>();
+    private static Map<String, LinkedList<String>> internalControlsQueue = new HashMap<>();
     private static MQTTArduinoSubscriber mqttArduinoSubscriber;
 
     static {
@@ -93,8 +82,7 @@ public class ArduinoControllerService {
 
     }
 
-
-    public  void setMqttArduinoSubscriber(MQTTArduinoSubscriber mqttArduinoSubscriber) {
+    public void setMqttArduinoSubscriber(MQTTArduinoSubscriber mqttArduinoSubscriber) {
         ArduinoControllerService.mqttArduinoSubscriber = mqttArduinoSubscriber;
         try {
             mqttArduinoSubscriber.subscribe();
@@ -103,7 +91,7 @@ public class ArduinoControllerService {
         }
     }
 
-    public  MQTTArduinoSubscriber getMqttArduinoSubscriber() {
+    public MQTTArduinoSubscriber getMqttArduinoSubscriber() {
         return mqttArduinoSubscriber;
     }
 
@@ -115,16 +103,22 @@ public class ArduinoControllerService {
         return Collections.unmodifiableMap(internalControlsQueue);
     }
 
-
-
-
     /*    Service to switch arduino bulb (pin 13) between "ON" and "OFF"
-               Called by an external client intended to control the Arduino fan */
+               Called by an external client intended to control the Arduino */
     @Path("/switch/bulb") @POST public void switchBulb(@HeaderParam("owner") String owner,
-            @HeaderParam("deviceId") String deviceId,@HeaderParam("deviceId") String status, @Context HttpServletResponse response) {
+            @HeaderParam("deviceId") String deviceId, @FormParam("state") String state,
+            @Context HttpServletResponse response) {
+
+        String switchToState = state.toUpperCase();
+
+        if (!switchToState.equals(ArduinoConstants.STATE_ON) && !switchToState.equals(ArduinoConstants.STATE_OFF)) {
+            log.error("The requested state change shoud be either - 'ON' or 'OFF'");
+            response.setStatus(HttpStatus.SC_BAD_REQUEST);
+            return;
+        }
 
         try {
-            boolean result = DeviceController.setControl(owner, "Arduino", deviceId, "Bulb", "IN");
+            boolean result = DeviceController.setControl(owner, ArduinoConstants.DEVICE_TYPE, deviceId, "BULB", switchToState);
             if (result) {
                 response.setStatus(HttpStatus.SC_ACCEPTED);
 
@@ -168,87 +162,28 @@ public class ArduinoControllerService {
         return result;
     }
 
-    /*    Service to send back the replies for the controls sent to the Arduino
-           Called by the Arduino device  */
-    @Path("/reply") @POST @Consumes(MediaType.APPLICATION_JSON) public void reply(final DeviceJSON replyMsg,
-            @Context HttpServletResponse response) {
-        try {
-            boolean result = DeviceController
-                    .setControl(replyMsg.owner, "Arduino", replyMsg.deviceId, replyMsg.reply, "OUT");
-            if (result) {
-                response.setStatus(HttpStatus.SC_ACCEPTED);
-
-            } else {
-                response.setStatus(HttpStatus.SC_INTERNAL_SERVER_ERROR);
-
-            }
-
-        } catch (UnauthorizedException e) {
-            response.setStatus(HttpStatus.SC_UNAUTHORIZED);
-
-        }
-
-    }
 
     /*    Service to push all the sensor data collected by the Arduino
            Called by the Arduino device  */
     @Path("/pushdata") @POST @Consumes(MediaType.APPLICATION_JSON) public void pushData(
             final DeviceJSON dataMsg, @Context HttpServletResponse response) {
-        boolean result;
 
-        String sensorValues = dataMsg.value;
-        log.info("Recieved Sensor Data Values: " + sensorValues);
+        String temperature = dataMsg.value;                            //TEMP
+        log.info("Recieved Sensor Data Values: " + temperature);
 
-        String sensors[] = sensorValues.split(":");
+        if (log.isDebugEnabled())
+            log.debug("Recieved Temperature Data Value: " + temperature + " degrees C");
         try {
-            if (sensors.length == 3) {
-                String temperature = sensors[0];
-                String bulb = sensors[1];
-                String fan = sensors[2];
+            boolean result = DeviceController.pushData(dataMsg.owner, ArduinoConstants.DEVICE_TYPE, dataMsg.deviceId,
+                    System.currentTimeMillis(), "DeviceData", temperature, "TEMPERATURE");
 
-                sensorValues = "Temperature:" + temperature + "C\tBulb Status:" + bulb + "\t\tFan Status:" +
-                        fan;
-                log.info(sensorValues);
-
-                result = DeviceController
-                        .pushData(dataMsg.owner, "Arduino", dataMsg.deviceId, System.currentTimeMillis(),
-                                "DeviceData", temperature, "TEMP");
-
-                if (!result) {
-                    response.setStatus(HttpStatus.SC_INTERNAL_SERVER_ERROR);
-                    return;
-                }
-
-                result = DeviceController
-                        .pushData(dataMsg.owner, "Arduino", dataMsg.deviceId, System.currentTimeMillis(),
-                                "DeviceData", bulb, "BULB");
-
-                if (!result) {
-                    response.setStatus(HttpStatus.SC_INTERNAL_SERVER_ERROR);
-                    return;
-                }
-
-                result = DeviceController
-                        .pushData(dataMsg.owner, "Arduino", dataMsg.deviceId, System.currentTimeMillis(),
-                                "DeviceData", fan, "FAN");
-
-                if (!result) {
-                    response.setStatus(HttpStatus.SC_INTERNAL_SERVER_ERROR);
-                }
-
-            } else {
-                result = DeviceController
-                        .pushData(dataMsg.owner, "Arduino", dataMsg.deviceId, System.currentTimeMillis(),
-                                "DeviceData", dataMsg.value, dataMsg.reply);
-                if (!result) {
-                    response.setStatus(HttpStatus.SC_INTERNAL_SERVER_ERROR);
-                }
+            if (!result) {
+                response.setStatus(HttpStatus.SC_INTERNAL_SERVER_ERROR);
             }
 
         } catch (UnauthorizedException e) {
             response.setStatus(HttpStatus.SC_UNAUTHORIZED);
 
         }
-
     }
 }

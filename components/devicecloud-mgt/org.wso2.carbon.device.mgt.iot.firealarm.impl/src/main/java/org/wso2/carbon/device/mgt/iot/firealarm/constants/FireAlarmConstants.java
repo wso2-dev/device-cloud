@@ -17,9 +17,9 @@
 package org.wso2.carbon.device.mgt.iot.firealarm.constants;
 
 public class FireAlarmConstants {
-
     public final static String DEVICE_TYPE = "firealarm";
     public final static String DEVICE_PLUGIN_DEVICE_NAME = "DEVICE_NAME";
     public final static String DEVICE_PLUGIN_DEVICE_ID = "FIREALARM_DEVICE_ID";
-
+    public final static String STATE_ON = "ON";
+    public final static String STATE_OFF = "OFF";
 }
