@@ -48,7 +48,7 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 
 public class DigitalDisplayManagerService {
 
-	private static Log log = LogFactory.getLog(DigitalDisplayManagerService.class); 
+	private static Log log = LogFactory.getLog(DigitalDisplayManagerService.class);
 
 	@Path("/device/register")
 	@PUT
