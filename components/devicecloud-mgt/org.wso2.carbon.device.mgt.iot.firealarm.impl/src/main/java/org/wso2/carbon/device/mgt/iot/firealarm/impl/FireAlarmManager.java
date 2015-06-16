@@ -22,9 +22,8 @@ package org.wso2.carbon.device.mgt.iot.firealarm.impl;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.device.mgt.common.*;
-import org.wso2.carbon.device.mgt.common.app.mgt.Application;
-import org.wso2.carbon.device.mgt.common.app.mgt.ApplicationManagementException;
-import org.wso2.carbon.device.mgt.common.spi.DeviceManagementService;
+import org.wso2.carbon.device.mgt.common.app.mgt.AppManagerConnectorException;
+import org.wso2.carbon.device.mgt.common.spi.DeviceMgtService;
 import org.wso2.carbon.device.mgt.iot.firealarm.constants.FireAlarmConstants;
 import org.wso2.carbon.device.mgt.iot.firealarm.impl.dao.FireAlarmDAO;
 import org.wso2.carbon.device.mgt.iot.common.iotdevice.dao.IotDeviceManagementDAOException;
@@ -40,7 +39,7 @@ import org.wso2.carbon.device.mgt.common.operation.mgt.Operation;
 /**
  * This represents the FireAlarm implementation of DeviceManagerService.
  */
-public class FireAlarmManager implements DeviceManagementService {
+public class FireAlarmManager implements DeviceMgtService {
 
     private static final IotDeviceManagementDAOFactory iotDeviceManagementDAOFactory = new FireAlarmDAO();
     private static final Log log = LogFactory.getLog(FireAlarmManager.class);
@@ -245,29 +244,10 @@ public class FireAlarmManager implements DeviceManagementService {
         return devices;
     }
 
-    @Override
-    public Application[] getApplications(String s, int i, int i1)
-            throws ApplicationManagementException {
-        return new Application[0];
-    }
-
-    @Override
-    public void updateApplicationStatus(DeviceIdentifier deviceIdentifier, Application application,
-                                        String s) throws ApplicationManagementException {
-
-    }
-
-    @Override
-    public String getApplicationStatus(DeviceIdentifier deviceIdentifier, Application application)
-            throws ApplicationManagementException {
-        return null;
-    }
 
     @Override
     public void installApplication(Operation operation, List<DeviceIdentifier> list)
-            throws ApplicationManagementException {
+            throws AppManagerConnectorException {
 
     }
-
-    
 }
