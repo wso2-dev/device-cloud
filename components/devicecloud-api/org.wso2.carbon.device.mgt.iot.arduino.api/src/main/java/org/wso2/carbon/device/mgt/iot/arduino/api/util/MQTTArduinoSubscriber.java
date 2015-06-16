@@ -33,6 +33,8 @@ public class MQTTArduinoSubscriber extends MqttSubscriber {
             "wso2" + File.separator + "iot" + File.separator + "+" + File.separator +
                     ArduinoConstants.DEVICE_TYPE + File.separator + "#";
 
+
+    //make it singleton
     private MQTTArduinoSubscriber() {
 
         super("Subscriber", ArduinoConstants.DEVICE_TYPE, ArduinoControllerService.CONTROL_QUEUE_ENDPOINT,

@@ -47,6 +47,7 @@ public class ArduinoControllerService {
 	private static Map<String, LinkedList<String>> replyMsgQueue = new HashMap<>();
 	private static Map<String, LinkedList<String>> internalControlsQueue = new HashMap<>();
 	private static MQTTArduinoSubscriber mqttArduinoSubscriber;
+//Todo first call create a instance;
 
 	static {
 
@@ -100,11 +101,11 @@ public class ArduinoControllerService {
 	}
 
 	public static Map<String, LinkedList<String>> getReplyMsgQueue() {
-		return Collections.unmodifiableMap(replyMsgQueue);
+		return replyMsgQueue;
 	}
 
 	public static Map<String, LinkedList<String>> getInternalControlsQueue() {
-		return Collections.unmodifiableMap(internalControlsQueue);
+		return internalControlsQueue;
 	}
 
 	/*    Service to switch arduino bulb (pin 13) between "ON" and "OFF"
