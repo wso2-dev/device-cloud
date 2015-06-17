@@ -4,6 +4,17 @@ package org.wso2.carbon.device.mgt.iot.common.devicecloud.datastore.bam;
  * Created by smean-MAC on 5/31/15.
  */
 public class BAMStreamDefinitions {
+
+    public final class StreamConstants{
+            public static final String TEMPERATURE="TEMPERATURE";
+            public static final String FAN="FAN";
+            public static final String BULB="BULB";
+            public static final String SONAR="SONAR";
+            public static final String LIGHT="LIGHT";
+            public static final String MOTION="MOTION";
+
+
+    }
     public final static String TEMPERATURE_STREAM_DEFINITION =
             "{"
                     + "     'name':'org_wso2_iot_devices_temperature',"

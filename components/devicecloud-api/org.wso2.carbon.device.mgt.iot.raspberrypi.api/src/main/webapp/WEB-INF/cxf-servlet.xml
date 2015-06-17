@@ -26,16 +26,16 @@
 
 
 
-    <!--<jaxrs:server id="DigitalDisplayController" address="controller">-->
-        <!--<jaxrs:serviceBeans>-->
-            <!--<bean id="SenseBotControllerService"-->
-                  <!--class="org.wso2.carbon.device.mgt.iot.digitaldisplay.api.DigitalDisplayControllerService">-->
-            <!--</bean>-->
-        <!--</jaxrs:serviceBeans>-->
-        <!--<jaxrs:providers>-->
-            <!--<bean class="org.codehaus.jackson.jaxrs.JacksonJsonProvider" />-->
-        <!--</jaxrs:providers>-->
-    <!--</jaxrs:server>-->
+    <jaxrs:server id="RaspberryPiController" address="controller">
+        <jaxrs:serviceBeans>
+            <bean id="RaspberryPiControllerService"
+                  class="org.wso2.carbon.device.mgt.iot.raspberrypi.api.RaspberrypiControllerService">
+            </bean>
+        </jaxrs:serviceBeans>
+        <jaxrs:providers>
+            <bean class="org.codehaus.jackson.jaxrs.JacksonJsonProvider" />
+        </jaxrs:providers>
+    </jaxrs:server>
 
     <jaxrs:server id="RaspberrypiManager" address="/manager">
         <jaxrs:serviceBeans>

@@ -137,37 +137,37 @@ public class BAMDataStore implements DataStoreConnector {
 
         try {
             switch (description) {
-            case "TEMPERATURE":
+            case BAMStreamDefinitions.StreamConstants.TEMPERATURE:
                 if (log.isDebugEnabled()) {
                     log.info("Stream definition set to Temperature");
                 }
                 DEVICE_DATA_STREAM = BAM_DATA_PUBLISHER.defineStream(BAMStreamDefinitions.TEMPERATURE_STREAM_DEFINITION);
                 break;
-            case "MOTION":
+            case BAMStreamDefinitions.StreamConstants.MOTION:
                 if (log.isDebugEnabled()) {
                     log.info("Stream definition set to Motion (PIR)");
                 }
                 DEVICE_DATA_STREAM = BAM_DATA_PUBLISHER.defineStream(BAMStreamDefinitions.MOTION_STREAM_DEFINITION);
                 break;
-            case "SONAR":
+            case BAMStreamDefinitions.StreamConstants.SONAR:
                 if (log.isDebugEnabled()) {
                     log.info("Stream definition set to Sonar");
                 }
                 DEVICE_DATA_STREAM = BAM_DATA_PUBLISHER.defineStream(BAMStreamDefinitions.SONAR_STREAM_DEFINITION);
                 break;
-            case "LIGHT":
+            case BAMStreamDefinitions.StreamConstants.LIGHT:
                 if (log.isDebugEnabled()) {
                     log.info("Stream definition set to Light");
                 }
                 DEVICE_DATA_STREAM = BAM_DATA_PUBLISHER.defineStream(BAMStreamDefinitions.LIGHT_STREAM_DEFINITION);
                 break;
-            case "BULB":
+            case BAMStreamDefinitions.StreamConstants.BULB:
                 if (log.isDebugEnabled()) {
                     log.info("Stream definition set to Bulb Status");
                 }
                 DEVICE_DATA_STREAM = BAM_DATA_PUBLISHER.defineStream(BAMStreamDefinitions.BULB_STREAM_DEFINITION);
                 break;
-            case "FAN":
+            case  BAMStreamDefinitions.StreamConstants.FAN:
                 if (log.isDebugEnabled()) {
                     log.info("Stream definition set to Fan Status");
                 }
@@ -185,7 +185,7 @@ public class BAMDataStore implements DataStoreConnector {
         }
 
         try {
-            if (deviceType.equalsIgnoreCase("FireAlarm") || deviceType.equalsIgnoreCase("SenseBot")) {
+            //if (deviceType.equalsIgnoreCase("FireAlarm") || deviceType.equalsIgnoreCase("SenseBot")|| deviceType.equalsIgnoreCase("sensebot")) {
                 if (log.isDebugEnabled()) {
                     log.info("Publishing FireAlarm specific data");
                 }
@@ -198,20 +198,20 @@ public class BAMDataStore implements DataStoreConnector {
                                 + "\n" + "\tDeviceId: " + deviceId + "\tTime: " + time + "\n" + "\tDescription: "
                                 + description + "\n" + "\tKey: " + key + "\tValue: " + value + "\n";
 
-            } else {
-                if (log.isDebugEnabled()) {
-                    log.info("Publishing exception device specific data");
-                }
-                BAM_DATA_PUBLISHER.publish(DEVICE_DATA_STREAM, System.currentTimeMillis(),
-                        new Object[] { owner, deviceType, deviceId, Long.parseLong(time) }, null,
-                        new Object[] { key, value, description });
-
-                logMsg =
-                        "event published to devicePinDataStream\n" + "\tOwner: " + owner + "\tDeviceType: " + deviceType
-                                + "\n" + "\tDeviceId: " + deviceId + "\tTime: " + time + "\n" + "\tDescription: "
-                                + description + "\n" + "\tKey: " + key + "\tValue: " + value + "\n";
-
-            }
+//            } else {
+//                if (log.isDebugEnabled()) {
+//                    log.info("Publishing exception device specific data");
+//                }
+//                BAM_DATA_PUBLISHER.publish(DEVICE_DATA_STREAM, System.currentTimeMillis(),
+//                        new Object[] { owner, deviceType, deviceId, Long.parseLong(time) }, null,
+//                        new Object[] { key, value, description });
+//
+//                logMsg =
+//                        "event published to devicePinDataStream\n" + "\tOwner: " + owner + "\tDeviceType: " + deviceType
+//                                + "\n" + "\tDeviceId: " + deviceId + "\tTime: " + time + "\n" + "\tDescription: "
+//                                + description + "\n" + "\tKey: " + key + "\tValue: " + value + "\n";
+//
+//            }
 
             if (log.isDebugEnabled()) {
                 log.info(logMsg);
