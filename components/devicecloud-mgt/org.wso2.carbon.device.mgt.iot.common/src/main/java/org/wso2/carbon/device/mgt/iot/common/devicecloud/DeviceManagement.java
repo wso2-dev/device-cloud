@@ -21,13 +21,13 @@ import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.device.mgt.common.Device;
 import org.wso2.carbon.device.mgt.common.DeviceIdentifier;
 import org.wso2.carbon.device.mgt.common.DeviceManagementException;
-import org.wso2.carbon.device.mgt.common.spi.DeviceManagementService;
+import org.wso2.carbon.device.mgt.common.spi.DeviceMgtService;
 import org.wso2.carbon.device.mgt.core.dao.DeviceManagementDAOException;
 import org.wso2.carbon.device.mgt.core.dao.DeviceManagementDAOFactory;
 import org.wso2.carbon.device.mgt.core.dto.DeviceType;
-import org.wso2.carbon.device.mgt.core.service.DeviceManagementProviderService;
+import org.wso2.carbon.device.mgt.core.service.DeviceManagementService;
 import org.wso2.carbon.device.mgt.iot.common.iotdevice.util.IotDeviceManagementUtil;
-import org.wso2.carbon.device.mgt.core.service.DeviceManagementProviderServiceImpl;
+import org.wso2.carbon.device.mgt.core.service.DeviceManagementServiceImpl;
 import org.wso2.carbon.device.mgt.iot.common.devicecloud.util.ZipArchive;
 
 import java.io.IOException;
@@ -40,7 +40,7 @@ public class DeviceManagement {
 
 	public boolean addNewDevice(Device device) throws DeviceManagementException  {
 
-		DeviceManagementProviderService dmService = new DeviceManagementProviderServiceImpl();
+		DeviceManagementService dmService = new DeviceManagementServiceImpl();
 		boolean status = dmService.enrollDevice(device);
 		return status;
 
@@ -49,7 +49,7 @@ public class DeviceManagement {
 	public boolean removeDevice(DeviceIdentifier deviceIdentifier)
 			throws DeviceManagementException {
 
-		DeviceManagementProviderService dmService = new DeviceManagementProviderServiceImpl();
+		DeviceManagementService dmService = new DeviceManagementServiceImpl();
 
 		boolean status = dmService.disenrollDevice(deviceIdentifier);
 		return status;
@@ -57,7 +57,7 @@ public class DeviceManagement {
 
 	public boolean update(Device device) throws DeviceManagementException {
 
-		DeviceManagementProviderService dmService = new DeviceManagementProviderServiceImpl();
+		DeviceManagementService dmService = new DeviceManagementServiceImpl();
 		boolean status = dmService.modifyEnrollment(device);
 
 		return status;
@@ -65,14 +65,14 @@ public class DeviceManagement {
 
 	public Device getDevice(DeviceIdentifier deviceIdentifier) throws DeviceManagementException {
 
-		DeviceManagementProviderService dmService = new DeviceManagementProviderServiceImpl();
+		DeviceManagementService dmService = new DeviceManagementServiceImpl();
 		return dmService.getDevice(deviceIdentifier);
 
 	}
 
 	public boolean isExist(DeviceIdentifier deviceIdentifier) throws DeviceManagementException {
 
-		DeviceManagementProviderService dmService = new DeviceManagementProviderServiceImpl();
+		DeviceManagementService dmService = new DeviceManagementServiceImpl();
 
 		return dmService.isEnrolled(deviceIdentifier);
 
@@ -81,7 +81,7 @@ public class DeviceManagement {
 	public boolean isExist(String owner, DeviceIdentifier deviceIdentifier)
 			throws DeviceManagementException {
 
-		DeviceManagementProviderService dmService = new DeviceManagementProviderServiceImpl();
+		DeviceManagementService dmService = new DeviceManagementServiceImpl();
 		if (dmService.isEnrolled(deviceIdentifier)) {
 			Device device=dmService.getDevice(deviceIdentifier);
 
@@ -96,13 +96,13 @@ public class DeviceManagement {
 	}
 
 	public List<Device> getDevices(String user) throws DeviceManagementException {
-		DeviceManagementProviderService dmService = new DeviceManagementProviderServiceImpl();
+		DeviceManagementService dmService = new DeviceManagementServiceImpl();
 		return dmService.getAllDevicesOfUser(user);
 
 	}
 
 	public List<Device> getDevicesByType(String deviceType) throws DeviceManagementException{
-		DeviceManagementProviderService dmService = new DeviceManagementProviderServiceImpl();
+		DeviceManagementService dmService = new DeviceManagementServiceImpl();
 		return dmService.getAllDevices(deviceType);
 	}
 

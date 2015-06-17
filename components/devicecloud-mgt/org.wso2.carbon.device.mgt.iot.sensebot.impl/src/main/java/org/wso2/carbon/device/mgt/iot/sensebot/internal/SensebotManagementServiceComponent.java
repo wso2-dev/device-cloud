@@ -23,16 +23,11 @@ import org.apache.commons.logging.LogFactory;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.component.ComponentContext;
-import org.wso2.carbon.device.mgt.common.spi.DeviceManagementService;
+import org.wso2.carbon.device.mgt.common.spi.DeviceMgtService;
 import org.wso2.carbon.device.mgt.iot.common.DeviceTypeService;
 import org.wso2.carbon.device.mgt.iot.sensebot.impl.SensebotManager;
 
-//* @scr.reference name="org.wso2.carbon.ndatasource"
-//		* interface="org.wso2.carbon.ndatasource.core.DataSourceService"
-//		* cardinality="1..1"
-//		* policy="dynamic"
-//		* bind="setDataSourceService"
-//		* unbind="unsetDataSourceService"
+
 
 /**
  * @scr.component name="org.wso2.carbon.device.mgt.iot.sensebot.internal.SensebotManagementServiceComponent"
@@ -58,7 +53,7 @@ public class SensebotManagementServiceComponent {
             BundleContext bundleContext = ctx.getBundleContext();
 
             sensebotServiceRegRef = bundleContext
-                    .registerService(DeviceManagementService.class.getName(), new SensebotManager(), null);
+                    .registerService(DeviceMgtService.class.getName(), new SensebotManager(), null);
 
             if (log.isDebugEnabled()) {
                 log.debug("Sensebot Device Management Service Component has been successfully activated");
