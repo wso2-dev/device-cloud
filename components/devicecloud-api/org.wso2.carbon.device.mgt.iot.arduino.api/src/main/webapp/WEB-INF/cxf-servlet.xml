@@ -31,6 +31,9 @@
                 <property name="mqttArduinoSubscriber" ref="mqttSubscriber"/>
             </bean>
         </jaxrs:serviceBeans>
+        <jaxrs:providers>
+            <bean class="org.codehaus.jackson.jaxrs.JacksonJsonProvider" />
+        </jaxrs:providers>
     </jaxrs:server>
 
 
@@ -41,9 +44,6 @@
                   class="org.wso2.carbon.device.mgt.iot.arduino.api.ArduinoManagerService">
             </bean>
         </jaxrs:serviceBeans>
-        <jaxrs:providers>
-            <bean class="org.codehaus.jackson.jaxrs.JacksonJsonProvider" />
-        </jaxrs:providers>
     </jaxrs:server>
 
 

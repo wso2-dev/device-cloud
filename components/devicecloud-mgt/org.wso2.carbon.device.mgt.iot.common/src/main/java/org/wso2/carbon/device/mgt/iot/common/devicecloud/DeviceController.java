@@ -148,13 +148,13 @@ public class DeviceController {
         deviceDataMap.put("value", value);
         deviceDataMap.put("description", description);
 
-        DeviceValidator deviceChecker = new DeviceValidator();
-
-        DeviceIdentifier dId = new DeviceIdentifier(deviceId, deviceType);
+//        DeviceValidator deviceChecker = new DeviceValidator();
+//
+//        DeviceIdentifier dId = new DeviceIdentifier(deviceId, deviceType);
 
         try {
-            boolean exists = deviceChecker.isExist(owner, dId);
-
+//            boolean exists = deviceChecker.isExist(owner, dId);
+            boolean exists = true;
             if (exists) {
 
                 iotDataStore.publishIoTData(deviceDataMap);
@@ -174,12 +174,12 @@ public class DeviceController {
 
             return false;
 
-        } catch (DeviceManagementException e) {
+        } /*catch (DeviceManagementException e) {
 
             log.error("Error whilst trying to authenticate the owner with device");
             return false;
 
-        }
+        }*/
 
     }
 
@@ -193,11 +193,12 @@ public class DeviceController {
         deviceControlsMap.put("key", key);
         deviceControlsMap.put("value", value);
 
-        DeviceValidator deviceChecker = new DeviceValidator();
-        DeviceIdentifier dId = new DeviceIdentifier(deviceId, deviceType);
+//        DeviceValidator deviceChecker = new DeviceValidator();
+//        DeviceIdentifier dId = new DeviceIdentifier(deviceId, deviceType);
 
         try {
-            boolean exists = deviceChecker.isExist(owner, dId);
+//            boolean exists = deviceChecker.isExist(owner, dId);
+            boolean exists = true;
 
             if (exists) {
                 iotControlQueue.enqueueControls(deviceControlsMap);
@@ -212,11 +213,11 @@ public class DeviceController {
                     controlQueueConfig.getEndPoint() + ":" +
                     controlQueueConfig.getPort());
             return false;
-        } catch (DeviceManagementException e) {
+        } /*catch (DeviceManagementException e) {
             log.error("Error whilst trying to authenticate the owner with device");
             return false;
 
-        }
+        }*/
 
     }
 

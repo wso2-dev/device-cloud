@@ -32,12 +32,9 @@ import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
-import java.net.HttpURLConnection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.Future;
-
-//import java.net.URL;
 
 public class SensebotControllerService {
 
@@ -45,7 +42,6 @@ public class SensebotControllerService {
 
     private static final Map<String, String> deviceIPList = new HashMap<>();
 
-    private static HttpURLConnection httpConn;
     private static final String URL_PREFIX = "http://";
     private static final String FORWARD_URL = "/move/F";
     private static final String BACKWARD_URL = "/move/B";

@@ -30,6 +30,9 @@
                 <property name="mqttFireAlarmSubscriber" ref="mqttSubscriber"/>
             </bean>
         </jaxrs:serviceBeans>
+        <jaxrs:providers>
+            <bean class="org.codehaus.jackson.jaxrs.JacksonJsonProvider" />
+        </jaxrs:providers>
     </jaxrs:server>
 
     <jaxrs:server id="FireAlarmManager" address="/manager">
