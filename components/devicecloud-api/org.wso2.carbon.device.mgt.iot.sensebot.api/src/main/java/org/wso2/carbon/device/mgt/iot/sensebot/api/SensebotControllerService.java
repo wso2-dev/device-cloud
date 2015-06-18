@@ -24,6 +24,7 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.nio.client.CloseableHttpAsyncClient;
 import org.apache.http.impl.nio.client.HttpAsyncClients;
 import org.wso2.carbon.device.mgt.iot.common.devicecloud.DeviceController;
+import org.wso2.carbon.device.mgt.iot.common.devicecloud.datastore.bam.BAMStreamDefinitions;
 import org.wso2.carbon.device.mgt.iot.common.devicecloud.exception.UnauthorizedException;
 import org.wso2.carbon.device.mgt.iot.sensebot.api.util.DeviceJSON;
 import org.wso2.carbon.device.mgt.iot.sensebot.constants.SensebotConstants;
@@ -83,9 +84,8 @@ public class SensebotControllerService {
         sendCommand(deviceIp, deviceServerPort, RIGHT_URL);
     }
 
-    @Path("/stop") @POST public void stop(@HeaderParam("owner") String owner,
-            @HeaderParam("deviceId") String deviceId, @FormParam("ip") String deviceIp,
-            @FormParam("port") int deviceServerPort) {
+    @Path("/stop") @POST public void stop(@HeaderParam("owner") String owner, @HeaderParam("deviceId") String deviceId,
+            @FormParam("ip") String deviceIp, @FormParam("port") int deviceServerPort) {
 
         sendCommand(deviceIp, deviceServerPort, STOP_URL);
     }
@@ -116,7 +116,8 @@ public class SensebotControllerService {
                     log.debug(sensorValues);
 
                 result = DeviceController.pushData(dataMsg.owner, SensebotConstants.DEVICE_TYPE, dataMsg.deviceId,
-                        System.currentTimeMillis(), "DeviceData", temperature, "TEMP");
+                        System.currentTimeMillis(), "DeviceData", temperature,
+                        BAMStreamDefinitions.StreamTypeLabel.TEMPERATURE);
 
                 if (!result) {
                     response.setStatus(HttpStatus.SC_INTERNAL_SERVER_ERROR);
@@ -124,7 +125,7 @@ public class SensebotControllerService {
                 }
 
                 result = DeviceController.pushData(dataMsg.owner, SensebotConstants.DEVICE_TYPE, dataMsg.deviceId,
-                        System.currentTimeMillis(), "DeviceData", motion, "MOTION");
+                        System.currentTimeMillis(), "DeviceData", motion, BAMStreamDefinitions.StreamTypeLabel.MOTION);
 
                 if (!result) {
                     response.setStatus(HttpStatus.SC_INTERNAL_SERVER_ERROR);
@@ -133,7 +134,8 @@ public class SensebotControllerService {
 
                 if (!sonar.equals("No Object")) {
                     result = DeviceController.pushData(dataMsg.owner, SensebotConstants.DEVICE_TYPE, dataMsg.deviceId,
-                            System.currentTimeMillis(), "DeviceData", sonar, "SONAR");
+                            System.currentTimeMillis(), "DeviceData", sonar,
+                            BAMStreamDefinitions.StreamTypeLabel.SONAR);
 
                     if (!result) {
                         response.setStatus(HttpStatus.SC_INTERNAL_SERVER_ERROR);
@@ -143,7 +145,7 @@ public class SensebotControllerService {
                 }
 
                 result = DeviceController.pushData(dataMsg.owner, SensebotConstants.DEVICE_TYPE, dataMsg.deviceId,
-                        System.currentTimeMillis(), "DeviceData", light, "LIGHT");
+                        System.currentTimeMillis(), "DeviceData", light, BAMStreamDefinitions.StreamTypeLabel.LIGHT);
 
                 if (!result) {
                     response.setStatus(HttpStatus.SC_INTERNAL_SERVER_ERROR);
@@ -170,7 +172,8 @@ public class SensebotControllerService {
             log.debug("Recieved Temperature Data Value: " + temperature + " degrees C");
         try {
             boolean result = DeviceController.pushData(dataMsg.owner, SensebotConstants.DEVICE_TYPE, dataMsg.deviceId,
-                    System.currentTimeMillis(), "DeviceData", temperature, "TEMP");
+                    System.currentTimeMillis(), "DeviceData", temperature,
+                    BAMStreamDefinitions.StreamTypeLabel.TEMPERATURE);
 
             if (!result) {
                 response.setStatus(HttpStatus.SC_INTERNAL_SERVER_ERROR);
@@ -192,7 +195,7 @@ public class SensebotControllerService {
             log.debug("Recieved PIR (Motion) Sensor Data Value: " + motion);
         try {
             boolean result = DeviceController.pushData(dataMsg.owner, SensebotConstants.DEVICE_TYPE, dataMsg.deviceId,
-                    System.currentTimeMillis(), "DeviceData", motion, "MOTION");
+                    System.currentTimeMillis(), "DeviceData", motion, BAMStreamDefinitions.StreamTypeLabel.MOTION);
 
             if (!result) {
                 response.setStatus(HttpStatus.SC_INTERNAL_SERVER_ERROR);
@@ -220,7 +223,8 @@ public class SensebotControllerService {
             try {
                 boolean result = DeviceController
                         .pushData(dataMsg.owner, SensebotConstants.DEVICE_TYPE, dataMsg.deviceId,
-                                System.currentTimeMillis(), "DeviceData", sonar, "SONAR");
+                                System.currentTimeMillis(), "DeviceData", sonar,
+                                BAMStreamDefinitions.StreamTypeLabel.SONAR);
 
                 if (!result) {
                     response.setStatus(HttpStatus.SC_INTERNAL_SERVER_ERROR);
@@ -246,7 +250,7 @@ public class SensebotControllerService {
 
         try {
             boolean result = DeviceController.pushData(dataMsg.owner, SensebotConstants.DEVICE_TYPE, dataMsg.deviceId,
-                    System.currentTimeMillis(), "DeviceData", light, "LIGHT");
+                    System.currentTimeMillis(), "DeviceData", light, BAMStreamDefinitions.StreamTypeLabel.LIGHT);
 
             if (!result) {
                 response.setStatus(HttpStatus.SC_INTERNAL_SERVER_ERROR);

@@ -163,7 +163,6 @@
 			<groupId>org.eclipse.paho</groupId>
 			<artifactId>mqtt-client</artifactId>
 		</dependency>
-
 		<!--<dependency>-->
 		<!--<groupId>org.apache.velocity</groupId>-->
 		<!--<artifactId>velocity</artifactId>-->

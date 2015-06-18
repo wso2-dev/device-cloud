@@ -137,37 +137,37 @@ public class BAMDataStore implements DataStoreConnector {
 
         try {
             switch (description) {
-            case BAMStreamDefinitions.StreamConstants.TEMPERATURE:
+            case BAMStreamDefinitions.StreamTypeLabel.TEMPERATURE:
                 if (log.isDebugEnabled()) {
                     log.info("Stream definition set to Temperature");
                 }
                 DEVICE_DATA_STREAM = BAM_DATA_PUBLISHER.defineStream(BAMStreamDefinitions.TEMPERATURE_STREAM_DEFINITION);
                 break;
-            case BAMStreamDefinitions.StreamConstants.MOTION:
+            case BAMStreamDefinitions.StreamTypeLabel.MOTION:
                 if (log.isDebugEnabled()) {
                     log.info("Stream definition set to Motion (PIR)");
                 }
                 DEVICE_DATA_STREAM = BAM_DATA_PUBLISHER.defineStream(BAMStreamDefinitions.MOTION_STREAM_DEFINITION);
                 break;
-            case BAMStreamDefinitions.StreamConstants.SONAR:
+            case BAMStreamDefinitions.StreamTypeLabel.SONAR:
                 if (log.isDebugEnabled()) {
                     log.info("Stream definition set to Sonar");
                 }
                 DEVICE_DATA_STREAM = BAM_DATA_PUBLISHER.defineStream(BAMStreamDefinitions.SONAR_STREAM_DEFINITION);
                 break;
-            case BAMStreamDefinitions.StreamConstants.LIGHT:
+            case BAMStreamDefinitions.StreamTypeLabel.LIGHT:
                 if (log.isDebugEnabled()) {
                     log.info("Stream definition set to Light");
                 }
                 DEVICE_DATA_STREAM = BAM_DATA_PUBLISHER.defineStream(BAMStreamDefinitions.LIGHT_STREAM_DEFINITION);
                 break;
-            case BAMStreamDefinitions.StreamConstants.BULB:
+            case BAMStreamDefinitions.StreamTypeLabel.BULB:
                 if (log.isDebugEnabled()) {
                     log.info("Stream definition set to Bulb Status");
                 }
                 DEVICE_DATA_STREAM = BAM_DATA_PUBLISHER.defineStream(BAMStreamDefinitions.BULB_STREAM_DEFINITION);
                 break;
-            case  BAMStreamDefinitions.StreamConstants.FAN:
+            case  BAMStreamDefinitions.StreamTypeLabel.FAN:
                 if (log.isDebugEnabled()) {
                     log.info("Stream definition set to Fan Status");
                 }
