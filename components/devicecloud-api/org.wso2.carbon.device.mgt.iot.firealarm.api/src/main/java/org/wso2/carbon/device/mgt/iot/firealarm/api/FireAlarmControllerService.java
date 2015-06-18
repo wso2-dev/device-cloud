@@ -549,7 +549,6 @@ String owner,
 			}
 
 			responseMsg = readResponseFromGetRequest(httpConnection);
-			log.info(responseMsg.toString());
 
 		} else {
 			HttpGet request = new HttpGet(urlString);
