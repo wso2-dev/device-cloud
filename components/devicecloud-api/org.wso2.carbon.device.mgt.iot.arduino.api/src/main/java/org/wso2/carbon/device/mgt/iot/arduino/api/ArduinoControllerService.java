@@ -30,6 +30,7 @@ import org.wso2.carbon.device.mgt.iot.common.devicecloud.config
         .DeviceCloudManagementControllerConfig;
 import org.wso2.carbon.device.mgt.iot.common.devicecloud.config.controlqueue
         .DeviceControlQueueConfig;
+import org.wso2.carbon.device.mgt.iot.common.devicecloud.datastore.bam.BAMStreamDefinitions;
 import org.wso2.carbon.device.mgt.iot.common.devicecloud.exception.DeviceControllerException;
 import org.wso2.carbon.device.mgt.iot.common.devicecloud.exception.UnauthorizedException;
 
@@ -193,7 +194,7 @@ public class ArduinoControllerService {
 			boolean result = DeviceController.pushData(dataMsg.owner, ArduinoConstants.DEVICE_TYPE,
 													   dataMsg.deviceId,
 													   System.currentTimeMillis(), "DeviceData",
-													   temperature, "TEMPERATURE");
+													   temperature, BAMStreamDefinitions.StreamTypeLabel.TEMPERATURE);
 
 			if (!result) {
 				response.setStatus(HttpStatus.SC_INTERNAL_SERVER_ERROR);

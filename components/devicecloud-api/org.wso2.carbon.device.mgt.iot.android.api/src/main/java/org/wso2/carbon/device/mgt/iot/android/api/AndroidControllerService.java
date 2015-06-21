@@ -14,16 +14,14 @@
  * limitations under the License.
  */
 
-package org.wso2.carbon.device.mgt.iot.raspberrypi.api;
+package org.wso2.carbon.device.mgt.iot.android.api;
 
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.wso2.carbon.device.mgt.iot.common.devicecloud.datastore.bam.BAMStreamDefinitions;
-import org.wso2.carbon.device.mgt.iot.raspberrypi.api.util.DeviceJSON;
-import org.wso2.carbon.device.mgt.iot.raspberrypi.constants.RaspberrypiConstants;
+import org.wso2.carbon.device.mgt.iot.android.api.util.DeviceJSON;
+import org.wso2.carbon.device.mgt.iot.android.constants.AndroidConstants;
 import org.wso2.carbon.device.mgt.iot.common.devicecloud.DeviceController;
-
 import org.wso2.carbon.device.mgt.iot.common.devicecloud.exception.UnauthorizedException;
 
 import javax.servlet.http.HttpServletResponse;
@@ -33,16 +31,20 @@ import javax.ws.rs.Path;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
-public class RaspberrypiControllerService {
+public class AndroidControllerService {
 
-	private static Log log = LogFactory.getLog(RaspberrypiControllerService.class);
+	private static Log log = LogFactory.getLog(AndroidControllerService.class);
 
-	/*    Service to push all the sensor data collected by the Arduino
-		   Called by the Arduino device  */
+
+	/*    Service to push all the sensor data collected by the Android
+		   Called by the Android device  */
 	@Path("/pushdata")
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	public void pushData(final DeviceJSON dataMsg, @Context HttpServletResponse response) {
+
+
+
 
 		String temperature = dataMsg.value;                            //TEMP
 		log.info("Recieved Sensor Data Values: " + temperature);
@@ -50,19 +52,20 @@ public class RaspberrypiControllerService {
 		if (log.isDebugEnabled()) {
 			log.debug("Recieved Temperature Data Value: " + temperature + " degrees C");
 		}
-		try {
-			boolean result = DeviceController.pushData(dataMsg.owner, RaspberrypiConstants.DEVICE_TYPE,
-													   dataMsg.deviceId,
-													   System.currentTimeMillis(), "DeviceData",
-													   temperature, BAMStreamDefinitions.StreamTypeLabel.TEMPERATURE);
+		//try {
+			boolean result = false;
+// result=DeviceController.pushData(dataMsg.owner, AndroidConstants.DEVICE_TYPE,
+//													   dataMsg.deviceId,
+//													   System.currentTimeMillis(), "DeviceData",
+//													   temperature, "TEMPERATURE");
 
 			if (!result) {
 				response.setStatus(HttpStatus.SC_INTERNAL_SERVER_ERROR);
 			}
-
-		} catch (UnauthorizedException e) {
-			response.setStatus(HttpStatus.SC_UNAUTHORIZED);
-
-		}
+			//return result;
+//		} catch (UnauthorizedException e) {
+//			response.setStatus(HttpStatus.SC_UNAUTHORIZED);
+//
+//		}
 	}
 }

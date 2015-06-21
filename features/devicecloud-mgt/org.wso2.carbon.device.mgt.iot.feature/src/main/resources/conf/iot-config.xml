@@ -30,6 +30,11 @@
                 <Name>jdbc/ArduinoDM_DB</Name>
             </JndiLookupDefinition>
         </DataSourceConfiguration>
+        <DataSourceConfiguration type="android">
+            <JndiLookupDefinition>
+                <Name>jdbc/AndroidDM_DB</Name>
+            </JndiLookupDefinition>
+        </DataSourceConfiguration>
         <DataSourceConfiguration type="sensebot">
             <JndiLookupDefinition>
                 <Name>jdbc/SensebotDM_DB</Name>
