@@ -292,7 +292,7 @@
             </dependency>
             <dependency>
                 <groupId>org.wso2.carbon.device.mgt.iot</groupId>
-                <artifactId>org.wso2.carbon.device.mgt.iot.android.impl</artifactId>
+                <artifactId>org.wso2.carbon.device.mgt.iot.android.sense.impl</artifactId>
                 <version>${carbon.iot.device.mgt.version}</version>
             </dependency>
             <dependency>
@@ -355,7 +355,7 @@
             </dependency>
             <dependency>
                 <groupId>org.wso2.carbon.device.mgt.iot</groupId>
-                <artifactId>org.wso2.carbon.device.mgt.iot.android.api</artifactId>
+                <artifactId>org.wso2.carbon.device.mgt.iot.android.sense.api</artifactId>
                 <version>${device.mgt.iot.feature.version}</version>
                 <type>war</type>
             </dependency>

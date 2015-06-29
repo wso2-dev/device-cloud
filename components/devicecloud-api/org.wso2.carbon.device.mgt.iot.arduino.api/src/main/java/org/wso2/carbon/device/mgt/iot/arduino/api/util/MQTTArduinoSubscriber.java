@@ -26,16 +26,16 @@ import org.wso2.carbon.device.mgt.iot.common.devicecloud.controlqueue.mqtt.MqttS
 import java.io.File;
 import java.util.LinkedList;
 
-public class MQTTArduinoSubscriber extends MqttSubscriber {
+public class MqttArduinoSubscriber extends MqttSubscriber {
 
-    private static Log log = LogFactory.getLog(MQTTArduinoSubscriber.class);
+    private static Log log = LogFactory.getLog(MqttArduinoSubscriber.class);
     private static final String subscribetopic =
             "wso2" + File.separator + "iot" + File.separator + "+" + File.separator +
                     ArduinoConstants.DEVICE_TYPE + File.separator + "#";
 
 
     //make it singleton
-    private MQTTArduinoSubscriber() {
+    private MqttArduinoSubscriber() {
 
         super("Subscriber", ArduinoConstants.DEVICE_TYPE, ArduinoControllerService.CONTROL_QUEUE_ENDPOINT,
                 subscribetopic);

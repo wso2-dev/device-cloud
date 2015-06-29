@@ -24,11 +24,10 @@
          http://cxf.apache.org/jaxrs http://cxf.apache.org/schemas/jaxrs.xsd">
 
 
-    <jaxrs:server id="ArduinoController" address="/controller">
+    <jaxrs:server id="AndroidSenseController" address="/controller">
         <jaxrs:serviceBeans>
-            <bean id="ArduinoControllerService"
-                  class="org.wso2.carbon.device.mgt.iot.arduino.api.ArduinoControllerService">
-                <property name="mqttArduinoSubscriber" ref="mqttSubscriber"/>
+            <bean id="AndroidSenseControllerService"
+                  class="org.wso2.carbon.device.mgt.iot.android.sense.api.AndroidSenseControllerService">
             </bean>
         </jaxrs:serviceBeans>
         <jaxrs:providers>
@@ -38,21 +37,13 @@
 
 
 
-    <jaxrs:server id="ArduinoManager" address="/manager">
+    <jaxrs:server id="AndroidSenseManager" address="/manager">
         <jaxrs:serviceBeans>
-            <bean id="ArduinoManagerService"
-                  class="org.wso2.carbon.device.mgt.iot.arduino.api.ArduinoManagerService">
+            <bean id="AndroidSenseManagerService"
+                  class="org.wso2.carbon.device.mgt.iot.android.sense.api.AndroidSenseManagerService">
             </bean>
         </jaxrs:serviceBeans>
     </jaxrs:server>
-
-
-    <bean id="mqttSubscriber" class="org.wso2.carbon.device.mgt.iot.arduino.api.util.MqttArduinoSubscriber" >
-
-    </bean>
-
-
-
 
 </beans>
 

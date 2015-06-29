@@ -40,7 +40,7 @@
         <module>org.wso2.carbon.device.mgt.iot.sensebot.impl</module>
         <module>org.wso2.carbon.device.mgt.iot.digitaldisplay.impl</module>
         <module>org.wso2.carbon.device.mgt.iot.arduino.impl</module>
-        <module>org.wso2.carbon.device.mgt.iot.android.impl</module>
+        <module>org.wso2.carbon.device.mgt.iot.android.sense.impl</module>
     </modules>
 
     <repositories>

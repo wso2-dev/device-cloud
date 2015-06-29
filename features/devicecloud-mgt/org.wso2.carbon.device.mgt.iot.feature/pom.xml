@@ -65,7 +65,7 @@
         </dependency>
         <dependency>
             <groupId>org.wso2.carbon.device.mgt.iot</groupId>
-            <artifactId>org.wso2.carbon.device.mgt.iot.android.impl</artifactId>
+            <artifactId>org.wso2.carbon.device.mgt.iot.android.sense.impl</artifactId>
         </dependency>
 
         <dependency>
@@ -86,7 +86,7 @@
         </dependency>
         <dependency>
             <groupId>org.wso2.carbon.device.mgt.iot</groupId>
-            <artifactId>org.wso2.carbon.device.mgt.iot.android.api</artifactId>
+            <artifactId>org.wso2.carbon.device.mgt.iot.android.sense.api</artifactId>
             <version>1.0.0</version>
             <type>war</type>
         </dependency>
@@ -174,11 +174,11 @@
 
                                 <artifactItem>
                                     <groupId>org.wso2.carbon.device.mgt.iot</groupId>
-                                    <artifactId>org.wso2.carbon.device.mgt.iot.android.api</artifactId>
+                                    <artifactId>org.wso2.carbon.device.mgt.iot.android.sense.api</artifactId>
                                     <type>war</type>
                                     <overWrite>true</overWrite>
                                     <outputDirectory>${basedir}/src/main/resources/webapps/</outputDirectory>
-                                    <destFileName>android.war</destFileName>
+                                    <destFileName>android_sense.war</destFileName>
                                 </artifactItem>
                                 <artifactItem>
                                     <groupId>org.wso2.carbon.device.mgt.iot</groupId>
@@ -248,7 +248,7 @@
                                     org.wso2.carbon.device.mgt.iot:org.wso2.carbon.device.mgt.iot.arduino.impl:${carbon.iot.device.mgt.version}
                                 </bundleDef>
                                 <bundleDef>
-                                    org.wso2.carbon.device.mgt.iot:org.wso2.carbon.device.mgt.iot.android.impl:${carbon.iot.device.mgt.version}
+                                    org.wso2.carbon.device.mgt.iot:org.wso2.carbon.device.mgt.iot.android.sense.impl:${carbon.iot.device.mgt.version}
                                 </bundleDef>
                             </bundles>
                             <importFeatures>

@@ -21,7 +21,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.device.mgt.common.DeviceManagementException;
 import org.wso2.carbon.device.mgt.iot.arduino.api.util.DeviceJSON;
-import org.wso2.carbon.device.mgt.iot.arduino.api.util.MQTTArduinoSubscriber;
+import org.wso2.carbon.device.mgt.iot.arduino.api.util.MqttArduinoSubscriber;
 import org.wso2.carbon.device.mgt.iot.arduino.constants.ArduinoConstants;
 import org.wso2.carbon.device.mgt.iot.common.devicecloud.DeviceController;
 import org.wso2.carbon.device.mgt.iot.common.devicecloud.config.DeviceCloudConfigManager;
@@ -47,7 +47,7 @@ public class ArduinoControllerService {
 	public static final String CONTROL_QUEUE_ENDPOINT;
 	private static Map<String, LinkedList<String>> replyMsgQueue = new HashMap<>();
 	private static Map<String, LinkedList<String>> internalControlsQueue = new HashMap<>();
-	private static MQTTArduinoSubscriber mqttArduinoSubscriber;
+	private static MqttArduinoSubscriber mqttArduinoSubscriber;
 //Todo first call create a instance;
 
 	static {
@@ -88,7 +88,7 @@ public class ArduinoControllerService {
 
 	}
 
-	public void setMqttArduinoSubscriber(MQTTArduinoSubscriber mqttArduinoSubscriber) {
+	public void setMqttArduinoSubscriber(MqttArduinoSubscriber mqttArduinoSubscriber) {
 		ArduinoControllerService.mqttArduinoSubscriber = mqttArduinoSubscriber;
 		try {
 			mqttArduinoSubscriber.subscribe();
@@ -97,7 +97,7 @@ public class ArduinoControllerService {
 		}
 	}
 
-	public MQTTArduinoSubscriber getMqttArduinoSubscriber() {
+	public MqttArduinoSubscriber getMqttArduinoSubscriber() {
 		return mqttArduinoSubscriber;
 	}
 
