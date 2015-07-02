@@ -24,12 +24,12 @@ import org.wso2.carbon.device.mgt.common.DeviceIdentifier;
 import org.wso2.carbon.device.mgt.common.DeviceManagementException;
 import org.wso2.carbon.device.mgt.iot.android.sense.constants.AndroidSenseConstants;
 import org.wso2.carbon.device.mgt.iot.common.devicecloud.DeviceManagement;
-import org.wso2.carbon.device.mgt.iot.common.devicecloud.util.ZipArchive;
-import org.wso2.carbon.device.mgt.iot.common.devicecloud.util.ZipUtil;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
+import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
@@ -39,20 +39,21 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
-import java.nio.ByteBuffer;
-import java.nio.charset.StandardCharsets;
 import java.util.Date;
-import java.util.UUID;
+import java.util.Enumeration;
 
 public class AndroidSenseManagerService {
 
 	private static Log log = LogFactory.getLog(AndroidSenseManagerService.class);
 
-	@Path("/device/register")
+	@Path("/device")
 	@PUT
-	public boolean register(@QueryParam("deviceId") String deviceId,
-							@QueryParam("name") String name, @QueryParam("owner") String owner) {
+	public boolean register(@FormParam("deviceId") String deviceId, @FormParam("owner") String owner, @Context
+							HttpServletRequest request) {
 
+		request.getSession().getAttribute(owner);
+
+		Enumeration<String> test=request.getSession().getAttributeNames();
 		DeviceManagement deviceManagement = new DeviceManagement();
 
 		DeviceIdentifier deviceIdentifier = new DeviceIdentifier();
@@ -69,8 +70,8 @@ public class AndroidSenseManagerService {
 
 			device.setDateOfEnrolment(new Date().getTime());
 			device.setDateOfLastUpdate(new Date().getTime());
-			//		device.setStatus(true);
-
+			device.setStatus(true);
+			String name="android_sense"+deviceId;
 			device.setName(name);
 			device.setType(AndroidSenseConstants.DEVICE_TYPE);
 			device.setOwner(owner);
@@ -92,7 +93,7 @@ public class AndroidSenseManagerService {
 		}
 	}
 
-	@Path("/device/remove/{device_id}")
+	@Path("/device/{device_id}")
 	@DELETE
 	public void removeDevice(@PathParam("device_id") String deviceId,
 							 @Context HttpServletResponse response) {
@@ -118,10 +119,10 @@ public class AndroidSenseManagerService {
 
 	}
 
-	@Path("/device/update/{device_id}")
+	@Path("/device/{device_id}")
 	@POST
 	public boolean updateDevice(@PathParam("device_id") String deviceId,
-								@QueryParam("name") String name,
+								@FormParam("name") String name,
 								@Context HttpServletResponse response) {
 
 		DeviceManagement deviceManagement = new DeviceManagement();
@@ -179,52 +180,52 @@ public class AndroidSenseManagerService {
 
 	}
 
-	@Path("/device/{sketch_type}/download")
-	@GET
-	@Produces("application/octet-stream")
-	public Response downloadSketch(@QueryParam("owner") String owner, @PathParam("sketch_type") String
-			sketchType) {
+//	@Path("/device/{sketch_type}/download")
+//	@GET
+//	@Produces("application/octet-stream")
+//	public Response downloadSketch(@QueryParam("owner") String owner, @PathParam("sketch_type") String
+//			sketchType) {
+//
+//		if (owner == null) {
+//			return Response.status(400).build();//bad request
+//		}
+//
+//		//create new device id
+//		String deviceId = shortUUID();
+//
+//		//create token
+//		String token = UUID.randomUUID().toString();
+//
+//		//adding registering data
+//
+////		boolean status = register(deviceId,
+////								  owner + "s_" + sketchType + "_" + deviceId.substring(0, 3),
+////								  owner);
+////		if (!status) {
+////			return Response.status(500).entity(
+////					"Error occurred while registering the device with " + "id: " + deviceId
+////							+ " owner:" + owner).build();
+////
+////		}
+//
+//		ZipUtil ziputil = new ZipUtil();
+//		ZipArchive zipFile = null;
+//		try {
+//			zipFile = ziputil.downloadSketch(owner, sketchType, deviceId,
+//											 token);
+//		} catch (DeviceManagementException ex) {
+//			return Response.status(500).entity("Error occurred while creating zip file").build();
+//		}
+//
+//		Response.ResponseBuilder rb = Response.ok(zipFile.getZipFile());
+//		rb.header("Content-Disposition", "attachment; filename=\"" + zipFile.getFileName() + "\"");
+//		return rb.build();
+//	}
 
-		if (owner == null) {
-			return Response.status(400).build();//bad request
-		}
-
-		//create new device id
-		String deviceId = shortUUID();
-
-		//create token
-		String token = UUID.randomUUID().toString();
-
-		//adding registering data
-
-		boolean status = register(deviceId,
-								  owner + "s_" + sketchType + "_" + deviceId.substring(0, 3),
-								  owner);
-		if (!status) {
-			return Response.status(500).entity(
-					"Error occurred while registering the device with " + "id: " + deviceId
-							+ " owner:" + owner).build();
-
-		}
-
-		ZipUtil ziputil = new ZipUtil();
-		ZipArchive zipFile = null;
-		try {
-			zipFile = ziputil.downloadSketch(owner, sketchType, deviceId,
-											 token);
-		} catch (DeviceManagementException ex) {
-			return Response.status(500).entity("Error occurred while creating zip file").build();
-		}
-
-		Response.ResponseBuilder rb = Response.ok(zipFile.getZipFile());
-		rb.header("Content-Disposition", "attachment; filename=\"" + zipFile.getFileName() + "\"");
-		return rb.build();
-	}
-
-	private static String shortUUID() {
-		UUID uuid = UUID.randomUUID();
-		long l = ByteBuffer.wrap(uuid.toString().getBytes(StandardCharsets.UTF_8)).getLong();
-		return Long.toString(l, Character.MAX_RADIX);
-	}
+//	private static String shortUUID() {
+//		UUID uuid = UUID.randomUUID();
+//		long l = ByteBuffer.wrap(uuid.toString().getBytes(StandardCharsets.UTF_8)).getLong();
+//		return Long.toString(l, Character.MAX_RADIX);
+//	}
 
 }
