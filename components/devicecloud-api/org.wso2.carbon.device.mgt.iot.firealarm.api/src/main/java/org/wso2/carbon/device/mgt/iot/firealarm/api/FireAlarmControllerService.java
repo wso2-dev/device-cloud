@@ -136,7 +136,7 @@ public class FireAlarmControllerService {
     }*/
 
 	@Path("/register/{owner}/{deviceId}/{ip}")
-	@GET
+	@POST
 	public String registerDeviceIP(@PathParam("owner") String owner,
 								   @PathParam("deviceId") String deviceId,
 								   @PathParam("ip") String deviceIP,

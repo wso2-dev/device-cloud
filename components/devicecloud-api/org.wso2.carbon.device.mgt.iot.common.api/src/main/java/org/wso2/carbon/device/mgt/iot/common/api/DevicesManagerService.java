@@ -32,6 +32,24 @@ public class DevicesManagerService {
 		return devices.toArray(new Device[]{});
 	}
 
+	@Path("/devices/count/{username}")
+	@GET
+	@Consumes("application/json")
+	@Produces("application/json")
+	public int getDeviceCount(@PathParam("username") String username)
+			throws DeviceManagementException {
+
+		DeviceManagement deviceManagement = new DeviceManagement();
+
+		List<Device> devices = deviceManagement.getDevices(username);
+
+		if(devices!=null){
+			return devices.size();
+		}
+		return 0;
+	}
+
+
 	@Path("/devices/types/{type}")
 	@GET
 	@Consumes("application/json")
