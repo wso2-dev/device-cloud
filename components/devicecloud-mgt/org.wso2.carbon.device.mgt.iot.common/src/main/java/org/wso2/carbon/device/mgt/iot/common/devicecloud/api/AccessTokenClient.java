@@ -15,18 +15,18 @@
 * limitations under the License.
 */
 
-package org.wso2.carbon.device.mgt.iot.common.devicecloud;
+package org.wso2.carbon.device.mgt.iot.common.devicecloud.api;
 
 
 import java.io.IOException;
 
-
-import com.google.gson.Gson;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.NameValuePair;
 import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.wso2.carbon.device.mgt.iot.common.devicecloud.exception.AccessTokenException;
 import java.net.URL;
 import java.security.KeyManagementException;
@@ -79,7 +79,7 @@ public class AccessTokenClient {
 			PostMethod postMethod = new PostMethod(tokenURL);
 			postMethod.addParameter(new NameValuePair("grant_type", grantType));
 			postMethod.addParameter(new NameValuePair("username",username));
-			postMethod.addParameter(new NameValuePair("device_id", deviceId+"%?%"+deviceType));
+			postMethod.addParameter(new NameValuePair("device_id", deviceId + "%?%" + deviceType));
 			postMethod.addParameter(new NameValuePair("scope", scope));
 
 			postMethod.addRequestHeader("Authorization",
@@ -91,16 +91,21 @@ public class AccessTokenClient {
 
 			response = postMethod.getResponseBodyAsString();
 			log.info(response);
+			JSONObject jsonObject=new JSONObject();
 
-			Gson gson =new Gson();
-			AccessTokenInfo accessTokenInfo =gson.fromJson(response,AccessTokenInfo.class);
+			AccessTokenInfo accessTokenInfo=new AccessTokenInfo();
+			accessTokenInfo.setAccess_token(jsonObject.getString("access_token"));
+			accessTokenInfo.setRefresh_token(jsonObject.getString("refresh_token"));
+			accessTokenInfo.setExpres_in(jsonObject.getInt("express_in"));
+			accessTokenInfo.setToken_type(jsonObject.getString("token_type"));
+
 
 			return accessTokenInfo;
 //			JSONObject js = new JSONObject(response);
 //			response = (String) js.get("access_token");
 
 
-		} catch (NoSuchAlgorithmException | KeyManagementException| IOException e) {
+		} catch (NoSuchAlgorithmException | KeyManagementException| IOException |JSONException e) {
 
 			log.error(e.getMessage());
 			throw new AccessTokenException("Configuration Error for Access Token Generation");

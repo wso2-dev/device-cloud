@@ -1,4 +1,4 @@
-package org.wso2.carbon.device.mgt.iot.common.devicecloud;
+package org.wso2.carbon.device.mgt.iot.common.devicecloud.api;
 
 public class AccessTokenInfo {
 

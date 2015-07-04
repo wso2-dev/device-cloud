@@ -16,16 +16,14 @@
 
 package org.wso2.carbon.device.mgt.iot.firealarm.api;
 
-import org.apache.axis2.json.gson.factory.JsonObject;
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.codehaus.jackson.map.util.JSONPObject;
 import org.wso2.carbon.device.mgt.common.Device;
 import org.wso2.carbon.device.mgt.common.DeviceIdentifier;
 import org.wso2.carbon.device.mgt.common.DeviceManagementException;
-import org.wso2.carbon.device.mgt.iot.common.devicecloud.AccessTokenClient;
-import org.wso2.carbon.device.mgt.iot.common.devicecloud.AccessTokenInfo;
+import org.wso2.carbon.device.mgt.iot.common.devicecloud.api.AccessTokenClient;
+import org.wso2.carbon.device.mgt.iot.common.devicecloud.api.AccessTokenInfo;
 import org.wso2.carbon.device.mgt.iot.common.devicecloud.exception.AccessTokenException;
 import org.wso2.carbon.device.mgt.iot.firealarm.constants.FireAlarmConstants;
 import org.wso2.carbon.device.mgt.iot.common.devicecloud.util.ZipUtil;
