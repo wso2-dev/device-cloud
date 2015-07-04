@@ -40,6 +40,9 @@
             <bean id="FireAlarmManagerService"
                   class="org.wso2.carbon.device.mgt.iot.firealarm.api.FireAlarmManagerService"/>
         </jaxrs:serviceBeans>
+        <jaxrs:providers>
+            <bean class="org.codehaus.jackson.jaxrs.JacksonJsonProvider" />
+        </jaxrs:providers>
     </jaxrs:server>
 
 

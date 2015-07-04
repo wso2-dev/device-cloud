@@ -194,7 +194,7 @@ public class ArduinoManagerService {
 
 		//create token
 		String token = UUID.randomUUID().toString();
-
+		String refreshToken = UUID.randomUUID().toString();
 		//adding registering data
 
 		boolean status = register(deviceId,
@@ -211,7 +211,7 @@ public class ArduinoManagerService {
 		ZipArchive zipFile = null;
 		try {
 			zipFile = ziputil.downloadSketch(owner, sketchType, deviceId,
-											 token);
+											 token,refreshToken);
 		} catch (DeviceManagementException ex) {
 			return Response.status(500).entity("Error occurred while creating zip file").build();
 		}
