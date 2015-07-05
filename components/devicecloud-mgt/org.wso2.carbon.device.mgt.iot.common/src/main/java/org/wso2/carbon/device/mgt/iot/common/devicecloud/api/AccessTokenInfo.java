@@ -3,7 +3,7 @@ package org.wso2.carbon.device.mgt.iot.common.devicecloud.api;
 public class AccessTokenInfo {
 
 	private String token_type;
-	private int expres_in;
+	private int expires_in;
 	private String refresh_token;
 	private String access_token;
 
@@ -15,12 +15,12 @@ public class AccessTokenInfo {
 		this.token_type = token_type;
 	}
 
-	public int getExpres_in() {
-		return expres_in;
+	public int getExpires_in() {
+		return expires_in;
 	}
 
-	public void setExpres_in(int expres_in) {
-		this.expres_in = expres_in;
+	public void setExpires_in(int expres_in) {
+		this.expires_in = expres_in;
 	}
 
 	public String getRefresh_token() {

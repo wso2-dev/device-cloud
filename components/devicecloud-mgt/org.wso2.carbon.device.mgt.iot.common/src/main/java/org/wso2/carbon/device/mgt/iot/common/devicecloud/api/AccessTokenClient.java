@@ -48,10 +48,10 @@ public class AccessTokenClient {
 
 	//TODO read from configuration file
 	private static Log log = LogFactory.getLog(AccessTokenClient.class);
-	private static String tokenURL ="https://192.168.57.128:9444/oauth2/token";
-	private static String grantType ="devicecloud";
-	private static String scope ="PRODUCTION";
-	private static String appToken="WDNhSF9OT0VuSFphbVBFcHljVmpZR0ZpaGM4YTprUks3aFg2UmpqZ0V0QmdVd2x1VENnZFNjakVh";
+	private String tokenURL ="https://192.168.57.128:9444/oauth2/token";
+	private String grantType ="devicecloud";
+	private String scope ="PRODUCTION";
+	private String appToken="WDNhSF9OT0VuSFphbVBFcHljVmpZR0ZpaGM4YTprUks3aFg2UmpqZ0V0QmdVd2x1VENnZFNjakVh";
 
 	public AccessTokenInfo getAccessToken(String username,String deviceId,String deviceType) throws AccessTokenException {
 		SSLContext ctx;
@@ -91,18 +91,16 @@ public class AccessTokenClient {
 
 			response = postMethod.getResponseBodyAsString();
 			log.info(response);
-			JSONObject jsonObject=new JSONObject();
+			JSONObject jsonObject=new JSONObject(response);
 
 			AccessTokenInfo accessTokenInfo=new AccessTokenInfo();
 			accessTokenInfo.setAccess_token(jsonObject.getString("access_token"));
 			accessTokenInfo.setRefresh_token(jsonObject.getString("refresh_token"));
-			accessTokenInfo.setExpres_in(jsonObject.getInt("express_in"));
+			accessTokenInfo.setExpires_in(jsonObject.getInt("expires_in"));
 			accessTokenInfo.setToken_type(jsonObject.getString("token_type"));
 
 
 			return accessTokenInfo;
-//			JSONObject js = new JSONObject(response);
-//			response = (String) js.get("access_token");
 
 
 		} catch (NoSuchAlgorithmException | KeyManagementException| IOException |JSONException e) {

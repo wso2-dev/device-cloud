@@ -219,9 +219,10 @@ public class FireAlarmManagerService {
 		String deviceId = shortUUID();
 
 
-		AccessTokenClient accessTokenClient=new AccessTokenClient();
+
 
 		try {
+			AccessTokenClient accessTokenClient=new AccessTokenClient();
 			AccessTokenInfo accessTokenInfo=accessTokenClient.getAccessToken(owner,deviceId,FireAlarmConstants.DEVICE_TYPE);
 
 			//create token

@@ -59,22 +59,24 @@
 							org.wso2.carbon.device.mgt.common.*,
 							org.wso2.carbon.device.mgt.common,
 							org.wso2.carbon.device.mgt.core.*,
-							org.apache.commons.collections.map.*,
-							org.apache.commons.io.*,
+							<!--org.apache.commons.collections.map.*,-->
+							<!--org.apache.commons.io.*,-->
 							org.wso2.carbon.context.*,
 							org.wso2.carbon.ndatasource.core,
-							org.wso2.carbon.databridge.agent.thrift,
-							org.wso2.carbon.databridge.agent.thrift.exception,
-							org.wso2.carbon.databridge.commons.exception,
-							org.apache.commons.httpclient.*,
-
+							<!--org.wso2.carbon.databridge.agent.thrift,-->
+							<!--org.wso2.carbon.databridge.agent.thrift.exception,-->
+							<!--org.wso2.carbon.databridge.commons.exception,-->
+							<!--org.apache.commons.httpclient.*,-->
+							<!--org.json;version=${commons-json.version},-->
+							<!--org.json.*;version=${commons-json.version},-->
+							*;resolution:=optional
 						</Import-Package>
+						<DynamicImport-Package>*</DynamicImport-Package>
 
 						<Export-Package>
 							!org.wso2.carbon.device.mgt.iot.common.internal,
 							org.wso2.carbon.device.mgt.iot.common.*,
 							org.eclipse.paho.client.mqttv3.*,
-							org.json.*
 						</Export-Package>
 
 					</instructions>
