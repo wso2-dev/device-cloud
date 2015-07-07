@@ -18,58 +18,58 @@ import java.util.List;
 
 public class DevicesManagerService {
 
-	@Path("/devices/username/{username}")
-	@GET
-	@Consumes("application/json")
-	@Produces("application/json")
-	public Device[] getDevices(@PathParam("username") String username)
-			throws DeviceManagementException {
+    @Path("/devices/username/{username}")
+    @GET
+    @Consumes("application/json")
+    @Produces("application/json")
+    public Device[] getDevices(@PathParam("username") String username)
+            throws DeviceManagementException {
 
-		DeviceManagement deviceManagement = new DeviceManagement();
+        DeviceManagement deviceManagement = new DeviceManagement();
+        List<Device> devices = deviceManagement.getDevices(username);
+        return devices.toArray(new Device[]{});
+    }
 
-		List<Device> devices = deviceManagement.getDevices(username);
+    @Path("/devices/groups/{groupid}")
+    @GET
+    @Consumes("application/json")
+    @Produces("application/json")
+    public Device[] getDevices(@PathParam("groupid") int groupid)
+            throws DeviceManagementException {
+        DeviceManagement deviceManagement = new DeviceManagement();
+        List<Device> devices = deviceManagement.getDevices(groupid);
+        return devices.toArray(new Device[]{});
+    }
 
-		return devices.toArray(new Device[]{});
-	}
+    @Path("/devices/types/{type}")
+    @GET
+    @Consumes("application/json")
+    @Produces("application/json")
+    public Device[] getDevicesByType(@PathParam("type") String deviceType)
+            throws DeviceManagementException {
 
-	@Path("/devices/types/{type}")
-	@GET
-	@Consumes("application/json")
-	@Produces("application/json")
-	public Device[] getDevicesByType(@PathParam("type") String deviceType)
-			throws DeviceManagementException {
+        DeviceManagement deviceManagement = new DeviceManagement();
+        List<Device> devices = deviceManagement.getDevicesByType(deviceType);
+        return devices.toArray(new Device[]{});
+    }
 
-		DeviceManagement deviceManagement = new DeviceManagement();
+    @Path("/devices/types/")
+    @GET
+    @Consumes("application/json")
+    @Produces("application/json")
+    public DeviceTypes[] getDeviceTypes()
+            throws DeviceManagementDAOException {
 
-		List<Device> devices = deviceManagement.getDevicesByType(deviceType);
-
-		return devices.toArray(new Device[]{});
-	}
-
-	@Path("/devices/types/")
-	@GET
-	@Consumes("application/json")
-	@Produces("application/json")
-	public DeviceTypes[] getDeviceTypes()
-			throws DeviceManagementDAOException {
-
-		DeviceManagement deviceManagement = new DeviceManagement();
-
-		List<DeviceType> deviceTypes = deviceManagement.getDeviceTypes();
-		DeviceTypes dTypes[]= new DeviceTypes[deviceTypes.size()];
-		int iter=0;
-		for(DeviceType type: deviceTypes){
-
-			DeviceTypes dt =new DeviceTypes();
-			dt.setName(type.getName());
-			dTypes[iter]=dt;
-			iter++;
-
-		}
-		return dTypes;
-
-
-	}
-
-
+        DeviceManagement deviceManagement = new DeviceManagement();
+        List<DeviceType> deviceTypes = deviceManagement.getDeviceTypes();
+        DeviceTypes dTypes[] = new DeviceTypes[deviceTypes.size()];
+        int iter = 0;
+        for (DeviceType type : deviceTypes) {
+            DeviceTypes dt = new DeviceTypes();
+            dt.setName(type.getName());
+            dTypes[iter] = dt;
+            iter++;
+        }
+        return dTypes;
+    }
 }

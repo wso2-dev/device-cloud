@@ -18,9 +18,7 @@ package org.wso2.carbon.device.mgt.iot.common.devicecloud;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.wso2.carbon.device.mgt.common.Device;
-import org.wso2.carbon.device.mgt.common.DeviceIdentifier;
-import org.wso2.carbon.device.mgt.common.DeviceManagementException;
+import org.wso2.carbon.device.mgt.common.*;
 import org.wso2.carbon.device.mgt.common.spi.DeviceMgtService;
 import org.wso2.carbon.device.mgt.core.dao.DeviceManagementDAOException;
 import org.wso2.carbon.device.mgt.core.dao.DeviceManagementDAOFactory;
@@ -101,6 +99,12 @@ public class DeviceManagement {
 
 	}
 
+	public List<Device> getDevices(int groupId) throws DeviceManagementException {
+		DeviceManagementService dmService = new DeviceManagementServiceImpl();
+		return dmService.getDevicesByGroup(groupId);
+
+	}
+
 	public List<Device> getDevicesByType(String deviceType) throws DeviceManagementException{
 		DeviceManagementService dmService = new DeviceManagementServiceImpl();
 		return dmService.getAllDevices(deviceType);
@@ -122,6 +126,11 @@ public class DeviceManagement {
 		} catch (IOException e) {
 			throw new DeviceManagementException("Zip File Creation Failed",e);
 		}
+	}
+
+	public void addDeviceGroup(Group group) throws GroupManagementException {
+        DeviceManagementService dmService = new DeviceManagementServiceImpl();
+        dmService.addGroup(group);
 	}
 
 }
