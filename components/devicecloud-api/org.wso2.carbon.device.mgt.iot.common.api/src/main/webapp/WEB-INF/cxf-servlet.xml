@@ -47,6 +47,16 @@
         </jaxrs:providers>
     </jaxrs:server>
 
+    <jaxrs:server id="GroupManager" address="/group_manager">
+        <jaxrs:serviceBeans>
+            <bean id="GroupManagerService"
+                  class="org.wso2.carbon.device.mgt.iot.common.api.GroupManagerService"/>
+        </jaxrs:serviceBeans>
+        <jaxrs:providers>
+            <bean class="org.codehaus.jackson.jaxrs.JacksonJsonProvider" />
+        </jaxrs:providers>
+    </jaxrs:server>
+
     <jaxrs:server id="UsersManager" address="/user_manager">
         <jaxrs:serviceBeans>
             <bean id="UsersManagerService"
