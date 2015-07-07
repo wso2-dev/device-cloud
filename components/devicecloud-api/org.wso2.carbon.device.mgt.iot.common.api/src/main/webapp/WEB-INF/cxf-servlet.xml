@@ -37,12 +37,26 @@
         <!--</jaxrs:providers>-->
     <!--</jaxrs:server>-->
 
-    <jaxrs:server id="DevicesManager" address="/manager">
+    <jaxrs:server id="DevicesManager" address="/device_manager">
         <jaxrs:serviceBeans>
             <bean id="DevicesManagerService"
                   class="org.wso2.carbon.device.mgt.iot.common.api.DevicesManagerService"/>
         </jaxrs:serviceBeans>
+        <jaxrs:providers>
+            <bean class="org.codehaus.jackson.jaxrs.JacksonJsonProvider" />
+        </jaxrs:providers>
     </jaxrs:server>
+
+    <jaxrs:server id="UsersManager" address="/user_manager">
+        <jaxrs:serviceBeans>
+            <bean id="UsersManagerService"
+                  class="org.wso2.carbon.device.mgt.iot.common.api.UsersManagerService"/>
+        </jaxrs:serviceBeans>
+        <jaxrs:providers>
+            <bean class="org.codehaus.jackson.jaxrs.JacksonJsonProvider" />
+        </jaxrs:providers>
+    </jaxrs:server>
+
 
 </beans>
 

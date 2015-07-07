@@ -30,16 +30,19 @@ public class DevicesManagerService {
         return devices.toArray(new Device[]{});
     }
 
-    @Path("/devices/groups/{groupid}")
     @GET
     @Consumes("application/json")
     @Produces("application/json")
-    public Device[] getDevices(@PathParam("groupid") int groupid)
             throws DeviceManagementException {
+
         DeviceManagement deviceManagement = new DeviceManagement();
-        List<Device> devices = deviceManagement.getDevices(groupid);
-        return devices.toArray(new Device[]{});
+
+
+		if(devices!=null){
     }
+		return 0;
+	}
+
 
     @Path("/devices/types/{type}")
     @GET

@@ -23,8 +23,11 @@ import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.nio.client.CloseableHttpAsyncClient;
 import org.apache.http.impl.nio.client.HttpAsyncClients;
+import org.wso2.carbon.device.mgt.common.DeviceIdentifier;
 import org.wso2.carbon.device.mgt.common.DeviceManagementException;
 import org.wso2.carbon.device.mgt.iot.common.devicecloud.DeviceController;
+import org.wso2.carbon.device.mgt.iot.common.devicecloud.DeviceValidator;
+import org.wso2.carbon.device.mgt.iot.common.devicecloud.datastore.bam.BAMStreamDefinitions;
 import org.wso2.carbon.device.mgt.iot.common.devicecloud.exception.UnauthorizedException;
 import org.wso2.carbon.device.mgt.iot.firealarm.api.util.DeviceJSON;
 import org.wso2.carbon.device.mgt.iot.firealarm.constants.FireAlarmConstants;
@@ -63,80 +66,18 @@ public class FireAlarmControllerService {
 	private static final String TEMPERATURE_CONTEXT = "/TEMP/";
 
 	private static CloseableHttpAsyncClient httpclient;
-	private static Map<String, Map<String, String>> ownerTodevicesIPMap;
-	//    private FireAlarmCallback fireAlarmCallback;
-
-	//    private static Map<String, LinkedList<String>> replyMsgQueue;
-	//    private static Map<String, LinkedList<String>> internalControlsQueue;
-	//    private static MQTTFirealarmSubscriber mqttFireAlarmSubscriber;
+	private static Map<String, Map<String, String>> ownerTodevicesIPMap=new HashMap<>();
 
 	static {
-
-        /*DeviceCloudManagementConfig config = null;
-		try {
-            config = DeviceCloudConfigManager.getInstance().getDeviceCloudMgtConfig();
-        } catch (DeviceControllerException ex) {
-            log.error("An error occured when trying to read device-cloud configurations", ex);
-        }
-
-        if (config != null) {
-            // controller configurations
-            DeviceCloudManagementControllerConfig controllerConfig = config
-            .getDeviceCloudManagementControllerConfig();
-
-            // reading control queue configurations
-            String controlQueueKey = controllerConfig.getDeviceControlQueue();
-            DeviceControlQueueConfig controlQueueConfig = config.getControlQueuesMap().get
-            (controlQueueKey);
-            if (controlQueueConfig == null) {
-                log.error("Error occurred when trying to read control queue configurations");
-            }
-
-            String mqttUrl = "";
-            String mqttPort = "";
-            if (controlQueueConfig != null) {
-                mqttUrl = controlQueueConfig.getEndPoint();
-                mqttPort = controlQueueConfig.getPort();
-            }
-
-            CONTROL_QUEUE_ENDPOINT = mqttUrl + ":" + mqttPort;
-            log.info("CONTROL_QUEUE_ENDPOINT Successfully initialized.");
-        } else {
-            CONTROL_QUEUE_ENDPOINT = null;
-            log.error("CONTROL_QUEUE_ENDPOINT initialization failed.");
-        }
-
-        replyMsgQueue = new HashMap<>();
-        internalControlsQueue = new HashMap<>();*/
-		ownerTodevicesIPMap = new HashMap<>();
 
 		httpclient = HttpAsyncClients.createDefault();
 		httpclient.start();
 	}
 
- /*   public void setMqttFireAlarmSubscriber(MQTTFirealarmSubscriber mqttFireAlarmSubscriber) {
-		FireAlarmControllerService.mqttFireAlarmSubscriber = mqttFireAlarmSubscriber;
-        try {
-            mqttFireAlarmSubscriber.subscribe();
-        } catch (DeviceManagementException ex) {
-            log.error("Error occured when trying to subscribe the FireAlarmSubscriber", ex);
-        }
-    }
 
-    public MQTTFirealarmSubscriber getMqttFireAlarmSubscriber() {
-        return mqttFireAlarmSubscriber;
-    }
-
-    public static Map<String, LinkedList<String>> getReplyMsgQueue() {
-        return replyMsgQueue;
-    }
-
-    public static Map<String, LinkedList<String>> getInternalControlsQueue() {
-        return internalControlsQueue;
-    }*/
 
 	@Path("/register/{owner}/{deviceId}/{ip}")
-	@GET
+	@POST
 	public String registerDeviceIP(@PathParam("owner") String owner,
 								   @PathParam("deviceId") String deviceId,
 								   @PathParam("ip") String deviceIP,
@@ -166,37 +107,7 @@ public class FireAlarmControllerService {
 	}
 
 
-    /*    Service to switch "ON" and "OFF" the FireAlarm bulb
-			   Called by an external client intended to control the FireAlarm bulb */
-/*    @Path("/bulb/{state}") @POST public void switchBulb(@HeaderParam("owner") String owner,
-			@HeaderParam("deviceId") String deviceId, @PathParam("state") String state,
-            @Context HttpServletResponse response) {
 
-        String switchToState = state.toUpperCase();
-
-        if (!switchToState.equals(FireAlarmConstants.STATE_ON) && !switchToState.equals
-        (FireAlarmConstants.STATE_OFF)) {
-            log.error("The requested state change shoud be either - 'ON' or 'OFF'");
-            response.setStatus(HttpStatus.SC_BAD_REQUEST);
-            return;
-        }
-
-        try {
-            boolean result = DeviceController
-                    .setControl(owner, FireAlarmConstants.DEVICE_TYPE, deviceId, "BULB",
-                    switchToState);
-            if (result) {
-                response.setStatus(HttpStatus.SC_ACCEPTED);
-
-            } else {
-                response.setStatus(HttpStatus.SC_INTERNAL_SERVER_ERROR);
-            }
-
-        } catch (UnauthorizedException e) {
-            response.setStatus(HttpStatus.SC_UNAUTHORIZED);
-
-        }
-    }*/
 
 	/*    Service to switch "ON" and "OFF" the FireAlarm bulb
 		   Called by an external client intended to control the FireAlarm bulb */
@@ -207,36 +118,47 @@ public class FireAlarmControllerService {
 						   @PathParam("state") String state,
 						   @Context HttpServletResponse response) {
 
-		String switchToState = state.toUpperCase();
+		try {
+			DeviceValidator deviceValidator = new DeviceValidator();
+			if (!deviceValidator.isExist(owner, new DeviceIdentifier(deviceId,
+																	FireAlarmConstants
+																			.DEVICE_TYPE))) {
 
-		if (!switchToState.equals(FireAlarmConstants.STATE_ON) && !switchToState.equals(
-				FireAlarmConstants.STATE_OFF)) {
-			log.error("The requested state change shoud be either - 'ON' or 'OFF'");
-			response.setStatus(HttpStatus.SC_BAD_REQUEST);
-			return;
-		}
-
-		Map<String, String> deviceIPMap = ownerTodevicesIPMap.get(owner);
-		String deviceIP;
-
-		if (deviceIPMap == null) {
-			log.error("No live-registered devices exist for owner: " + owner);
-			response.setStatus(HttpStatus.SC_NOT_FOUND);
-			return;
-		} else {
-			deviceIP = deviceIPMap.get(deviceId);
-
-			if (deviceIP == null) {
-				log.error("IP not registered for device: " + deviceId + " of owner: " + owner);
-				response.setStatus(HttpStatus.SC_PRECONDITION_FAILED);
+				response.setStatus(HttpStatus.SC_UNAUTHORIZED);
 				return;
 			}
-		}
 
-		log.info("Sending command : " + switchToState + " to firealarm-BULB at : " + deviceIP);
 
-		String callUrlPattern = BULB_CONTEXT + switchToState;
-		try {
+			String switchToState = state.toUpperCase();
+
+			if (!switchToState.equals(FireAlarmConstants.STATE_ON) && !switchToState.equals(
+					FireAlarmConstants.STATE_OFF)) {
+				log.error("The requested state change shoud be either - 'ON' or 'OFF'");
+				response.setStatus(HttpStatus.SC_BAD_REQUEST);
+				return;
+			}
+
+			Map<String, String> deviceIPMap = ownerTodevicesIPMap.get(owner);
+			String deviceIP;
+
+			if (deviceIPMap == null) {
+				log.error("No live-registered devices exist for owner: " + owner);
+				response.setStatus(HttpStatus.SC_NOT_FOUND);
+				return;
+			} else {
+				deviceIP = deviceIPMap.get(deviceId);
+
+				if (deviceIP == null) {
+					log.error("IP not registered for device: " + deviceId + " of owner: " + owner);
+					response.setStatus(HttpStatus.SC_PRECONDITION_FAILED);
+					return;
+				}
+			}
+
+			log.info("Sending command : " + switchToState + " to firealarm-BULB at : " + deviceIP);
+
+			String callUrlPattern = BULB_CONTEXT + switchToState;
+
 			sendCommand(deviceIP, 80, callUrlPattern);
 		} catch (DeviceManagementException e) {
 			response.setStatus(HttpStatus.SC_INTERNAL_SERVER_ERROR);
@@ -246,43 +168,26 @@ public class FireAlarmControllerService {
 	}
 
 
-    /*    Service to read the temperature from the FireAlarm temperature sensor
-				   Called by an external client intended to get the current temperature */
-/*    @Path("/readtemperature") @GET public String requestTemperature(@HeaderParam("owner")
-String owner,
-            @HeaderParam("deviceId") String deviceId, @Context HttpServletResponse response) {
-        String replyMsg = "";
 
-        try {
-            boolean result = DeviceController
-                    .setControl(owner, FireAlarmConstants.DEVICE_TYPE, deviceId, "TEMPERATURE",
-                    "IN");
-            if (result) {
-                response.setStatus(HttpStatus.SC_ACCEPTED);
-                replyMsg = "Request to read temperature sent to controls queue. Please wait...";
-                return replyMsg;
-            } else {
-                response.setStatus(HttpStatus.SC_INTERNAL_SERVER_ERROR);
-                replyMsg = "An error occured whilst routing the request to queue. Re-try after
-                some time...";
-                return replyMsg;
-            }
-
-        } catch (UnauthorizedException e) {
-            response.setStatus(HttpStatus.SC_UNAUTHORIZED);
-            replyMsg = "An error occured whilst routing the request to queue. Re-try after some
-            time...";
-            return replyMsg;
-        }
-    }*/
 
 	@Path("/readtemperature")
 	@GET
 	public String requestTemperature(@HeaderParam("owner") String owner,
 									 @HeaderParam("deviceId") String deviceId,
 									 @Context HttpServletResponse response) {
+
 		String replyMsg = "";
 		String deviceIP;
+		try {
+			DeviceValidator deviceValidator = new DeviceValidator();
+			if (!deviceValidator.isExist(owner, new DeviceIdentifier(deviceId,
+																	 FireAlarmConstants
+																			 .DEVICE_TYPE))) {
+
+				response.setStatus(HttpStatus.SC_UNAUTHORIZED);
+				return "Unauthorized Access";
+			}
+
 
 		Map<String, String> deviceIPMap = ownerTodevicesIPMap.get(owner);
 
@@ -304,7 +209,7 @@ String owner,
 
 		log.info("Sending request to read firealarm-temperature at : " + deviceIP);
 
-		try {
+
 			replyMsg = sendCommand(deviceIP, 80, TEMPERATURE_CONTEXT);
 		} catch (DeviceManagementException e) {
 			replyMsg = e.getErrorMessage();
@@ -317,38 +222,34 @@ String owner,
 		return replyMsg;
 	}
 
-    /*    Service to toggle the FireAlarm fan between "ON" and "OFF"
-			   Called by an external client intended to control the FireAlarm fan */
-/*    @Path("/fan/{state}") @POST public void switchFan(@HeaderParam("owner") String owner,
-			@HeaderParam("deviceId") String deviceId, @PathParam("state") String state,
-            @Context HttpServletResponse response) {
 
-        String switchToState = state.toUpperCase();
+	@Path("/push_temperature")
+	@POST
+	@Consumes(MediaType.APPLICATION_JSON)
+	public void pushTemperatureData(
+			final DeviceJSON dataMsg, @Context HttpServletResponse response) {
+		boolean result;
+		String temperature = dataMsg.value;
 
-        if (!switchToState.equals(FireAlarmConstants.STATE_ON) && !switchToState.equals
-        (FireAlarmConstants.STATE_OFF)) {
-            log.error("The requested state change shoud be either - 'ON' or 'OFF'");
-            response.setStatus(HttpStatus.SC_BAD_REQUEST);
-            return;
-        }
+		try{
+				result = DeviceController.pushData(dataMsg.owner, FireAlarmConstants.DEVICE_TYPE,
+												   dataMsg.deviceId,
+												   System.currentTimeMillis(), "DeviceData",
+												   temperature, BAMStreamDefinitions.StreamTypeLabel.TEMPERATURE);
 
-        try {
-            boolean result = DeviceController
-                    .setControl(owner, FireAlarmConstants.DEVICE_TYPE, deviceId, "FAN",
-                    switchToState);
-            if (result) {
-                response.setStatus(HttpStatus.SC_ACCEPTED);
+				if (!result) {
+					response.setStatus(HttpStatus.SC_INTERNAL_SERVER_ERROR);
+					return;
+				}
 
-            } else {
-                response.setStatus(HttpStatus.SC_INTERNAL_SERVER_ERROR);
+		} catch (UnauthorizedException e) {
+			response.setStatus(HttpStatus.SC_UNAUTHORIZED);
 
-            }
+		}
 
-        } catch (UnauthorizedException e) {
-            response.setStatus(HttpStatus.SC_UNAUTHORIZED);
+	}
 
-        }
-    }*/
+
 
 	@Path("/fan/{state}")
 	@POST
@@ -396,60 +297,6 @@ String owner,
 		response.setStatus(HttpStatus.SC_OK);
 	}
 
-
-    /*    Service to poll the control-queue for the controls sent to the FireAlarm
-			   Called by the FireAlarm device  */
-/*    @Path("/readcontrols/{owner}/{deviceId}") @GET public String readControls(@PathParam
-("owner") String owner,
-            @PathParam("deviceId") String deviceId, @Context HttpServletResponse response) {
-        String result;
-        LinkedList<String> deviceControlList = internalControlsQueue.get(deviceId);
-
-        if (deviceControlList == null) {
-            result = "No controls have been set for device " + deviceId + " of owner " + owner;
-            response.setStatus(HttpStatus.SC_NO_CONTENT);
-        } else {
-            try {
-                result = deviceControlList.remove(); //returns the  head value
-                response.setStatus(HttpStatus.SC_ACCEPTED);
-
-            } catch (NoSuchElementException ex) {
-                result = "There are no more controls for device " + deviceId + " of owner " +
-                        owner;
-                response.setStatus(HttpStatus.SC_NO_CONTENT);
-            }
-        }
-        if (log.isDebugEnabled()) {
-            log.debug(result);
-        }
-
-        return result;
-    }*/
-
-    /*    Service to send back the replies for the controls sent to the FireAlarm
-		   Called by the FireAlarm device  */
-	/*@Path("/reply") @POST @Consumes(MediaType.APPLICATION_JSON) public void reply(final
-	DeviceJSON replyMsg,
-            @Context HttpServletResponse response) {
-        try {
-            boolean result = DeviceController
-                    .setControl(replyMsg.owner, FireAlarmConstants.DEVICE_TYPE, replyMsg
-                    .deviceId, replyMsg.reply,
-                            "OUT");
-            if (result) {
-                response.setStatus(HttpStatus.SC_ACCEPTED);
-
-            } else {
-                response.setStatus(HttpStatus.SC_INTERNAL_SERVER_ERROR);
-
-            }
-
-        } catch (UnauthorizedException e) {
-            response.setStatus(HttpStatus.SC_UNAUTHORIZED);
-
-        }
-
-    }*/
 
 	/*    Service to push all the sensor data collected by the FireAlarm
 		   Called by the FireAlarm device  */

@@ -8,12 +8,10 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Created by ayyoobhamza on 6/5/15.
- */
+
 public class ZipUtil {
 
-	public ZipArchive downloadSketch(String owner, String deviceType, String deviceId, String token)
+	public ZipArchive downloadSketch(String owner, String deviceType, String deviceId, String token,String refreshToken)
 			throws DeviceManagementException {
 
 		if (owner == null || deviceType == null) {
@@ -30,6 +28,7 @@ public class ZipUtil {
 		contextParams.put("DEVICE_OWNER", owner);
 		contextParams.put("DEVICE_ID", deviceId);
 		contextParams.put("DEVICE_TOKEN", token);
+		contextParams.put("DEVICE_REFRESH_TOKEN", refreshToken);
 
 		DeviceManagement deviceManagement = new DeviceManagement();
 		ZipArchive zipFile = deviceManagement.getSketchArchive(archivesPath, templateSketchPath,

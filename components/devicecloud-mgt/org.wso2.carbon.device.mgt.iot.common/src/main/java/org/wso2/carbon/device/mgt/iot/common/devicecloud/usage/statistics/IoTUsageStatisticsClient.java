@@ -165,8 +165,11 @@ public class IoTUsageStatisticsClient {
 			return deviceUsageDTOs;
 
 		} catch (Exception e) {
-			throw new IoTUsageStatisticsException(
-					"Error occurred while querying from JDBC database", e);
+//			throw new IoTUsageStatisticsException(
+//					"Error occurred while querying from JDBC database", e);
+			//Exception hiding to avoid GC error
+			log.error("Error occurred while querying from JDBC database: " + e.getMessage());
+			return new ArrayList<>();
 		} finally {
 			if (rs != null) {
 				try {

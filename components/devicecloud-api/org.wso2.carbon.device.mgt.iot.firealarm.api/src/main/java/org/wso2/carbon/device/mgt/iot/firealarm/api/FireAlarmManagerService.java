@@ -22,21 +22,23 @@ import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.device.mgt.common.Device;
 import org.wso2.carbon.device.mgt.common.DeviceIdentifier;
 import org.wso2.carbon.device.mgt.common.DeviceManagementException;
+import org.wso2.carbon.device.mgt.iot.common.devicecloud.api.AccessTokenClient;
+import org.wso2.carbon.device.mgt.iot.common.devicecloud.api.AccessTokenInfo;
+import org.wso2.carbon.device.mgt.iot.common.devicecloud.exception.AccessTokenException;
 import org.wso2.carbon.device.mgt.iot.firealarm.constants.FireAlarmConstants;
 import org.wso2.carbon.device.mgt.iot.common.devicecloud.util.ZipUtil;
 import org.wso2.carbon.device.mgt.iot.common.devicecloud.util.ZipArchive;
 import org.wso2.carbon.device.mgt.iot.common.devicecloud.DeviceManagement;
-
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
-
-import static java.nio.charset.StandardCharsets.UTF_8;
 
 //@Path("/FireAlarmDeviceManager")
 public class FireAlarmManagerService {
@@ -174,6 +176,35 @@ public class FireAlarmManagerService {
 
 	}
 
+	@Path("/devices/{username}")
+	@GET
+	@Consumes("application/json")
+	@Produces("application/json")
+	public Device[] getFirealarmDevices(@PathParam("username") String username) {
+
+		DeviceManagement deviceManagement = new DeviceManagement();
+
+
+		try {
+			List<Device> userDevices = deviceManagement.getDevices(username);
+			ArrayList<Device> userDevicesforFirealarm=new ArrayList<Device>();
+			for(Device device : userDevices){
+
+				if(device.getType().equals(FireAlarmConstants.DEVICE_TYPE)){
+					userDevicesforFirealarm.add(device);
+
+
+				}
+			}
+
+			return userDevicesforFirealarm.toArray(new Device[]{});
+		} catch (DeviceManagementException ex) {
+			log.error("Error occurred while retrieving devices for "+ username);
+			return null;
+		}
+
+	}
+
 	@Path("/device/{sketch_type}/download")
 	@GET
 	@Produces("application/octet-stream")
@@ -187,33 +218,46 @@ public class FireAlarmManagerService {
 		//create new device id
 		String deviceId = shortUUID();
 
-		//create token
-		String token = UUID.randomUUID().toString();
 
-		//adding registering data
 
-		boolean status = register(deviceId,
-								  owner + "s_" + sketchType + "_" + deviceId.substring(0, 3),
-								  owner);
-		if (!status) {
-			return Response.status(500).entity(
-					"Error occurred while registering the device with " + "id: " + deviceId
-							+ " owner:" + owner).build();
 
-		}
-
-		ZipUtil ziputil = new ZipUtil();
-		ZipArchive zipFile = null;
 		try {
-			zipFile = ziputil.downloadSketch(owner, sketchType, deviceId,
-														   token);
-		} catch (DeviceManagementException ex) {
-			return Response.status(500).entity("Error occurred while creating zip file").build();
+			AccessTokenClient accessTokenClient=new AccessTokenClient();
+			AccessTokenInfo accessTokenInfo=accessTokenClient.getAccessToken(owner,deviceId,FireAlarmConstants.DEVICE_TYPE);
+
+			//create token
+			String accessToken = accessTokenInfo.getAccess_token();
+			String refreshToken=accessTokenInfo.getRefresh_token();
+			//adding registering data
+
+			boolean status = register(deviceId,
+									  owner + "s_" + sketchType + "_" + deviceId.substring(0, 3),
+									  owner);
+			if (!status) {
+				return Response.status(500).entity(
+						"Error occurred while registering the device with " + "id: " + deviceId
+								+ " owner:" + owner).build();
+
+			}
+
+			ZipUtil ziputil = new ZipUtil();
+			ZipArchive zipFile = null;
+			try {
+				zipFile = ziputil.downloadSketch(owner, sketchType, deviceId,
+												 accessToken,refreshToken);
+			} catch (DeviceManagementException ex) {
+				return Response.status(500).entity("Error occurred while creating zip file").build();
+			}
+
+			Response.ResponseBuilder rb = Response.ok(zipFile.getZipFile());
+			rb.header("Content-Disposition", "attachment; filename=\"" + zipFile.getFileName() + "\"");
+			return rb.build();
+		} catch (AccessTokenException e) {
+			return Response.status(500).build();
 		}
 
-		Response.ResponseBuilder rb = Response.ok(zipFile.getZipFile());
-		rb.header("Content-Disposition", "attachment; filename=\"" + zipFile.getFileName() + "\"");
-		return rb.build();
+
+
 	}
 
 	private static String shortUUID() {

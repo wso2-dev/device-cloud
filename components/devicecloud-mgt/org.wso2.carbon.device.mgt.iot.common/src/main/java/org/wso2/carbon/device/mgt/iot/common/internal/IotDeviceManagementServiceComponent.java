@@ -24,6 +24,7 @@ import org.osgi.framework.BundleContext;
 import org.osgi.service.component.ComponentContext;
 import org.wso2.carbon.device.mgt.iot.common.DeviceTypeService;
 import org.wso2.carbon.device.mgt.iot.common.DeviceTypeServiceImpl;
+import org.wso2.carbon.device.mgt.iot.common.devicecloud.api.AccessTokenClient;
 import org.wso2.carbon.device.mgt.iot.common.iotdevice.exception.IotDeviceMgtPluginException;
 import org.wso2.carbon.device.mgt.iot.common.devicecloud.config.DeviceCloudConfigManager;
 import org.wso2.carbon.device.mgt.iot.common.devicecloud.usage.statistics.IoTUsageStatisticsClient;
@@ -65,6 +66,9 @@ public class IotDeviceManagementServiceComponent {
 					config.getIotDeviceMgtRepository().getIotDataSourceConfigMap();
 
 			IotDeviceManagementDAOFactory.init(dsConfigMap);
+
+			//TODO
+			AccessTokenClient accessTokenClient = new AccessTokenClient();
 
 			String setupOption = System.getProperty("setup");
 			if (setupOption != null) {

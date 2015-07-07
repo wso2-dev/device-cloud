@@ -35,10 +35,10 @@ public class AndroidSenseControllerService {
 
 	/*    Service to push all the sensor data collected by the Android
 		   Called by the Android device  */
-	@Path("/pushdata")
+	@Path("/sensordata")
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
-	public void pushData(final DeviceJSON dataMsg, @Context HttpServletResponse response) {
+	public void pushSensorData(final DeviceJSON dataMsg, @Context HttpServletResponse response) {
 
 
 
