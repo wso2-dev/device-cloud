@@ -21,7 +21,8 @@ import org.apache.commons.logging.LogFactory;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 import org.wso2.carbon.device.mgt.iot.arduino.api.ArduinoControllerService;
 import org.wso2.carbon.device.mgt.iot.arduino.constants.ArduinoConstants;
-import org.wso2.carbon.device.mgt.iot.common.devicecloud.controlqueue.mqtt.MqttSubscriber;
+import org.wso2.carbon.device.mgt.iot.common.controlqueue.mqtt.MqttConfig;
+import org.wso2.carbon.device.mgt.iot.common.controlqueue.mqtt.MqttSubscriber;
 
 import java.io.File;
 import java.util.LinkedList;
@@ -37,7 +38,7 @@ public class MqttArduinoSubscriber extends MqttSubscriber {
     //make it singleton
     private MqttArduinoSubscriber() {
 
-        super("Subscriber", ArduinoConstants.DEVICE_TYPE, ArduinoControllerService.CONTROL_QUEUE_ENDPOINT,
+        super("Subscriber", ArduinoConstants.DEVICE_TYPE, MqttConfig.getInstance().getControlQueueEndpoint(),
                 subscribetopic);
     }
 
@@ -56,12 +57,9 @@ public class MqttArduinoSubscriber extends MqttSubscriber {
             log.info("Recieved a control message: ");
             log.info("Control message topic: " + topic);
             log.info("Control message: " + message.toString());
-            //                    synchronized (ArduinoControllerService.internalControlsQueue) {
-            //                        deviceControlList = ArduinoControllerService.internalControlsQueue.get(deviceId);
             synchronized (ArduinoControllerService.getInternalControlsQueue()) {
                 deviceControlList = ArduinoControllerService.getInternalControlsQueue().get(deviceId);
                 if (deviceControlList == null) {
-                    //                            ArduinoControllerService.internalControlsQueue
                     ArduinoControllerService.getInternalControlsQueue()
                             .put(deviceId, deviceControlList = new LinkedList<String>());
                 }
@@ -71,12 +69,9 @@ public class MqttArduinoSubscriber extends MqttSubscriber {
             log.info("Recieved reply from a device: ");
             log.info("Reply message topic: " + topic);
             log.info("Reply message: " + message.toString().substring(0, lastIndex));
-            //                    synchronized (ArduinoControllerService.replyMsgQueue) {
-            //                        replyMessageList = ArduinoControllerService.replyMsgQueue.get(deviceId);
             synchronized (ArduinoControllerService.getReplyMsgQueue()) {
                 replyMessageList = ArduinoControllerService.getReplyMsgQueue().get(deviceId);
                 if (replyMessageList == null) {
-                    //                            ArduinoControllerService.replyMsgQueue
                     ArduinoControllerService.getReplyMsgQueue()
                             .put(deviceId, replyMessageList = new LinkedList<String>());
                 }

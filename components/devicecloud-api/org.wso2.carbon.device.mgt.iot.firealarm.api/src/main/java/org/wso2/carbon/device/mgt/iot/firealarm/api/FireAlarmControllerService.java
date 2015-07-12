@@ -25,10 +25,10 @@ import org.apache.http.impl.nio.client.CloseableHttpAsyncClient;
 import org.apache.http.impl.nio.client.HttpAsyncClients;
 import org.wso2.carbon.device.mgt.common.DeviceIdentifier;
 import org.wso2.carbon.device.mgt.common.DeviceManagementException;
-import org.wso2.carbon.device.mgt.iot.common.devicecloud.DeviceController;
-import org.wso2.carbon.device.mgt.iot.common.devicecloud.DeviceValidator;
-import org.wso2.carbon.device.mgt.iot.common.devicecloud.datastore.bam.BAMStreamDefinitions;
-import org.wso2.carbon.device.mgt.iot.common.devicecloud.exception.UnauthorizedException;
+import org.wso2.carbon.device.mgt.iot.common.DeviceController;
+import org.wso2.carbon.device.mgt.iot.common.DeviceValidator;
+import org.wso2.carbon.device.mgt.iot.common.datastore.impl.DataStreamDefinitions;
+import org.wso2.carbon.device.mgt.iot.common.exception.UnauthorizedException;
 import org.wso2.carbon.device.mgt.iot.firealarm.api.util.DeviceJSON;
 import org.wso2.carbon.device.mgt.iot.firealarm.constants.FireAlarmConstants;
 
@@ -232,15 +232,34 @@ public class FireAlarmControllerService {
 		String temperature = dataMsg.value;
 
 		try{
-				result = DeviceController.pushData(dataMsg.owner, FireAlarmConstants.DEVICE_TYPE,
-												   dataMsg.deviceId,
-												   System.currentTimeMillis(), "DeviceData",
-												   temperature, BAMStreamDefinitions.StreamTypeLabel.TEMPERATURE);
+				result = DeviceController.pushBamData(dataMsg.owner, FireAlarmConstants
+															  .DEVICE_TYPE,
+													  dataMsg.deviceId,
+													  System.currentTimeMillis(), "DeviceData",
+													  temperature,
+													  DataStreamDefinitions.StreamTypeLabel.TEMPERATURE);
+
+
 
 				if (!result) {
 					response.setStatus(HttpStatus.SC_INTERNAL_SERVER_ERROR);
 					return;
 				}
+
+			result = DeviceController.pushCEPData(dataMsg.owner, FireAlarmConstants
+														  .DEVICE_TYPE,
+												  dataMsg.deviceId,
+												  System.currentTimeMillis(), "DeviceData",
+												  temperature,
+												  DataStreamDefinitions.StreamTypeLabel.TEMPERATURE);
+
+
+
+			if (!result) {
+				response.setStatus(HttpStatus.SC_INTERNAL_SERVER_ERROR);
+				return;
+			}
+
 
 		} catch (UnauthorizedException e) {
 			response.setStatus(HttpStatus.SC_UNAUTHORIZED);
@@ -321,40 +340,45 @@ public class FireAlarmControllerService {
 						fan;
 				log.info(sensorValues);
 
-				result = DeviceController.pushData(dataMsg.owner, FireAlarmConstants.DEVICE_TYPE,
-												   dataMsg.deviceId,
-												   System.currentTimeMillis(), "DeviceData",
-												   temperature, "TEMPERATURE");
+				result = DeviceController.pushBamData(dataMsg.owner, FireAlarmConstants
+															  .DEVICE_TYPE,
+													  dataMsg.deviceId,
+													  System.currentTimeMillis(), "DeviceData",
+													  temperature, "TEMPERATURE");
 
 				if (!result) {
 					response.setStatus(HttpStatus.SC_INTERNAL_SERVER_ERROR);
 					return;
 				}
 
-				result = DeviceController.pushData(dataMsg.owner, FireAlarmConstants.DEVICE_TYPE,
-												   dataMsg.deviceId,
-												   System.currentTimeMillis(), "DeviceData", bulb,
-												   "BULB");
+				result = DeviceController.pushBamData(dataMsg.owner, FireAlarmConstants
+															  .DEVICE_TYPE,
+													  dataMsg.deviceId,
+													  System.currentTimeMillis(), "DeviceData",
+													  bulb,
+													  "BULB");
 
 				if (!result) {
 					response.setStatus(HttpStatus.SC_INTERNAL_SERVER_ERROR);
 					return;
 				}
 
-				result = DeviceController.pushData(dataMsg.owner, FireAlarmConstants.DEVICE_TYPE,
-												   dataMsg.deviceId,
-												   System.currentTimeMillis(), "DeviceData", fan,
-												   "FAN");
+				result = DeviceController.pushBamData(dataMsg.owner, FireAlarmConstants
+															  .DEVICE_TYPE,
+													  dataMsg.deviceId,
+													  System.currentTimeMillis(), "DeviceData", fan,
+													  "FAN");
 
 				if (!result) {
 					response.setStatus(HttpStatus.SC_INTERNAL_SERVER_ERROR);
 				}
 
 			} else {
-				result = DeviceController.pushData(dataMsg.owner, FireAlarmConstants.DEVICE_TYPE,
-												   dataMsg.deviceId,
-												   System.currentTimeMillis(), "DeviceData",
-												   dataMsg.value, dataMsg.reply);
+				result = DeviceController.pushBamData(dataMsg.owner, FireAlarmConstants
+															  .DEVICE_TYPE,
+													  dataMsg.deviceId,
+													  System.currentTimeMillis(), "DeviceData",
+													  dataMsg.value, dataMsg.reply);
 				if (!result) {
 					response.setStatus(HttpStatus.SC_INTERNAL_SERVER_ERROR);
 				}

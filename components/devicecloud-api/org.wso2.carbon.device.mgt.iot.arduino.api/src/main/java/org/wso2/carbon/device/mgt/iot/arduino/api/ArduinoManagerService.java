@@ -22,9 +22,9 @@ import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.device.mgt.common.Device;
 import org.wso2.carbon.device.mgt.common.DeviceIdentifier;
 import org.wso2.carbon.device.mgt.common.DeviceManagementException;
-import org.wso2.carbon.device.mgt.iot.common.devicecloud.DeviceManagement;
-import org.wso2.carbon.device.mgt.iot.common.devicecloud.util.ZipArchive;
-import org.wso2.carbon.device.mgt.iot.common.devicecloud.util.ZipUtil;
+import org.wso2.carbon.device.mgt.iot.common.DeviceManagement;
+import org.wso2.carbon.device.mgt.iot.common.util.ZipArchive;
+import org.wso2.carbon.device.mgt.iot.common.util.ZipUtil;
 import org.wso2.carbon.device.mgt.iot.arduino.constants.ArduinoConstants;
 
 import javax.servlet.http.HttpServletResponse;

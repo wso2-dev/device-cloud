@@ -51,7 +51,7 @@ public class AndroidSenseControllerService {
 		}
 		//try {
 			boolean result = false;
-// result=DeviceController.pushData(dataMsg.owner, AndroidSenseConstants.DEVICE_TYPE,
+// result=DeviceController.pushBamData(dataMsg.owner, AndroidSenseConstants.DEVICE_TYPE,
 //													   dataMsg.deviceId,
 //													   System.currentTimeMillis(), "DeviceData",
 //													   temperature, "TEMPERATURE");

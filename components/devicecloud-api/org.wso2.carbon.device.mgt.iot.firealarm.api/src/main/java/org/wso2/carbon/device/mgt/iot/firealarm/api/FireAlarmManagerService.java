@@ -22,13 +22,13 @@ import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.device.mgt.common.Device;
 import org.wso2.carbon.device.mgt.common.DeviceIdentifier;
 import org.wso2.carbon.device.mgt.common.DeviceManagementException;
-import org.wso2.carbon.device.mgt.iot.common.devicecloud.api.AccessTokenClient;
-import org.wso2.carbon.device.mgt.iot.common.devicecloud.api.AccessTokenInfo;
-import org.wso2.carbon.device.mgt.iot.common.devicecloud.exception.AccessTokenException;
+import org.wso2.carbon.device.mgt.iot.common.apimgt.TokenClient;
+import org.wso2.carbon.device.mgt.iot.common.apimgt.AccessTokenInfo;
+import org.wso2.carbon.device.mgt.iot.common.exception.AccessTokenException;
 import org.wso2.carbon.device.mgt.iot.firealarm.constants.FireAlarmConstants;
-import org.wso2.carbon.device.mgt.iot.common.devicecloud.util.ZipUtil;
-import org.wso2.carbon.device.mgt.iot.common.devicecloud.util.ZipArchive;
-import org.wso2.carbon.device.mgt.iot.common.devicecloud.DeviceManagement;
+import org.wso2.carbon.device.mgt.iot.common.util.ZipUtil;
+import org.wso2.carbon.device.mgt.iot.common.util.ZipArchive;
+import org.wso2.carbon.device.mgt.iot.common.DeviceManagement;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
@@ -222,7 +222,7 @@ public class FireAlarmManagerService {
 
 
 		try {
-			AccessTokenClient accessTokenClient=new AccessTokenClient();
+			TokenClient accessTokenClient=new TokenClient();
 			AccessTokenInfo accessTokenInfo=accessTokenClient.getAccessToken(owner,deviceId,FireAlarmConstants.DEVICE_TYPE);
 
 			//create token

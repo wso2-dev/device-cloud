@@ -24,19 +24,6 @@
          http://cxf.apache.org/jaxrs http://cxf.apache.org/schemas/jaxrs.xsd">
 
 
-
-
-    <!--<jaxrs:server id="SenseBotController" address="/SenseBotController">-->
-        <!--<jaxrs:serviceBeans>-->
-            <!--<bean id="SenseBotControllerService"-->
-                  <!--class="org.wso2.carbon.device.mgt.iot.sensebot.service.SenseBotControllerService">-->
-            <!--</bean>-->
-        <!--</jaxrs:serviceBeans>-->
-        <!--<jaxrs:providers>-->
-            <!--<bean class="org.codehaus.jackson.jaxrs.JacksonJsonProvider" />-->
-        <!--</jaxrs:providers>-->
-    <!--</jaxrs:server>-->
-
     <jaxrs:server id="DevicesManager" address="/device_manager">
         <jaxrs:serviceBeans>
             <bean id="DevicesManagerService"
@@ -51,6 +38,16 @@
         <jaxrs:serviceBeans>
             <bean id="UsersManagerService"
                   class="org.wso2.carbon.device.mgt.iot.common.api.UsersManagerService"/>
+        </jaxrs:serviceBeans>
+        <jaxrs:providers>
+            <bean class="org.codehaus.jackson.jaxrs.JacksonJsonProvider" />
+        </jaxrs:providers>
+    </jaxrs:server>
+
+    <jaxrs:server id="TokenManager" address="/token_manager">
+        <jaxrs:serviceBeans>
+            <bean id="TokenManagerService"
+                  class="org.wso2.carbon.device.mgt.iot.common.api.TokenManagerService"/>
         </jaxrs:serviceBeans>
         <jaxrs:providers>
             <bean class="org.codehaus.jackson.jaxrs.JacksonJsonProvider" />

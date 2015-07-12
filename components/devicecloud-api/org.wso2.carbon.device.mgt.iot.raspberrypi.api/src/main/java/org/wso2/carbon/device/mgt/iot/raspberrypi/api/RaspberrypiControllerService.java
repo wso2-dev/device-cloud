@@ -19,12 +19,12 @@ package org.wso2.carbon.device.mgt.iot.raspberrypi.api;
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.wso2.carbon.device.mgt.iot.common.devicecloud.datastore.bam.BAMStreamDefinitions;
+import org.wso2.carbon.device.mgt.iot.common.datastore.impl.DataStreamDefinitions;
 import org.wso2.carbon.device.mgt.iot.raspberrypi.api.util.DeviceJSON;
 import org.wso2.carbon.device.mgt.iot.raspberrypi.constants.RaspberrypiConstants;
-import org.wso2.carbon.device.mgt.iot.common.devicecloud.DeviceController;
+import org.wso2.carbon.device.mgt.iot.common.DeviceController;
 
-import org.wso2.carbon.device.mgt.iot.common.devicecloud.exception.UnauthorizedException;
+import org.wso2.carbon.device.mgt.iot.common.exception.UnauthorizedException;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.Consumes;
@@ -51,10 +51,12 @@ public class RaspberrypiControllerService {
 			log.debug("Recieved Temperature Data Value: " + temperature + " degrees C");
 		}
 		try {
-			boolean result = DeviceController.pushData(dataMsg.owner, RaspberrypiConstants.DEVICE_TYPE,
-													   dataMsg.deviceId,
-													   System.currentTimeMillis(), "DeviceData",
-													   temperature, BAMStreamDefinitions.StreamTypeLabel.TEMPERATURE);
+			boolean result = DeviceController.pushBamData(dataMsg.owner,
+														  RaspberrypiConstants.DEVICE_TYPE,
+														  dataMsg.deviceId,
+														  System.currentTimeMillis(), "DeviceData",
+														  temperature,
+														  DataStreamDefinitions.StreamTypeLabel.TEMPERATURE);
 
 			if (!result) {
 				response.setStatus(HttpStatus.SC_INTERNAL_SERVER_ERROR);
