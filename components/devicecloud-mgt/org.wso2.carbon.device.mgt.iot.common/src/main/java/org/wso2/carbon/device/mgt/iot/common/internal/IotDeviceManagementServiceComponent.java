@@ -66,8 +66,7 @@ public class IotDeviceManagementServiceComponent {
 
 			IotDeviceManagementDAOFactory.init(dsConfigMap);
 
-			//TODO
-			TokenClient accessTokenClient = new TokenClient();
+
 
 			String setupOption = System.getProperty("setup");
 			if (setupOption != null) {

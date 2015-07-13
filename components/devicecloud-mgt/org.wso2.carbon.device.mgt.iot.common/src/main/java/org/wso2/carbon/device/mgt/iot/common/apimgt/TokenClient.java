@@ -27,7 +27,12 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.wso2.carbon.device.mgt.iot.common.config.devicetype.IotDeviceTypeConfigurationManager;
+import org.wso2.carbon.device.mgt.iot.common.config.devicetype.datasource
+		.IoTDeviceTypeConfigManager;
+import org.wso2.carbon.device.mgt.iot.common.config.server.DeviceCloudConfigManager;
 import org.wso2.carbon.device.mgt.iot.common.exception.AccessTokenException;
+
 import java.net.URL;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
@@ -48,12 +53,53 @@ public class TokenClient {
 
 	//TODO read from configuration file
 	private static Log log = LogFactory.getLog(TokenClient.class);
-	private String tokenURL ="https://localhost:9444/oauth2/token";
-	private String grantType ="devicecloud";
-	private String scope ="PRODUCTION";
-	private String appToken="WDNhSF9OT0VuSFphbVBFcHljVmpZR0ZpaGM4YTprUks3aFg2UmpqZ0V0QmdVd2x1VENnZFNjakVh";
+	private String tokenURL;
+	private String grantType;
+	private String scope;
 
-	public AccessTokenInfo getAccessToken(String username,String deviceId,String deviceType) throws AccessTokenException {
+	//TODO: getTokenApp
+	private String appToken =
+			"WDNhSF9OT0VuSFphbVBFcHljVmpZR0ZpaGM4YTprUks3aFg2UmpqZ0V0QmdVd2x1VENnZFNjakVh";
+	private String deviceType;
+
+	public TokenClient(String deviceType) {
+		this.deviceType = deviceType;
+		tokenURL = DeviceCloudConfigManager.getInstance().getDeviceCloudMgtConfig().getApiManager()
+				.getAccessTokenURL();
+		grantType = DeviceCloudConfigManager.getInstance().getDeviceCloudMgtConfig()
+				.getApiManager()
+				.getDeviceGrantType();
+		scope = DeviceCloudConfigManager.getInstance().getDeviceCloudMgtConfig().getApiManager()
+				.getDeviceScopes();
+
+
+	}
+
+	public AccessTokenInfo getAccessToken(String username, String deviceId)
+			throws AccessTokenException {
+
+		NameValuePair nameValuePairs[] = new NameValuePair[4];
+		nameValuePairs[0] = new NameValuePair("grant_type", grantType);
+		nameValuePairs[1] = new NameValuePair("device_id", deviceId + "%?%" + deviceType);
+		nameValuePairs[2] = new NameValuePair("username", username);
+		nameValuePairs[3] = new NameValuePair("scope", scope);
+
+		return getTokenInfo(nameValuePairs);
+	}
+
+	public AccessTokenInfo getAccessToken(String refreshToken) throws AccessTokenException {
+
+		NameValuePair nameValuePairs[] = new NameValuePair[3];
+		nameValuePairs[0] = new NameValuePair("grant_type", "refresh_token");
+		nameValuePairs[1] = new NameValuePair("refresh_token", refreshToken);
+		nameValuePairs[2] = new NameValuePair("scope", scope);
+		return getTokenInfo(nameValuePairs);
+
+
+	}
+
+	private AccessTokenInfo getTokenInfo(NameValuePair[] nameValuePairs)
+			throws AccessTokenException {
 		SSLContext ctx;
 		String response = "";
 		try {
@@ -77,10 +123,11 @@ public class TokenClient {
 			HttpClient httpClient = new HttpClient();
 
 			PostMethod postMethod = new PostMethod(tokenURL);
-			postMethod.addParameter(new NameValuePair("grant_type", grantType));
-			postMethod.addParameter(new NameValuePair("username",username));
-			postMethod.addParameter(new NameValuePair("device_id", deviceId + "%?%" + deviceType));
-			postMethod.addParameter(new NameValuePair("scope", scope));
+
+			for (NameValuePair nameValuePair : nameValuePairs) {
+				postMethod.addParameter(nameValuePair);
+
+			}
 
 			postMethod.addRequestHeader("Authorization",
 										"Basic " + appToken);
@@ -91,9 +138,9 @@ public class TokenClient {
 
 			response = postMethod.getResponseBodyAsString();
 			log.info(response);
-			JSONObject jsonObject=new JSONObject(response);
+			JSONObject jsonObject = new JSONObject(response);
 
-			AccessTokenInfo accessTokenInfo=new AccessTokenInfo();
+			AccessTokenInfo accessTokenInfo = new AccessTokenInfo();
 			accessTokenInfo.setAccess_token(jsonObject.getString("access_token"));
 			accessTokenInfo.setRefresh_token(jsonObject.getString("refresh_token"));
 			accessTokenInfo.setExpires_in(jsonObject.getInt("expires_in"));
@@ -103,7 +150,8 @@ public class TokenClient {
 			return accessTokenInfo;
 
 
-		} catch (NoSuchAlgorithmException | KeyManagementException| IOException |JSONException e) {
+		} catch (NoSuchAlgorithmException | KeyManagementException | IOException | JSONException
+				e) {
 
 			log.error(e.getMessage());
 			throw new AccessTokenException("Configuration Error for Access Token Generation");

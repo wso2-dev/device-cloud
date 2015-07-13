@@ -222,8 +222,8 @@ public class FireAlarmManagerService {
 
 
 		try {
-			TokenClient accessTokenClient=new TokenClient();
-			AccessTokenInfo accessTokenInfo=accessTokenClient.getAccessToken(owner,deviceId,FireAlarmConstants.DEVICE_TYPE);
+			TokenClient accessTokenClient=new TokenClient(FireAlarmConstants.DEVICE_TYPE);
+			AccessTokenInfo accessTokenInfo=accessTokenClient.getAccessToken(owner,deviceId);
 
 			//create token
 			String accessToken = accessTokenInfo.getAccess_token();

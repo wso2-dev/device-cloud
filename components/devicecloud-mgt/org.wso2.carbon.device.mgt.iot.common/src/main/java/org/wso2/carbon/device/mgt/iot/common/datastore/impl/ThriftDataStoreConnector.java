@@ -55,7 +55,7 @@ public class ThriftDataStoreConnector implements DataStoreConnector {
 			log.info("data publisher created for endpoint " + dataStoreEndpoint);
 		} catch (MalformedURLException | AgentException | AuthenticationException
 				| TransportException e) {
-			String error = "Error creating data publisher for endpoint: " + dataStoreEndpoint +
+			String error = "Error creating data publisher for  endpoint: " + dataStoreEndpoint +
 					"with credentials, username-" + dataStoreUsername + " and password-" +
 					dataStorePassword + ": ";
 			log.error(error, e);

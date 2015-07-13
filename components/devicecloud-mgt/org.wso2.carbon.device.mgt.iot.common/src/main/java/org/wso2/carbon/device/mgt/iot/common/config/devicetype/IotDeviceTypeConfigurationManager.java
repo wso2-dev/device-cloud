@@ -110,6 +110,8 @@ public class IotDeviceTypeConfigurationManager {
 		return Collections.unmodifiableMap(iotDeviceTypeConfigMap);
 	}
 
+
+
 	private class IotConfigValidationEventHandler implements ValidationEventHandler {
 
 
