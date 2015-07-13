@@ -304,7 +304,8 @@ public class FireAlarmControllerService {
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	public void pushAlarmData(
-			final DeviceJSON dataMsg, @Context HttpServletResponse response) {
+//			final DeviceJSON dataMsg, @Context HttpServletResponse response) {
+			final DeviceJSON dataMsg) {
 		boolean result;
 		String sensorValues = dataMsg.value;
 		log.info("Recieved Sensor Data Values: " + sensorValues);
@@ -327,7 +328,8 @@ public class FireAlarmControllerService {
 												   temperature, "TEMPERATURE");
 
 				if (!result) {
-					response.setStatus(HttpStatus.SC_INTERNAL_SERVER_ERROR);
+//					response.setStatus(HttpStatus.SC_INTERNAL_SERVER_ERROR);
+					log.error("Temp + Error: " + sensorValues);
 					return;
 				}
 
@@ -337,7 +339,8 @@ public class FireAlarmControllerService {
 												   "BULB");
 
 				if (!result) {
-					response.setStatus(HttpStatus.SC_INTERNAL_SERVER_ERROR);
+//					response.setStatus(HttpStatus.SC_INTERNAL_SERVER_ERROR);
+					log.error("Bulb + Error: " + sensorValues);
 					return;
 				}
 
@@ -347,7 +350,8 @@ public class FireAlarmControllerService {
 												   "FAN");
 
 				if (!result) {
-					response.setStatus(HttpStatus.SC_INTERNAL_SERVER_ERROR);
+//					response.setStatus(HttpStatus.SC_INTERNAL_SERVER_ERROR);
+					log.error("Fan + Error: " + sensorValues);
 				}
 
 			} else {
@@ -356,13 +360,14 @@ public class FireAlarmControllerService {
 												   System.currentTimeMillis(), "DeviceData",
 												   dataMsg.value, dataMsg.reply);
 				if (!result) {
-					response.setStatus(HttpStatus.SC_INTERNAL_SERVER_ERROR);
+//					response.setStatus(HttpStatus.SC_INTERNAL_SERVER_ERROR);
+					log.error("Bottom + Error: " + sensorValues);
 				}
 			}
 
 		} catch (UnauthorizedException e) {
-			response.setStatus(HttpStatus.SC_UNAUTHORIZED);
-
+//			response.setStatus(HttpStatus.SC_UNAUTHORIZED);
+			log.error("Unauthorized Data Push Attempt: " + e.getMessage());
 		}
 
 	}
