@@ -20,7 +20,7 @@ package org.wso2.carbon.device.mgt.iot.firealarm.api.util;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
-import org.wso2.carbon.device.mgt.iot.common.devicecloud.controlqueue.mqtt.MqttSubscriber;
+import org.wso2.carbon.device.mgt.iot.common.controlqueue.mqtt.MqttSubscriber;
 import org.wso2.carbon.device.mgt.iot.firealarm.api.FireAlarmControllerService;
 import org.wso2.carbon.device.mgt.iot.firealarm.constants.FireAlarmConstants;
 

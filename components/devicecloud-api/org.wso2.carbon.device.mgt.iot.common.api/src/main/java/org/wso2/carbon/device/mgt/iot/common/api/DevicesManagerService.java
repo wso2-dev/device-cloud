@@ -6,14 +6,13 @@ import org.wso2.carbon.device.mgt.core.dao.DeviceManagementDAOException;
 import org.wso2.carbon.device.mgt.core.dto.DeviceType;
 
 import org.wso2.carbon.device.mgt.iot.common.api.util.DeviceTypes;
-import org.wso2.carbon.device.mgt.iot.common.devicecloud.DeviceManagement;
+import org.wso2.carbon.device.mgt.iot.common.DeviceManagement;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
 import java.util.List;
 
 public class DevicesManagerService {

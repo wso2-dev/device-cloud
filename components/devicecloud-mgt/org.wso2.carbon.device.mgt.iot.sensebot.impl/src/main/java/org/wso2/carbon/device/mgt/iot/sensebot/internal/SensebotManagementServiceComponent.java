@@ -24,7 +24,7 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.component.ComponentContext;
 import org.wso2.carbon.device.mgt.common.spi.DeviceMgtService;
-import org.wso2.carbon.device.mgt.iot.common.DeviceTypeService;
+import org.wso2.carbon.device.mgt.iot.common.service.DeviceTypeService;
 import org.wso2.carbon.device.mgt.iot.sensebot.impl.SensebotManager;
 
 
@@ -33,7 +33,7 @@ import org.wso2.carbon.device.mgt.iot.sensebot.impl.SensebotManager;
  * @scr.component name="org.wso2.carbon.device.mgt.iot.sensebot.internal.SensebotManagementServiceComponent"
  * immediate="true"
  * @scr.reference name="wso2.carbon.device.mgt.iot.common.DeviceTypeService"
- * interface="org.wso2.carbon.device.mgt.iot.common.DeviceTypeService"
+ * interface="org.wso2.carbon.device.mgt.iot.common.service.DeviceTypeService"
  * cardinality="1..1"
  * policy="dynamic"
  * bind="setDeviceTypeService"

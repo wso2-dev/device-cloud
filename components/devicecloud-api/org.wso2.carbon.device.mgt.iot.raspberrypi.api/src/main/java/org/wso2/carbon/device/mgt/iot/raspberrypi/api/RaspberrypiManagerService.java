@@ -22,9 +22,9 @@ import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.device.mgt.common.Device;
 import org.wso2.carbon.device.mgt.common.DeviceIdentifier;
 import org.wso2.carbon.device.mgt.common.DeviceManagementException;
-import org.wso2.carbon.device.mgt.iot.common.devicecloud.DeviceManagement;
-import org.wso2.carbon.device.mgt.iot.common.devicecloud.util.ZipArchive;
-import org.wso2.carbon.device.mgt.iot.common.devicecloud.util.ZipUtil;
+import org.wso2.carbon.device.mgt.iot.common.DeviceManagement;
+import org.wso2.carbon.device.mgt.iot.common.util.ZipArchive;
+import org.wso2.carbon.device.mgt.iot.common.util.ZipUtil;
 import org.wso2.carbon.device.mgt.iot.raspberrypi.constants.RaspberrypiConstants;
 
 import javax.servlet.http.HttpServletResponse;
@@ -43,8 +43,6 @@ import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import java.util.UUID;
-
-import static java.nio.charset.StandardCharsets.UTF_8;
 
 public class RaspberrypiManagerService {
 

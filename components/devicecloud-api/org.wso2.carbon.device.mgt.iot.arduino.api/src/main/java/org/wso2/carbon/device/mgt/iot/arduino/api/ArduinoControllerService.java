@@ -23,16 +23,9 @@ import org.wso2.carbon.device.mgt.common.DeviceManagementException;
 import org.wso2.carbon.device.mgt.iot.arduino.api.util.DeviceJSON;
 import org.wso2.carbon.device.mgt.iot.arduino.api.util.MqttArduinoSubscriber;
 import org.wso2.carbon.device.mgt.iot.arduino.constants.ArduinoConstants;
-import org.wso2.carbon.device.mgt.iot.common.devicecloud.DeviceController;
-import org.wso2.carbon.device.mgt.iot.common.devicecloud.config.DeviceCloudConfigManager;
-import org.wso2.carbon.device.mgt.iot.common.devicecloud.config.DeviceCloudManagementConfig;
-import org.wso2.carbon.device.mgt.iot.common.devicecloud.config
-        .DeviceCloudManagementControllerConfig;
-import org.wso2.carbon.device.mgt.iot.common.devicecloud.config.controlqueue
-        .DeviceControlQueueConfig;
-import org.wso2.carbon.device.mgt.iot.common.devicecloud.datastore.bam.BAMStreamDefinitions;
-import org.wso2.carbon.device.mgt.iot.common.devicecloud.exception.DeviceControllerException;
-import org.wso2.carbon.device.mgt.iot.common.devicecloud.exception.UnauthorizedException;
+import org.wso2.carbon.device.mgt.iot.common.DeviceController;
+import org.wso2.carbon.device.mgt.iot.common.datastore.impl.DataStreamDefinitions;
+import org.wso2.carbon.device.mgt.iot.common.exception.UnauthorizedException;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.*;
@@ -44,49 +37,10 @@ public class ArduinoControllerService {
 
 	private static Log log = LogFactory.getLog(ArduinoControllerService.class);
 
-	public static final String CONTROL_QUEUE_ENDPOINT;
 	private static Map<String, LinkedList<String>> replyMsgQueue = new HashMap<>();
 	private static Map<String, LinkedList<String>> internalControlsQueue = new HashMap<>();
 	private static MqttArduinoSubscriber mqttArduinoSubscriber;
-//Todo first call create a instance;
 
-	static {
-
-		DeviceCloudManagementConfig config = null;
-		try {
-			config = DeviceCloudConfigManager.getInstance().getDeviceCloudMgtConfig();
-		} catch (DeviceControllerException ex) {
-			log.error(ex.getMessage());
-		}
-
-		if (config != null) {
-			// controller configurations
-			DeviceCloudManagementControllerConfig controllerConfig =
-					config.getDeviceCloudManagementControllerConfig();
-
-			// reading control queue configurations
-			String controlQueueKey = controllerConfig.getDeviceControlQueue();
-			DeviceControlQueueConfig controlQueueConfig = config.getControlQueuesMap().get(
-					controlQueueKey);
-			if (controlQueueConfig == null) {
-				log.error("Error occurred when trying to read control queue configurations");
-			}
-
-			String mqttUrl = "";
-			String mqttPort = "";
-			if (controlQueueConfig != null) {
-				mqttUrl = controlQueueConfig.getEndPoint();
-				mqttPort = controlQueueConfig.getPort();
-			}
-
-			CONTROL_QUEUE_ENDPOINT = mqttUrl + ":" + mqttPort;
-			log.info("CONTROL_QUEUE_ENDPOINT Successfully initialized.");
-		} else {
-			CONTROL_QUEUE_ENDPOINT = null;
-			log.error("CONTROL_QUEUE_ENDPOINT initialization failed.");
-		}
-
-	}
 
 	public void setMqttArduinoSubscriber(MqttArduinoSubscriber mqttArduinoSubscriber) {
 		ArduinoControllerService.mqttArduinoSubscriber = mqttArduinoSubscriber;
@@ -128,8 +82,9 @@ public class ArduinoControllerService {
 		}
 
 		try {
-			boolean result = DeviceController.setControl(owner, ArduinoConstants.DEVICE_TYPE,
-														 deviceId, "BULB", switchToState);
+			boolean result = DeviceController.publishMqttControl(owner,
+																 ArduinoConstants.DEVICE_TYPE,
+																 deviceId, "BULB", switchToState);
 			if (result) {
 				response.setStatus(HttpStatus.SC_ACCEPTED);
 
@@ -191,10 +146,13 @@ public class ArduinoControllerService {
 			log.debug("Recieved Temperature Data Value: " + temperature + " degrees C");
 		}
 		try {
-			boolean result = DeviceController.pushData(dataMsg.owner, ArduinoConstants.DEVICE_TYPE,
-													   dataMsg.deviceId,
-													   System.currentTimeMillis(), "DeviceData",
-													   temperature, BAMStreamDefinitions.StreamTypeLabel.TEMPERATURE);
+			boolean result = DeviceController.pushBamData(dataMsg.owner,
+														  ArduinoConstants.DEVICE_TYPE,
+														  dataMsg.deviceId,
+														  System.currentTimeMillis(), "DeviceData",
+														  temperature,
+														  DataStreamDefinitions.StreamTypeLabel
+																  .TEMPERATURE);
 
 			if (!result) {
 				response.setStatus(HttpStatus.SC_INTERNAL_SERVER_ERROR);

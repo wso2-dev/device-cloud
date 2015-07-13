@@ -23,9 +23,9 @@ import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.nio.client.CloseableHttpAsyncClient;
 import org.apache.http.impl.nio.client.HttpAsyncClients;
-import org.wso2.carbon.device.mgt.iot.common.devicecloud.DeviceController;
-import org.wso2.carbon.device.mgt.iot.common.devicecloud.datastore.bam.BAMStreamDefinitions;
-import org.wso2.carbon.device.mgt.iot.common.devicecloud.exception.UnauthorizedException;
+import org.wso2.carbon.device.mgt.iot.common.DeviceController;
+import org.wso2.carbon.device.mgt.iot.common.datastore.impl.DataStreamDefinitions;
+import org.wso2.carbon.device.mgt.iot.common.exception.UnauthorizedException;
 import org.wso2.carbon.device.mgt.iot.sensebot.api.util.DeviceJSON;
 import org.wso2.carbon.device.mgt.iot.sensebot.constants.SensebotConstants;
 
@@ -115,17 +115,22 @@ public class SensebotControllerService {
                 if (log.isDebugEnabled())
                     log.debug(sensorValues);
 
-                result = DeviceController.pushData(dataMsg.owner, SensebotConstants.DEVICE_TYPE, dataMsg.deviceId,
-                        System.currentTimeMillis(), "DeviceData", temperature,
-                        BAMStreamDefinitions.StreamTypeLabel.TEMPERATURE);
+                result = DeviceController.pushBamData(dataMsg.owner, SensebotConstants.DEVICE_TYPE,
+                                                      dataMsg.deviceId,
+                                                      System.currentTimeMillis(), "DeviceData",
+                                                      temperature,
+                                                      DataStreamDefinitions.StreamTypeLabel.TEMPERATURE);
 
                 if (!result) {
                     response.setStatus(HttpStatus.SC_INTERNAL_SERVER_ERROR);
                     return;
                 }
 
-                result = DeviceController.pushData(dataMsg.owner, SensebotConstants.DEVICE_TYPE, dataMsg.deviceId,
-                        System.currentTimeMillis(), "DeviceData", motion, BAMStreamDefinitions.StreamTypeLabel.MOTION);
+                result = DeviceController.pushBamData(dataMsg.owner, SensebotConstants.DEVICE_TYPE,
+                                                      dataMsg.deviceId,
+                                                      System.currentTimeMillis(), "DeviceData",
+                                                      motion,
+                                                      DataStreamDefinitions.StreamTypeLabel.MOTION);
 
                 if (!result) {
                     response.setStatus(HttpStatus.SC_INTERNAL_SERVER_ERROR);
@@ -133,9 +138,12 @@ public class SensebotControllerService {
                 }
 
                 if (!sonar.equals("No Object")) {
-                    result = DeviceController.pushData(dataMsg.owner, SensebotConstants.DEVICE_TYPE, dataMsg.deviceId,
-                            System.currentTimeMillis(), "DeviceData", sonar,
-                            BAMStreamDefinitions.StreamTypeLabel.SONAR);
+                    result = DeviceController.pushBamData(dataMsg.owner,
+                                                          SensebotConstants.DEVICE_TYPE,
+                                                          dataMsg.deviceId,
+                                                          System.currentTimeMillis(), "DeviceData",
+                                                          sonar,
+                                                          DataStreamDefinitions.StreamTypeLabel.SONAR);
 
                     if (!result) {
                         response.setStatus(HttpStatus.SC_INTERNAL_SERVER_ERROR);
@@ -144,8 +152,11 @@ public class SensebotControllerService {
 
                 }
 
-                result = DeviceController.pushData(dataMsg.owner, SensebotConstants.DEVICE_TYPE, dataMsg.deviceId,
-                        System.currentTimeMillis(), "DeviceData", light, BAMStreamDefinitions.StreamTypeLabel.LIGHT);
+                result = DeviceController.pushBamData(dataMsg.owner, SensebotConstants.DEVICE_TYPE,
+                                                      dataMsg.deviceId,
+                                                      System.currentTimeMillis(), "DeviceData",
+                                                      light,
+                                                      DataStreamDefinitions.StreamTypeLabel.LIGHT);
 
                 if (!result) {
                     response.setStatus(HttpStatus.SC_INTERNAL_SERVER_ERROR);
@@ -171,9 +182,12 @@ public class SensebotControllerService {
         if (log.isDebugEnabled())
             log.debug("Recieved Temperature Data Value: " + temperature + " degrees C");
         try {
-            boolean result = DeviceController.pushData(dataMsg.owner, SensebotConstants.DEVICE_TYPE, dataMsg.deviceId,
-                    System.currentTimeMillis(), "DeviceData", temperature,
-                    BAMStreamDefinitions.StreamTypeLabel.TEMPERATURE);
+            boolean result = DeviceController.pushBamData(dataMsg.owner,
+                                                          SensebotConstants.DEVICE_TYPE,
+                                                          dataMsg.deviceId,
+                                                          System.currentTimeMillis(), "DeviceData",
+                                                          temperature,
+                                                          DataStreamDefinitions.StreamTypeLabel.TEMPERATURE);
 
             if (!result) {
                 response.setStatus(HttpStatus.SC_INTERNAL_SERVER_ERROR);
@@ -194,8 +208,12 @@ public class SensebotControllerService {
         if (log.isDebugEnabled())
             log.debug("Recieved PIR (Motion) Sensor Data Value: " + motion);
         try {
-            boolean result = DeviceController.pushData(dataMsg.owner, SensebotConstants.DEVICE_TYPE, dataMsg.deviceId,
-                    System.currentTimeMillis(), "DeviceData", motion, BAMStreamDefinitions.StreamTypeLabel.MOTION);
+            boolean result = DeviceController.pushBamData(dataMsg.owner,
+                                                          SensebotConstants.DEVICE_TYPE,
+                                                          dataMsg.deviceId,
+                                                          System.currentTimeMillis(), "DeviceData",
+                                                          motion,
+                                                          DataStreamDefinitions.StreamTypeLabel.MOTION);
 
             if (!result) {
                 response.setStatus(HttpStatus.SC_INTERNAL_SERVER_ERROR);
@@ -216,15 +234,16 @@ public class SensebotControllerService {
 
         if (sonar.equals("-1")) {
             if (log.isDebugEnabled())
-                log.debug("Recieved a 'No Obstacle' Sonar value. (Means there are no abstacles within 30cm)");
+                log.debug("Recieved a 'No Obstacle' Sonar value. (Means there are no abstacles " +
+                                  "within 30cm)");
         } else {
             if (log.isDebugEnabled())
                 log.debug("Recieved Sonar Sensor Data Value: " + sonar + " cm");
             try {
                 boolean result = DeviceController
-                        .pushData(dataMsg.owner, SensebotConstants.DEVICE_TYPE, dataMsg.deviceId,
-                                System.currentTimeMillis(), "DeviceData", sonar,
-                                BAMStreamDefinitions.StreamTypeLabel.SONAR);
+                        .pushBamData(dataMsg.owner, SensebotConstants.DEVICE_TYPE, dataMsg.deviceId,
+                                     System.currentTimeMillis(), "DeviceData", sonar,
+                                     DataStreamDefinitions.StreamTypeLabel.SONAR);
 
                 if (!result) {
                     response.setStatus(HttpStatus.SC_INTERNAL_SERVER_ERROR);
@@ -249,8 +268,12 @@ public class SensebotControllerService {
             log.debug("Recieved LDR (Light) Sensor Data Value: " + light);
 
         try {
-            boolean result = DeviceController.pushData(dataMsg.owner, SensebotConstants.DEVICE_TYPE, dataMsg.deviceId,
-                    System.currentTimeMillis(), "DeviceData", light, BAMStreamDefinitions.StreamTypeLabel.LIGHT);
+            boolean result = DeviceController.pushBamData(dataMsg.owner,
+                                                          SensebotConstants.DEVICE_TYPE,
+                                                          dataMsg.deviceId,
+                                                          System.currentTimeMillis(), "DeviceData",
+                                                          light,
+                                                          DataStreamDefinitions.StreamTypeLabel.LIGHT);
 
             if (!result) {
                 response.setStatus(HttpStatus.SC_INTERNAL_SERVER_ERROR);
