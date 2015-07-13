@@ -42,6 +42,8 @@ public class ThriftDataStoreConnector implements DataStoreConnector {
 
 	}
 
+	private boolean enabled=false;
+
 	@Override
 	public void initDataStore(DataStore config) throws DeviceControllerException {
 
@@ -49,6 +51,7 @@ public class ThriftDataStoreConnector implements DataStoreConnector {
 		String dataStoreEndpoint = dataStore.getServerURL() + ":" + dataStore.getPort();
 		String dataStoreUsername = dataStore.getUsername();
 		String dataStorePassword = dataStore.getPassword();
+		enabled=dataStore.isEnabled();
 		try {
 			dataPublisher = new DataPublisher(dataStoreEndpoint, dataStoreUsername,
 											  dataStorePassword);
@@ -58,7 +61,7 @@ public class ThriftDataStoreConnector implements DataStoreConnector {
 			String error = "Error creating data publisher for  endpoint: " + dataStoreEndpoint +
 					"with credentials, username-" + dataStoreUsername + " and password-" +
 					dataStorePassword + ": ";
-			log.error(error, e);
+			log.error(error);
 			throw new DeviceControllerException(error, e);
 		}
 	}
@@ -67,6 +70,10 @@ public class ThriftDataStoreConnector implements DataStoreConnector {
 	@Override
 	public void publishIoTData(HashMap<String, String> deviceData) throws
 																   DeviceControllerException {
+
+		if(!enabled||dataPublisher==null){
+			throw new DeviceControllerException();
+		}
 		String logMsg = "";
 		String owner = deviceData.get("owner");
 		String deviceType = deviceData.get("deviceType");
@@ -80,42 +87,42 @@ public class ThriftDataStoreConnector implements DataStoreConnector {
 			switch (description) {
 				case DataStreamDefinitions.StreamTypeLabel.TEMPERATURE:
 					if (log.isDebugEnabled()) {
-						log.info("Stream definition set to Temperature");
+						log.debug("Stream definition set to Temperature");
 					}
 					deviceDataStream = dataPublisher.defineStream(
 							DataStreamDefinitions.TEMPERATURE_STREAM_DEFINITION);
 					break;
 				case DataStreamDefinitions.StreamTypeLabel.MOTION:
 					if (log.isDebugEnabled()) {
-						log.info("Stream definition set to Motion (PIR)");
+						log.debug("Stream definition set to Motion (PIR)");
 					}
 					deviceDataStream = dataPublisher.defineStream(
 							DataStreamDefinitions.MOTION_STREAM_DEFINITION);
 					break;
 				case DataStreamDefinitions.StreamTypeLabel.SONAR:
 					if (log.isDebugEnabled()) {
-						log.info("Stream definition set to Sonar");
+						log.debug("Stream definition set to Sonar");
 					}
 					deviceDataStream = dataPublisher.defineStream(
 							DataStreamDefinitions.SONAR_STREAM_DEFINITION);
 					break;
 				case DataStreamDefinitions.StreamTypeLabel.LIGHT:
 					if (log.isDebugEnabled()) {
-						log.info("Stream definition set to Light");
+						log.debug("Stream definition set to Light");
 					}
 					deviceDataStream = dataPublisher.defineStream(
 							DataStreamDefinitions.LIGHT_STREAM_DEFINITION);
 					break;
 				case DataStreamDefinitions.StreamTypeLabel.BULB:
 					if (log.isDebugEnabled()) {
-						log.info("Stream definition set to Bulb Status");
+						log.debug("Stream definition set to Bulb Status");
 					}
 					deviceDataStream = dataPublisher.defineStream(
 							DataStreamDefinitions.BULB_STREAM_DEFINITION);
 					break;
 				case DataStreamDefinitions.StreamTypeLabel.FAN:
 					if (log.isDebugEnabled()) {
-						log.info("Stream definition set to Fan Status");
+						log.debug("Stream definition set to Fan Status");
 					}
 					deviceDataStream = dataPublisher.defineStream(
 							DataStreamDefinitions.FAN_STREAM_DEFINITION);
@@ -126,13 +133,13 @@ public class ThriftDataStoreConnector implements DataStoreConnector {
 		} catch (AgentException | MalformedStreamDefinitionException | StreamDefinitionException
 				| DifferentStreamDefinitionAlreadyDefinedException e) {
 			String error = "Error in defining fire-alarm specific streams for data publisher";
-			log.error(error, e);
+			log.error(error);
 			throw new DeviceControllerException(error, e);
 		}
 
 		try {
 			if (log.isDebugEnabled()) {
-				log.info("Publishing FireAlarm specific data");
+				log.debug("Publishing data");
 			}
 			dataPublisher.publish(deviceDataStream, System.currentTimeMillis(),
 								  new Object[]{owner, deviceType, deviceId, Long.parseLong(
@@ -149,7 +156,7 @@ public class ThriftDataStoreConnector implements DataStoreConnector {
 
 		} catch (AgentException e) {
 			String error = "Error while publishing device pin data";
-			log.error(error, e);
+			log.error(error);
 			throw new DeviceControllerException(error, e);
 		}
 	}

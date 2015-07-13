@@ -22,6 +22,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.osgi.framework.BundleContext;
 import org.osgi.service.component.ComponentContext;
+import org.wso2.carbon.device.mgt.iot.common.DeviceController;
 import org.wso2.carbon.device.mgt.iot.common.config.devicetype.datasource.IotDeviceTypeConfig;
 import org.wso2.carbon.device.mgt.iot.common.service.DeviceTypeService;
 import org.wso2.carbon.device.mgt.iot.common.service.DeviceTypeServiceImpl;
@@ -94,6 +95,7 @@ public class IotDeviceManagementServiceComponent {
 
 			//TODO: handle
             DeviceCloudConfigManager.getInstance().initConfig();
+			DeviceController.init();
             IoTUsageStatisticsClient.initializeDataSource();
 
 
