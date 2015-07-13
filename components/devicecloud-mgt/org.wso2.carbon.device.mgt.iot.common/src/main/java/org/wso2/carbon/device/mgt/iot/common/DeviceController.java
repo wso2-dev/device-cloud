@@ -42,7 +42,8 @@ public class DeviceController {
 	private static ControlQueueConnector mqttControlQueue;
 
 
-	static {
+
+	public static void init(){
 		DeviceCloudConfig config = DeviceCloudConfigManager.getInstance().getDeviceCloudMgtConfig();
 
 		if (config != null) {
@@ -50,7 +51,10 @@ public class DeviceController {
 			loadDataStores(config);
 			loadControlQueues(config);
 		}
+
 	}
+
+
 
 	private static void loadDataStores(DeviceCloudConfig config){
 		List<DataStore> dataStores=config.getDataStores().getDataStore();
@@ -77,7 +81,7 @@ public class DeviceController {
 			} catch (ClassNotFoundException | IllegalAccessException | InstantiationException ex) {
 				log.error("Error occurred when trying to initiate data store", ex);
 			} catch (DeviceControllerException ex) {
-				log.error(ex.getMessage(), ex);
+				log.error(ex.getMessage());
 			}
 		}
 	}
@@ -102,7 +106,7 @@ public class DeviceController {
 					}
 				}
 			} catch (ClassNotFoundException | IllegalAccessException | InstantiationException ex) {
-				log.error("Error occurred when trying to initiate data store", ex);
+				log.error("Error occurred when trying to initiate data store"+controlQueue.getName());
 			}
 		}
 

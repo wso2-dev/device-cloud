@@ -243,9 +243,13 @@ public class FireAlarmControllerService {
 
 				if (!result) {
 					response.setStatus(HttpStatus.SC_INTERNAL_SERVER_ERROR);
-					return;
 				}
+		} catch (UnauthorizedException e) {
+			response.setStatus(HttpStatus.SC_UNAUTHORIZED);
 
+		}
+
+		try{
 			result = DeviceController.pushCEPData(dataMsg.owner, FireAlarmConstants
 														  .DEVICE_TYPE,
 												  dataMsg.deviceId,
@@ -257,14 +261,13 @@ public class FireAlarmControllerService {
 
 			if (!result) {
 				response.setStatus(HttpStatus.SC_INTERNAL_SERVER_ERROR);
-				return;
 			}
-
-
 		} catch (UnauthorizedException e) {
 			response.setStatus(HttpStatus.SC_UNAUTHORIZED);
 
 		}
+
+
 
 	}
 
