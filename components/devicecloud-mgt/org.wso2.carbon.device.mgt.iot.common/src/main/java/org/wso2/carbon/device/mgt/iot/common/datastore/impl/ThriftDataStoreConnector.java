@@ -36,13 +36,13 @@ public class ThriftDataStoreConnector implements DataStoreConnector {
 
 	private DataPublisher dataPublisher = null;
 
-	public final class DataStoreConstants{
-			public final static String BAM="WSO2-BAM";
-			public final static String CEP="WSO2-CEP";
+	public final class DataStoreConstants {
+		public final static String BAM = "WSO2-BAM";
+		public final static String CEP = "WSO2-CEP";
 
 	}
 
-	private boolean enabled=false;
+	private boolean enabled = false;
 
 	@Override
 	public void initDataStore(DataStore config) throws DeviceControllerException {
@@ -51,7 +51,7 @@ public class ThriftDataStoreConnector implements DataStoreConnector {
 		String dataStoreEndpoint = dataStore.getServerURL() + ":" + dataStore.getPort();
 		String dataStoreUsername = dataStore.getUsername();
 		String dataStorePassword = dataStore.getPassword();
-		enabled=dataStore.isEnabled();
+		enabled = dataStore.isEnabled();
 		try {
 			dataPublisher = new DataPublisher(dataStoreEndpoint, dataStoreUsername,
 											  dataStorePassword);
@@ -71,7 +71,7 @@ public class ThriftDataStoreConnector implements DataStoreConnector {
 	public void publishIoTData(HashMap<String, String> deviceData) throws
 																   DeviceControllerException {
 
-		if(!enabled||dataPublisher==null){
+		if (!enabled || dataPublisher == null) {
 			throw new DeviceControllerException();
 		}
 		String logMsg = "";
