@@ -51,7 +51,9 @@ public class RaspberrypiControllerService {
 			log.debug("Recieved Temperature Data Value: " + temperature + " degrees C");
 		}
 		try {
-			boolean result = DeviceController.pushBamData(dataMsg.owner,
+
+			DeviceController deviceController = new DeviceController();
+			boolean result = deviceController.pushBamData(dataMsg.owner,
 														  RaspberrypiConstants.DEVICE_TYPE,
 														  dataMsg.deviceId,
 														  System.currentTimeMillis(), "DeviceData",

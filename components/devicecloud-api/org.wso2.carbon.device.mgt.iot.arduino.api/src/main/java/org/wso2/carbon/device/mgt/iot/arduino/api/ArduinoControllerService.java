@@ -19,6 +19,7 @@ package org.wso2.carbon.device.mgt.iot.arduino.api;
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.wso2.carbon.device.mgt.common.Device;
 import org.wso2.carbon.device.mgt.common.DeviceManagementException;
 import org.wso2.carbon.device.mgt.iot.arduino.api.util.DeviceJSON;
 import org.wso2.carbon.device.mgt.iot.arduino.api.util.MqttArduinoSubscriber;
@@ -82,7 +83,8 @@ public class ArduinoControllerService {
 		}
 
 		try {
-			boolean result = DeviceController.publishMqttControl(owner,
+			DeviceController deviceController = new DeviceController();
+			boolean result = deviceController.publishMqttControl(owner,
 																 ArduinoConstants.DEVICE_TYPE,
 																 deviceId, "BULB", switchToState);
 			if (result) {
@@ -146,7 +148,8 @@ public class ArduinoControllerService {
 			log.debug("Recieved Temperature Data Value: " + temperature + " degrees C");
 		}
 		try {
-			boolean result = DeviceController.pushBamData(dataMsg.owner,
+			DeviceController deviceController = new DeviceController();
+			boolean result = deviceController.pushBamData(dataMsg.owner,
 														  ArduinoConstants.DEVICE_TYPE,
 														  dataMsg.deviceId,
 														  System.currentTimeMillis(), "DeviceData",

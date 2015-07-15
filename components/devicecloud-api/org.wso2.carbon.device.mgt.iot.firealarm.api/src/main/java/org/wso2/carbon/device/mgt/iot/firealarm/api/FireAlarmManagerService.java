@@ -166,9 +166,8 @@ public class FireAlarmManagerService {
 		deviceIdentifier.setType(FireAlarmConstants.DEVICE_TYPE);
 
 		try {
-			Device device = deviceManagement.getDevice(deviceIdentifier);
+			return deviceManagement.getDevice(deviceIdentifier);
 
-			return device;
 		} catch (DeviceManagementException ex) {
 			log.error("Error occurred while retrieving device with Id " + deviceId + "\n" + ex);
 			return null;

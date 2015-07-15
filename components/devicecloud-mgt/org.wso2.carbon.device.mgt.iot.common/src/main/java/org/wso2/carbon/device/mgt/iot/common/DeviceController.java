@@ -136,7 +136,7 @@ public class DeviceController {
 		}
 	}
 
-	public static boolean pushBamData(String owner, String deviceType, String deviceId, Long time,
+	public  boolean pushBamData(String owner, String deviceType, String deviceId, Long time,
 									  String key,
 									  String value, String description)  throws UnauthorizedException {
 
@@ -153,12 +153,12 @@ public class DeviceController {
 		return pushData(deviceDataMap, ThriftDataStoreConnector.DataStoreConstants.BAM);
 
 	}
-	private static boolean pushData(HashMap<String, String> deviceDataMap,String publisherType)  throws UnauthorizedException{
+	private boolean pushData(HashMap<String, String> deviceDataMap,String publisherType)  throws UnauthorizedException{
 		try {
 			DataStoreConnector dataStoreConnector=dataStoresMap.get(publisherType);
 			if(dataStoreConnector==null){
 
-				log.info(publisherType+" is not enabled");
+				log.error(publisherType + " is not enabled");
 				return false;
 			}
 
@@ -172,7 +172,7 @@ public class DeviceController {
 
 	}
 
-	public static boolean pushCEPData(String owner, String deviceType, String deviceId, Long time,
+	public  boolean pushCepData(String owner, String deviceType, String deviceId, Long time,
 									  String key,
 									  String value, String description)  throws UnauthorizedException {
 		HashMap<String, String> deviceDataMap = new HashMap<String, String>();
@@ -189,7 +189,7 @@ public class DeviceController {
 
 	}
 
-	public static boolean publishMqttControl(String owner, String deviceType, String deviceId, String key,
+	public boolean publishMqttControl(String owner, String deviceType, String deviceId, String key,
 									 String value)
 			throws UnauthorizedException {
 		HashMap<String, String> deviceControlsMap = new HashMap<String, String>();
