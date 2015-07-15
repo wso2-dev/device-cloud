@@ -34,7 +34,10 @@ public class ThriftDataStoreConnector implements DataStoreConnector {
 
 	private static final Log log = LogFactory.getLog(ThriftDataStoreConnector.class);
 
-	private DataPublisher dataPublisher = null;
+	private String dataStoreEndpoint;
+	private String dataStoreUsername;
+	private String dataStorePassword;
+	private boolean enabled=false;
 
 	public final class DataStoreConstants{
 			public final static String BAM="WSO2-BAM";
@@ -42,27 +45,35 @@ public class ThriftDataStoreConnector implements DataStoreConnector {
 
 	}
 
-	private boolean enabled=false;
+
 
 	@Override
 	public void initDataStore(DataStore config) throws DeviceControllerException {
 
-		DataStore dataStore = config;
-		String dataStoreEndpoint = dataStore.getServerURL() + ":" + dataStore.getPort();
-		String dataStoreUsername = dataStore.getUsername();
-		String dataStorePassword = dataStore.getPassword();
-		enabled=dataStore.isEnabled();
+
+		dataStoreEndpoint = config.getServerURL() + ":" + config.getPort();
+		dataStoreUsername = config.getUsername();
+		dataStorePassword = config.getPassword();
+		enabled=config.isEnabled();
+
+	}
+
+	private DataPublisher getDataPublisher()  throws DeviceControllerException {
+
 		try {
-			dataPublisher = new DataPublisher(dataStoreEndpoint, dataStoreUsername,
+			DataPublisher dataPublisher = new DataPublisher(dataStoreEndpoint, dataStoreUsername,
 											  dataStorePassword);
-			log.info("data publisher created for endpoint " + dataStoreEndpoint);
+			if(log.isDebugEnabled()){
+				log.info("data publisher created for endpoint " + dataStoreEndpoint);
+			}
+			return dataPublisher;
 		} catch (MalformedURLException | AgentException | AuthenticationException
 				| TransportException e) {
 			String error = "Error creating data publisher for  endpoint: " + dataStoreEndpoint +
 					"with credentials, username-" + dataStoreUsername + " and password-" +
 					dataStorePassword + ": ";
 			log.error(error);
-			throw new DeviceControllerException(error, e);
+			throw new DeviceControllerException(error);
 		}
 	}
 
@@ -70,11 +81,12 @@ public class ThriftDataStoreConnector implements DataStoreConnector {
 	@Override
 	public void publishIoTData(HashMap<String, String> deviceData) throws
 																   DeviceControllerException {
-
+		//TODO: Create a threadpool and publish the Data or  use a queue and publish to it and have a data retreiver.
+		DataPublisher dataPublisher=getDataPublisher();
 		if(!enabled||dataPublisher==null){
 			throw new DeviceControllerException();
 		}
-		String logMsg = "";
+
 		String owner = deviceData.get("owner");
 		String deviceType = deviceData.get("deviceType");
 		String deviceId = deviceData.get("deviceId");
@@ -84,6 +96,7 @@ public class ThriftDataStoreConnector implements DataStoreConnector {
 		String description = deviceData.get("description");
 		String deviceDataStream = null;
 		try {
+			//TODO read from configuration
 			switch (description) {
 				case DataStreamDefinitions.StreamTypeLabel.TEMPERATURE:
 					if (log.isDebugEnabled()) {
@@ -147,7 +160,7 @@ public class ThriftDataStoreConnector implements DataStoreConnector {
 								  new Object[]{value});
 
 			if (log.isDebugEnabled()) {
-				logMsg = "event published to devicePinDataStream\n" + "\tOwner: " + owner +
+				String logMsg = "event published to devicePinDataStream\n" + "\tOwner: " + owner +
 						"\tDeviceType: " + deviceType + "\n" + "\tDeviceId: " + deviceId + "\tTime: " +
 						time + "\n" + "\tDescription: " + description + "\n" + "\tKey: " + key +
 						"\tValue: " + value + "\n";
