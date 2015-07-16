@@ -130,7 +130,12 @@ public class DeviceManagement {
 
 	public void addDeviceGroup(Group group) throws GroupManagementException {
         DeviceManagementService dmService = new DeviceManagementServiceImpl();
-        dmService.addGroup(group);
+        dmService.createGroup(group);
+	}
+
+	public void removeDeviceGroup(int groupId) throws GroupManagementException{
+		DeviceManagementService dmService = new DeviceManagementServiceImpl();
+		dmService.removeGroup(groupId);
 	}
 
 }

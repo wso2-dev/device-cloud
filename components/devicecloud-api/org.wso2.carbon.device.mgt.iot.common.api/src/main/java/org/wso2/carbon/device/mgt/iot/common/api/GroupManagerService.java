@@ -6,6 +6,7 @@ import org.wso2.carbon.device.mgt.iot.common.devicecloud.DeviceManagement;
 
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.QueryParam;
 import java.util.Date;
 
@@ -28,4 +29,18 @@ public class GroupManagerService {
             return false;
         }
     }
+
+    @Path("/group/delete/{groupId}")
+    @PUT
+    public boolean deleteGroup(@PathParam("groupId") int groupId) {
+        DeviceManagement deviceManagement = new DeviceManagement();
+        try {
+            deviceManagement.removeDeviceGroup(groupId);
+            return true;
+        } catch (GroupManagementException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
 }
