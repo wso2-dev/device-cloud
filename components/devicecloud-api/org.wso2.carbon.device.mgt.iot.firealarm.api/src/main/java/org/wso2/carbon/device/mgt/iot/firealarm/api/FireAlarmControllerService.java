@@ -192,10 +192,30 @@ public class FireAlarmControllerService {
 	public void pushTemperatureData(
 			final DeviceJSON dataMsg, @Context HttpServletResponse response) {
 		boolean result;
+		String deviceId = dataMsg.deviceId;
+		String deviceIp = dataMsg.reply;
 		String temperature = dataMsg.value;
 
+		String registeredIp = deviceToIpMap.get(deviceId);
+
+		if (registeredIp == null) {
+			log.warn(
+					"Unregistered IP: Temperature Data Received from an un-registered IP " +
+							deviceIp +
+							" for device ID - " + deviceId);
+			response.setStatus(HttpStatus.SC_PRECONDITION_FAILED);
+			return;
+		} else if (registeredIp != deviceIp) {
+			log.warn(
+					"Conflicting IP: Received IP is " + deviceIp + ". Device with ID " + deviceId +
+							" is already registered under some other IP. Re-registration " +
+							"required");
+			response.setStatus(HttpStatus.SC_CONFLICT);
+			return;
+		}
+
 		try {
-			DeviceController deviceController =new DeviceController();
+			DeviceController deviceController = new DeviceController();
 			result = deviceController.pushBamData(dataMsg.owner, FireAlarmConstants
 														  .DEVICE_TYPE,
 												  dataMsg.deviceId,
@@ -397,7 +417,7 @@ public class FireAlarmControllerService {
 
 				httpclient.close();
 			} catch (IOException e) {
-				if(log.isDebugEnabled()) {
+				if (log.isDebugEnabled()) {
 					log.debug("Failed on Creating the client for" + urlString);
 				}
 			}
