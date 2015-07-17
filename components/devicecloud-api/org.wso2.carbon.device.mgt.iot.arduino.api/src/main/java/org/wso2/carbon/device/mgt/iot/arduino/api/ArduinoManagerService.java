@@ -22,21 +22,13 @@ import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.device.mgt.common.Device;
 import org.wso2.carbon.device.mgt.common.DeviceIdentifier;
 import org.wso2.carbon.device.mgt.common.DeviceManagementException;
+import org.wso2.carbon.device.mgt.iot.arduino.constants.ArduinoConstants;
 import org.wso2.carbon.device.mgt.iot.common.DeviceManagement;
 import org.wso2.carbon.device.mgt.iot.common.util.ZipArchive;
 import org.wso2.carbon.device.mgt.iot.common.util.ZipUtil;
-import org.wso2.carbon.device.mgt.iot.arduino.constants.ArduinoConstants;
 
 import javax.servlet.http.HttpServletResponse;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.DELETE;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.PUT;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
+import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import java.nio.ByteBuffer;
@@ -185,8 +177,42 @@ public class ArduinoManagerService {
 	public Response downloadSketch(@QueryParam("owner") String owner, @PathParam("sketch_type") String
 			sketchType) {
 
+		ZipArchive zipFile = null;
+		try {
+			zipFile = createDownloadFile(owner, sketchType);
+			Response.ResponseBuilder rb = Response.ok(zipFile.getZipFile());
+			rb.header("Content-Disposition",
+					  "attachment; filename=\"" + zipFile.getFileName() + "\"");
+			return rb.build();
+		} catch (IllegalArgumentException ex) {
+			return Response.status(400).entity(ex.getMessage()).build();//bad request
+		} catch (DeviceManagementException ex) {
+			return Response.status(500).entity(ex.getMessage()).build();
+		}
+
+	}
+
+	@Path("/device/{sketch_type}/generate_link")
+	@GET
+	public Response generateSketchLink(@QueryParam("owner") String owner, @PathParam("sketch_type") String
+			sketchType) {
+
+		ZipArchive zipFile = null;
+		try {
+			zipFile = createDownloadFile(owner, sketchType);
+			Response.ResponseBuilder rb = Response.ok(zipFile.getDeviceId());
+			return rb.build();
+		} catch (IllegalArgumentException ex) {
+			return Response.status(400).entity(ex.getMessage()).build();//bad request
+		} catch (DeviceManagementException ex) {
+			return Response.status(500).entity(ex.getMessage()).build();
+		}
+
+	}
+
+	private ZipArchive createDownloadFile(String owner, String sketchType) throws DeviceManagementException{
 		if (owner == null) {
-			return Response.status(400).build();//bad request
+			throw new IllegalArgumentException("Error on createDownloadFile() Owner is null!");
 		}
 
 		//create new device id
@@ -197,28 +223,21 @@ public class ArduinoManagerService {
 		String refreshToken = UUID.randomUUID().toString();
 		//adding registering data
 
-		boolean status = register(deviceId,
-								  owner + "s_" + sketchType + "_" + deviceId.substring(0, 3),
+		boolean status = register(deviceId, owner + "s_" + sketchType + "_" + deviceId.substring(0,
+																								 3),
 								  owner);
 		if (!status) {
-			return Response.status(500).entity(
-					"Error occurred while registering the device with " + "id: " + deviceId
-							+ " owner:" + owner).build();
-
+			String msg = "Error occurred while registering the device with " + "id: " + deviceId
+					+ " owner:" + owner;
+			throw new DeviceManagementException(msg);
 		}
 
 		ZipUtil ziputil = new ZipUtil();
 		ZipArchive zipFile = null;
-		try {
-			zipFile = ziputil.downloadSketch(owner, sketchType, deviceId,
-											 token,refreshToken);
-		} catch (DeviceManagementException ex) {
-			return Response.status(500).entity("Error occurred while creating zip file").build();
-		}
 
-		Response.ResponseBuilder rb = Response.ok(zipFile.getZipFile());
-		rb.header("Content-Disposition", "attachment; filename=\"" + zipFile.getFileName() + "\"");
-		return rb.build();
+		zipFile = ziputil.downloadSketch(owner, sketchType, deviceId, token, refreshToken);
+		zipFile.setDeviceId(deviceId);
+		return zipFile;
 	}
 
 	private static String shortUUID() {
