@@ -21,6 +21,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.concurrent.FutureCallback;
 import org.apache.http.impl.nio.client.CloseableHttpAsyncClient;
 import org.apache.http.impl.nio.client.HttpAsyncClients;
 import org.wso2.carbon.device.mgt.common.DeviceIdentifier;
@@ -50,6 +51,7 @@ import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.Future;
 
 //import org.wso2.carbon.device.mgt.iot.firealarm.api.util.MQTTFirealarmSubscriber;
@@ -205,11 +207,11 @@ public class FireAlarmControllerService {
 							" for device ID - " + deviceId);
 			response.setStatus(HttpStatus.SC_PRECONDITION_FAILED);
 			return;
-		} else if (registeredIp != deviceIp) {
-			log.warn(
-					"Conflicting IP: Received IP is " + deviceIp + ". Device with ID " + deviceId +
-							" is already registered under some other IP. Re-registration " +
-							"required");
+		} else if (!registeredIp.equals(deviceIp)) {
+			log.warn("Conflicting IP: Received IP is " + deviceIp + ". Device with ID " +
+							 deviceId +
+							 " is already registered under some other IP. Re-registration " +
+							 "required");
 			response.setStatus(HttpStatus.SC_CONFLICT);
 			return;
 		}
@@ -407,18 +409,50 @@ public class FireAlarmControllerService {
 			responseMsg = readResponseFromGetRequest(httpConnection);
 
 		} else {
-
+			CloseableHttpAsyncClient httpclient = null;
 			try {
-				CloseableHttpAsyncClient httpclient;
+
 				httpclient = HttpAsyncClients.createDefault();
 				httpclient.start();
 				HttpGet request = new HttpGet(urlString);
-				Future<HttpResponse> future = httpclient.execute(request, null);
+				final CountDownLatch latch = new CountDownLatch(1);
+				Future<HttpResponse> future = httpclient.execute(
+						request, new FutureCallback<HttpResponse>
+								() {
 
-				httpclient.close();
-			} catch (IOException e) {
+
+							@Override
+							public void completed(HttpResponse httpResponse) {
+								latch.countDown();
+							}
+
+							@Override
+							public void failed(Exception e) {
+								latch.countDown();
+							}
+
+							@Override
+							public void cancelled() {
+								latch.countDown();
+							}
+						});
+
+				latch.await();
+
+			} catch (InterruptedException e) {
 				if (log.isDebugEnabled()) {
-					log.debug("Failed on Creating the client for" + urlString);
+					log.debug("Sync Interrupted");
+				}
+			} finally {
+				try {
+					if (httpclient != null) {
+						httpclient.close();
+
+					}
+				} catch (IOException e) {
+					if (log.isDebugEnabled()) {
+						log.debug("Failed on close");
+					}
 				}
 			}
 
