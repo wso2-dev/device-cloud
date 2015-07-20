@@ -1,7 +1,7 @@
 package org.wso2.carbon.device.mgt.iot.common.api;
 
-import org.wso2.carbon.device.mgt.common.Group;
-import org.wso2.carbon.device.mgt.common.GroupManagementException;
+import org.wso2.carbon.device.mgt.group.common.Group;
+import org.wso2.carbon.device.mgt.group.common.GroupManagementException;
 import org.wso2.carbon.device.mgt.iot.common.devicecloud.DeviceManagement;
 
 import javax.ws.rs.PUT;

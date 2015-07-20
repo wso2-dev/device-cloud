@@ -19,11 +19,14 @@ package org.wso2.carbon.device.mgt.iot.common.devicecloud;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.device.mgt.common.*;
-import org.wso2.carbon.device.mgt.common.spi.DeviceMgtService;
 import org.wso2.carbon.device.mgt.core.dao.DeviceManagementDAOException;
 import org.wso2.carbon.device.mgt.core.dao.DeviceManagementDAOFactory;
 import org.wso2.carbon.device.mgt.core.dto.DeviceType;
 import org.wso2.carbon.device.mgt.core.service.DeviceManagementService;
+import org.wso2.carbon.device.mgt.group.common.Group;
+import org.wso2.carbon.device.mgt.group.common.GroupManagementException;
+import org.wso2.carbon.device.mgt.group.core.service.GroupManagementService;
+import org.wso2.carbon.device.mgt.group.core.service.GroupManagementServiceImpl;
 import org.wso2.carbon.device.mgt.iot.common.iotdevice.util.IotDeviceManagementUtil;
 import org.wso2.carbon.device.mgt.core.service.DeviceManagementServiceImpl;
 import org.wso2.carbon.device.mgt.iot.common.devicecloud.util.ZipArchive;
@@ -101,8 +104,7 @@ public class DeviceManagement {
 
 	public List<Device> getDevices(int groupId) throws DeviceManagementException {
 		DeviceManagementService dmService = new DeviceManagementServiceImpl();
-		return dmService.getDevicesByGroup(groupId);
-
+		throw new DeviceManagementException("Method not implemented", new Exception());
 	}
 
 	public List<Device> getDevicesByType(String deviceType) throws DeviceManagementException{
@@ -129,13 +131,13 @@ public class DeviceManagement {
 	}
 
 	public void addDeviceGroup(Group group) throws GroupManagementException {
-        DeviceManagementService dmService = new DeviceManagementServiceImpl();
-        dmService.createGroup(group);
+        GroupManagementService groupManagementService = new GroupManagementServiceImpl();
+        groupManagementService.createGroup(group);
 	}
 
-	public void removeDeviceGroup(int groupId) throws GroupManagementException{
-		DeviceManagementService dmService = new DeviceManagementServiceImpl();
-		dmService.removeGroup(groupId);
+	public void removeDeviceGroup(int groupId) throws GroupManagementException {
+		GroupManagementService groupManagementService = new GroupManagementServiceImpl();
+		groupManagementService.deleteGroup(groupId);
 	}
 
 }

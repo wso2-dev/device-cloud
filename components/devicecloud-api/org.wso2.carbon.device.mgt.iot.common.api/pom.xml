@@ -29,6 +29,15 @@
             <artifactId>org.wso2.carbon.device.mgt.core</artifactId>
             <scope>provided</scope>
         </dependency>
+        <dependency>
+            <groupId>org.wso2.carbon.devicemgt</groupId>
+            <artifactId>org.wso2.carbon.device.mgt.group.core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.wso2.carbon.devicemgt</groupId>
+            <artifactId>org.wso2.carbon.device.mgt.group.common</artifactId>
+            <scope>provided</scope>
+        </dependency>
 
         <!--CXF -->
         <dependency>

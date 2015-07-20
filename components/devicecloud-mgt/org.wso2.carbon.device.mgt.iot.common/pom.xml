@@ -56,6 +56,8 @@
 							javax.net.ssl,
 							org.w3c.dom,
 							org.wso2.carbon.utils.*,
+							org.wso2.carbon.device.mgt.group.common*,
+							org.wso2.carbon.device.mgt.group.core.*,
 							org.wso2.carbon.device.mgt.common.*,
 							org.wso2.carbon.device.mgt.common,
 							org.wso2.carbon.device.mgt.core.*,
@@ -123,6 +125,14 @@
 		<dependency>
 			<groupId>org.wso2.carbon.devicemgt</groupId>
 			<artifactId>org.wso2.carbon.device.mgt.core</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.wso2.carbon.devicemgt</groupId>
+			<artifactId>org.wso2.carbon.device.mgt.group.common</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.wso2.carbon.devicemgt</groupId>
+			<artifactId>org.wso2.carbon.device.mgt.group.core</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.wso2.carbon</groupId>
