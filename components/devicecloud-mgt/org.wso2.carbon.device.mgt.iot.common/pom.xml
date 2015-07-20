@@ -56,7 +56,7 @@
 							javax.net.ssl,
 							org.w3c.dom,
 							org.wso2.carbon.utils.*,
-							org.wso2.carbon.device.mgt.group.common*,
+							org.wso2.carbon.device.mgt.group.common.*,
 							org.wso2.carbon.device.mgt.group.core.*,
 							org.wso2.carbon.device.mgt.common.*,
 							org.wso2.carbon.device.mgt.common,
