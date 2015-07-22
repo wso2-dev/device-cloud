@@ -35,6 +35,7 @@ import org.wso2.carbon.device.mgt.iot.common.config.devicetype.IotDeviceTypeConf
 import org.wso2.carbon.device.mgt.iot.common.util.iotdevice.dao.IotDeviceManagementDAOFactory;
 import org.wso2.carbon.device.mgt.iot.common.util.iotdevice.dao.util.IotDeviceManagementDAOUtil;
 import org.wso2.carbon.ndatasource.core.DataSourceService;
+import org.wso2.carbon.utils.ConfigurationContextService;
 
 import java.util.Map;
 
@@ -47,11 +48,17 @@ import java.util.Map;
  * policy="dynamic"
  * bind="setDataSourceService"
  * unbind="unsetDataSourceService"
+ * @scr.reference name="config.context.service"
+ * interface="org.wso2.carbon.utils.ConfigurationContextService"
+ * cardinality="0..1"
+ * policy="dynamic"
+ * bind="setConfigurationContextService"
+ * unbind="unsetConfigurationContextService"
  */
 public class IotDeviceManagementServiceComponent {
 
     private static final Log log = LogFactory.getLog(IotDeviceManagementServiceComponent.class);
-
+	public static ConfigurationContextService configurationContextService;
     protected void activate(ComponentContext ctx) {
         if (log.isDebugEnabled()) {
             log.debug("Activating Iot Device Management Service Component");
@@ -132,5 +139,21 @@ public class IotDeviceManagementServiceComponent {
     protected void unsetDataSourceService(DataSourceService dataSourceService) {
         //do nothing
     }
+
+	protected void setConfigurationContextService(ConfigurationContextService configurationContextService) {
+		if (log.isDebugEnabled()) {
+			log.debug("Setting ConfigurationContextService");
+		}
+
+		IotDeviceManagementServiceComponent.configurationContextService=configurationContextService;
+
+	}
+
+	protected void unsetConfigurationContextService(ConfigurationContextService configurationContextService) {
+		if (log.isDebugEnabled()) {
+			log.debug("Un-setting ConfigurationContextService");
+		}
+		IotDeviceManagementServiceComponent.configurationContextService=null;
+	}
 
 }
