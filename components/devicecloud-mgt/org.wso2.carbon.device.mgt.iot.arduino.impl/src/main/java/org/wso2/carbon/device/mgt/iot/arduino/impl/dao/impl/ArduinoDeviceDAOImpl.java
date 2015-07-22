@@ -18,10 +18,10 @@ package org.wso2.carbon.device.mgt.iot.arduino.impl.dao.impl;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.wso2.carbon.device.mgt.iot.common.iotdevice.dao.IotDeviceDAO;
-import org.wso2.carbon.device.mgt.iot.common.iotdevice.dao.IotDeviceManagementDAOException;
-import org.wso2.carbon.device.mgt.iot.common.iotdevice.dao.util.IotDeviceManagementDAOUtil;
-import org.wso2.carbon.device.mgt.iot.common.iotdevice.dto.IotDevice;
+import org.wso2.carbon.device.mgt.iot.common.util.iotdevice.dao.IotDeviceDAO;
+import org.wso2.carbon.device.mgt.iot.common.util.iotdevice.dao.IotDeviceManagementDAOException;
+import org.wso2.carbon.device.mgt.iot.common.util.iotdevice.dao.util.IotDeviceManagementDAOUtil;
+import org.wso2.carbon.device.mgt.iot.common.util.iotdevice.dto.IotDevice;
 import org.wso2.carbon.device.mgt.iot.arduino.constants.ArduinoConstants;
 import org.wso2.carbon.device.mgt.iot.arduino.impl.dao.ArduinoDAO;
 

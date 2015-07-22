@@ -20,10 +20,10 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.device.mgt.iot.android.sense.constants.AndroidSenseConstants;
 import org.wso2.carbon.device.mgt.iot.android.sense.impl.dao.impl.AndroidSenseDAOImpl;
-import org.wso2.carbon.device.mgt.iot.common.iotdevice.dao.IotDeviceDAO;
-import org.wso2.carbon.device.mgt.iot.common.iotdevice.dao.IotDeviceManagementDAOException;
-import org.wso2.carbon.device.mgt.iot.common.iotdevice.dao.IotDeviceManagementDAOFactory;
-import org.wso2.carbon.device.mgt.iot.common.iotdevice.dao.IotDeviceManagementDAOFactoryInterface;
+import org.wso2.carbon.device.mgt.iot.common.util.iotdevice.dao.IotDeviceDAO;
+import org.wso2.carbon.device.mgt.iot.common.util.iotdevice.dao.IotDeviceManagementDAOException;
+import org.wso2.carbon.device.mgt.iot.common.util.iotdevice.dao.IotDeviceManagementDAOFactory;
+import org.wso2.carbon.device.mgt.iot.common.util.iotdevice.dao.IotDeviceManagementDAOFactoryInterface;
 
 import javax.sql.DataSource;
 import java.sql.Connection;

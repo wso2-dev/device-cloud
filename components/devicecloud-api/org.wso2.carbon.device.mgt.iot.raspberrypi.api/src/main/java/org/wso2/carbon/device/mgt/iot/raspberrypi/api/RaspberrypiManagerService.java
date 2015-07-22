@@ -22,9 +22,10 @@ import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.device.mgt.common.Device;
 import org.wso2.carbon.device.mgt.common.DeviceIdentifier;
 import org.wso2.carbon.device.mgt.common.DeviceManagementException;
-import org.wso2.carbon.device.mgt.iot.common.devicecloud.DeviceManagement;
-import org.wso2.carbon.device.mgt.iot.common.devicecloud.util.ZipArchive;
-import org.wso2.carbon.device.mgt.iot.common.devicecloud.util.ZipUtil;
+import org.wso2.carbon.device.mgt.common.EnrolmentInfo;
+import org.wso2.carbon.device.mgt.iot.common.DeviceManagement;
+import org.wso2.carbon.device.mgt.iot.common.util.ZipArchive;
+import org.wso2.carbon.device.mgt.iot.common.util.ZipUtil;
 import org.wso2.carbon.device.mgt.iot.raspberrypi.constants.RaspberrypiConstants;
 
 import javax.servlet.http.HttpServletResponse;
@@ -44,8 +45,6 @@ import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import java.util.UUID;
 
-import static java.nio.charset.StandardCharsets.UTF_8;
-
 public class RaspberrypiManagerService {
 
 	private static Log log = LogFactory.getLog(RaspberrypiManagerService.class);
@@ -61,22 +60,22 @@ public class RaspberrypiManagerService {
 		deviceIdentifier.setId(deviceId);
 		deviceIdentifier.setType(RaspberrypiConstants.DEVICE_TYPE);
 		try {
-			if (deviceManagement.isExist(deviceIdentifier)) {
+			if (deviceManagement.getDeviceManagementService().isEnrolled(deviceIdentifier)) {
 				Response.status(HttpStatus.SC_CONFLICT).build();
 				return false;
 			}
 
 			Device device = new Device();
 			device.setDeviceIdentifier(deviceId);
-
-			device.setDateOfEnrolment(new Date().getTime());
-			device.setDateOfLastUpdate(new Date().getTime());
-			//		device.setStatus(true);
+			EnrolmentInfo enrolmentInfo = new EnrolmentInfo();
+			enrolmentInfo.setDateOfEnrolment(new Date().getTime());
+			enrolmentInfo.setDateOfLastUpdate(new Date().getTime());
+			enrolmentInfo.setStatus(EnrolmentInfo.Status.ACTIVE);
 
 			device.setName(name);
 			device.setType(RaspberrypiConstants.DEVICE_TYPE);
-			device.setOwner(owner);
-			boolean added = deviceManagement.addNewDevice(device);
+			enrolmentInfo.setOwner(owner);
+			boolean added = deviceManagement.getDeviceManagementService().enrollDevice(device);
 			if (added) {
 				Response.status(HttpStatus.SC_OK).build();
 
@@ -104,7 +103,7 @@ public class RaspberrypiManagerService {
 		deviceIdentifier.setId(deviceId);
 		deviceIdentifier.setType(RaspberrypiConstants.DEVICE_TYPE);
 		try {
-			boolean removed = deviceManagement.removeDevice(deviceIdentifier);
+			boolean removed = deviceManagement.getDeviceManagementService().disenrollDevice(deviceIdentifier);
 			if (removed) {
 				response.setStatus(HttpStatus.SC_OK);
 
@@ -132,16 +131,16 @@ public class RaspberrypiManagerService {
 		deviceIdentifier.setId(deviceId);
 		deviceIdentifier.setType(RaspberrypiConstants.DEVICE_TYPE);
 		try {
-			Device device = deviceManagement.getDevice(deviceIdentifier);
+			Device device = deviceManagement.getDeviceManagementService().getDevice(deviceIdentifier);
 			device.setDeviceIdentifier(deviceId);
 
 			// device.setDeviceTypeId(deviceTypeId);
-			device.setDateOfLastUpdate(new Date().getTime());
+			device.getEnrolmentInfo().setDateOfLastUpdate(new Date().getTime());
 
 			device.setName(name);
 			device.setType(RaspberrypiConstants.DEVICE_TYPE);
 
-			boolean updated = deviceManagement.update(device);
+			boolean updated = deviceManagement.getDeviceManagementService().updateDeviceInfo(deviceIdentifier,device);
 
 
 			if (updated) {
@@ -171,7 +170,7 @@ public class RaspberrypiManagerService {
 		deviceIdentifier.setType(RaspberrypiConstants.DEVICE_TYPE);
 
 		try {
-			Device device = deviceManagement.getDevice(deviceIdentifier);
+			Device device = deviceManagement.getDeviceManagementService().getDevice(deviceIdentifier);
 
 			return device;
 		} catch (DeviceManagementException ex) {

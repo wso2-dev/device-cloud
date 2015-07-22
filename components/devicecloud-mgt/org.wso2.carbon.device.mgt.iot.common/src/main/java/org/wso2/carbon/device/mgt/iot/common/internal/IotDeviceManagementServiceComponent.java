@@ -22,18 +22,20 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.osgi.framework.BundleContext;
 import org.osgi.service.component.ComponentContext;
-import org.wso2.carbon.device.mgt.iot.common.DeviceTypeService;
-import org.wso2.carbon.device.mgt.iot.common.DeviceTypeServiceImpl;
-import org.wso2.carbon.device.mgt.iot.common.devicecloud.api.AccessTokenClient;
-import org.wso2.carbon.device.mgt.iot.common.iotdevice.exception.IotDeviceMgtPluginException;
-import org.wso2.carbon.device.mgt.iot.common.devicecloud.config.DeviceCloudConfigManager;
-import org.wso2.carbon.device.mgt.iot.common.devicecloud.usage.statistics.IoTUsageStatisticsClient;
-import org.wso2.carbon.device.mgt.iot.common.iotdevice.config.IotDeviceConfigurationManager;
-import org.wso2.carbon.device.mgt.iot.common.iotdevice.config.IotDeviceManagementConfig;
-import org.wso2.carbon.device.mgt.iot.common.iotdevice.config.datasource.IotDataSourceConfig;
-import org.wso2.carbon.device.mgt.iot.common.iotdevice.dao.IotDeviceManagementDAOFactory;
-import org.wso2.carbon.device.mgt.iot.common.iotdevice.dao.util.IotDeviceManagementDAOUtil;
+import org.wso2.carbon.core.ServerStartupObserver;
+import org.wso2.carbon.device.mgt.iot.common.DeviceController;
+import org.wso2.carbon.device.mgt.iot.common.config.devicetype.datasource.IotDeviceTypeConfig;
+import org.wso2.carbon.device.mgt.iot.common.service.DeviceTypeService;
+import org.wso2.carbon.device.mgt.iot.common.service.DeviceTypeServiceImpl;
+import org.wso2.carbon.device.mgt.iot.common.startup.StartupUrlPrinter;
+import org.wso2.carbon.device.mgt.iot.common.util.iotdevice.exception.IotDeviceMgtPluginException;
+import org.wso2.carbon.device.mgt.iot.common.config.server.DeviceCloudConfigManager;
+import org.wso2.carbon.device.mgt.iot.common.analytics.statistics.IoTUsageStatisticsClient;
+import org.wso2.carbon.device.mgt.iot.common.config.devicetype.IotDeviceTypeConfigurationManager;
+import org.wso2.carbon.device.mgt.iot.common.util.iotdevice.dao.IotDeviceManagementDAOFactory;
+import org.wso2.carbon.device.mgt.iot.common.util.iotdevice.dao.util.IotDeviceManagementDAOUtil;
 import org.wso2.carbon.ndatasource.core.DataSourceService;
+import org.wso2.carbon.utils.ConfigurationContextService;
 
 import java.util.Map;
 
@@ -46,11 +48,17 @@ import java.util.Map;
  * policy="dynamic"
  * bind="setDataSourceService"
  * unbind="unsetDataSourceService"
+ * @scr.reference name="config.context.service"
+ * interface="org.wso2.carbon.utils.ConfigurationContextService"
+ * cardinality="0..1"
+ * policy="dynamic"
+ * bind="setConfigurationContextService"
+ * unbind="unsetConfigurationContextService"
  */
 public class IotDeviceManagementServiceComponent {
 
     private static final Log log = LogFactory.getLog(IotDeviceManagementServiceComponent.class);
-
+	public static ConfigurationContextService configurationContextService;
     protected void activate(ComponentContext ctx) {
         if (log.isDebugEnabled()) {
             log.debug("Activating Iot Device Management Service Component");
@@ -59,16 +67,15 @@ public class IotDeviceManagementServiceComponent {
 
 
             BundleContext bundleContext = ctx.getBundleContext();              /* Initialize the data source configuration */
-			IotDeviceConfigurationManager.getInstance().initConfig();
-			IotDeviceManagementConfig config = IotDeviceConfigurationManager.getInstance()
-					.getIotDeviceManagementConfig();
-			Map<String, IotDataSourceConfig> dsConfigMap =
-					config.getIotDeviceMgtRepository().getIotDataSourceConfigMap();
+			IotDeviceTypeConfigurationManager.getInstance().initConfig();
+
+
+			Map<String, IotDeviceTypeConfig> dsConfigMap =
+					IotDeviceTypeConfigurationManager.getInstance().getIotDeviceTypeConfigMap();
 
 			IotDeviceManagementDAOFactory.init(dsConfigMap);
 
-			//TODO
-			AccessTokenClient accessTokenClient = new AccessTokenClient();
+
 
 			String setupOption = System.getProperty("setup");
 			if (setupOption != null) {
@@ -92,14 +99,23 @@ public class IotDeviceManagementServiceComponent {
 			}
 
 
-			bundleContext.registerService(DeviceTypeService.class.getName(),new DeviceTypeServiceImpl(), null);
+
+
+			//TODO: handle
             DeviceCloudConfigManager.getInstance().initConfig();
+			DeviceController.init();
             IoTUsageStatisticsClient.initializeDataSource();
+
+			bundleContext.registerService(DeviceTypeService.class.getName(),
+										  new DeviceTypeServiceImpl(), null);
+
 
 
 			if (log.isDebugEnabled()) {
 				log.debug("Iot Device Management Service Component has been successfully activated");
 			}
+
+			bundleContext.registerService(ServerStartupObserver.class, new StartupUrlPrinter(), null);
 		} catch (Throwable e) {
 			log.error("Error occurred while activating Iot Device Management Service Component", e);
 		}
@@ -124,5 +140,21 @@ public class IotDeviceManagementServiceComponent {
     protected void unsetDataSourceService(DataSourceService dataSourceService) {
         //do nothing
     }
+
+	protected void setConfigurationContextService(ConfigurationContextService configurationContextService) {
+		if (log.isDebugEnabled()) {
+			log.debug("Setting ConfigurationContextService");
+		}
+
+		IotDeviceManagementServiceComponent.configurationContextService=configurationContextService;
+
+	}
+
+	protected void unsetConfigurationContextService(ConfigurationContextService configurationContextService) {
+		if (log.isDebugEnabled()) {
+			log.debug("Un-setting ConfigurationContextService");
+		}
+		IotDeviceManagementServiceComponent.configurationContextService=null;
+	}
 
 }

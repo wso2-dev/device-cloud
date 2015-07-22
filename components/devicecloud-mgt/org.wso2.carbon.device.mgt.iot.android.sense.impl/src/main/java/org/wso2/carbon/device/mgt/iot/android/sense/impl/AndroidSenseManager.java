@@ -22,16 +22,14 @@ import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.device.mgt.common.Device;
 import org.wso2.carbon.device.mgt.common.DeviceIdentifier;
 import org.wso2.carbon.device.mgt.common.DeviceManagementException;
+import org.wso2.carbon.device.mgt.common.DeviceManager;
+import org.wso2.carbon.device.mgt.common.EnrolmentInfo;
 import org.wso2.carbon.device.mgt.common.FeatureManager;
-import org.wso2.carbon.device.mgt.common.app.mgt.AppManagerConnectorException;
-import org.wso2.carbon.device.mgt.common.operation.mgt.Operation;
-import org.wso2.carbon.device.mgt.common.spi.DeviceMgtService;
-import org.wso2.carbon.device.mgt.iot.android.sense.constants.AndroidSenseConstants;
 import org.wso2.carbon.device.mgt.iot.android.sense.impl.dao.AndroidSenseDAO;
-import org.wso2.carbon.device.mgt.iot.common.iotdevice.dao.IotDeviceManagementDAOException;
-import org.wso2.carbon.device.mgt.iot.common.iotdevice.dao.IotDeviceManagementDAOFactory;
-import org.wso2.carbon.device.mgt.iot.common.iotdevice.dto.IotDevice;
-import org.wso2.carbon.device.mgt.iot.common.iotdevice.util.IotDeviceManagementUtil;
+import org.wso2.carbon.device.mgt.iot.common.util.iotdevice.dao.IotDeviceManagementDAOException;
+import org.wso2.carbon.device.mgt.iot.common.util.iotdevice.dao.IotDeviceManagementDAOFactory;
+import org.wso2.carbon.device.mgt.iot.common.util.iotdevice.dto.IotDevice;
+import org.wso2.carbon.device.mgt.iot.common.util.iotdevice.util.IotDeviceManagementUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,15 +38,11 @@ import java.util.List;
 /**
  * This represents the Android implementation of DeviceManagerService.
  */
-public class AndroidSenseManager implements DeviceMgtService {
+public class AndroidSenseManager implements DeviceManager {
 
     private static final IotDeviceManagementDAOFactory iotDeviceManagementDAOFactory = new AndroidSenseDAO();
     private static final Log log = LogFactory.getLog(AndroidSenseManager.class);
 
-    @Override
-    public String getProviderType() {
-        return AndroidSenseConstants.DEVICE_TYPE;
-    }
 
     @Override
     public FeatureManager getFeatureManager() {
@@ -195,6 +189,12 @@ public class AndroidSenseManager implements DeviceMgtService {
     }
 
     @Override
+    public boolean setStatus(DeviceIdentifier deviceId, String currentOwner,
+                             EnrolmentInfo.Status status) throws DeviceManagementException {
+        return false;
+    }
+
+    @Override
     public boolean updateDeviceInfo(DeviceIdentifier deviceIdentifier, Device device) throws DeviceManagementException {
         boolean status;
         IotDevice iotDevice = IotDeviceManagementUtil.convertToIotDevice(device);
@@ -245,10 +245,4 @@ public class AndroidSenseManager implements DeviceMgtService {
         return devices;
     }
 
-
-    @Override
-    public void installApplication(Operation operation, List<DeviceIdentifier> list)
-            throws AppManagerConnectorException {
-
-    }
 }

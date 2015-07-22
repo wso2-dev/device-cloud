@@ -21,35 +21,16 @@ import org.apache.commons.logging.LogFactory;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.component.ComponentContext;
-import org.wso2.carbon.device.mgt.common.spi.DeviceMgtService;
-import org.wso2.carbon.device.mgt.iot.common.DeviceTypeService;
-import org.wso2.carbon.device.mgt.iot.arduino.impl.ArduinoManager;
+import org.wso2.carbon.device.mgt.common.spi.DeviceManagementService;
+import org.wso2.carbon.device.mgt.iot.arduino.impl.ArduinoManagerService;
+import org.wso2.carbon.device.mgt.iot.common.service.DeviceTypeService;
 
-///**
-// * @scr.component name="org.wso2.carbon.device.mgt.iot.arduino.internal.ArduinoManagementServiceComponent"
-// * immediate="true"
-// * @scr.reference name="org.wso2.carbon.ndatasource"
-// * interface="org.wso2.carbon.ndatasource.core.DataSourceService"
-// * cardinality="1..1"
-// * policy="dynamic"
-// * bind="setDataSourceService"
-// * unbind="unsetDataSourceService"
-// */
-
-
-
-//* @scr.reference name="org.wso2.carbon.ndatasource"
-//		* interface="org.wso2.carbon.ndatasource.core.DataSourceService"
-//		* cardinality="1..1"
-//		* policy="dynamic"
-//		* bind="setDataSourceService"
-//		* unbind="unsetDataSourceService"
 
 /**
  * @scr.component name="org.wso2.carbon.device.mgt.iot.arduino.internal.ArduinoManagementServiceComponent"
  * immediate="true"
  * @scr.reference name="wso2.carbon.device.mgt.iot.common.DeviceTypeService"
- * interface="org.wso2.carbon.device.mgt.iot.common.DeviceTypeService"
+ * interface="org.wso2.carbon.device.mgt.iot.common.service.DeviceTypeService"
  * cardinality="1..1"
  * policy="dynamic"
  * bind="setDeviceTypeService"
@@ -72,8 +53,8 @@ public class ArduinoManagementServiceComponent {
 
 
             arduinoServiceRegRef =
-                    bundleContext.registerService(DeviceMgtService.class.getName(), new
-					ArduinoManager(), null);
+                    bundleContext.registerService(DeviceManagementService.class.getName(), new
+                            ArduinoManagerService(), null);
 
 
 

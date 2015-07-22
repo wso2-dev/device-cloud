@@ -1,47 +1,54 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<DeviceCloudMgtConfiguration>
-
-    <DeviceController>
-        <DeviceDataStore>WSO2-BAM</DeviceDataStore>
-        <DeviceControlQueue>MQTT</DeviceControlQueue>
-    </DeviceController>
-
+<DeviceCloudConfiguration>
     <DataStores>
-        <DataStore type="WSO2-BAM">
-            <class>org.wso2.carbon.device.mgt.iot.common.devicecloud.datastore.bam.BAMDataStore</class>
-            <endpoint>tcp://localhost</endpoint>
-            <!--<endpoint>tcp://10.100.7.38</endpoint>-->
-            <port>7613</port>
-            <username>admin</username>
-            <password>admin</password>
+        <DataStore>
+            <Name>WSO2-BAM</Name>
+            <Enabled>true</Enabled>
+            <PublisherClass>org.wso2.carbon.device.mgt.iot.common.datastore.impl.ThriftDataStoreConnector</PublisherClass>
+            <ServerURL>tcp://localhost</ServerURL>
+            <Port>7613</Port>
+            <Username>admin</Username>
+            <Password>admin</Password>
         </DataStore>
 
-        <DataStore type="WSO2-CEP">
-            <class>
-                org.wso2.carbon.device.mgt.iot.common.devicecloud.exception.devicecontroller.impl.CEPDataStore
-            </class>
-            <endpoint>[CEP_ENDPOINT]</endpoint>
-            <port>[CEP_PORT]</port>
-            <username>admin</username>
-            <password>admin</password>
+        <DataStore>
+            <Name>WSO2-CEP</Name>
+            <Enabled>true</Enabled>
+            <PublisherClass>org.wso2.carbon.device.mgt.iot.common.datastore.impl.ThriftDataStoreConnector</PublisherClass>
+            <ServerURL>tcp://localhost</ServerURL>
+            <Port>7613</Port>
+            <Username>admin</Username>
+            <Password>admin</Password>
         </DataStore>
     </DataStores>
 
     <ControlQueues>
-        <ControlQueue type="MQTT">
-            <class>org.wso2.carbon.device.mgt.iot.common.devicecloud.controlqueue.mqtt.MqttControlPublisher</class>
-            <protocol>MQTT</protocol>
-            <endpoint>tcp://localhost</endpoint>
-            <!--<endpoint>tcp://212.72.74.21</endpoint>-->  <!-- broker.mqtt-dashboard.com -->
-            <port>1883</port>
-            <username>.</username>
-            <password>.</password>
+        <ControlQueue>
+            <Name>MQTT</Name>
+            <Enabled>true</Enabled>
+            <ControlClass>org.wso2.carbon.device.mgt.iot.common.controlqueue.mqtt.MqttControlPublisher</ControlClass>
+            <Protocol>MQTT</Protocol>
+            <ServerURL>tcp://localhost</ServerURL>
+            <Port>1883</Port>
+            <Username>.</Username>
+            <Password>.</Password>
         </ControlQueue>
     </ControlQueues>
 
     <Security>
-        <client>client-truststore.jks</client>
-        <password>wso2carbon</password>
+        <ClientTrustStore>client-truststore.jks</ClientTrustStore>
+        <Password>wso2carbon</Password>
     </Security>
 
-</DeviceCloudMgtConfiguration>
+    <ApiManager>
+        <Enabled>true</Enabled>
+        <AccessTokenURL>https://localhost:9444/oauth2/token</AccessTokenURL>
+        <LoginURL>sdf</LoginURL>
+        <SubscriptionListURL>fdas</SubscriptionListURL>
+        <DeviceGrantType>devicecloud</DeviceGrantType>
+        <DeviceScopes>PRODUCTION</DeviceScopes>
+    </ApiManager>
+
+    <DeviceUserValidatorCacheSize>1000</DeviceUserValidatorCacheSize>
+
+</DeviceCloudConfiguration>

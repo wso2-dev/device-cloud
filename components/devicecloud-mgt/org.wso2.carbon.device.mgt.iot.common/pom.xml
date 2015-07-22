@@ -55,22 +55,16 @@
 							javax.net,
 							javax.net.ssl,
 							org.w3c.dom,
+							org.wso2.carbon.core,
+							org.wso2.carbon.utils.*,
 							org.wso2.carbon.utils.*,
 							org.wso2.carbon.device.mgt.group.common.*,
 							org.wso2.carbon.device.mgt.group.core.*,
 							org.wso2.carbon.device.mgt.common.*,
 							org.wso2.carbon.device.mgt.common,
 							org.wso2.carbon.device.mgt.core.*,
-							<!--org.apache.commons.collections.map.*,-->
-							<!--org.apache.commons.io.*,-->
 							org.wso2.carbon.context.*,
 							org.wso2.carbon.ndatasource.core,
-							<!--org.wso2.carbon.databridge.agent.thrift,-->
-							<!--org.wso2.carbon.databridge.agent.thrift.exception,-->
-							<!--org.wso2.carbon.databridge.commons.exception,-->
-							<!--org.apache.commons.httpclient.*,-->
-							<!--org.json;version=${commons-json.version},-->
-							<!--org.json.*;version=${commons-json.version},-->
 							*;resolution:=optional
 						</Import-Package>
 						<DynamicImport-Package>*</DynamicImport-Package>
@@ -159,7 +153,14 @@
 			<!--<scope>test</scope>-->
 		<!--</dependency>-->
 
-
+		<dependency>
+			<groupId>org.wso2.carbon</groupId>
+			<artifactId>org.wso2.carbon.utils</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.wso2.carbon</groupId>
+			<artifactId>org.wso2.carbon.core</artifactId>
+		</dependency>
 
 		<dependency>
 			<groupId>commons-collections</groupId>
@@ -184,12 +185,6 @@
 			<groupId>org.eclipse.paho</groupId>
 			<artifactId>mqtt-client</artifactId>
 		</dependency>
-		<!--<dependency>-->
-		<!--<groupId>org.apache.velocity</groupId>-->
-		<!--<artifactId>velocity</artifactId>-->
-		<!--<version>1.7</version>-->
-		<!--<scope>provided</scope>-->
-		<!--</dependency>-->
 	</dependencies>
 
 	<repositories>
