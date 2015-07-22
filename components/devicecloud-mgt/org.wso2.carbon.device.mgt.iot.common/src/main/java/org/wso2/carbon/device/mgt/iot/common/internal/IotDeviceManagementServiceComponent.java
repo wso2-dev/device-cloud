@@ -99,14 +99,15 @@ public class IotDeviceManagementServiceComponent {
 			}
 
 
-			bundleContext.registerService(DeviceTypeService.class.getName(),
-										  new DeviceTypeServiceImpl(), null);
+
 
 			//TODO: handle
             DeviceCloudConfigManager.getInstance().initConfig();
 			DeviceController.init();
             IoTUsageStatisticsClient.initializeDataSource();
 
+			bundleContext.registerService(DeviceTypeService.class.getName(),
+										  new DeviceTypeServiceImpl(), null);
 
 
 
