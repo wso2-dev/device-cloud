@@ -26,8 +26,12 @@ import org.wso2.carbon.device.mgt.core.dao.DeviceManagementDAOException;
 import org.wso2.carbon.device.mgt.core.dao.DeviceManagementDAOFactory;
 import org.wso2.carbon.device.mgt.core.dto.DeviceType;
 import org.wso2.carbon.device.mgt.core.service.DeviceManagementProviderService;
-import org.wso2.carbon.device.mgt.iot.common.util.iotdevice.util.IotDeviceManagementUtil;
+import org.wso2.carbon.device.mgt.group.common.Group;
+import org.wso2.carbon.device.mgt.group.common.GroupManagementException;
+import org.wso2.carbon.device.mgt.group.core.service.GroupManagementService;
+import org.wso2.carbon.device.mgt.group.core.service.GroupManagementServiceImpl;
 import org.wso2.carbon.device.mgt.iot.common.util.ZipArchive;
+import org.wso2.carbon.device.mgt.iot.common.util.iotdevice.util.IotDeviceManagementUtil;
 import org.wso2.carbon.utils.multitenancy.MultitenantConstants;
 
 import java.io.IOException;
@@ -37,105 +41,15 @@ import java.util.Map;
 public class GroupManagement {
 
 	private static Log log = LogFactory.getLog(GroupManagement.class);
-//
-//	public boolean addNewDevice(Device device) throws DeviceManagementException  {
-//
-//		DeviceManagementService dmService = new DeviceManagementServiceImpl();
-//		boolean status = dmService.enrollDevice(device);
-//		return status;
-//
-//	}
-//
-//	public boolean removeDevice(DeviceIdentifier deviceIdentifier)
-//			throws DeviceManagementException {
-//
-//		DeviceManagementService dmService = new DeviceManagementServiceImpl();
-//
-//		boolean status = dmService.disenrollDevice(deviceIdentifier);
-//		return status;
-//	}
-//
-//	public boolean update(Device device) throws DeviceManagementException {
-//
-//		DeviceIdentifier identifier=new DeviceIdentifier();
-//		identifier.setId(device.getDeviceIdentifier());
-//		identifier.setType(device.getType());
-//		DeviceManagementService dmService = new DeviceManagementServiceImpl();
-//		boolean status = dmService.updateDeviceInfo(identifier, device);
-//
-//		return status;
-//	}
-//
-//	public Device getDevice(DeviceIdentifier deviceIdentifier) throws DeviceManagementException {
-//
-//		DeviceManagementService dmService = new DeviceManagementServiceImpl();
-//		return dmService.getDevice(deviceIdentifier);
-//
-//	}
-//
-//	public boolean isExist(DeviceIdentifier deviceIdentifier) throws DeviceManagementException {
-//
-//		DeviceManagementService dmService = new DeviceManagementServiceImpl();
-//
-//		return dmService.isEnrolled(deviceIdentifier);
-//
-//	}
-//
-	public boolean isExist(String owner, DeviceIdentifier deviceIdentifier)
-			throws DeviceManagementException {
 
+    public void addDeviceGroup(Group group) throws GroupManagementException {
+        GroupManagementService groupManagementService = new GroupManagementServiceImpl();
+        groupManagementService.createGroup(group);
+    }
 
-		DeviceManagementProviderService dmService = getDeviceManagementService();
-		if (dmService.isEnrolled(deviceIdentifier)) {
-			Device device=dmService.getDevice(deviceIdentifier);
-
-				if (device.getEnrolmentInfo().getOwner().equals(owner)) {
-					return true;
-				}
-		}
-
-		return false;
-	}
-//
-//	public List<Device> getDevices(String user) throws DeviceManagementException {
-//		DeviceManagementService dmService = new DeviceManagementServiceImpl();
-//		return dmService.getAllDevicesOfUser(user);
-//
-//	}
-//
-//	public List<Device> getDevicesByType(String deviceType) throws DeviceManagementException{
-//		DeviceManagementService dmService = new DeviceManagementServiceImpl();
-//		return dmService.getAllDevices(deviceType);
-//	}
-
-	public DeviceManagementProviderService getDeviceManagementService() {
-
-		DeviceManagementProviderService dmService;
-		PrivilegedCarbonContext.startTenantFlow();
-		PrivilegedCarbonContext ctx = PrivilegedCarbonContext.getThreadLocalCarbonContext();
-		ctx.setTenantDomain(MultitenantConstants.SUPER_TENANT_DOMAIN_NAME);
-		ctx.setTenantId(MultitenantConstants.SUPER_TENANT_ID);
-		dmService =(DeviceManagementProviderService) ctx.getOSGiService(DeviceManagementProviderService.class, null);
-		PrivilegedCarbonContext.endTenantFlow();
-		return dmService;
-	}
-
-	public List<DeviceType> getDeviceTypes() throws DeviceManagementDAOException {
-
-		return DeviceManagementDAOFactory.getDeviceTypeDAO().getDeviceTypes();
-
-	}
-
-	public ZipArchive getSketchArchive(String archivesPath, String templateSketchPath, Map contextParams)
-			throws DeviceManagementException {
-		/*  create a context and add data */
-
-		try {
-			return IotDeviceManagementUtil.getSketchArchive(archivesPath, templateSketchPath,
-															contextParams);
-		} catch (IOException e) {
-			throw new DeviceManagementException("Zip File Creation Failed",e);
-		}
-	}
+    public void removeDeviceGroup(int groupId) throws GroupManagementException {
+        GroupManagementService groupManagementService = new GroupManagementServiceImpl();
+        groupManagementService.deleteGroup(groupId);
+    }
 
 }
