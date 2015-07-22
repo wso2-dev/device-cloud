@@ -22,6 +22,7 @@ import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.device.mgt.common.Device;
 import org.wso2.carbon.device.mgt.common.DeviceIdentifier;
 import org.wso2.carbon.device.mgt.common.DeviceManagementException;
+import org.wso2.carbon.device.mgt.common.EnrolmentInfo;
 import org.wso2.carbon.device.mgt.iot.common.DeviceManagement;
 import org.wso2.carbon.device.mgt.iot.common.apimgt.AccessTokenInfo;
 import org.wso2.carbon.device.mgt.iot.common.apimgt.TokenClient;
@@ -57,22 +58,25 @@ public class FireAlarmManagerService {
 		deviceIdentifier.setId(deviceId);
 		deviceIdentifier.setType(FireAlarmConstants.DEVICE_TYPE);
 		try {
-			if (deviceManagement.isExist(deviceIdentifier)) {
+			if (deviceManagement.getDeviceManagementService().isEnrolled(deviceIdentifier)) {
 				Response.status(HttpStatus.SC_CONFLICT).build();
 				return false;
 			}
 
 			Device device = new Device();
 			device.setDeviceIdentifier(deviceId);
+			EnrolmentInfo enrolmentInfo = new EnrolmentInfo();
 
-			device.setDateOfEnrolment(new Date().getTime());
-			device.setDateOfLastUpdate(new Date().getTime());
+			enrolmentInfo.setDateOfEnrolment(new Date().getTime());
+			enrolmentInfo.setDateOfLastUpdate(new Date().getTime());
+			enrolmentInfo.setStatus(EnrolmentInfo.Status.ACTIVE);
 			//		device.setStatus(true);
 
 			device.setName(name);
 			device.setType(FireAlarmConstants.DEVICE_TYPE);
-			device.setOwner(owner);
-			boolean added = deviceManagement.addNewDevice(device);
+			enrolmentInfo.setOwner(owner);
+			device.setEnrolmentInfo(enrolmentInfo);
+			boolean added = deviceManagement.getDeviceManagementService().enrollDevice(device);
 			if (added) {
 				Response.status(HttpStatus.SC_OK).build();
 
@@ -98,7 +102,8 @@ public class FireAlarmManagerService {
 		deviceIdentifier.setId(deviceId);
 		deviceIdentifier.setType(FireAlarmConstants.DEVICE_TYPE);
 		try {
-			boolean removed = deviceManagement.removeDevice(deviceIdentifier);
+			boolean removed = deviceManagement.getDeviceManagementService().disenrollDevice(
+					deviceIdentifier);
 			if (removed) {
 				response.setStatus(HttpStatus.SC_OK);
 
@@ -125,16 +130,18 @@ public class FireAlarmManagerService {
 		deviceIdentifier.setId(deviceId);
 		deviceIdentifier.setType(FireAlarmConstants.DEVICE_TYPE);
 		try {
-			Device device = deviceManagement.getDevice(deviceIdentifier);
+			Device device = deviceManagement.getDeviceManagementService().getDevice(
+					deviceIdentifier);
 			device.setDeviceIdentifier(deviceId);
 
 			// device.setDeviceTypeId(deviceTypeId);
-			device.setDateOfLastUpdate(new Date().getTime());
+			device.getEnrolmentInfo().setDateOfLastUpdate(new Date().getTime());
 
 			device.setName(name);
 			device.setType(FireAlarmConstants.DEVICE_TYPE);
 
-			boolean updated = deviceManagement.update(device);
+			boolean updated = deviceManagement.getDeviceManagementService().updateDeviceInfo(
+					deviceIdentifier, device);
 
 			if (updated) {
 				response.setStatus(HttpStatus.SC_OK);
@@ -163,7 +170,7 @@ public class FireAlarmManagerService {
 		deviceIdentifier.setType(FireAlarmConstants.DEVICE_TYPE);
 
 		try {
-			return deviceManagement.getDevice(deviceIdentifier);
+			return deviceManagement.getDeviceManagementService().getDevice(deviceIdentifier);
 
 		} catch (DeviceManagementException ex) {
 			log.error("Error occurred while retrieving device with Id " + deviceId + "\n" + ex);
@@ -181,11 +188,13 @@ public class FireAlarmManagerService {
 		DeviceManagement deviceManagement = new DeviceManagement();
 
 		try {
-			List<Device> userDevices = deviceManagement.getDevices(username);
+			List<Device> userDevices = deviceManagement.getDeviceManagementService().getDevicesOfUser(
+					username);
 			ArrayList<Device> userDevicesforFirealarm = new ArrayList<Device>();
 			for (Device device : userDevices) {
 
-				if (device.getType().equals(FireAlarmConstants.DEVICE_TYPE)) {
+				if (device.getType().equals(FireAlarmConstants.DEVICE_TYPE)&&device.getEnrolmentInfo().getStatus().equals(
+						EnrolmentInfo.Status.ACTIVE)) {
 					userDevicesforFirealarm.add(device);
 
 				}

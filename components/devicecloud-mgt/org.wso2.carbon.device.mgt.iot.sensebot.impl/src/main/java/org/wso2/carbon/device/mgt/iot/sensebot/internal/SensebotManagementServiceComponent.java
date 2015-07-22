@@ -23,10 +23,9 @@ import org.apache.commons.logging.LogFactory;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.component.ComponentContext;
-import org.wso2.carbon.device.mgt.common.spi.DeviceMgtService;
+import org.wso2.carbon.device.mgt.common.spi.DeviceManagementService;
 import org.wso2.carbon.device.mgt.iot.common.service.DeviceTypeService;
-import org.wso2.carbon.device.mgt.iot.sensebot.impl.SensebotManager;
-
+import org.wso2.carbon.device.mgt.iot.sensebot.impl.SensebotManagerService;
 
 
 /**
@@ -41,55 +40,62 @@ import org.wso2.carbon.device.mgt.iot.sensebot.impl.SensebotManager;
  */
 public class SensebotManagementServiceComponent {
 
-    private ServiceRegistration sensebotServiceRegRef;
+	private ServiceRegistration sensebotServiceRegRef;
 
-    private static final Log log = LogFactory.getLog(SensebotManagementServiceComponent.class);
+	private static final Log log = LogFactory.getLog(SensebotManagementServiceComponent.class);
 
-    protected void activate(ComponentContext ctx) {
-        if (log.isDebugEnabled()) {
-            log.debug("Activating Sensebot Device Management Service Component");
-        }
-        try {
-            BundleContext bundleContext = ctx.getBundleContext();
+	protected void activate(ComponentContext ctx) {
+		if (log.isDebugEnabled()) {
+			log.debug("Activating Sensebot Device Management Service Component");
+		}
+		try {
+			BundleContext bundleContext = ctx.getBundleContext();
 
-            sensebotServiceRegRef = bundleContext
-                    .registerService(DeviceMgtService.class.getName(), new SensebotManager(), null);
+			sensebotServiceRegRef = bundleContext
+					.registerService(DeviceManagementService.class.getName(),
+									 new SensebotManagerService(), null);
 
-            if (log.isDebugEnabled()) {
-                log.debug("Sensebot Device Management Service Component has been successfully activated");
-            }
-        } catch (Throwable e) {
-            log.error("Error occurred while activating Sensebot Device Management Service Component", e);
-        }
-    }
+			if (log.isDebugEnabled()) {
+				log.debug(
+						"Sensebot Device Management Service Component has been successfully " +
+								"activated");
+			}
+		} catch (Throwable e) {
+			log.error(
+					"Error occurred while activating Sensebot Device Management Service Component",
+					e);
+		}
+	}
 
-    protected void deactivate(ComponentContext ctx) {
-        if (log.isDebugEnabled()) {
-            log.debug("De-activating Sensebot Device Management Service Component");
-        }
-        try {
-            if (sensebotServiceRegRef != null) {
-                sensebotServiceRegRef.unregister();
-            }
+	protected void deactivate(ComponentContext ctx) {
+		if (log.isDebugEnabled()) {
+			log.debug("De-activating Sensebot Device Management Service Component");
+		}
+		try {
+			if (sensebotServiceRegRef != null) {
+				sensebotServiceRegRef.unregister();
+			}
 
-            if (log.isDebugEnabled()) {
-                log.debug("Sensebot Device Management Service Component has been successfully de-activated");
-            }
-        } catch (Throwable e) {
-            log.error("Error occurred while de-activating Sensebot Device Management bundle", e);
-        }
-    }
+			if (log.isDebugEnabled()) {
+				log.debug(
+						"Sensebot Device Management Service Component has been successfully " +
+								"de-activated");
+			}
+		} catch (Throwable e) {
+			log.error("Error occurred while de-activating Sensebot Device Management bundle", e);
+		}
+	}
 
-    protected void setDeviceTypeService(DeviceTypeService deviceTypeService) {
-        /* This is to avoid this component getting initialized before the
+	protected void setDeviceTypeService(DeviceTypeService deviceTypeService) {
+		/* This is to avoid this component getting initialized before the
 		common registered */
-        if (log.isDebugEnabled()) {
-            log.debug("Data source service set to mobile service component");
-        }
-    }
+		if (log.isDebugEnabled()) {
+			log.debug("Data source service set to mobile service component");
+		}
+	}
 
-    protected void unsetDeviceTypeService(DeviceTypeService deviceTypeService) {
-        //do nothing
-    }
+	protected void unsetDeviceTypeService(DeviceTypeService deviceTypeService) {
+		//do nothing
+	}
 
 }

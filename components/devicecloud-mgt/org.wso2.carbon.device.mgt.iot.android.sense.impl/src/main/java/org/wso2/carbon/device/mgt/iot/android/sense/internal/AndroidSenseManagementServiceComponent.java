@@ -21,8 +21,8 @@ import org.apache.commons.logging.LogFactory;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.component.ComponentContext;
-import org.wso2.carbon.device.mgt.common.spi.DeviceMgtService;
-import org.wso2.carbon.device.mgt.iot.android.sense.impl.AndroidSenseManager;
+import org.wso2.carbon.device.mgt.common.spi.DeviceManagementService;
+import org.wso2.carbon.device.mgt.iot.android.sense.impl.AndroidSenseManagerService;
 import org.wso2.carbon.device.mgt.iot.common.service.DeviceTypeService;
 
 
@@ -54,8 +54,8 @@ public class AndroidSenseManagementServiceComponent {
 
 
             androidServiceRegRef =
-                    bundleContext.registerService(DeviceMgtService.class.getName(), new
-                            AndroidSenseManager(), null);
+                    bundleContext.registerService(DeviceManagementService.class.getName(), new
+                            AndroidSenseManagerService(), null);
 
 
 

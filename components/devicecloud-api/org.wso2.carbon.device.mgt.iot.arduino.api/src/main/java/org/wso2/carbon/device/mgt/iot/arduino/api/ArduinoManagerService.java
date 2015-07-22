@@ -22,6 +22,7 @@ import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.device.mgt.common.Device;
 import org.wso2.carbon.device.mgt.common.DeviceIdentifier;
 import org.wso2.carbon.device.mgt.common.DeviceManagementException;
+import org.wso2.carbon.device.mgt.common.EnrolmentInfo;
 import org.wso2.carbon.device.mgt.iot.arduino.constants.ArduinoConstants;
 import org.wso2.carbon.device.mgt.iot.common.DeviceManagement;
 import org.wso2.carbon.device.mgt.iot.common.util.ZipArchive;
@@ -51,22 +52,23 @@ public class ArduinoManagerService {
 		deviceIdentifier.setId(deviceId);
 		deviceIdentifier.setType(ArduinoConstants.DEVICE_TYPE);
 		try {
-			if (deviceManagement.isExist(deviceIdentifier)) {
+			if (deviceManagement.getDeviceManagementService().isEnrolled(deviceIdentifier)) {
 				Response.status(HttpStatus.SC_CONFLICT).build();
 				return false;
 			}
 
 			Device device = new Device();
 			device.setDeviceIdentifier(deviceId);
-
-			device.setDateOfEnrolment(new Date().getTime());
-			device.setDateOfLastUpdate(new Date().getTime());
-			//		device.setStatus(true);
+			EnrolmentInfo enrolmentInfo=new EnrolmentInfo();
+			enrolmentInfo.setDateOfEnrolment(new Date().getTime());
+			enrolmentInfo.setDateOfLastUpdate(new Date().getTime());
+			enrolmentInfo.setStatus(EnrolmentInfo.Status.ACTIVE);
 
 			device.setName(name);
 			device.setType(ArduinoConstants.DEVICE_TYPE);
-			device.setOwner(owner);
-			boolean added = deviceManagement.addNewDevice(device);
+			enrolmentInfo.setOwner(owner);
+			device.setEnrolmentInfo(enrolmentInfo);
+			boolean added = deviceManagement.getDeviceManagementService().enrollDevice(device);
 			if (added) {
 				Response.status(HttpStatus.SC_OK).build();
 
@@ -94,7 +96,7 @@ public class ArduinoManagerService {
 		deviceIdentifier.setId(deviceId);
 		deviceIdentifier.setType(ArduinoConstants.DEVICE_TYPE);
 		try {
-			boolean removed = deviceManagement.removeDevice(deviceIdentifier);
+			boolean removed = deviceManagement.getDeviceManagementService().disenrollDevice(deviceIdentifier);
 			if (removed) {
 				response.setStatus(HttpStatus.SC_OK);
 
@@ -122,16 +124,16 @@ public class ArduinoManagerService {
 		deviceIdentifier.setId(deviceId);
 		deviceIdentifier.setType(ArduinoConstants.DEVICE_TYPE);
 		try {
-			Device device = deviceManagement.getDevice(deviceIdentifier);
+			Device device = deviceManagement.getDeviceManagementService().getDevice(deviceIdentifier);
 			device.setDeviceIdentifier(deviceId);
 
 			// device.setDeviceTypeId(deviceTypeId);
-			device.setDateOfLastUpdate(new Date().getTime());
+			device.getEnrolmentInfo().setDateOfLastUpdate(new Date().getTime());
 
 			device.setName(name);
 			device.setType(ArduinoConstants.DEVICE_TYPE);
 
-			boolean updated = deviceManagement.update(device);
+			boolean updated = deviceManagement.getDeviceManagementService().updateDeviceInfo(deviceIdentifier,device);
 
 
 			if (updated) {
@@ -161,7 +163,7 @@ public class ArduinoManagerService {
 		deviceIdentifier.setType(ArduinoConstants.DEVICE_TYPE);
 
 		try {
-			Device device = deviceManagement.getDevice(deviceIdentifier);
+			Device device = deviceManagement.getDeviceManagementService().getDevice(deviceIdentifier);
 
 			return device;
 		} catch (DeviceManagementException ex) {

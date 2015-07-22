@@ -22,11 +22,12 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.osgi.framework.BundleContext;
 import org.osgi.service.component.ComponentContext;
+import org.wso2.carbon.core.ServerStartupObserver;
 import org.wso2.carbon.device.mgt.iot.common.DeviceController;
 import org.wso2.carbon.device.mgt.iot.common.config.devicetype.datasource.IotDeviceTypeConfig;
 import org.wso2.carbon.device.mgt.iot.common.service.DeviceTypeService;
 import org.wso2.carbon.device.mgt.iot.common.service.DeviceTypeServiceImpl;
-import org.wso2.carbon.device.mgt.iot.common.apimgt.TokenClient;
+import org.wso2.carbon.device.mgt.iot.common.startup.StartupUrlPrinter;
 import org.wso2.carbon.device.mgt.iot.common.util.iotdevice.exception.IotDeviceMgtPluginException;
 import org.wso2.carbon.device.mgt.iot.common.config.server.DeviceCloudConfigManager;
 import org.wso2.carbon.device.mgt.iot.common.analytics.statistics.IoTUsageStatisticsClient;
@@ -91,7 +92,8 @@ public class IotDeviceManagementServiceComponent {
 			}
 
 
-			bundleContext.registerService(DeviceTypeService.class.getName(),new DeviceTypeServiceImpl(), null);
+			bundleContext.registerService(DeviceTypeService.class.getName(),
+										  new DeviceTypeServiceImpl(), null);
 
 			//TODO: handle
             DeviceCloudConfigManager.getInstance().initConfig();
@@ -99,9 +101,13 @@ public class IotDeviceManagementServiceComponent {
             IoTUsageStatisticsClient.initializeDataSource();
 
 
+
+
 			if (log.isDebugEnabled()) {
 				log.debug("Iot Device Management Service Component has been successfully activated");
 			}
+
+			bundleContext.registerService(ServerStartupObserver.class, new StartupUrlPrinter(), null);
 		} catch (Throwable e) {
 			log.error("Error occurred while activating Iot Device Management Service Component", e);
 		}

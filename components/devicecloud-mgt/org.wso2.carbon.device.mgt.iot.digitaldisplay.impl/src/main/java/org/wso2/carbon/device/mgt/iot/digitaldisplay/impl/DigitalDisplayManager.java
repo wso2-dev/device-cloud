@@ -24,15 +24,13 @@ import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.device.mgt.common.Device;
 import org.wso2.carbon.device.mgt.common.DeviceIdentifier;
 import org.wso2.carbon.device.mgt.common.DeviceManagementException;
+import org.wso2.carbon.device.mgt.common.DeviceManager;
+import org.wso2.carbon.device.mgt.common.EnrolmentInfo;
 import org.wso2.carbon.device.mgt.common.FeatureManager;
-import org.wso2.carbon.device.mgt.common.app.mgt.AppManagerConnectorException;
-import org.wso2.carbon.device.mgt.common.operation.mgt.Operation;
-import org.wso2.carbon.device.mgt.common.spi.DeviceMgtService;
 import org.wso2.carbon.device.mgt.iot.common.util.iotdevice.dao.IotDeviceManagementDAOException;
 import org.wso2.carbon.device.mgt.iot.common.util.iotdevice.dao.IotDeviceManagementDAOFactory;
 import org.wso2.carbon.device.mgt.iot.common.util.iotdevice.dto.IotDevice;
 import org.wso2.carbon.device.mgt.iot.common.util.iotdevice.util.IotDeviceManagementUtil;
-import org.wso2.carbon.device.mgt.iot.digitaldisplay.constants.DigitalDisplayConstants;
 import org.wso2.carbon.device.mgt.iot.digitaldisplay.impl.dao.DigitalDisplayDAO;
 
 import java.util.ArrayList;
@@ -42,15 +40,13 @@ import java.util.List;
 /**
  * This represents the DigitalDisplay implementation of DeviceManagerService.
  */
-public class DigitalDisplayManager implements DeviceMgtService {
+public class DigitalDisplayManager implements DeviceManager
+{
 
     private static final IotDeviceManagementDAOFactory iotDeviceManagementDAOFactory = new DigitalDisplayDAO();
     private static final Log log = LogFactory.getLog(DigitalDisplayManager.class);
 
-    @Override
-    public String getProviderType() {
-        return DigitalDisplayConstants.DEVICE_TYPE;
-    }
+
 
     @Override
     public FeatureManager getFeatureManager() {
@@ -197,6 +193,12 @@ public class DigitalDisplayManager implements DeviceMgtService {
     }
 
     @Override
+    public boolean setStatus(DeviceIdentifier deviceId, String currentOwner,
+                             EnrolmentInfo.Status status) throws DeviceManagementException {
+        return false;
+    }
+
+    @Override
     public boolean updateDeviceInfo(DeviceIdentifier deviceIdentifier, Device device) throws DeviceManagementException {
         boolean status;
         IotDevice iotDevice = IotDeviceManagementUtil.convertToIotDevice(device);
@@ -247,10 +249,4 @@ public class DigitalDisplayManager implements DeviceMgtService {
         return devices;
     }
 
-
-    @Override
-    public void installApplication(Operation operation, List<DeviceIdentifier> list)
-            throws AppManagerConnectorException {
-
-    }
 }

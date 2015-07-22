@@ -23,9 +23,9 @@ import org.apache.commons.logging.LogFactory;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.component.ComponentContext;
-import org.wso2.carbon.device.mgt.common.spi.DeviceMgtService;
+import org.wso2.carbon.device.mgt.common.spi.DeviceManagementService;
 import org.wso2.carbon.device.mgt.iot.common.service.DeviceTypeService;
-import org.wso2.carbon.device.mgt.iot.raspberrypi.impl.RaspberrypiManager;
+import org.wso2.carbon.device.mgt.iot.raspberrypi.impl.RaspberrypiManagerService;
 
 
 /**
@@ -39,67 +39,66 @@ import org.wso2.carbon.device.mgt.iot.raspberrypi.impl.RaspberrypiManager;
  * unbind="unsetDeviceTypeService"
  */
 public class RaspberrypiManagementServiceComponent {
-	
-
-    private ServiceRegistration raspberrypiServiceRegRef;
 
 
-
-    private static final Log log = LogFactory.getLog(RaspberrypiManagementServiceComponent.class);
-
-    protected void activate(ComponentContext ctx) {
-    	if (log.isDebugEnabled()) {
-            log.debug("Activating Raspberrypi Device Management Service Component");
-        }
-        try {
-            BundleContext bundleContext = ctx.getBundleContext();
+	private ServiceRegistration raspberrypiServiceRegRef;
 
 
-            raspberrypiServiceRegRef =
-                    bundleContext.registerService(DeviceMgtService.class.getName(), new
-                                                          RaspberrypiManager(),
-												  null);
+	private static final Log log = LogFactory.getLog(RaspberrypiManagementServiceComponent.class);
 
+	protected void activate(ComponentContext ctx) {
+		if (log.isDebugEnabled()) {
+			log.debug("Activating Raspberrypi Device Management Service Component");
+		}
+		try {
+			BundleContext bundleContext = ctx.getBundleContext();
+			raspberrypiServiceRegRef =
+					bundleContext.registerService(DeviceManagementService.class.getName(),
+												  new RaspberrypiManagerService(), null);
+			if (log.isDebugEnabled()) {
+				log.debug(
+						"Raspberrypi Device Management Service Component has been successfully " +
+								"activated");
+			}
+		} catch (Throwable e) {
+			log.error(
+					"Error occurred while activating Raspberrypi Device Management Service " +
+							"Component",
+					e);
+		}
+	}
 
+	protected void deactivate(ComponentContext ctx) {
+		if (log.isDebugEnabled()) {
+			log.debug("De-activating Raspberrypi Device Management Service Component");
+		}
+		try {
+			if (raspberrypiServiceRegRef != null) {
+				raspberrypiServiceRegRef.unregister();
+			}
 
-            if (log.isDebugEnabled()) {
-                log.debug("Raspberrypi Device Management Service Component has been successfully activated");
-            }
-        } catch (Throwable e) {
-            log.error("Error occurred while activating Raspberrypi Device Management Service Component", e);
-        }
-    }
+			if (log.isDebugEnabled()) {
+				log.debug(
+						"Raspberrypi Device Management Service Component has been successfully " +
+								"de-activated");
+			}
+		} catch (Throwable e) {
+			log.error("Error occurred while de-activating Raspberrypi Device Management bundle",
+					  e);
+		}
+	}
 
-    protected void deactivate(ComponentContext ctx) {
-        if (log.isDebugEnabled()) {
-            log.debug("De-activating Raspberrypi Device Management Service Component");
-        }
-        try {
-            if (raspberrypiServiceRegRef != null) {
-                raspberrypiServiceRegRef.unregister();
-            }
-
-            if (log.isDebugEnabled()) {
-                log.debug(
-                        "Raspberrypi Device Management Service Component has been successfully de-activated");
-            }
-        } catch (Throwable e) {
-            log.error("Error occurred while de-activating Raspberrypi Device Management bundle", e);
-        }
-    }
-
-    protected void setDeviceTypeService(DeviceTypeService deviceTypeService) {
+	protected void setDeviceTypeService(DeviceTypeService deviceTypeService) {
 		/* This is to avoid this component getting initialized before the
 		common registered */
-        if (log.isDebugEnabled()) {
-            log.debug("Data source service set to mobile service component");
-        }
-    }
+		if (log.isDebugEnabled()) {
+			log.debug("Data source service set to mobile service component");
+		}
+	}
 
-    protected void unsetDeviceTypeService(DeviceTypeService deviceTypeService)  {
-        //do nothing
-    }
+	protected void unsetDeviceTypeService(DeviceTypeService deviceTypeService) {
+		//do nothing
+	}
 
-    
-    
+
 }

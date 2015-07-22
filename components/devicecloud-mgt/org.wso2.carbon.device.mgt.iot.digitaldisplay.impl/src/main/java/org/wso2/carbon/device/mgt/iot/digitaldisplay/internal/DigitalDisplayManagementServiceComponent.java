@@ -23,11 +23,9 @@ import org.apache.commons.logging.LogFactory;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.component.ComponentContext;
-import org.wso2.carbon.device.mgt.common.spi.DeviceMgtService;
-import org.wso2.carbon.device.mgt.iot.digitaldisplay.impl.DigitalDisplayManager;
+import org.wso2.carbon.device.mgt.common.spi.DeviceManagementService;
 import org.wso2.carbon.device.mgt.iot.common.service.DeviceTypeService;
-
-
+import org.wso2.carbon.device.mgt.iot.digitaldisplay.impl.DigitalDisplayManagerService;
 
 
 /**
@@ -40,6 +38,7 @@ import org.wso2.carbon.device.mgt.iot.common.service.DeviceTypeService;
  * bind="setDeviceTypeService"
  * unbind="unsetDeviceTypeService"
  */
+
 public class DigitalDisplayManagementServiceComponent {
 	
 
@@ -58,8 +57,8 @@ public class DigitalDisplayManagementServiceComponent {
 
 
             digitalDisplayServiceRegRef =
-                    bundleContext.registerService(DeviceMgtService.class.getName(), new
-                                                          DigitalDisplayManager(),
+                    bundleContext.registerService(DeviceManagementService.class.getName(), new
+                                                          DigitalDisplayManagerService(),
 												  null);
 
 
