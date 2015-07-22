@@ -70,8 +70,7 @@ public class FireAlarmManagerService {
 			enrolmentInfo.setDateOfEnrolment(new Date().getTime());
 			enrolmentInfo.setDateOfLastUpdate(new Date().getTime());
 			enrolmentInfo.setStatus(EnrolmentInfo.Status.ACTIVE);
-			//		device.setStatus(true);
-
+			enrolmentInfo.setOwnership(EnrolmentInfo.OwnerShip.BYOD);
 			device.setName(name);
 			device.setType(FireAlarmConstants.DEVICE_TYPE);
 			enrolmentInfo.setOwner(owner);

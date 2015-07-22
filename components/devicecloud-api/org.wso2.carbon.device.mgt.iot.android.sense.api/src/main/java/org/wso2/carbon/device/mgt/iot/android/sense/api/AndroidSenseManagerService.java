@@ -66,7 +66,9 @@ public class AndroidSenseManagerService {
 			enrolmentInfo.setDateOfEnrolment(new Date().getTime());
 			enrolmentInfo.setDateOfLastUpdate(new Date().getTime());
 			enrolmentInfo.setStatus(EnrolmentInfo.Status.ACTIVE);
+			enrolmentInfo.setOwnership(EnrolmentInfo.OwnerShip.BYOD);
 			device.setEnrolmentInfo(enrolmentInfo);
+
 			String name = "android_sense" + deviceId;
 			device.setName(name);
 			device.setType(AndroidSenseConstants.DEVICE_TYPE);

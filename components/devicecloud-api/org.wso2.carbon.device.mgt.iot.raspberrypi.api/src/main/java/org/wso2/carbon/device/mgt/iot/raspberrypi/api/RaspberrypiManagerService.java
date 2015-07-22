@@ -71,7 +71,7 @@ public class RaspberrypiManagerService {
 			enrolmentInfo.setDateOfEnrolment(new Date().getTime());
 			enrolmentInfo.setDateOfLastUpdate(new Date().getTime());
 			enrolmentInfo.setStatus(EnrolmentInfo.Status.ACTIVE);
-
+			enrolmentInfo.setOwnership(EnrolmentInfo.OwnerShip.BYOD);
 			device.setName(name);
 			device.setType(RaspberrypiConstants.DEVICE_TYPE);
 			enrolmentInfo.setOwner(owner);

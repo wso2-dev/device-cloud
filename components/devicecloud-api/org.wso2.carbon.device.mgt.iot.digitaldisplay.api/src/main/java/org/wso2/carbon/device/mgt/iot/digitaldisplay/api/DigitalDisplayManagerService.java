@@ -75,7 +75,7 @@ public class DigitalDisplayManagerService {
 			device.setName(name);
 			device.setType(DigitalDisplayConstants.DEVICE_TYPE);
 			enrolmentInfo.setOwner(owner);
-
+			enrolmentInfo.setOwnership(EnrolmentInfo.OwnerShip.BYOD);
 			boolean added = deviceManagement.getDeviceManagementService().enrollDevice(device);
 			if (added) {
 				Response.status(HttpStatus.SC_OK).build();
