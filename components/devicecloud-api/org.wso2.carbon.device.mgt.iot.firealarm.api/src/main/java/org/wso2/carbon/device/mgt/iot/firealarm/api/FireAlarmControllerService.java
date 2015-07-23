@@ -30,6 +30,7 @@ import org.wso2.carbon.device.mgt.iot.common.DeviceController;
 import org.wso2.carbon.device.mgt.iot.common.DeviceValidator;
 import org.wso2.carbon.device.mgt.iot.common.datastore.impl.DataStreamDefinitions;
 import org.wso2.carbon.device.mgt.iot.common.exception.DeviceControllerException;
+import org.wso2.carbon.device.mgt.iot.common.exception.UnauthorizedException;
 import org.wso2.carbon.device.mgt.iot.firealarm.api.util.DeviceJSON;
 import org.wso2.carbon.device.mgt.iot.firealarm.constants.FireAlarmConstants;
 import org.wso2.carbon.utils.CarbonUtils;
@@ -397,7 +398,7 @@ public class FireAlarmControllerService {
 			if (!result) {
 				response.setStatus(HttpStatus.SC_INTERNAL_SERVER_ERROR);
 			}
-		} catch (DeviceControllerException e) {
+		} catch (UnauthorizedException e) {
 			response.setStatus(HttpStatus.SC_INTERNAL_SERVER_ERROR);
 			log.error("Data Push Attempt Failed for BAM Publisher: " + e.getMessage());
 		}
@@ -416,7 +417,7 @@ public class FireAlarmControllerService {
 			if (!result) {
 				response.setStatus(HttpStatus.SC_INTERNAL_SERVER_ERROR);
 			}
-		} catch (DeviceControllerException e) {
+		} catch (UnauthorizedException e) {
 			response.setStatus(HttpStatus.SC_INTERNAL_SERVER_ERROR);
 			log.error("Data Push Attempt Failed for CEP Publisher: " + e.getMessage());
 		}
@@ -495,7 +496,7 @@ public class FireAlarmControllerService {
 				}
 			}
 
-		} catch (DeviceControllerException e) {
+		} catch (UnauthorizedException e) {
 			response.setStatus(HttpStatus.SC_INTERNAL_SERVER_ERROR);
 			log.error("Data Push Attempt Failed at Publisher: " + e.getMessage());
 		}

@@ -33,6 +33,17 @@
             <Username>.</Username>
             <Password>.</Password>
         </ControlQueue>
+
+        <ControlQueue>
+            <Name>XMPP</Name>
+            <Enabled>true</Enabled>
+            <ControlClass>org.wso2.carbon.device.mgt.iot.common.controlqueue.xmpp.XmppServerClient</ControlClass>
+            <Protocol>XMPP</Protocol>
+            <ServerURL>tcp://localhost</ServerURL>
+            <Port>1883</Port>
+            <Username>.</Username>
+            <Password>.</Password>
+        </ControlQueue>
     </ControlQueues>
 
     <Security>

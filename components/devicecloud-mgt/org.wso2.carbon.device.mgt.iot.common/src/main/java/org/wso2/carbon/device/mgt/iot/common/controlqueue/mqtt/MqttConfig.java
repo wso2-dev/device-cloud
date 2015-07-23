@@ -4,7 +4,6 @@ import org.wso2.carbon.device.mgt.iot.common.config.server.DeviceCloudConfigMana
 import org.wso2.carbon.device.mgt.iot.common.config.server.datasource.ControlQueue;
 
 public class MqttConfig {
-
 	private String controlQueueEndpoint;
 	private String controlQueueUsername;
 	private String controlQueuePassword;
@@ -15,12 +14,12 @@ public class MqttConfig {
 
 	private static MqttConfig mqttConfig = new MqttConfig();
 
-	public String getControlQueueUsername() {
-		return controlQueueUsername;
-	}
-
 	public String getControlQueueEndpoint() {
 		return controlQueueEndpoint;
+	}
+
+	public String getControlQueueUsername() {
+		return controlQueueUsername;
 	}
 
 	public String getControlQueuePassword() {
@@ -31,9 +30,11 @@ public class MqttConfig {
 		return isEnabled;
 	}
 
+	public static String getMqttQueueConfigName() {
+		return MQTT_QUEUE_CONFIG_NAME;
+	}
 
 	private MqttConfig() {
-
 		mqttControlQueue = DeviceCloudConfigManager.getInstance().getControlQueue(
 				MQTT_QUEUE_CONFIG_NAME);
 		controlQueueEndpoint = mqttControlQueue.getServerURL() + ":" + mqttControlQueue.getPort();

@@ -188,7 +188,6 @@ public class SensebotControllerService {
 
 		} catch (UnauthorizedException e) {
 			response.setStatus(HttpStatus.SC_UNAUTHORIZED);
-
 		}
 
 	}

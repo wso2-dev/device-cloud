@@ -84,7 +84,6 @@ public class DeviceManagement {
 	public boolean isExist(String owner, DeviceIdentifier deviceIdentifier)
 			throws DeviceManagementException {
 
-
 		DeviceManagementProviderService dmService = getDeviceManagementService();
 		if (dmService.isEnrolled(deviceIdentifier)) {
 			Device device=dmService.getDevice(deviceIdentifier);

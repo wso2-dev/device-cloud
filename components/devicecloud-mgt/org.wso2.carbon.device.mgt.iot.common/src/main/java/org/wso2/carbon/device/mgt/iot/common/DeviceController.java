@@ -23,6 +23,7 @@ import org.wso2.carbon.device.mgt.iot.common.config.server.datasource.ControlQue
 import org.wso2.carbon.device.mgt.iot.common.config.server.datasource.DataStore;
 import org.wso2.carbon.device.mgt.iot.common.config.server.datasource.DeviceCloudConfig;
 import org.wso2.carbon.device.mgt.iot.common.controlqueue.ControlQueueConnector;
+import org.wso2.carbon.device.mgt.iot.common.controlqueue.mqtt.MqttConfig;
 import org.wso2.carbon.device.mgt.iot.common.datastore.DataStoreConnector;
 import org.wso2.carbon.device.mgt.iot.common.datastore.impl.ThriftDataStoreConnector;
 import org.wso2.carbon.device.mgt.iot.common.exception.DeviceControllerException;
@@ -38,10 +39,8 @@ public class DeviceController {
 
 	private static final Log log = LogFactory.getLog(DeviceController.class);
 
-	private static HashMap<String, DataStoreConnector> dataStoresMap =
-			new HashMap<String, DataStoreConnector>();
-	private static ControlQueueConnector mqttControlQueue;
-
+	private static HashMap<String, DataStoreConnector> dataStoresMap = new HashMap<>();
+	private static HashMap<String, ControlQueueConnector> controlQueueMap = new HashMap<>();
 
 	public static void init() {
 		DeviceCloudConfig config = DeviceCloudConfigManager.getInstance()
@@ -73,9 +72,9 @@ public class DeviceController {
 
 					DataStoreConnector dataStoreConnector =
 							(DataStoreConnector) dataStoreClass.newInstance();
-					String configName = dataStore.getName();
+					String dataStoreName = dataStore.getName();
 					if (dataStore.isEnabled()) {
-						dataStoresMap.put(configName, dataStoreConnector);
+						dataStoresMap.put(dataStoreName, dataStoreConnector);
 						dataStoreConnector.initDataStore(dataStore);
 					}
 				}
@@ -90,7 +89,7 @@ public class DeviceController {
 	private static void loadControlQueues(DeviceCloudConfig config) {
 		List<ControlQueue> controlQueues = config.getControlQueues().getControlQueue();
 		if (controlQueues == null) {
-			log.error("Error occurred when trying to read data stores configurations");
+			log.error("Error occurred when trying to read control queue configurations");
 			return;
 		}
 
@@ -98,17 +97,22 @@ public class DeviceController {
 			try {
 				String handlerClass = controlQueue.getControlClass();
 
-
 				Class<?> controlQueueClass = Class.forName(handlerClass);
 				if (ControlQueueConnector.class.isAssignableFrom(controlQueueClass)) {
 
+					ControlQueueConnector controlQueueConnector =
+							(ControlQueueConnector) controlQueueClass.newInstance();
+					String controlQueueName = controlQueue.getName();
 					if (controlQueue.isEnabled()) {
-						mqttControlQueue = (ControlQueueConnector) controlQueueClass.newInstance();
+						controlQueueMap.put(controlQueueName, controlQueueConnector);
+						controlQueueConnector.initControlQueue();
 					}
 				}
 			} catch (ClassNotFoundException | IllegalAccessException | InstantiationException ex) {
-				log.error("Error occurred when trying to initiate data store" +
+				log.error("Error occurred when trying to initiate control queue" +
 								  controlQueue.getName());
+			} catch (DeviceControllerException ex) {
+				log.error(ex.getMessage());
 			}
 		}
 
@@ -148,8 +152,9 @@ public class DeviceController {
 		deviceControlsMap.put("value", value);
 
 
+		ControlQueueConnector mqttControlQueue = controlQueueMap.get(MqttConfig.getMqttQueueConfigName());
 		if (mqttControlQueue == null) {
-			log.info("MQTT has not been enabled");
+			log.info("MQTT Queue has not been listed in 'devicecloud-config.xml'");
 			return false;
 		}
 
@@ -172,8 +177,7 @@ public class DeviceController {
 
 	public boolean pushBamData(String owner, String deviceType, String deviceId, Long time,
 							   String key,
-							   String value, String description)
-			throws DeviceControllerException {
+							   String value, String description) throws UnauthorizedException {
 
 		HashMap<String, String> deviceDataMap = new HashMap<String, String>();
 
@@ -185,14 +189,17 @@ public class DeviceController {
 		deviceDataMap.put("value", value);
 		deviceDataMap.put("description", description);
 
-		return pushData(deviceDataMap, ThriftDataStoreConnector.DataStoreConstants.BAM);
-
+		try {
+			return pushData(deviceDataMap, ThriftDataStoreConnector.DataStoreConstants.BAM);
+		} catch (DeviceControllerException e) {
+			throw new UnauthorizedException(e);
+		}
 	}
 
 	public boolean pushCepData(String owner, String deviceType, String deviceId, Long time,
 							   String key,
 							   String value, String description)
-			throws DeviceControllerException {
+			throws UnauthorizedException {
 		HashMap<String, String> deviceDataMap = new HashMap<String, String>();
 
 		deviceDataMap.put("owner", owner);
@@ -203,7 +210,11 @@ public class DeviceController {
 		deviceDataMap.put("value", value);
 		deviceDataMap.put("description", description);
 
-		return pushData(deviceDataMap, ThriftDataStoreConnector.DataStoreConstants.CEP);
+		try {
+			return pushData(deviceDataMap, ThriftDataStoreConnector.DataStoreConstants.CEP);
+		} catch (DeviceControllerException e) {
+			throw new UnauthorizedException(e);
+		}
 
 	}
 

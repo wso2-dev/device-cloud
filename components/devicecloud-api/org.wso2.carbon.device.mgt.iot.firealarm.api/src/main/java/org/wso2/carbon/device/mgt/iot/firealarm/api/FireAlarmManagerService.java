@@ -32,7 +32,15 @@ import org.wso2.carbon.device.mgt.iot.common.util.ZipUtil;
 import org.wso2.carbon.device.mgt.iot.firealarm.constants.FireAlarmConstants;
 
 import javax.servlet.http.HttpServletResponse;
-import javax.ws.rs.*;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import java.nio.ByteBuffer;
@@ -71,6 +79,7 @@ public class FireAlarmManagerService {
 			enrolmentInfo.setDateOfLastUpdate(new Date().getTime());
 			enrolmentInfo.setStatus(EnrolmentInfo.Status.ACTIVE);
 			enrolmentInfo.setOwnership(EnrolmentInfo.OwnerShip.BYOD);
+
 			device.setName(name);
 			device.setType(FireAlarmConstants.DEVICE_TYPE);
 			enrolmentInfo.setOwner(owner);
@@ -187,19 +196,21 @@ public class FireAlarmManagerService {
 		DeviceManagement deviceManagement = new DeviceManagement();
 
 		try {
-			List<Device> userDevices = deviceManagement.getDeviceManagementService().getDevicesOfUser(
-					username);
+			List<Device> userDevices =
+					deviceManagement.getDeviceManagementService().getDevicesOfUser(
+							username);
 			ArrayList<Device> userDevicesforFirealarm = new ArrayList<Device>();
 			for (Device device : userDevices) {
 
-				if (device.getType().equals(FireAlarmConstants.DEVICE_TYPE)&&device.getEnrolmentInfo().getStatus().equals(
-						EnrolmentInfo.Status.ACTIVE)) {
+				if (device.getType().equals(FireAlarmConstants.DEVICE_TYPE) &&
+						device.getEnrolmentInfo().getStatus().equals(
+								EnrolmentInfo.Status.ACTIVE)) {
 					userDevicesforFirealarm.add(device);
 
 				}
 			}
 
-			return userDevicesforFirealarm.toArray(new Device[] {});
+			return userDevicesforFirealarm.toArray(new Device[]{});
 		} catch (DeviceManagementException ex) {
 			log.error("Error occurred while retrieving devices for " + username);
 			return null;

@@ -48,16 +48,22 @@ import static java.nio.charset.StandardCharsets.UTF_8;
  */
 public class MqttControlPublisher implements ControlQueueConnector, MqttCallback {
 
-
 	private static final Log log = LogFactory.getLog(MqttControlPublisher.class);
 
+	private String mqttEndpoint;
+	private String mqttUsername;
+	private String mqttPassword;
+	private boolean mqttEnabled = false;
 
 	public MqttControlPublisher() {
 	}
 
 	@Override
 	public void initControlQueue() throws DeviceControllerException {
-
+		mqttEndpoint = MqttConfig.getInstance().getControlQueueEndpoint();
+		mqttUsername = MqttConfig.getInstance().getControlQueueUsername();
+		mqttPassword = MqttConfig.getInstance().getControlQueuePassword();
+		mqttEnabled = MqttConfig.getInstance().isEnabled();
 	}
 
 
@@ -65,8 +71,7 @@ public class MqttControlPublisher implements ControlQueueConnector, MqttCallback
 	public void enqueueControls(HashMap<String, String> deviceControls)
 			throws DeviceControllerException {
 
-		if (MqttConfig.getInstance().isEnabled()) {
-
+		if (mqttEnabled) {
 			MqttClient client;
 			MqttConnectOptions options;
 
@@ -103,8 +108,7 @@ public class MqttControlPublisher implements ControlQueueConnector, MqttCallback
 			log.info("PayLoad: " + payLoad);
 
 			try {
-				client = new MqttClient(MqttConfig.getInstance().getControlQueueEndpoint(),
-										clientId);
+				client = new MqttClient(mqttEndpoint,clientId);
 				options = new MqttConnectOptions();
 				options.setWill("iotDevice/clienterrors", "crashed".getBytes(UTF_8), 2, true);
 				client.setCallback(this);
@@ -129,7 +133,8 @@ public class MqttControlPublisher implements ControlQueueConnector, MqttCallback
 				log.error(errorMsg, ex);
 				throw new DeviceControllerException(errorMsg, ex);
 			}
-
+		} else {
+			log.warn("MQTT <Enabled> set to false in 'devicecloud-config.xml'");
 		}
 	}
 
