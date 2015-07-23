@@ -10,7 +10,7 @@ import java.util.Date;
 public class GroupManagerService {
 
     @Path("/group/add")
-    @PUT
+    @POST
     public boolean addGroup(@QueryParam("name") String name, @QueryParam("owner") String owner) {
         GroupManagement groupManagement = new GroupManagement();
         Group group = new Group();
@@ -19,7 +19,24 @@ public class GroupManagerService {
         group.setDateOfCreation(new Date().getTime());
         group.setDateOfLastUpdate(new Date().getTime());
         try {
-            groupManagement.addDeviceGroup(group);
+            return groupManagement.createGroup(group);
+        } catch (GroupManagementException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    @Path("/group/update/{groupId}")
+    @POST
+    public boolean updateGroup(@PathParam("groupId") int groupId, @QueryParam("name") String name, @QueryParam("owner") String owner) {
+        GroupManagement groupManagement = new GroupManagement();
+        Group group = new Group();
+        group.setId(groupId);
+        group.setName(name);
+        group.setOwnerId(owner);
+        group.setDateOfLastUpdate(new Date().getTime());
+        try {
+            groupManagement.updateGroup(group);
             return true;
         } catch (GroupManagementException e) {
             e.printStackTrace();
@@ -32,12 +49,24 @@ public class GroupManagerService {
     public boolean deleteGroup(@PathParam("groupId") int groupId) {
         GroupManagement groupManagement = new GroupManagement();
         try {
-            groupManagement.removeDeviceGroup(groupId);
-            return true;
+            return groupManagement.deleteGroup(groupId);
         } catch (GroupManagementException e) {
             e.printStackTrace();
             return false;
         }
     }
+
+    @Path("/group/get/{groupId}")
+    @GET
+    public Group getGroup(@PathParam("groupId") int groupId) {
+        GroupManagement groupManagement = new GroupManagement();
+        try {
+            return groupManagement.getGroupById(groupId);
+        } catch (GroupManagementException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
 
 }
