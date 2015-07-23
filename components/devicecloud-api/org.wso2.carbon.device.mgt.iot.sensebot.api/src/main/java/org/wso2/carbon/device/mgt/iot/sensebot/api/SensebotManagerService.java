@@ -134,7 +134,7 @@ public class SensebotManagerService {
 			device.setName(name);
 			device.setType(SensebotConstants.DEVICE_TYPE);
 
-			boolean updated = deviceManagement.getDeviceManagementService().updateDeviceInfo(deviceIdentifier,device);
+			boolean updated = deviceManagement.getDeviceManagementService().modifyEnrollment(device);
 
 
 			if (updated) {

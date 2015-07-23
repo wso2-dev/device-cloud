@@ -133,7 +133,7 @@ public class ArduinoManagerService {
 			device.setName(name);
 			device.setType(ArduinoConstants.DEVICE_TYPE);
 
-			boolean updated = deviceManagement.getDeviceManagementService().updateDeviceInfo(deviceIdentifier,device);
+			boolean updated = deviceManagement.getDeviceManagementService().modifyEnrollment(device);
 
 
 			if (updated) {
