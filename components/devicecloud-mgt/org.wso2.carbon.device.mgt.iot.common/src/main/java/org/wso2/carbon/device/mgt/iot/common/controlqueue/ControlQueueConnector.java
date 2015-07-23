@@ -16,6 +16,8 @@
 
 package org.wso2.carbon.device.mgt.iot.common.controlqueue;
 
+import org.wso2.carbon.device.mgt.iot.common.config.server.datasource.ControlQueue;
+import org.wso2.carbon.device.mgt.iot.common.config.server.datasource.ControlQueuesConfig;
 import org.wso2.carbon.device.mgt.iot.common.exception.DeviceControllerException;
 
 import java.util.HashMap;

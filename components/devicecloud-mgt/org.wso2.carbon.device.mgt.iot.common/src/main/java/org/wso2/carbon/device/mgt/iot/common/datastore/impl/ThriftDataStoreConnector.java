@@ -21,9 +21,14 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.databridge.agent.thrift.DataPublisher;
 import org.wso2.carbon.databridge.agent.thrift.exception.AgentException;
-import org.wso2.carbon.databridge.commons.exception.*;
-import org.wso2.carbon.device.mgt.iot.common.datastore.DataStoreConnector;
+import org.wso2.carbon.databridge.commons.exception.AuthenticationException;
+import org.wso2.carbon.databridge.commons.exception
+		.DifferentStreamDefinitionAlreadyDefinedException;
+import org.wso2.carbon.databridge.commons.exception.MalformedStreamDefinitionException;
+import org.wso2.carbon.databridge.commons.exception.StreamDefinitionException;
+import org.wso2.carbon.databridge.commons.exception.TransportException;
 import org.wso2.carbon.device.mgt.iot.common.config.server.datasource.DataStore;
+import org.wso2.carbon.device.mgt.iot.common.datastore.DataStoreConnector;
 import org.wso2.carbon.device.mgt.iot.common.exception.DeviceControllerException;
 
 import java.net.MalformedURLException;
@@ -37,33 +42,27 @@ public class ThriftDataStoreConnector implements DataStoreConnector {
 	private String dataStoreEndpoint;
 	private String dataStoreUsername;
 	private String dataStorePassword;
-	private boolean enabled=false;
+	private boolean enabled = false;
 
-	public final class DataStoreConstants{
-			public final static String BAM="WSO2-BAM";
-			public final static String CEP="WSO2-CEP";
-
+	public final class DataStoreConstants {
+		public final static String BAM = "WSO2-BAM";
+		public final static String CEP = "WSO2-CEP";
 	}
-
-
 
 	@Override
 	public void initDataStore(DataStore config) throws DeviceControllerException {
-
-
 		dataStoreEndpoint = config.getServerURL() + ":" + config.getPort();
 		dataStoreUsername = config.getUsername();
 		dataStorePassword = config.getPassword();
-		enabled=config.isEnabled();
-
+		enabled = config.isEnabled();
 	}
 
-	private DataPublisher getDataPublisher()  throws DeviceControllerException {
+	private DataPublisher getDataPublisher() throws DeviceControllerException {
 
 		try {
 			DataPublisher dataPublisher = new DataPublisher(dataStoreEndpoint, dataStoreUsername,
-											  dataStorePassword);
-			if(log.isDebugEnabled()){
+															dataStorePassword);
+			if (log.isDebugEnabled()) {
 				log.info("data publisher created for endpoint " + dataStoreEndpoint);
 			}
 			return dataPublisher;
@@ -81,9 +80,10 @@ public class ThriftDataStoreConnector implements DataStoreConnector {
 	@Override
 	public void publishIoTData(HashMap<String, String> deviceData) throws
 																   DeviceControllerException {
-		//TODO: Create a threadpool and publish the Data or  use a queue and publish to it and have a data retreiver.
-		DataPublisher dataPublisher=getDataPublisher();
-		if(!enabled||dataPublisher==null){
+		//TODO: Create a threadpool and publish the Data or  use a queue and publish to it and
+		// have a data retreiver.
+		DataPublisher dataPublisher = getDataPublisher();
+		if (!enabled || dataPublisher == null) {
 			throw new DeviceControllerException();
 		}
 
@@ -161,7 +161,8 @@ public class ThriftDataStoreConnector implements DataStoreConnector {
 
 			if (log.isDebugEnabled()) {
 				String logMsg = "event published to devicePinDataStream\n" + "\tOwner: " + owner +
-						"\tDeviceType: " + deviceType + "\n" + "\tDeviceId: " + deviceId + "\tTime: " +
+						"\tDeviceType: " + deviceType + "\n" + "\tDeviceId: " + deviceId +
+						"\tTime: " +
 						time + "\n" + "\tDescription: " + description + "\n" + "\tKey: " + key +
 						"\tValue: " + value + "\n";
 				log.info(logMsg);
