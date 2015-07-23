@@ -18,13 +18,13 @@ package org.wso2.carbon.device.mgt.iot.common;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.wso2.carbon.device.mgt.iot.common.datastore.impl.ThriftDataStoreConnector;
 import org.wso2.carbon.device.mgt.iot.common.config.server.DeviceCloudConfigManager;
 import org.wso2.carbon.device.mgt.iot.common.config.server.datasource.ControlQueue;
 import org.wso2.carbon.device.mgt.iot.common.config.server.datasource.DataStore;
 import org.wso2.carbon.device.mgt.iot.common.config.server.datasource.DeviceCloudConfig;
 import org.wso2.carbon.device.mgt.iot.common.controlqueue.ControlQueueConnector;
 import org.wso2.carbon.device.mgt.iot.common.datastore.DataStoreConnector;
+import org.wso2.carbon.device.mgt.iot.common.datastore.impl.ThriftDataStoreConnector;
 import org.wso2.carbon.device.mgt.iot.common.exception.DeviceControllerException;
 import org.wso2.carbon.device.mgt.iot.common.exception.UnauthorizedException;
 import org.wso2.carbon.device.mgt.iot.common.util.ResourceFileLoader;
@@ -38,13 +38,14 @@ public class DeviceController {
 
 	private static final Log log = LogFactory.getLog(DeviceController.class);
 
-	private static HashMap<String,DataStoreConnector> dataStoresMap = new HashMap<String,DataStoreConnector>();
+	private static HashMap<String, DataStoreConnector> dataStoresMap =
+			new HashMap<String, DataStoreConnector>();
 	private static ControlQueueConnector mqttControlQueue;
 
 
-
-	public static void init(){
-		DeviceCloudConfig config = DeviceCloudConfigManager.getInstance().getDeviceCloudMgtConfig();
+	public static void init() {
+		DeviceCloudConfig config = DeviceCloudConfigManager.getInstance()
+				.getDeviceCloudMgtConfig();
 
 		if (config != null) {
 			initSecurity(config);
@@ -55,15 +56,14 @@ public class DeviceController {
 	}
 
 
-
-	private static void loadDataStores(DeviceCloudConfig config){
-		List<DataStore> dataStores=config.getDataStores().getDataStore();
+	private static void loadDataStores(DeviceCloudConfig config) {
+		List<DataStore> dataStores = config.getDataStores().getDataStore();
 		if (dataStores == null) {
 			log.error("Error occurred when trying to read data stores configurations");
 			return;
 		}
 
-		for(DataStore dataStore:dataStores) {
+		for (DataStore dataStore : dataStores) {
 			try {
 				String handlerClass = dataStore.getPublisherClass();
 
@@ -71,9 +71,10 @@ public class DeviceController {
 				Class<?> dataStoreClass = Class.forName(handlerClass);
 				if (DataStoreConnector.class.isAssignableFrom(dataStoreClass)) {
 
-					DataStoreConnector dataStoreConnector = (DataStoreConnector) dataStoreClass.newInstance();
-					String configName=dataStore.getName();
-					if(dataStore.isEnabled()) {
+					DataStoreConnector dataStoreConnector =
+							(DataStoreConnector) dataStoreClass.newInstance();
+					String configName = dataStore.getName();
+					if (dataStore.isEnabled()) {
 						dataStoresMap.put(configName, dataStoreConnector);
 						dataStoreConnector.initDataStore(dataStore);
 					}
@@ -86,14 +87,14 @@ public class DeviceController {
 		}
 	}
 
-	private static void loadControlQueues(DeviceCloudConfig config){
-		List<ControlQueue> controlQueues=config.getControlQueues().getControlQueue();
+	private static void loadControlQueues(DeviceCloudConfig config) {
+		List<ControlQueue> controlQueues = config.getControlQueues().getControlQueue();
 		if (controlQueues == null) {
 			log.error("Error occurred when trying to read data stores configurations");
 			return;
 		}
 
-		for(ControlQueue controlQueue:controlQueues) {
+		for (ControlQueue controlQueue : controlQueues) {
 			try {
 				String handlerClass = controlQueue.getControlClass();
 
@@ -101,19 +102,19 @@ public class DeviceController {
 				Class<?> controlQueueClass = Class.forName(handlerClass);
 				if (ControlQueueConnector.class.isAssignableFrom(controlQueueClass)) {
 
-					if(controlQueue.isEnabled()) {
+					if (controlQueue.isEnabled()) {
 						mqttControlQueue = (ControlQueueConnector) controlQueueClass.newInstance();
 					}
 				}
 			} catch (ClassNotFoundException | IllegalAccessException | InstantiationException ex) {
-				log.error("Error occurred when trying to initiate data store"+controlQueue.getName());
+				log.error("Error occurred when trying to initiate data store" +
+								  controlQueue.getName());
 			}
 		}
 
 	}
 
-	private static void initSecurity(DeviceCloudConfig config ){
-
+	private static void initSecurity(DeviceCloudConfig config) {
 		String trustStoreFile = null;
 		String trustStorePassword = null;
 		File certificateFile = null;
@@ -136,9 +137,43 @@ public class DeviceController {
 		}
 	}
 
-	public  boolean pushBamData(String owner, String deviceType, String deviceId, Long time,
-									  String key,
-									  String value, String description)  throws UnauthorizedException {
+	public boolean publishMqttControl(String owner, String deviceType, String deviceId, String key,
+									  String value) throws DeviceControllerException {
+		HashMap<String, String> deviceControlsMap = new HashMap<String, String>();
+
+		deviceControlsMap.put("owner", owner);
+		deviceControlsMap.put("deviceType", deviceType);
+		deviceControlsMap.put("deviceId", deviceId);
+		deviceControlsMap.put("key", key);
+		deviceControlsMap.put("value", value);
+
+
+		if (mqttControlQueue == null) {
+			log.info("MQTT has not been enabled");
+			return false;
+		}
+
+		mqttControlQueue.enqueueControls(deviceControlsMap);
+		return true;
+	}
+
+	private boolean pushData(HashMap<String, String> deviceDataMap, String publisherType)
+			throws DeviceControllerException {
+
+		DataStoreConnector dataStoreConnector = dataStoresMap.get(publisherType);
+		if (dataStoreConnector == null) {
+			log.error(publisherType + " is not enabled");
+			return false;
+		}
+
+		dataStoreConnector.publishIoTData(deviceDataMap);
+		return true;
+	}
+
+	public boolean pushBamData(String owner, String deviceType, String deviceId, Long time,
+							   String key,
+							   String value, String description)
+			throws DeviceControllerException {
 
 		HashMap<String, String> deviceDataMap = new HashMap<String, String>();
 
@@ -153,28 +188,11 @@ public class DeviceController {
 		return pushData(deviceDataMap, ThriftDataStoreConnector.DataStoreConstants.BAM);
 
 	}
-	private boolean pushData(HashMap<String, String> deviceDataMap,String publisherType)  throws UnauthorizedException{
-		try {
-			DataStoreConnector dataStoreConnector=dataStoresMap.get(publisherType);
-			if(dataStoreConnector==null){
 
-				log.error(publisherType + " is not enabled");
-				return false;
-			}
-
-			dataStoreConnector.publishIoTData(deviceDataMap);
-			return true;
-		} catch (DeviceControllerException e) {
-			log.error(e.getMessage());
-			return false;
-
-		}
-
-	}
-
-	public  boolean pushCepData(String owner, String deviceType, String deviceId, Long time,
-									  String key,
-									  String value, String description)  throws UnauthorizedException {
+	public boolean pushCepData(String owner, String deviceType, String deviceId, Long time,
+							   String key,
+							   String value, String description)
+			throws DeviceControllerException {
 		HashMap<String, String> deviceDataMap = new HashMap<String, String>();
 
 		deviceDataMap.put("owner", owner);
@@ -186,49 +204,6 @@ public class DeviceController {
 		deviceDataMap.put("description", description);
 
 		return pushData(deviceDataMap, ThriftDataStoreConnector.DataStoreConstants.CEP);
-
-	}
-
-	public boolean publishMqttControl(String owner, String deviceType, String deviceId, String key,
-									 String value)
-			throws UnauthorizedException {
-		HashMap<String, String> deviceControlsMap = new HashMap<String, String>();
-
-		deviceControlsMap.put("owner", owner);
-		deviceControlsMap.put("deviceType", deviceType);
-		deviceControlsMap.put("deviceId", deviceId);
-		deviceControlsMap.put("key", key);
-		deviceControlsMap.put("value", value);
-
-//      DeviceValidator deviceChecker = new DeviceValidator();
-//      DeviceIdentifier dId = new DeviceIdentifier(deviceId, deviceType);
-
-		try {
-//            boolean exists = deviceChecker.isExist(owner, dId);
-			boolean exists = true;
-
-			if (exists) {
-				if(mqttControlQueue==null){
-					log.info("mqtt is not enabled");
-					return false;
-
-				}
-				mqttControlQueue.enqueueControls(deviceControlsMap);
-				return true;
-			} else {
-				throw new UnauthorizedException(
-						"There is no mapping between owner:" + owner + " and device id:" +
-								deviceId);
-			}
-		} catch (DeviceControllerException e) {
-
-			log.error(e.getMessage());
-			return false;
-		} /*catch (DeviceManagementException e) {
-            log.error("Error whilst trying to authenticate the owner with device");
-            return false;
-
-        }*/
 
 	}
 

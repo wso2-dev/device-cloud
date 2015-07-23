@@ -32,15 +32,17 @@ public class MqttConfig {
 	}
 
 
-	private MqttConfig(){
+	private MqttConfig() {
 
-		mqttControlQueue = DeviceCloudConfigManager.getInstance().getControlQueue(MQTT_QUEUE_CONFIG_NAME);
+		mqttControlQueue = DeviceCloudConfigManager.getInstance().getControlQueue(
+				MQTT_QUEUE_CONFIG_NAME);
 		controlQueueEndpoint = mqttControlQueue.getServerURL() + ":" + mqttControlQueue.getPort();
 		controlQueueUsername = mqttControlQueue.getUsername();
 		controlQueuePassword = mqttControlQueue.getPassword();
-
+		isEnabled = mqttControlQueue.isEnabled();
 	}
-	public static MqttConfig getInstance(){
+
+	public static MqttConfig getInstance() {
 		return mqttConfig;
 	}
 
