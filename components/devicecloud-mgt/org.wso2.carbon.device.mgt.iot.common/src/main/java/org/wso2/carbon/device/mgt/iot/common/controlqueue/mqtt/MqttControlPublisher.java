@@ -19,7 +19,12 @@ package org.wso2.carbon.device.mgt.iot.common.controlqueue.mqtt;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.eclipse.paho.client.mqttv3.*;
+import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
+import org.eclipse.paho.client.mqttv3.MqttCallback;
+import org.eclipse.paho.client.mqttv3.MqttClient;
+import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
+import org.eclipse.paho.client.mqttv3.MqttException;
+import org.eclipse.paho.client.mqttv3.MqttMessage;
 import org.wso2.carbon.device.mgt.iot.common.controlqueue.ControlQueueConnector;
 import org.wso2.carbon.device.mgt.iot.common.exception.DeviceControllerException;
 
@@ -47,7 +52,6 @@ public class MqttControlPublisher implements ControlQueueConnector, MqttCallback
 	private static final Log log = LogFactory.getLog(MqttControlPublisher.class);
 
 
-
 	public MqttControlPublisher() {
 	}
 
@@ -61,7 +65,7 @@ public class MqttControlPublisher implements ControlQueueConnector, MqttCallback
 	public void enqueueControls(HashMap<String, String> deviceControls)
 			throws DeviceControllerException {
 
-		if(MqttConfig.getInstance().isEnabled()) {
+		if (MqttConfig.getInstance().isEnabled()) {
 
 			MqttClient client;
 			MqttConnectOptions options;
@@ -77,7 +81,8 @@ public class MqttControlPublisher implements ControlQueueConnector, MqttCallback
 			if (clientId.length() > 24) {
 				String errorString =
 						"No of characters '" + clientId.length() + "' for ClientID: '" + clientId +
-								"' is invalid (should be less than 24, hence please provide a simple " +
+								"' is invalid (should be less than 24, hence please provide a " +
+								"simple " +
 
 
 								"'owner' tag)";
@@ -94,8 +99,12 @@ public class MqttControlPublisher implements ControlQueueConnector, MqttCallback
 							+ deviceId;
 			String payLoad = key + ":" + value;
 
+			log.info("Pubish-Topic: " + publishTopic);
+			log.info("PayLoad: " + payLoad);
+
 			try {
-				client = new MqttClient(MqttConfig.getInstance().getControlQueueEndpoint(), clientId);
+				client = new MqttClient(MqttConfig.getInstance().getControlQueueEndpoint(),
+										clientId);
 				options = new MqttConnectOptions();
 				options.setWill("iotDevice/clienterrors", "crashed".getBytes(UTF_8), 2, true);
 				client.setCallback(this);
