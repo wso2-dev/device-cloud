@@ -70,7 +70,7 @@
 						<Export-Package>
 							!org.wso2.carbon.device.mgt.iot.common.internal,
 							org.wso2.carbon.device.mgt.iot.common.*,
-							org.eclipse.paho.client.mqttv3.*,
+							org.eclipse.paho.client.mqttv3.*
 						</Export-Package>
 
 					</instructions>

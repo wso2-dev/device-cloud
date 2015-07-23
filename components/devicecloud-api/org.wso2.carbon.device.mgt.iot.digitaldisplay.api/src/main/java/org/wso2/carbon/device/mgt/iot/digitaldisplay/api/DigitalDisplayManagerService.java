@@ -143,8 +143,7 @@ public class DigitalDisplayManagerService {
 			device.setName(name);
 			device.setType(DigitalDisplayConstants.DEVICE_TYPE);
 
-			boolean updated = deviceManagement.getDeviceManagementService().updateDeviceInfo(
-					deviceIdentifier, device);
+			boolean updated = deviceManagement.getDeviceManagementService().modifyEnrollment(device);
 
 
 			if (updated) {

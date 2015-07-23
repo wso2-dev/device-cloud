@@ -148,8 +148,7 @@ public class FireAlarmManagerService {
 			device.setName(name);
 			device.setType(FireAlarmConstants.DEVICE_TYPE);
 
-			boolean updated = deviceManagement.getDeviceManagementService().updateDeviceInfo(
-					deviceIdentifier, device);
+			boolean updated = deviceManagement.getDeviceManagementService().modifyEnrollment(device);
 
 			if (updated) {
 				response.setStatus(HttpStatus.SC_OK);

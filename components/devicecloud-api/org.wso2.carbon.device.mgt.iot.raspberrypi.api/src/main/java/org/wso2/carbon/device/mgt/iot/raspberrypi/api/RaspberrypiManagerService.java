@@ -140,7 +140,7 @@ public class RaspberrypiManagerService {
 			device.setName(name);
 			device.setType(RaspberrypiConstants.DEVICE_TYPE);
 
-			boolean updated = deviceManagement.getDeviceManagementService().updateDeviceInfo(deviceIdentifier,device);
+			boolean updated = deviceManagement.getDeviceManagementService().modifyEnrollment(device);
 
 
 			if (updated) {
