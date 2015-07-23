@@ -67,6 +67,7 @@ public class SensebotManagerService {
 			device.setName(name);
 			device.setType(SensebotConstants.DEVICE_TYPE);
 			enrolmentInfo.setOwner(owner);
+			enrolmentInfo.setOwnership(EnrolmentInfo.OwnerShip.BYOD);
 			device.setEnrolmentInfo(enrolmentInfo);
 			boolean added = deviceManagement.getDeviceManagementService().enrollDevice(device);
 			if (added) {

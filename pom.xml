@@ -250,15 +250,26 @@
                 <artifactId>org.wso2.carbon.device.mgt.common</artifactId>
                 <version>${carbon.device.mgt.version}</version>
             </dependency>
+            <!--<dependency>-->
+                <!--<groupId>org.wso2.carbon.devicemgt</groupId>-->
+                <!--<artifactId>org.wso2.carbon.policy.mgt.common</artifactId>-->
+                <!--<version>${carbon.device.mgt.version}</version>-->
+            <!--</dependency>-->
+            <!--<dependency>-->
+                <!--<groupId>org.wso2.carbon.devicemgt</groupId>-->
+                <!--<artifactId>org.wso2.carbon.policy.mgt.core</artifactId>-->
+                <!--<version>${carbon.device.mgt.version}</version>-->
+            <!--</dependency>-->
             <dependency>
                 <groupId>org.wso2.carbon.devicemgt</groupId>
-                <artifactId>org.wso2.carbon.device.mgt.group.core</artifactId>
+                <artifactId>org.wso2.carbon.device.mgt.user.core</artifactId>
                 <version>${carbon.device.mgt.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.wso2.carbon.devicemgt</groupId>
-                <artifactId>org.wso2.carbon.device.mgt.group.common</artifactId>
+                <artifactId>org.wso2.carbon.device.mgt.user.common</artifactId>
                 <version>${carbon.device.mgt.version}</version>
+                <scope>provided</scope>
             </dependency>
 
             <!--IOT dependencies-->
