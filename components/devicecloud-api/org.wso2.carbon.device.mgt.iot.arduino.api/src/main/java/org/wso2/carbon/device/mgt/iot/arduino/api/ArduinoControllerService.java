@@ -26,6 +26,7 @@ import org.wso2.carbon.device.mgt.iot.arduino.api.util.MqttArduinoSubscriber;
 import org.wso2.carbon.device.mgt.iot.arduino.constants.ArduinoConstants;
 import org.wso2.carbon.device.mgt.iot.common.DeviceController;
 import org.wso2.carbon.device.mgt.iot.common.datastore.impl.DataStreamDefinitions;
+import org.wso2.carbon.device.mgt.iot.common.exception.DeviceControllerException;
 import org.wso2.carbon.device.mgt.iot.common.exception.UnauthorizedException;
 
 import javax.servlet.http.HttpServletResponse;
@@ -95,7 +96,7 @@ public class ArduinoControllerService {
 
 			}
 
-		} catch (UnauthorizedException e) {
+		} catch (DeviceControllerException e) {
 			response.setStatus(HttpStatus.SC_UNAUTHORIZED);
 
 		}

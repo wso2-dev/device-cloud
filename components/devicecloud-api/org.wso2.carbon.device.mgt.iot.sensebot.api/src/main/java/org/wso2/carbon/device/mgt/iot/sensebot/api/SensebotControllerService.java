@@ -25,6 +25,7 @@ import org.apache.http.impl.nio.client.CloseableHttpAsyncClient;
 import org.apache.http.impl.nio.client.HttpAsyncClients;
 import org.wso2.carbon.device.mgt.iot.common.DeviceController;
 import org.wso2.carbon.device.mgt.iot.common.datastore.impl.DataStreamDefinitions;
+import org.wso2.carbon.device.mgt.iot.common.exception.DeviceControllerException;
 import org.wso2.carbon.device.mgt.iot.common.exception.UnauthorizedException;
 import org.wso2.carbon.device.mgt.iot.sensebot.api.util.DeviceJSON;
 import org.wso2.carbon.device.mgt.iot.sensebot.constants.SensebotConstants;
