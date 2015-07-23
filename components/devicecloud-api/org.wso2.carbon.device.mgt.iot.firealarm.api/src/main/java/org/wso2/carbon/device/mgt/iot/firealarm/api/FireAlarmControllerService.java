@@ -32,18 +32,14 @@ import org.wso2.carbon.device.mgt.iot.common.datastore.impl.DataStreamDefinition
 import org.wso2.carbon.device.mgt.iot.common.exception.UnauthorizedException;
 import org.wso2.carbon.device.mgt.iot.firealarm.api.util.DeviceJSON;
 import org.wso2.carbon.device.mgt.iot.firealarm.constants.FireAlarmConstants;
+import org.wso2.carbon.utils.CarbonUtils;
 
 import javax.servlet.http.HttpServletResponse;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
-import javax.ws.rs.HeaderParam;
-import javax.ws.rs.HttpMethod;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
+import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
@@ -185,6 +181,75 @@ public class FireAlarmControllerService {
 		response.setStatus(HttpStatus.SC_OK);
 		replyMsg = "The current temperature of the device is " + replyMsg;
 		return replyMsg;
+	}
+
+	@Path("/read_current_temperature")
+	@GET
+	public String requestXMPPTemperature(@HeaderParam("owner") String owner,
+										 @HeaderParam("deviceId") String deviceId,
+										 @Context HttpServletResponse response) {
+
+		String replyMsg = "";
+		try {
+			DeviceValidator deviceValidator = new DeviceValidator();
+			if (!deviceValidator.isExist(owner, new DeviceIdentifier(deviceId,
+																	 FireAlarmConstants.DEVICE_TYPE))) {
+
+				response.setStatus(HttpStatus.SC_UNAUTHORIZED);
+				return "Unauthorized Access";
+			}
+
+			String deviceIp = deviceToIpMap.get(deviceId);
+
+			if (deviceIp == null) {
+				replyMsg = "IP not registered for device: " + deviceId + " of owner: " + owner;
+				response.setStatus(HttpStatus.SC_PRECONDITION_FAILED);
+				return replyMsg;
+			}
+
+			log.info("Sending request to read firealarm-temperature at : " + deviceIp);
+
+			String sep = File.separator;
+			String scriptsFolder = "repository" + sep + "resources" + sep + "scripts";
+			String scriptPath = CarbonUtils.getCarbonHome() + sep + scriptsFolder + sep
+					+ "xmpp_client.py";
+			String command = "python " + scriptPath;
+
+			replyMsg = executeCommand(command);
+
+		} catch (DeviceManagementException e) {
+			replyMsg = e.getErrorMessage();
+			response.setStatus(HttpStatus.SC_INTERNAL_SERVER_ERROR);
+			return replyMsg;
+		}
+
+		response.setStatus(HttpStatus.SC_OK);
+		replyMsg = "The current temperature of the device is " + replyMsg;
+		return replyMsg;
+	}
+
+	private String executeCommand(String command) {
+
+		StringBuffer output = new StringBuffer();
+
+		Process p;
+		try {
+			p = Runtime.getRuntime().exec(command);
+			p.waitFor();
+			BufferedReader reader =
+					new BufferedReader(new InputStreamReader(p.getInputStream()));
+
+			String line = "";
+			while ((line = reader.readLine())!= null) {
+				output.append(line + "\n");
+			}
+
+		} catch (Exception e) {
+			log.info(e.getMessage(),e);
+		}
+
+		return output.toString();
+
 	}
 
 
