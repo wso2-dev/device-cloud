@@ -72,6 +72,10 @@ public class TokenClient {
 		scope = DeviceCloudConfigManager.getInstance().getDeviceCloudMgtConfig().getApiManager()
 				.getDeviceScopes();
 
+		//todo this is tmp fix for firealarm
+		appToken = DeviceCloudConfigManager.getInstance().getDeviceCloudMgtConfig().getApiManager()
+				.getSubscriptionListURL();
+
 
 	}
 

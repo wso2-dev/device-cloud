@@ -22,72 +22,31 @@ import org.wso2.carbon.context.PrivilegedCarbonContext;
 import org.wso2.carbon.device.mgt.common.Device;
 import org.wso2.carbon.device.mgt.common.DeviceIdentifier;
 import org.wso2.carbon.device.mgt.common.DeviceManagementException;
+import org.wso2.carbon.device.mgt.common.EnrolmentInfo;
 import org.wso2.carbon.device.mgt.core.dao.DeviceManagementDAOException;
 import org.wso2.carbon.device.mgt.core.dao.DeviceManagementDAOFactory;
 import org.wso2.carbon.device.mgt.core.dto.DeviceType;
 import org.wso2.carbon.device.mgt.core.service.DeviceManagementProviderService;
+import org.wso2.carbon.device.mgt.iot.common.util.DeviceTypes;
 import org.wso2.carbon.device.mgt.iot.common.util.iotdevice.util.IotDeviceManagementUtil;
 import org.wso2.carbon.device.mgt.iot.common.util.ZipArchive;
 import org.wso2.carbon.utils.multitenancy.MultitenantConstants;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 public class DeviceManagement {
 
 	private static Log log = LogFactory.getLog(DeviceManagement.class);
-//
-//	public boolean addNewDevice(Device device) throws DeviceManagementException  {
-//
-//		DeviceManagementService dmService = new DeviceManagementServiceImpl();
-//		boolean status = dmService.enrollDevice(device);
-//		return status;
-//
-//	}
-//
-//	public boolean removeDevice(DeviceIdentifier deviceIdentifier)
-//			throws DeviceManagementException {
-//
-//		DeviceManagementService dmService = new DeviceManagementServiceImpl();
-//
-//		boolean status = dmService.disenrollDevice(deviceIdentifier);
-//		return status;
-//	}
-//
-//	public boolean update(Device device) throws DeviceManagementException {
-//
-//		DeviceIdentifier identifier=new DeviceIdentifier();
-//		identifier.setId(device.getDeviceIdentifier());
-//		identifier.setType(device.getType());
-//		DeviceManagementService dmService = new DeviceManagementServiceImpl();
-//		boolean status = dmService.updateDeviceInfo(identifier, device);
-//
-//		return status;
-//	}
-//
-//	public Device getDevice(DeviceIdentifier deviceIdentifier) throws DeviceManagementException {
-//
-//		DeviceManagementService dmService = new DeviceManagementServiceImpl();
-//		return dmService.getDevice(deviceIdentifier);
-//
-//	}
-//
-//	public boolean isExist(DeviceIdentifier deviceIdentifier) throws DeviceManagementException {
-//
-//		DeviceManagementService dmService = new DeviceManagementServiceImpl();
-//
-//		return dmService.isEnrolled(deviceIdentifier);
-//
-//	}
-//
+
 	public boolean isExist(String owner, DeviceIdentifier deviceIdentifier)
 			throws DeviceManagementException {
 
 		DeviceManagementProviderService dmService = getDeviceManagementService();
 		if (dmService.isEnrolled(deviceIdentifier)) {
 			Device device=dmService.getDevice(deviceIdentifier);
-
 				if (device.getEnrolmentInfo().getOwner().equals(owner)) {
 					return true;
 				}
@@ -95,17 +54,6 @@ public class DeviceManagement {
 
 		return false;
 	}
-//
-//	public List<Device> getDevices(String user) throws DeviceManagementException {
-//		DeviceManagementService dmService = new DeviceManagementServiceImpl();
-//		return dmService.getAllDevicesOfUser(user);
-//
-//	}
-//
-//	public List<Device> getDevicesByType(String deviceType) throws DeviceManagementException{
-//		DeviceManagementService dmService = new DeviceManagementServiceImpl();
-//		return dmService.getAllDevices(deviceType);
-//	}
 
 	public DeviceManagementProviderService getDeviceManagementService() {
 
@@ -119,10 +67,45 @@ public class DeviceManagement {
 		return dmService;
 	}
 
-	public List<DeviceType> getDeviceTypes() throws DeviceManagementDAOException {
 
-		return DeviceManagementDAOFactory.getDeviceTypeDAO().getDeviceTypes();
 
+	public Device[] getActiveDevices(String username)
+			throws DeviceManagementException {
+
+		DeviceManagement deviceManagement = new DeviceManagement();
+
+		List<Device> devices = deviceManagement.getDeviceManagementService().getDevicesOfUser(
+				username);
+		List<Device> activeDevices = new ArrayList<>();
+		if (devices != null) {
+			for (Device device : devices) {
+				if (device.getEnrolmentInfo().getStatus().equals(EnrolmentInfo.Status.ACTIVE)) {
+					activeDevices.add(device);
+				}
+			}
+		}
+		return activeDevices.toArray(new Device[]{});
+	}
+
+	public int getActiveDeviceCount(String username)
+			throws DeviceManagementException {
+
+		DeviceManagement deviceManagement = new DeviceManagement();
+
+		List<Device> devices = deviceManagement.getDeviceManagementService().getDevicesOfUser(
+				username);
+
+
+		if (devices != null) {
+			List<Device> activeDevices = new ArrayList<>();
+			for (Device device : devices) {
+				if (device.getEnrolmentInfo().getStatus().equals(EnrolmentInfo.Status.ACTIVE)) {
+					activeDevices.add(device);
+				}
+			}
+			return activeDevices.size();
+		}
+		return 0;
 	}
 
 	public ZipArchive getSketchArchive(String archivesPath, String templateSketchPath, Map contextParams)
@@ -135,6 +118,27 @@ public class DeviceManagement {
 		} catch (IOException e) {
 			throw new DeviceManagementException("Zip File Creation Failed",e);
 		}
+	}
+
+	public DeviceTypes[] getDeviceTypes()
+			throws DeviceManagementDAOException {
+
+		DeviceManagement deviceManagement = new DeviceManagement();
+
+		List<DeviceType> deviceTypes = DeviceManagementDAOFactory.getDeviceTypeDAO().getDeviceTypes();
+		DeviceTypes dTypes[] = new DeviceTypes[deviceTypes.size()];
+		int iter = 0;
+		for (DeviceType type : deviceTypes) {
+
+			DeviceTypes dt = new DeviceTypes();
+			dt.setName(type.getName());
+			dTypes[iter] = dt;
+			iter++;
+
+		}
+		return dTypes;
+
+
 	}
 
 }
