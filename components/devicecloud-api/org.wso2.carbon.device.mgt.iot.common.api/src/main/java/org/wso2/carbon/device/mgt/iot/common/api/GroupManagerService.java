@@ -13,13 +13,14 @@ import java.util.List;
 
 public class GroupManagerService {
 
-    @Path("/group/add")
+    @Path("/group")
     @POST
     @Consumes("application/json")
     @Produces("application/json")
-    public boolean addGroup(@QueryParam("name") String name, @QueryParam("username") String username) {
+    public boolean addGroup(@QueryParam("name") String name, @QueryParam("username") String username, @QueryParam("description") String description) {
         Group group = new Group();
         group.setName(name);
+        group.setDescription(description);
         group.setOwnerId(username);
         group.setDateOfCreation(new Date().getTime());
         group.setDateOfLastUpdate(new Date().getTime());
@@ -31,14 +32,15 @@ public class GroupManagerService {
         }
     }
 
-    @Path("/group/update/{groupId}")
-    @POST
+    @Path("/group/id/{groupId}")
+    @PUT
     @Consumes("application/json")
     @Produces("application/json")
-    public boolean updateGroup(@PathParam("groupId") int groupId, @QueryParam("name") String name, @QueryParam("username") String username) {
+    public boolean updateGroup(@PathParam("groupId") int groupId, @QueryParam("name") String name, @QueryParam("username") String username, @QueryParam("description") String description) {
         Group group = new Group();
         group.setId(groupId);
         group.setName(name);
+        group.setDescription(description);
         group.setOwnerId(username);
         group.setDateOfLastUpdate(new Date().getTime());
         try {
@@ -50,11 +52,11 @@ public class GroupManagerService {
         }
     }
 
-    @Path("/group/delete/{groupId}")
+    @Path("/group/id/{groupId}")
     @DELETE
     @Consumes("application/json")
     @Produces("application/json")
-    public boolean deleteGroup(@PathParam("groupId") int groupId) {
+    public boolean deleteGroup(@PathParam("groupId") int groupId, @QueryParam("username") String username) {
         try {
             return new GroupManagement().getGroupManagementService().deleteGroup(groupId);
         } catch (GroupManagementException e) {
@@ -67,7 +69,7 @@ public class GroupManagerService {
     @GET
     @Consumes("application/json")
     @Produces("application/json")
-    public Group getGroup(@PathParam("groupId") int groupId) {
+    public Group getGroup(@PathParam("groupId") int groupId, @QueryParam("username") String username) {
         try {
             return new GroupManagement().getGroupManagementService().getGroupById(groupId);
         } catch (GroupManagementException e) {
@@ -80,7 +82,7 @@ public class GroupManagerService {
     @GET
     @Consumes("application/json")
     @Produces("application/json")
-    public Group getGroupByName(@PathParam("groupName") String groupName) {
+    public Group getGroupByName(@PathParam("groupName") String groupName, @QueryParam("username") String username) {
         try {
             return new GroupManagement().getGroupManagementService().getGroupByName(groupName);
         } catch (GroupManagementException e) {
@@ -104,7 +106,7 @@ public class GroupManagerService {
         }
     }
 
-    @Path("/group/count")
+    @Path("/group/all/count")
     @GET
     @Consumes("application/json")
     @Produces("application/json")
@@ -121,30 +123,30 @@ public class GroupManagerService {
     @POST
     @Consumes("application/json")
     @Produces("application/json")
-    public boolean shareGroup(@QueryParam("username") String username, @PathParam("groupId") int groupId, @QueryParam("role") String sharingRole) {
+    public boolean shareGroup(@QueryParam("username") String username, @QueryParam("shareUser") String shareUser, @PathParam("groupId") int groupId, @QueryParam("role") String sharingRole) {
         try {
-            return new GroupManagement().getGroupManagementService().shareGroup(username, groupId, sharingRole);
+            return new GroupManagement().getGroupManagementService().shareGroup(shareUser, groupId, sharingRole);
         } catch (GroupManagementException e) {
             e.printStackTrace();
             return false;
         }
     }
 
-    @Path("/group/id/{groupId}/unshare")
-    @POST
+    @Path("/group/id/{groupId}/share")
+    @DELETE
     @Consumes("application/json")
     @Produces("application/json")
-    public boolean unShareGroup(@QueryParam("username") String username, @PathParam("groupId") int groupId, @QueryParam("role") String sharingRole) {
+    public boolean unShareGroup(@QueryParam("username") String username, @QueryParam("unShareUser") String unShareUser, @PathParam("groupId") int groupId, @QueryParam("role") String sharingRole) {
         try {
-            return new GroupManagement().getGroupManagementService().unShareGroup(username, groupId, sharingRole);
+            return new GroupManagement().getGroupManagementService().unShareGroup(unShareUser, groupId, sharingRole);
         } catch (GroupManagementException e) {
             e.printStackTrace();
             return false;
         }
     }
 
-    @Path("/group/id/{groupId}/role/add")
-    @PUT
+    @Path("/group/id/{groupId}/role")
+    @POST
     @Consumes("application/json")
     @Produces("application/json")
     public boolean addNewSharingRoleForGroup(@QueryParam("username") String username, @PathParam("groupId") int groupId, @QueryParam("role") String roleName, @QueryParam("permissions") String[] permissions) {
@@ -160,7 +162,7 @@ public class GroupManagerService {
         }
     }
 
-    @Path("/group/id/{groupId}/role/remove")
+    @Path("/group/id/{groupId}/role")
     @DELETE
     @Consumes("application/json")
     @Produces("application/json")
@@ -188,13 +190,13 @@ public class GroupManagerService {
         }
     }
 
-    @Path("/group/id/{groupId}/{username}/role/all")
+    @Path("/group/id/{groupId}/{user}/role/all")
     @GET
     @Consumes("application/json")
     @Produces("application/json")
-    public String[] getGroupRolesForUser(@PathParam("username") String username, @PathParam("groupId") int groupId) {
+    public String[] getGroupRolesForUser(@PathParam("user") String user, @QueryParam("username") String username, @PathParam("groupId") int groupId) {
         try {
-            List<String> roles = new GroupManagement().getGroupManagementService().getGroupRolesForUser(username, groupId);
+            List<String> roles = new GroupManagement().getGroupManagementService().getGroupRolesForUser(user, groupId);
             String[] rolesArray = new String[roles.size()];
             return roles.toArray(rolesArray);
         } catch (GroupManagementException e) {
