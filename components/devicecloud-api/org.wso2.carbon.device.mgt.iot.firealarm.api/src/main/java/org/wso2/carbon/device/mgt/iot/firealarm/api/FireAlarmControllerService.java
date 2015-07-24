@@ -60,10 +60,12 @@ import java.util.concurrent.Future;
 public class FireAlarmControllerService {
 
 	private static Log log = LogFactory.getLog(FireAlarmControllerService.class);
+
 	private static final String URL_PREFIX = "http://";
 	private static final String BULB_CONTEXT = "/BULB/";
 	private static final String FAN_CONTEXT = "/FAN/";
 	private static final String TEMPERATURE_CONTEXT = "/TEMP/";
+
 	public static final String XMPP_PROTOCOL = "XMPP";
 	public static final String HTTP_PROTOCOL = "HTTP";
 	public static final String MQTT_PROTOCOL = "MQTT";
@@ -71,7 +73,6 @@ public class FireAlarmControllerService {
 
 	private static ConcurrentHashMap<String, String> deviceToIpMap =
 			new ConcurrentHashMap<String, String>();
-
 
 	@Path("/register/{owner}/{deviceId}/{ip}")
 	@POST
