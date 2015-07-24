@@ -24,6 +24,16 @@
          http://cxf.apache.org/jaxrs http://cxf.apache.org/schemas/jaxrs.xsd">
 
 
+    <jaxrs:server id="DevicesManager" address="/device_manager">
+        <jaxrs:serviceBeans>
+            <bean id="DevicesManagerService"
+                  class="org.wso2.carbon.device.mgt.iot.common.api.DevicesManagerService"/>
+        </jaxrs:serviceBeans>
+        <jaxrs:providers>
+            <bean class="org.codehaus.jackson.jaxrs.JacksonJsonProvider" />
+        </jaxrs:providers>
+    </jaxrs:server>
+
     <jaxrs:server id="TokenManager" address="/token_manager">
         <jaxrs:serviceBeans>
             <bean id="TokenManagerService"
