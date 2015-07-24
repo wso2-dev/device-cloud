@@ -1,4 +1,4 @@
-package org.wso2.carbon.device.mgt.iot.common.api.util;
+package org.wso2.carbon.device.mgt.iot.common.util;
 
 import org.wso2.carbon.device.mgt.common.Feature;
 
