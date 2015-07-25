@@ -26,7 +26,13 @@ import org.wso2.carbon.device.mgt.common.EnrolmentInfo;
 import org.wso2.carbon.device.mgt.iot.common.DeviceManagement;
 import org.wso2.carbon.device.mgt.iot.common.apimgt.AccessTokenInfo;
 import org.wso2.carbon.device.mgt.iot.common.apimgt.TokenClient;
+import org.wso2.carbon.device.mgt.iot.common.controlqueue.ControlQueueConnector;
+import org.wso2.carbon.device.mgt.iot.common.controlqueue.mqtt.MqttConfig;
+import org.wso2.carbon.device.mgt.iot.common.controlqueue.xmpp.XmppAccount;
+import org.wso2.carbon.device.mgt.iot.common.controlqueue.xmpp.XmppConfig;
+import org.wso2.carbon.device.mgt.iot.common.controlqueue.xmpp.XmppServerClient;
 import org.wso2.carbon.device.mgt.iot.common.exception.AccessTokenException;
+import org.wso2.carbon.device.mgt.iot.common.exception.DeviceControllerException;
 import org.wso2.carbon.device.mgt.iot.common.util.ZipArchive;
 import org.wso2.carbon.device.mgt.iot.common.util.ZipUtil;
 import org.wso2.carbon.device.mgt.iot.firealarm.constants.FireAlarmConstants;
@@ -43,6 +49,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
+import java.io.File;
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -85,12 +92,11 @@ public class FireAlarmManagerService {
 			enrolmentInfo.setOwner(owner);
 			device.setEnrolmentInfo(enrolmentInfo);
 			boolean added = deviceManagement.getDeviceManagementService().enrollDevice(device);
+
 			if (added) {
 				Response.status(HttpStatus.SC_OK).build();
-
 			} else {
 				Response.status(HttpStatus.SC_EXPECTATION_FAILED).build();
-
 			}
 
 			return added;
@@ -148,7 +154,8 @@ public class FireAlarmManagerService {
 			device.setName(name);
 			device.setType(FireAlarmConstants.DEVICE_TYPE);
 
-			boolean updated = deviceManagement.getDeviceManagementService().modifyEnrollment(device);
+			boolean updated = deviceManagement.getDeviceManagementService().modifyEnrollment(
+					device);
 
 			if (updated) {
 				response.setStatus(HttpStatus.SC_OK);
@@ -236,6 +243,8 @@ public class FireAlarmManagerService {
 			return Response.status(500).entity(ex.getMessage()).build();
 		} catch (AccessTokenException ex) {
 			return Response.status(500).entity(ex.getMessage()).build();
+		} catch (DeviceControllerException ex) {
+			return Response.status(500).entity(ex.getMessage()).build();
 		}
 
 	}
@@ -256,12 +265,14 @@ public class FireAlarmManagerService {
 			return Response.status(500).entity(ex.getMessage()).build();
 		} catch (AccessTokenException ex) {
 			return Response.status(500).entity(ex.getMessage()).build();
+		} catch (DeviceControllerException ex) {
+			return Response.status(500).entity(ex.getMessage()).build();
 		}
 
 	}
 
 	private ZipArchive createDownloadFile(String owner, String sketchType)
-			throws DeviceManagementException, AccessTokenException {
+			throws DeviceManagementException, AccessTokenException, DeviceControllerException {
 		if (owner == null) {
 			throw new IllegalArgumentException("Error on createDownloadFile() Owner is null!");
 		}
@@ -287,6 +298,25 @@ public class FireAlarmManagerService {
 					+ " owner:" + owner;
 			throw new DeviceManagementException(msg);
 		}
+
+		XmppAccount newXmppAccount = new XmppAccount();
+		newXmppAccount.setAccountName(owner + "_" + deviceId);
+		newXmppAccount.setUsername(deviceId);
+		newXmppAccount.setPassword(accessToken);
+
+		String xmppEndPoint = XmppConfig.getInstance().getXmppControlQueue().getServerURL();
+
+		int indexOfChar = xmppEndPoint.lastIndexOf(File.separator);
+
+		if ( indexOfChar != -1) {
+			xmppEndPoint = xmppEndPoint.substring((indexOfChar + 1), xmppEndPoint.length());
+		}
+
+		newXmppAccount.setEmail(deviceId + "@" + xmppEndPoint);
+
+		XmppServerClient xmppServerClient = new XmppServerClient();
+		xmppServerClient.initControlQueue();
+		xmppServerClient.createXMPPAccount(newXmppAccount);
 
 		ZipUtil ziputil = new ZipUtil();
 		ZipArchive zipFile = null;

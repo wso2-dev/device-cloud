@@ -245,7 +245,7 @@ public class FireAlarmControllerService {
 	}
 
 
-	@Path("/temperature")
+	@Path("/readtemperature")
 	@GET
 	public String requestTemperature(@HeaderParam("owner") String owner,
 									 @HeaderParam("deviceId") String deviceId,

@@ -4,26 +4,31 @@ import org.wso2.carbon.device.mgt.iot.common.config.server.DeviceCloudConfigMana
 import org.wso2.carbon.device.mgt.iot.common.config.server.datasource.ControlQueue;
 
 public class MqttConfig {
-	private String controlQueueEndpoint;
-	private String controlQueueUsername;
-	private String controlQueuePassword;
+	private String mqttQueueEndpoint;
+	private String mqttQueueUsername;
+	private String mqttQueuePassword;
 	private boolean isEnabled;
 
 	private static final String MQTT_QUEUE_CONFIG_NAME = "MQTT";
+
 	private ControlQueue mqttControlQueue;
 
 	private static MqttConfig mqttConfig = new MqttConfig();
 
-	public String getControlQueueEndpoint() {
-		return controlQueueEndpoint;
+	public String getMqttQueueEndpoint() {
+		return mqttQueueEndpoint;
 	}
 
-	public String getControlQueueUsername() {
-		return controlQueueUsername;
+	public String getMqttQueueUsername() {
+		return mqttQueueUsername;
 	}
 
-	public String getControlQueuePassword() {
-		return controlQueuePassword;
+	public String getMqttQueuePassword() {
+		return mqttQueuePassword;
+	}
+
+	public ControlQueue getMqttControlQueue() {
+		return mqttControlQueue;
 	}
 
 	public boolean isEnabled() {
@@ -37,9 +42,9 @@ public class MqttConfig {
 	private MqttConfig() {
 		mqttControlQueue = DeviceCloudConfigManager.getInstance().getControlQueue(
 				MQTT_QUEUE_CONFIG_NAME);
-		controlQueueEndpoint = mqttControlQueue.getServerURL() + ":" + mqttControlQueue.getPort();
-		controlQueueUsername = mqttControlQueue.getUsername();
-		controlQueuePassword = mqttControlQueue.getPassword();
+		mqttQueueEndpoint = mqttControlQueue.getServerURL() + ":" + mqttControlQueue.getPort();
+		mqttQueueUsername = mqttControlQueue.getUsername();
+		mqttQueuePassword = mqttControlQueue.getPassword();
 		isEnabled = mqttControlQueue.isEnabled();
 	}
 
