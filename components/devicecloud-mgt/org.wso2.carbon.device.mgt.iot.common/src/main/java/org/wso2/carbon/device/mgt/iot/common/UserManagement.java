@@ -3,15 +3,14 @@ package org.wso2.carbon.device.mgt.iot.common;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.context.CarbonContext;
-import org.wso2.carbon.context.PrivilegedCarbonContext;
 import org.wso2.carbon.device.mgt.iot.common.util.Role;
 import org.wso2.carbon.device.mgt.iot.common.util.User;
 import org.wso2.carbon.user.api.Claim;
+import org.wso2.carbon.user.api.Permission;
 import org.wso2.carbon.user.api.UserStoreException;
 import org.wso2.carbon.user.api.UserStoreManager;
 import org.wso2.carbon.user.core.UserCoreConstants;
 import org.wso2.carbon.user.core.service.RealmService;
-import org.wso2.carbon.utils.multitenancy.MultitenantConstants;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -47,6 +46,17 @@ public class UserManagement {
 	public static final String TEMPORARY_EMAIL_ADDRESS
 			= UserCoreConstants.ClaimTypeURIs.TEMPORARY_EMAIL_ADDRESS;
 
+	private static final String DEVICE_API_ACCESS_ROLE_NAME="deviceRole";
+	private static final String DEVICE_USER_API_ACCESS_ROLE_NAME="deviceUser";
+	private static RealmService realmService;
+
+	public static RealmService getRealmService() {
+		return realmService;
+	}
+
+	public static void setRealmService(RealmService realmService) {
+		UserManagement.realmService = realmService;
+	}
 
 	public int getUserCount() {
 
@@ -58,25 +68,25 @@ public class UserManagement {
 			return users.length;
 		} catch (UserStoreException e) {
 			String msg
-					= "Error occurred while retrieving the list of users that exist within the current tenant";
+					=
+					"Error occurred while retrieving the list of users that exist within the " +
+							"current tenant";
 			log.error(msg, e);
 			return 0;
 		}
 	}
 
+
+
 	//===========================================================================
-	//TODO: Below methods are implemented to support jaggery code upon removal of org.wso2.carbon.device.mgt.user.core from CDMF
+	//TODO: Below methods are implemented to support jaggery code upon removal of org.wso2.carbon
+	// .device.mgt.user.core from CDMF
 	//===========================================================================
 
 	private static UserStoreManager getUserStoreManager() throws UserStoreException {
-		RealmService realmService;
+
 		UserStoreManager userStoreManager;
 		try {
-			PrivilegedCarbonContext.startTenantFlow();
-			PrivilegedCarbonContext ctx = PrivilegedCarbonContext.getThreadLocalCarbonContext();
-			ctx.setTenantDomain(MultitenantConstants.SUPER_TENANT_DOMAIN_NAME);
-			ctx.setTenantId(MultitenantConstants.SUPER_TENANT_ID);
-			realmService = (RealmService) ctx.getOSGiService(RealmService.class, null);
 
 			if (realmService == null) {
 				String msg = "Realm service not initialized";
@@ -90,9 +100,11 @@ public class UserManagement {
 			log.error(msg, e);
 			throw new UserStoreException(msg, e);
 		} finally {
-			PrivilegedCarbonContext.endTenantFlow();
+			//PrivilegedCarbonContext.endTenantFlow();
 		}
 		return userStoreManager;
+
+
 	}
 
 	public List<User> getUsersForTenantAndRole(int tenantId, String roleName)
@@ -204,6 +216,25 @@ public class UserManagement {
 		newUser.setStreatAddress(claimMap.get(STREET_ADDRESS));
 		newUser.setTitle(claimMap.get(TITLE));
 		newUser.setTempEmailAddress(claimMap.get(TEMPORARY_EMAIL_ADDRESS));
+	}
+
+	public static void registerApiAccessRoles() {
+		UserStoreManager userStoreManager = null;
+		try {
+			userStoreManager = getUserStoreManager();
+			String[] userList = new String[]{};
+			Permission permissions[] = new Permission[]{};
+			if (!userStoreManager.isExistingRole(DEVICE_API_ACCESS_ROLE_NAME)) {
+				userStoreManager.addRole(DEVICE_API_ACCESS_ROLE_NAME, userList, permissions);
+			}
+			if (!userStoreManager.isExistingRole(DEVICE_USER_API_ACCESS_ROLE_NAME)) {
+				userStoreManager.addRole(DEVICE_USER_API_ACCESS_ROLE_NAME, userList, permissions);
+			}
+		} catch (UserStoreException e) {
+			log.error("error on wso2 user component");
+		}
+
+
 	}
 
 }
