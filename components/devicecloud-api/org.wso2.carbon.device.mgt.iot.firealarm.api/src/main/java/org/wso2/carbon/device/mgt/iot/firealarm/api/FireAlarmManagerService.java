@@ -26,8 +26,6 @@ import org.wso2.carbon.device.mgt.common.EnrolmentInfo;
 import org.wso2.carbon.device.mgt.iot.common.DeviceManagement;
 import org.wso2.carbon.device.mgt.iot.common.apimgt.AccessTokenInfo;
 import org.wso2.carbon.device.mgt.iot.common.apimgt.TokenClient;
-import org.wso2.carbon.device.mgt.iot.common.controlqueue.ControlQueueConnector;
-import org.wso2.carbon.device.mgt.iot.common.controlqueue.mqtt.MqttConfig;
 import org.wso2.carbon.device.mgt.iot.common.controlqueue.xmpp.XmppAccount;
 import org.wso2.carbon.device.mgt.iot.common.controlqueue.xmpp.XmppConfig;
 import org.wso2.carbon.device.mgt.iot.common.controlqueue.xmpp.XmppServerClient;
@@ -308,7 +306,7 @@ public class FireAlarmManagerService {
 
 		int indexOfChar = xmppEndPoint.lastIndexOf(File.separator);
 
-		if ( indexOfChar != -1) {
+		if (indexOfChar != -1) {
 			xmppEndPoint = xmppEndPoint.substring((indexOfChar + 1), xmppEndPoint.length());
 		}
 
@@ -316,7 +314,16 @@ public class FireAlarmManagerService {
 
 		XmppServerClient xmppServerClient = new XmppServerClient();
 		xmppServerClient.initControlQueue();
-		xmppServerClient.createXMPPAccount(newXmppAccount);
+		status = xmppServerClient.createXMPPAccount(newXmppAccount);
+
+		if (!status) {
+			String msg =
+					"XMPP Account was not created for device - " + deviceId + " of owner - " +
+							owner +
+							". XMPP might have been disabled in configs";
+			log.warn(msg);
+		}
+
 
 		ZipUtil ziputil = new ZipUtil();
 		ZipArchive zipFile = null;
