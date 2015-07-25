@@ -60,9 +60,9 @@ public class MqttControlPublisher implements ControlQueueConnector, MqttCallback
 
 	@Override
 	public void initControlQueue() throws DeviceControllerException {
-		mqttEndpoint = MqttConfig.getInstance().getControlQueueEndpoint();
-		mqttUsername = MqttConfig.getInstance().getControlQueueUsername();
-		mqttPassword = MqttConfig.getInstance().getControlQueuePassword();
+		mqttEndpoint = MqttConfig.getInstance().getMqttQueueEndpoint();
+		mqttUsername = MqttConfig.getInstance().getMqttQueueUsername();
+		mqttPassword = MqttConfig.getInstance().getMqttQueuePassword();
 		mqttEnabled = MqttConfig.getInstance().isEnabled();
 	}
 

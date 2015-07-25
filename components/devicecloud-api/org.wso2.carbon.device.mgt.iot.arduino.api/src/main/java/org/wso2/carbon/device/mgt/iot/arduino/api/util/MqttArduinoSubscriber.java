@@ -38,7 +38,7 @@ public class MqttArduinoSubscriber extends MqttSubscriber {
     //make it singleton
     private MqttArduinoSubscriber() {
 
-        super("Subscriber", ArduinoConstants.DEVICE_TYPE, MqttConfig.getInstance().getControlQueueEndpoint(),
+        super("Subscriber", ArduinoConstants.DEVICE_TYPE, MqttConfig.getInstance().getMqttQueueEndpoint(),
                 subscribetopic);
     }
 

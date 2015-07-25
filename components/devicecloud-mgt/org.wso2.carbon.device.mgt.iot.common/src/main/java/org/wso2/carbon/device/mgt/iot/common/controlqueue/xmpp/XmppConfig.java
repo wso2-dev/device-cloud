@@ -7,26 +7,31 @@ import org.wso2.carbon.device.mgt.iot.common.config.server.datasource.ControlQue
  * Created by smean-MAC on 7/23/15.
  */
 public class XmppConfig {
-	private String controlQueueEndpoint;
-	private String controlQueueUsername;
-	private String controlQueuePassword;
+	private String xmppEndpoint;
+	private String xmppUsername;
+	private String xmppPassword;
 	private boolean isEnabled;
 
 	private static final String XMPP_QUEUE_CONFIG_NAME = "XMPP";
+
 	private ControlQueue xmppControlQueue;
 
 	private static XmppConfig xmppConfig = new XmppConfig();
 
-	public String getControlQueueEndpoint() {
-		return controlQueueEndpoint;
+	public String getXmppEndpoint() {
+		return xmppEndpoint;
 	}
 
-	public String getControlQueueUsername() {
-		return controlQueueUsername;
+	public String getXmppUsername() {
+		return xmppUsername;
 	}
 
-	public String getControlQueuePassword() {
-		return controlQueuePassword;
+	public String getXmppPassword() {
+		return xmppPassword;
+	}
+
+	public ControlQueue getXmppControlQueue() {
+		return xmppControlQueue;
 	}
 
 	public boolean isEnabled() {
@@ -40,9 +45,9 @@ public class XmppConfig {
 	private XmppConfig() {
 		xmppControlQueue = DeviceCloudConfigManager.getInstance().getControlQueue(
 				XMPP_QUEUE_CONFIG_NAME);
-		controlQueueEndpoint = xmppControlQueue.getServerURL() + ":" + xmppControlQueue.getPort();
-		controlQueueUsername = xmppControlQueue.getUsername();
-		controlQueuePassword = xmppControlQueue.getPassword();
+		xmppEndpoint = xmppControlQueue.getServerURL() + ":" + xmppControlQueue.getPort();
+		xmppUsername = xmppControlQueue.getUsername();
+		xmppPassword = xmppControlQueue.getPassword();
 		isEnabled = xmppControlQueue.isEnabled();
 	}
 

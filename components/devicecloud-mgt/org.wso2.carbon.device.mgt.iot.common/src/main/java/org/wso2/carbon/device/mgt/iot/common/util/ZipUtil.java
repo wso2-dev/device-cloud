@@ -2,7 +2,6 @@ package org.wso2.carbon.device.mgt.iot.common.util;
 
 import org.wso2.carbon.device.mgt.common.DeviceManagementException;
 import org.wso2.carbon.device.mgt.iot.common.DeviceManagement;
-import org.wso2.carbon.device.mgt.iot.common.config.server.DeviceCloudConfigManager;
 import org.wso2.carbon.device.mgt.iot.common.controlqueue.mqtt.MqttConfig;
 import org.wso2.carbon.device.mgt.iot.common.controlqueue.xmpp.XmppConfig;
 import org.wso2.carbon.utils.CarbonUtils;
@@ -15,9 +14,7 @@ import java.util.Map;
 public class ZipUtil {
 
 	public ZipArchive downloadSketch(String owner, String deviceType, String deviceId, String
-			token,
-									 String refreshToken)
-			throws DeviceManagementException {
+			token, String refreshToken) throws DeviceManagementException {
 
 		if (owner == null || deviceType == null) {
 			throw new DeviceManagementException("Invalid parameters for `owner` or `deviceType`");
@@ -32,8 +29,21 @@ public class ZipUtil {
 		Map<String, String> contextParams = new HashMap<String, String>();
 		contextParams.put("DEVICE_OWNER", owner);
 		contextParams.put("DEVICE_ID", deviceId);
-		contextParams.put("MQTT_EP", MqttConfig.getInstance().getControlQueueEndpoint());
-		contextParams.put("XMPP_EP", XmppConfig.getInstance().getControlQueueEndpoint());
+
+		String endpoint = MqttConfig.getInstance().getMqttQueueEndpoint();
+		int indexOfChar = endpoint.indexOf(File.separator);
+		if (indexOfChar != -1) {
+			endpoint = endpoint.substring((indexOfChar + 1), endpoint.length());
+		}
+		contextParams.put("MQTT_EP", endpoint);
+
+		endpoint = XmppConfig.getInstance().getXmppEndpoint();
+		indexOfChar = endpoint.indexOf(File.separator);
+		if (indexOfChar != -1) {
+			endpoint = endpoint.substring((indexOfChar + 1), endpoint.length());
+		}
+		contextParams.put("XMPP_EP", endpoint);
+
 		contextParams.put("DEVICE_TOKEN", token);
 		contextParams.put("DEVICE_REFRESH_TOKEN", refreshToken);
 
