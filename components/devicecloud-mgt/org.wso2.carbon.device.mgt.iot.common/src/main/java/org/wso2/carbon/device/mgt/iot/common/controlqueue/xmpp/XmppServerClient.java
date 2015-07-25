@@ -79,18 +79,21 @@ public class XmppServerClient implements ControlQueueConnector {
 		httpPost.addRequestHeader(HttpHeaders.AUTHORIZATION, authorizationHeader);
 		httpPost.addRequestHeader(HttpHeaders.CONTENT_TYPE, APPLICATION_JSON_MT);
 
-		int responseFromUserCreation;
+		int responseStatusFromUserCreation;
+		String responseFromUserCreation;
 		try {
-			responseFromUserCreation = httpClient.executeMethod(httpPost);
+			responseStatusFromUserCreation = httpClient.executeMethod(httpPost);
+			responseFromUserCreation = httpPost.getResponseBodyAsString();
 		} catch (IOException e) {
 			String errorMsg = "Error occured whilst trying a 'POST' at : " + xmppUsersAPIEndpoint;
 			log.error(errorMsg);
 			throw new DeviceControllerException(errorMsg, e);
 		}
 
-		if (responseFromUserCreation != HttpStatus.SC_CREATED) {
-			String errorMsg = "XMPP Server returned status: '" + responseFromUserCreation +
-					HttpStatus.getStatusText(responseFromUserCreation) + "' for account creation";
+		if (responseStatusFromUserCreation != HttpStatus.SC_CREATED) {
+			String errorMsg = "XMPP Server returned status: '" + responseStatusFromUserCreation +
+					HttpStatus.getStatusText(responseStatusFromUserCreation) +
+					"' for account creation with error:\n" + responseFromUserCreation;
 			log.error(errorMsg);
 			throw new DeviceControllerException(errorMsg);
 		}
