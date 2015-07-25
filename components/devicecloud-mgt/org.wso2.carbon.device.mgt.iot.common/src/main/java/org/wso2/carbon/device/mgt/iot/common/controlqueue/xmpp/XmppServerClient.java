@@ -8,6 +8,7 @@ import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.http.HttpHeaders;
+import org.json.JSONObject;
 import org.wso2.carbon.device.mgt.iot.common.controlqueue.ControlQueueConnector;
 import org.wso2.carbon.device.mgt.iot.common.exception.DeviceControllerException;
 
@@ -25,7 +26,7 @@ public class XmppServerClient implements ControlQueueConnector {
 	private static final String XMPP_SERVER_API_CONTEXT = "/plugins/restapi/v1";
 	private static final String USERS_API = "/users";
 	private static final String GROUPS_API = "/groups";
-	private static final String APPLICATION_JSON_MT = "application/json; charset=UTF-8";
+	private static final String APPLICATION_JSON_MT = "application/json";
 
 	private String xmppEndpoint;
 	private String xmppUsername;
@@ -73,12 +74,25 @@ public class XmppServerClient implements ControlQueueConnector {
 			xmppAccountPayLoad[2] = new NameValuePair("name", newUserAccount.getAccountName());
 			xmppAccountPayLoad[3] = new NameValuePair("email", newUserAccount.getEmail());
 
+//			JSONObject xmppAccountJSON = new JSONObject();
+//			xmppAccountJSON.put("username", newUserAccount.getUsername());
+//			xmppAccountJSON.put("password", newUserAccount.getPassword());
+//			xmppAccountJSON.put("name", newUserAccount.getAccountName());
+//			xmppAccountJSON.put("email", newUserAccount.getEmail());
+
+
 			HttpClient httpClient = new HttpClient();
 			PostMethod httpPost = new PostMethod(xmppUsersAPIEndpoint);
 
 			httpPost.addRequestHeader(HttpHeaders.AUTHORIZATION, authorizationHeader);
 			httpPost.addRequestHeader(HttpHeaders.CONTENT_TYPE, APPLICATION_JSON_MT);
+
+//			for (NameValuePair nameValuePair : xmppAccountPayLoad) {
+//				httpPost.addParameter(nameValuePair);
+//			}
+
 			httpPost.setRequestBody(xmppAccountPayLoad);
+//			httpPost.setRequestBody(xmppAccountJSON.toString());
 
 			int responseStatusFromUserCreation;
 			String responseFromUserCreation = "";
