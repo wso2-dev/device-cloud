@@ -14,6 +14,7 @@ import org.wso2.carbon.device.mgt.iot.common.controlqueue.ControlQueueConnector;
 import org.wso2.carbon.device.mgt.iot.common.exception.DeviceControllerException;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 
@@ -69,24 +70,29 @@ public class XmppServerClient implements ControlQueueConnector {
 
 			String authorizationHeader = "Basic " + encodedString;
  			String jsonRequest ="{\n" +
-					"    \"username\": \""+newUserAccount.getUsername()+"\",\n" +
-					"    \"password\": \""+newUserAccount.getPassword()+"\",\n" +
-					"    \"name\": \""+newUserAccount.getAccountName()+"\",\n" +
-					"    \"email\": \""+newUserAccount.getUsername()+"@example.com\",\n" +
-					"    \"properties\": {\n" +
-					"        \"property\": [\n" +
-					"            {\n" +
-					"                \"@key\": \"console.rows_per_page\",\n" +
-					"                \"@value\": \"user-summary=8\"\n" +
-					"            },\n" +
-					"            {\n" +
-					"                \"@key\": \"console.order\",\n" +
-					"                \"@value\": \"session-summary=1\"\n" +
-					"            }\n" +
-					"        ]\n" +
-					"    }\n" +
+					"    \"username\": \""+newUserAccount.getUsername()+"\"," +
+					"    \"password\": \""+newUserAccount.getPassword()+"\"," +
+					"    \"name\": \""+newUserAccount.getAccountName()+"\"," +
+					"    \"email\": \""+newUserAccount.getUsername()+"@example.com\"," +
+					"    \"properties\": {" +
+					"        \"property\": [" +
+					"            {" +
+					"                \"@key\": \"console.rows_per_page\"," +
+					"                \"@value\": \"user-summary=8\"" +
+					"            }," +
+					"            {" +
+					"                \"@key\": \"console.order\"," +
+					"                \"@value\": \"session-summary=1\"" +
+					"            }" +
+					"        ]" +
+					"    }" +
 					"}";
-			StringRequestEntity requestEntity = new StringRequestEntity(,"application/json","UTF-8");
+			StringRequestEntity requestEntity = null;
+			try {
+				requestEntity = new StringRequestEntity(jsonRequest,"application/json","UTF-8");
+			} catch (UnsupportedEncodingException e) {
+				return false;
+			}
 
 //			NameValuePair[] xmppAccountPayLoad = new NameValuePair[4];
 //			xmppAccountPayLoad[0] = new NameValuePair("username", newUserAccount.getUsername());
