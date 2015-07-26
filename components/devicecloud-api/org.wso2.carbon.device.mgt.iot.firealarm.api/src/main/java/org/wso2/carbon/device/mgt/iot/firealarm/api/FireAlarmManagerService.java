@@ -304,7 +304,7 @@ public class FireAlarmManagerService {
 
 		String xmppEndPoint = XmppConfig.getInstance().getXmppControlQueue().getServerURL();
 
-		int indexOfChar = xmppEndPoint.lastIndexOf(File.separator);
+		int indexOfChar = xmppEndPoint.lastIndexOf('/');
 
 		if (indexOfChar != -1) {
 			xmppEndPoint = xmppEndPoint.substring((indexOfChar + 1), xmppEndPoint.length());

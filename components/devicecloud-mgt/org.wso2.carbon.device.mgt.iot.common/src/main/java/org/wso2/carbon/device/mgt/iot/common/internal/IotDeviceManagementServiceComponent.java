@@ -24,6 +24,7 @@ import org.osgi.framework.BundleContext;
 import org.osgi.service.component.ComponentContext;
 import org.wso2.carbon.core.ServerStartupObserver;
 import org.wso2.carbon.device.mgt.iot.common.DeviceController;
+import org.wso2.carbon.device.mgt.iot.common.UserManagement;
 import org.wso2.carbon.device.mgt.iot.common.config.devicetype.datasource.IotDeviceTypeConfig;
 import org.wso2.carbon.device.mgt.iot.common.service.DeviceTypeService;
 import org.wso2.carbon.device.mgt.iot.common.service.DeviceTypeServiceImpl;
@@ -35,6 +36,7 @@ import org.wso2.carbon.device.mgt.iot.common.config.devicetype.IotDeviceTypeConf
 import org.wso2.carbon.device.mgt.iot.common.util.iotdevice.dao.IotDeviceManagementDAOFactory;
 import org.wso2.carbon.device.mgt.iot.common.util.iotdevice.dao.util.IotDeviceManagementDAOUtil;
 import org.wso2.carbon.ndatasource.core.DataSourceService;
+import org.wso2.carbon.user.core.service.RealmService;
 import org.wso2.carbon.utils.ConfigurationContextService;
 
 import java.util.Map;
@@ -42,6 +44,12 @@ import java.util.Map;
 /**
  * @scr.component name="org.wso2.carbon.device.mgt.iot.common.internal.IotDeviceManagementServiceComponent"
  * immediate="true"
+ * @scr.reference name="user.realmservice.default"
+ * interface="org.wso2.carbon.user.core.service.RealmService"
+ * cardinality="1..1"
+ * policy="dynamic"
+ * bind="setRealmService"
+ * unbind="unsetRealmService"
  * @scr.reference name="org.wso2.carbon.ndatasource"
  * interface="org.wso2.carbon.ndatasource.core.DataSourceService"
  * cardinality="1..1"
@@ -105,6 +113,7 @@ public class IotDeviceManagementServiceComponent {
             DeviceCloudConfigManager.getInstance().initConfig();
 			DeviceController.init();
             IoTUsageStatisticsClient.initializeDataSource();
+			UserManagement.registerApiAccessRoles();
 
 			bundleContext.registerService(DeviceTypeService.class.getName(),
 										  new DeviceTypeServiceImpl(), null);
@@ -155,6 +164,32 @@ public class IotDeviceManagementServiceComponent {
 			log.debug("Un-setting ConfigurationContextService");
 		}
 		IotDeviceManagementServiceComponent.configurationContextService=null;
+	}
+
+	/**
+	 * Sets Realm Service
+	 * @param realmService associated realm service reference
+	 */
+	protected void setRealmService(RealmService realmService) {
+		if (log.isDebugEnabled()) {
+			log.debug("Setting Realm Service");
+
+		}
+		UserManagement userManagement= new UserManagement();
+		userManagement.setRealmService(realmService);
+
+	}
+
+	/**
+	 * Unsets Realm Service
+	 * @param realmService associated realm service reference
+	 */
+	protected void unsetRealmService(RealmService realmService) {
+		if (log.isDebugEnabled()) {
+			log.debug("Unsetting Realm Service");
+		}
+		UserManagement userManagement= new UserManagement();
+		userManagement.setRealmService(realmService);
 	}
 
 }

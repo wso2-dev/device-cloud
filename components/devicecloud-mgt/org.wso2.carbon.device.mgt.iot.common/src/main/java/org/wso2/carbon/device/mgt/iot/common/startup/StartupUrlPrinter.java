@@ -33,9 +33,7 @@ public class StartupUrlPrinter implements ServerStartupObserver {
 		ConfigurationContextService configContextService = IotDeviceManagementServiceComponent.configurationContextService;
 
 		int httpsPort = CarbonUtils.getTransportPort(configContextService, mgtConsoleTransport);
-		int httpsProxyPort =
-				CarbonUtils.getTransportProxyPort(configContextService.getServerConfigContext(),
-												  mgtConsoleTransport);
+
 		return "https://" + hostName + ":" + httpsPort + "/iotserver";
 	}
 
