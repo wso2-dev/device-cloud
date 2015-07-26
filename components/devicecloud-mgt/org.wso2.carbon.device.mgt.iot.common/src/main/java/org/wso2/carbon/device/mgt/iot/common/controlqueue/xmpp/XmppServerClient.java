@@ -85,7 +85,7 @@ public class XmppServerClient implements ControlQueueConnector {
 					"            }\n" +
 					"        ]\n" +
 					"    }\n" +
-					"}"
+					"}";
 			StringRequestEntity requestEntity = new StringRequestEntity(,"application/json","UTF-8");
 
 //			NameValuePair[] xmppAccountPayLoad = new NameValuePair[4];
