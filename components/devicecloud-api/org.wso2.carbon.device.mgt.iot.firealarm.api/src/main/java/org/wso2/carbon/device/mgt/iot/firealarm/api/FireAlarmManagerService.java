@@ -288,14 +288,7 @@ public class FireAlarmManagerService {
 		String refreshToken = accessTokenInfo.getRefresh_token();
 		//adding registering data
 
-		boolean status = register(deviceId, owner + "s_" + sketchType + "_" + deviceId.substring(0,
-																								 3),
-								  owner);
-		if (!status) {
-			String msg = "Error occurred while registering the device with " + "id: " + deviceId
-					+ " owner:" + owner;
-			throw new DeviceManagementException(msg);
-		}
+
 
 		XmppAccount newXmppAccount = new XmppAccount();
 		newXmppAccount.setAccountName(owner + "_" + deviceId);
@@ -314,7 +307,7 @@ public class FireAlarmManagerService {
 
 		XmppServerClient xmppServerClient = new XmppServerClient();
 		xmppServerClient.initControlQueue();
-		status = xmppServerClient.createXMPPAccount(newXmppAccount);
+		boolean status = xmppServerClient.createXMPPAccount(newXmppAccount);
 
 		if (!status) {
 			String msg =
@@ -322,6 +315,16 @@ public class FireAlarmManagerService {
 							owner +
 							". XMPP might have been disabled in configs";
 			log.warn(msg);
+			throw new DeviceManagementException(msg);
+		}
+
+		status = register(deviceId, owner + "s_" + sketchType + "_" + deviceId.substring(0,
+																								 3),
+								  owner);
+		if (!status) {
+			String msg = "Error occurred while registering the device with " + "id: " + deviceId
+					+ " owner:" + owner;
+			throw new DeviceManagementException(msg);
 		}
 
 

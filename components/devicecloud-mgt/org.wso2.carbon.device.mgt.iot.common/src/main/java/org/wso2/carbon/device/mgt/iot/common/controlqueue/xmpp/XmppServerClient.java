@@ -5,6 +5,7 @@ import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.httpclient.NameValuePair;
 import org.apache.commons.httpclient.methods.PostMethod;
+import org.apache.commons.httpclient.methods.StringRequestEntity;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.http.HttpHeaders;
@@ -67,12 +68,31 @@ public class XmppServerClient implements ControlQueueConnector {
 			encodedString = Base64.encode(encodedString.getBytes(StandardCharsets.UTF_8));
 
 			String authorizationHeader = "Basic " + encodedString;
+ 			String jsonRequest ="{\n" +
+					"    \"username\": \""+newUserAccount.getUsername()+"\",\n" +
+					"    \"password\": \""+newUserAccount.getPassword()+"\",\n" +
+					"    \"name\": \""+newUserAccount.getAccountName()+"\",\n" +
+					"    \"email\": \""+newUserAccount.getUsername()+"@example.com\",\n" +
+					"    \"properties\": {\n" +
+					"        \"property\": [\n" +
+					"            {\n" +
+					"                \"@key\": \"console.rows_per_page\",\n" +
+					"                \"@value\": \"user-summary=8\"\n" +
+					"            },\n" +
+					"            {\n" +
+					"                \"@key\": \"console.order\",\n" +
+					"                \"@value\": \"session-summary=1\"\n" +
+					"            }\n" +
+					"        ]\n" +
+					"    }\n" +
+					"}"
+			StringRequestEntity requestEntity = new StringRequestEntity(,"application/json","UTF-8");
 
-			NameValuePair[] xmppAccountPayLoad = new NameValuePair[4];
-			xmppAccountPayLoad[0] = new NameValuePair("username", newUserAccount.getUsername());
-			xmppAccountPayLoad[1] = new NameValuePair("password", newUserAccount.getPassword());
-			xmppAccountPayLoad[2] = new NameValuePair("name", newUserAccount.getAccountName());
-			xmppAccountPayLoad[3] = new NameValuePair("email", newUserAccount.getEmail());
+//			NameValuePair[] xmppAccountPayLoad = new NameValuePair[4];
+//			xmppAccountPayLoad[0] = new NameValuePair("username", newUserAccount.getUsername());
+//			xmppAccountPayLoad[1] = new NameValuePair("password", newUserAccount.getPassword());
+//			xmppAccountPayLoad[2] = new NameValuePair("name", newUserAccount.getAccountName());
+//			xmppAccountPayLoad[3] = new NameValuePair("email", newUserAccount.getEmail());
 
 //			JSONObject xmppAccountJSON = new JSONObject();
 //			xmppAccountJSON.put("username", newUserAccount.getUsername());
@@ -85,13 +105,14 @@ public class XmppServerClient implements ControlQueueConnector {
 			PostMethod httpPost = new PostMethod(xmppUsersAPIEndpoint);
 
 			httpPost.addRequestHeader(HttpHeaders.AUTHORIZATION, authorizationHeader);
-			httpPost.addRequestHeader(HttpHeaders.CONTENT_TYPE, APPLICATION_JSON_MT);
+			httpPost.setRequestEntity(requestEntity);
+			//httpPost.addRequestHeader(HttpHeaders.CONTENT_TYPE, APPLICATION_JSON_MT);
 
 //			for (NameValuePair nameValuePair : xmppAccountPayLoad) {
 //				httpPost.addParameter(nameValuePair);
 //			}
 
-			httpPost.setRequestBody(xmppAccountPayLoad);
+			//httpPost.setRequestBody(xmppAccountPayLoad);
 //			httpPost.setRequestBody(xmppAccountJSON.toString());
 
 			int responseStatusFromUserCreation;
