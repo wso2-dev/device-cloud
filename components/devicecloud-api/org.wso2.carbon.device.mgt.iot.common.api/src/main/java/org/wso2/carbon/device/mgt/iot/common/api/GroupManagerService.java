@@ -132,8 +132,8 @@ public class GroupManagerService {
         }
     }
 
-    @Path("/group/id/{groupId}/share")
-    @DELETE
+    @Path("/group/id/{groupId}/unshare")
+    @POST
     @Consumes("application/json")
     @Produces("application/json")
     public boolean unShareGroup(@FormParam("username") String username, @FormParam("unShareUser") String unShareUser, @PathParam("groupId") int groupId, @FormParam("role") String sharingRole) {
