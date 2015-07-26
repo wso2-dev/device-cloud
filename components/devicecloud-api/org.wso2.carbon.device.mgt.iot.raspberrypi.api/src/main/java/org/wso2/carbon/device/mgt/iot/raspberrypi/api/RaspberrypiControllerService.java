@@ -20,6 +20,7 @@ import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.device.mgt.iot.common.datastore.impl.DataStreamDefinitions;
+import org.wso2.carbon.device.mgt.iot.common.exception.DeviceControllerException;
 import org.wso2.carbon.device.mgt.iot.raspberrypi.api.util.DeviceJSON;
 import org.wso2.carbon.device.mgt.iot.raspberrypi.constants.RaspberrypiConstants;
 import org.wso2.carbon.device.mgt.iot.common.DeviceController;
