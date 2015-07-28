@@ -31,14 +31,14 @@ public class ZipUtil {
 		contextParams.put("DEVICE_ID", deviceId);
 
 		String endpoint = MqttConfig.getInstance().getMqttQueueEndpoint();
-		int indexOfChar = endpoint.indexOf(File.separator);
+		int indexOfChar = endpoint.lastIndexOf(File.separator);
 		if (indexOfChar != -1) {
 			endpoint = endpoint.substring((indexOfChar + 1), endpoint.length());
 		}
 		contextParams.put("MQTT_EP", endpoint);
 
 		endpoint = XmppConfig.getInstance().getXmppEndpoint();
-		indexOfChar = endpoint.indexOf(File.separator);
+		indexOfChar = endpoint.lastIndexOf(File.separator);
 		if (indexOfChar != -1) {
 			endpoint = endpoint.substring((indexOfChar + 1), endpoint.length());
 		}

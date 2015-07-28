@@ -65,6 +65,7 @@ public class FireAlarmControllerService {
 	private static final String BULB_CONTEXT = "/BULB/";
 	private static final String FAN_CONTEXT = "/FAN/";
 	private static final String TEMPERATURE_CONTEXT = "/TEMP/";
+	private static final String SONAR_CONTEXT = "/SONAR/";
 
 	public static final String XMPP_PROTOCOL = "XMPP";
 	public static final String HTTP_PROTOCOL = "HTTP";
@@ -356,6 +357,76 @@ public class FireAlarmControllerService {
 
 	}
 
+
+	@Path("/readsonar")
+	@GET
+	public String requestSonar(@HeaderParam("owner") String owner,
+							   @HeaderParam("deviceId") String deviceId,
+							   @HeaderParam("protocol") String protocol,
+							   @Context HttpServletResponse response) {
+		String replyMsg = "";
+
+		DeviceValidator deviceValidator = new DeviceValidator();
+		try {
+			if (!deviceValidator.isExist(owner, new DeviceIdentifier(deviceId,
+																	 FireAlarmConstants
+																			 .DEVICE_TYPE))) {
+				response.setStatus(HttpStatus.SC_UNAUTHORIZED);
+				return "Unauthorized Access";
+			}
+		} catch (DeviceManagementException e) {
+			replyMsg = e.getErrorMessage();
+			response.setStatus(HttpStatus.SC_INTERNAL_SERVER_ERROR);
+			return replyMsg;
+		}
+
+		String deviceIp = deviceToIpMap.get(deviceId);
+
+		if (deviceIp == null) {
+			replyMsg = "IP not registered for device: " + deviceId + " of owner: " + owner;
+			response.setStatus(HttpStatus.SC_PRECONDITION_FAILED);
+			return replyMsg;
+		}
+
+		try {
+			switch (protocol) {
+				case HTTP_PROTOCOL:
+					log.info("Sending request to read firealarm-sonar at : " + deviceIp +
+									 " via " + HTTP_PROTOCOL);
+
+					replyMsg = sendCommandViaHTTP(deviceIp, 80, SONAR_CONTEXT, false);
+					break;
+
+//				case XMPP_PROTOCOL:
+//					log.info("Sending request to read firealarm-sonar at : " + deviceIp +
+//									 " via " +
+//									 XMPP_PROTOCOL);
+//					replyMsg = requestTemperatureViaXMPP(deviceIp, response);
+//					break;
+
+				default:
+					if (protocol == null) {
+						log.info("Sending request to read firealarm-sonar at : " + deviceIp +
+										 " via " + HTTP_PROTOCOL);
+
+						replyMsg = sendCommandViaHTTP(deviceIp, 80, SONAR_CONTEXT, false);
+					} else {
+						replyMsg = "Requested protocol '" + protocol + "' is not supported";
+						response.setStatus(HttpStatus.SC_NOT_IMPLEMENTED);
+						return replyMsg;
+					}
+					break;
+			}
+		} catch (DeviceManagementException e) {
+			replyMsg = e.getErrorMessage();
+			response.setStatus(HttpStatus.SC_INTERNAL_SERVER_ERROR);
+			return replyMsg;
+		}
+
+		response.setStatus(HttpStatus.SC_OK);
+		replyMsg = "The current sonar reading of the device is " + replyMsg;
+		return replyMsg;
+	}
 
 	@Path("/push_temperature")
 	@POST
