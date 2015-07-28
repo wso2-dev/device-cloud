@@ -303,21 +303,23 @@ public class FireAlarmManagerService {
 			xmppEndPoint = xmppEndPoint.substring((indexOfChar + 1), xmppEndPoint.length());
 		}
 
-		newXmppAccount.setEmail(deviceId + "@" + xmppEndPoint);
+		newXmppAccount.setEmail(deviceId + "@wso2.com");
 
 		XmppServerClient xmppServerClient = new XmppServerClient();
 		xmppServerClient.initControlQueue();
-		boolean status = xmppServerClient.createXMPPAccount(newXmppAccount);
+		boolean status;
+		if(XmppConfig.getInstance().isEnabled()) {
+			status = xmppServerClient.createXMPPAccount(newXmppAccount);
 
-		if (!status) {
-			String msg =
-					"XMPP Account was not created for device - " + deviceId + " of owner - " +
-							owner +
-							". XMPP might have been disabled in configs";
-			log.warn(msg);
-			throw new DeviceManagementException(msg);
+			if (!status) {
+				String msg =
+						"XMPP Account was not created for device - " + deviceId + " of owner - " +
+								owner +
+								". XMPP might have been disabled in configs";
+				log.warn(msg);
+				throw new DeviceManagementException(msg);
+			}
 		}
-
 		status = register(deviceId, owner + "s_" + sketchType + "_" + deviceId.substring(0,
 																								 3),
 								  owner);

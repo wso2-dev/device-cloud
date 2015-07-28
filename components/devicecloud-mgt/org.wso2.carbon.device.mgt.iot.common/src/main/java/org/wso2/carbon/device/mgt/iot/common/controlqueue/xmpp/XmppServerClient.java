@@ -18,9 +18,6 @@ import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 
-/**
- * Created by smean-MAC on 7/23/15.
- */
 public class XmppServerClient implements ControlQueueConnector {
 
 	private static final Log log = LogFactory.getLog(XmppServerClient.class);
@@ -73,7 +70,7 @@ public class XmppServerClient implements ControlQueueConnector {
 					"    \"username\": \""+newUserAccount.getUsername()+"\"," +
 					"    \"password\": \""+newUserAccount.getPassword()+"\"," +
 					"    \"name\": \""+newUserAccount.getAccountName()+"\"," +
-					"    \"email\": \""+newUserAccount.getUsername()+"@example.com\"," +
+					"    \"email\": \""+newUserAccount.getEmail()+"\"," +
 					"    \"properties\": {" +
 					"        \"property\": [" +
 					"            {" +
@@ -94,32 +91,13 @@ public class XmppServerClient implements ControlQueueConnector {
 				return false;
 			}
 
-//			NameValuePair[] xmppAccountPayLoad = new NameValuePair[4];
-//			xmppAccountPayLoad[0] = new NameValuePair("username", newUserAccount.getUsername());
-//			xmppAccountPayLoad[1] = new NameValuePair("password", newUserAccount.getPassword());
-//			xmppAccountPayLoad[2] = new NameValuePair("name", newUserAccount.getAccountName());
-//			xmppAccountPayLoad[3] = new NameValuePair("email", newUserAccount.getEmail());
-
-//			JSONObject xmppAccountJSON = new JSONObject();
-//			xmppAccountJSON.put("username", newUserAccount.getUsername());
-//			xmppAccountJSON.put("password", newUserAccount.getPassword());
-//			xmppAccountJSON.put("name", newUserAccount.getAccountName());
-//			xmppAccountJSON.put("email", newUserAccount.getEmail());
-
 
 			HttpClient httpClient = new HttpClient();
 			PostMethod httpPost = new PostMethod(xmppUsersAPIEndpoint);
 
 			httpPost.addRequestHeader(HttpHeaders.AUTHORIZATION, authorizationHeader);
 			httpPost.setRequestEntity(requestEntity);
-			//httpPost.addRequestHeader(HttpHeaders.CONTENT_TYPE, APPLICATION_JSON_MT);
 
-//			for (NameValuePair nameValuePair : xmppAccountPayLoad) {
-//				httpPost.addParameter(nameValuePair);
-//			}
-
-			//httpPost.setRequestBody(xmppAccountPayLoad);
-//			httpPost.setRequestBody(xmppAccountJSON.toString());
 
 			int responseStatusFromUserCreation;
 			String responseFromUserCreation = "";
