@@ -21,7 +21,6 @@ public class DeviceEventsDTO {
 	private String time;
 	private String deviceId;
 	private String deviceType;
-	private String deviceName;
 	private String deviceActivity;
 
 	public String getTime() {
@@ -40,16 +39,12 @@ public class DeviceEventsDTO {
 		this.deviceActivity = deviceActivity;
 	}
 
-	public String getDeviceName() {
-		return deviceName;
-	}
-
-	public void setDeviceName(String deviceName) {
-		this.deviceName = deviceName;
-	}
-
 	public void setDeviceId(String deviceId) {
 		this.deviceId = deviceId;
+	}
+
+	public String getDeviceId() {
+		return deviceId;
 	}
 
 	public String getDeviceType() {

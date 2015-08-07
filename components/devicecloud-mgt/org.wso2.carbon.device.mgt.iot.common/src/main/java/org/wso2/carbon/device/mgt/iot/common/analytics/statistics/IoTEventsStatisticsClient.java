@@ -75,11 +75,11 @@ public class IoTEventsStatisticsClient {
 
 			String limitString = "";
 			if(recordLimit > 0){
-				limitString = String.format(" LIMIT = '%d'", recordLimit);
+				limitString = String.format(" LIMIT %d", recordLimit);
 			}
 
 			query = String.format("SELECT * FROM %s WHERE 1=1 %s ORDER BY `time` DESC %s"
-										  + table, ownerString, limitString);
+										  ,table, ownerString, limitString);
 
 			log.info("query: " + query);
 
@@ -93,7 +93,6 @@ public class IoTEventsStatisticsClient {
 				DeviceEventsDTO DeviceEventsDTO = new DeviceEventsDTO();
 				DeviceEventsDTO.setTime(rs.getString("TIME"));
 				DeviceEventsDTO.setDeviceActivity(rs.getString("ACTIVITY"));
-				DeviceEventsDTO.setDeviceName(rs.getString("DEVICENAME"));
 				//(id + type) uniquely identifies a device
 				DeviceEventsDTO.setDeviceId(rs.getString("DEVICEID"));
 				DeviceEventsDTO.setDeviceType(rs.getString("DEVICETYPE"));

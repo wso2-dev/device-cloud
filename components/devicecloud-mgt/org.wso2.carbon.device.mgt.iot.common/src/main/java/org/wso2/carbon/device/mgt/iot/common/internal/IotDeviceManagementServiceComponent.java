@@ -25,6 +25,7 @@ import org.osgi.service.component.ComponentContext;
 import org.wso2.carbon.core.ServerStartupObserver;
 import org.wso2.carbon.device.mgt.iot.common.DeviceController;
 import org.wso2.carbon.device.mgt.iot.common.UserManagement;
+import org.wso2.carbon.device.mgt.iot.common.analytics.statistics.IoTEventsStatisticsClient;
 import org.wso2.carbon.device.mgt.iot.common.config.devicetype.datasource.IotDeviceTypeConfig;
 import org.wso2.carbon.device.mgt.iot.common.service.DeviceTypeService;
 import org.wso2.carbon.device.mgt.iot.common.service.DeviceTypeServiceImpl;
@@ -113,6 +114,7 @@ public class IotDeviceManagementServiceComponent {
             DeviceCloudConfigManager.getInstance().initConfig();
 			DeviceController.init();
             IoTUsageStatisticsClient.initializeDataSource();
+			IoTEventsStatisticsClient.initializeDataSource();
 			UserManagement.registerApiAccessRoles();
 
 			bundleContext.registerService(DeviceTypeService.class.getName(),
