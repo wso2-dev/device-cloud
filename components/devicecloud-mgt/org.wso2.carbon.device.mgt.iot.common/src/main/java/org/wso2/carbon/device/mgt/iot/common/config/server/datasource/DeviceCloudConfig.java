@@ -22,7 +22,7 @@ import javax.xml.bind.annotation.XmlType;
  *         &lt;element name="ControlQueues" type="{}ControlQueuesConfig"/>
  *         &lt;element name="Security" type="{}SecurityConfig"/>
  *         &lt;element name="ApiManager" type="{}ApiManagerConfig"/>
- *         &lt;element name="DeviceUserValidatorCacheSize" type="{http://www.w3.org/2001/XMLSchema}long"/>
+ *         &lt;element name="DeviceUserValidator" type="{}DeviceUserValidatorConfig"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -37,7 +37,7 @@ import javax.xml.bind.annotation.XmlType;
     "controlQueues",
     "security",
     "apiManager",
-    "deviceUserValidatorCacheSize"
+    "deviceUserValidator"
 })
 @XmlRootElement(name = "DeviceCloudConfiguration")
 public class DeviceCloudConfig {
@@ -50,8 +50,8 @@ public class DeviceCloudConfig {
     protected SecurityConfig security;
     @XmlElement(name = "ApiManager", required = true)
     protected ApiManagerConfig apiManager;
-    @XmlElement(name = "DeviceUserValidatorCacheSize")
-    protected int deviceUserValidatorCacheSize;
+    @XmlElement(name = "DeviceUserValidator", required = true)
+    protected DeviceUserValidatorConfig deviceUserValidator;
 
     /**
      * Gets the value of the dataStores property.
@@ -150,19 +150,27 @@ public class DeviceCloudConfig {
     }
 
     /**
-     * Gets the value of the deviceUserValidatorCacheSize property.
+     * Gets the value of the deviceUserValidator property.
      * 
+     * @return
+     *     possible object is
+     *     {@link DeviceUserValidatorConfig }
+     *     
      */
-    public int getDeviceUserValidatorCacheSize() {
-        return deviceUserValidatorCacheSize;
+    public DeviceUserValidatorConfig getDeviceUserValidator() {
+        return deviceUserValidator;
     }
 
     /**
-     * Sets the value of the deviceUserValidatorCacheSize property.
+     * Sets the value of the deviceUserValidator property.
      * 
+     * @param value
+     *     allowed object is
+     *     {@link DeviceUserValidatorConfig }
+     *     
      */
-    public void setDeviceUserValidatorCacheSize(int value) {
-        this.deviceUserValidatorCacheSize = value;
+    public void setDeviceUserValidator(DeviceUserValidatorConfig value) {
+        this.deviceUserValidator = value;
     }
 
 }

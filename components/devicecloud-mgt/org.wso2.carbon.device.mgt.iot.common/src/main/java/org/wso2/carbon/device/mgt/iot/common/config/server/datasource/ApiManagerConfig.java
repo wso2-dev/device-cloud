@@ -18,9 +18,14 @@ import javax.xml.bind.annotation.XmlType;
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
  *         &lt;element name="Enabled" type="{http://www.w3.org/2001/XMLSchema}boolean"/>
- *         &lt;element name="AccessTokenURL" type="{}http-url"/>
- *         &lt;element name="LoginURL" type="{}http-url"/>
- *         &lt;element name="SubscriptionListURL" type="{}http-url"/>
+ *         &lt;element name="AccessTokenURL" type="{http://www.w3.org/2001/XMLSchema}string"/>
+ *         &lt;element name="ServerURL" type="{http://www.w3.org/2001/XMLSchema}string"/>
+ *         &lt;element name="ServerPort" type="{http://www.w3.org/2001/XMLSchema}string"/>
+ *         &lt;element name="GatewayPort" type="{http://www.w3.org/2001/XMLSchema}string"/>
+ *         &lt;element name="LoginURL" type="{http://www.w3.org/2001/XMLSchema}string"/>
+ *         &lt;element name="SubscriptionListURL" type="{http://www.w3.org/2001/XMLSchema}string"/>
+ *         &lt;element name="Username" type="{http://www.w3.org/2001/XMLSchema}string"/>
+ *         &lt;element name="Password" type="{http://www.w3.org/2001/XMLSchema}string"/>
  *         &lt;element name="DeviceGrantType" type="{http://www.w3.org/2001/XMLSchema}string"/>
  *         &lt;element name="DeviceScopes" type="{http://www.w3.org/2001/XMLSchema}string"/>
  *       &lt;/sequence>
@@ -35,8 +40,13 @@ import javax.xml.bind.annotation.XmlType;
 @XmlType(name = "ApiManagerConfig", propOrder = {
     "enabled",
     "accessTokenURL",
+    "serverURL",
+    "serverPort",
+    "gatewayPort",
     "loginURL",
     "subscriptionListURL",
+    "username",
+    "password",
     "deviceGrantType",
     "deviceScopes"
 })
@@ -46,10 +56,20 @@ public class ApiManagerConfig {
     protected boolean enabled;
     @XmlElement(name = "AccessTokenURL", required = true)
     protected String accessTokenURL;
+    @XmlElement(name = "ServerURL", required = true)
+    protected String serverURL;
+    @XmlElement(name = "ServerPort", required = true)
+    protected String serverPort;
+    @XmlElement(name = "GatewayPort", required = true)
+    protected String gatewayPort;
     @XmlElement(name = "LoginURL", required = true)
     protected String loginURL;
     @XmlElement(name = "SubscriptionListURL", required = true)
     protected String subscriptionListURL;
+    @XmlElement(name = "Username", required = true)
+    protected String username;
+    @XmlElement(name = "Password", required = true)
+    protected String password;
     @XmlElement(name = "DeviceGrantType", required = true)
     protected String deviceGrantType;
     @XmlElement(name = "DeviceScopes", required = true)
@@ -93,6 +113,78 @@ public class ApiManagerConfig {
      */
     public void setAccessTokenURL(String value) {
         this.accessTokenURL = value;
+    }
+
+    /**
+     * Gets the value of the serverURL property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getServerURL() {
+        return serverURL;
+    }
+
+    /**
+     * Sets the value of the serverURL property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setServerURL(String value) {
+        this.serverURL = value;
+    }
+
+    /**
+     * Gets the value of the serverPort property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getServerPort() {
+        return serverPort;
+    }
+
+    /**
+     * Sets the value of the serverPort property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setServerPort(String value) {
+        this.serverPort = value;
+    }
+
+    /**
+     * Gets the value of the gatewayPort property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getGatewayPort() {
+        return gatewayPort;
+    }
+
+    /**
+     * Sets the value of the gatewayPort property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setGatewayPort(String value) {
+        this.gatewayPort = value;
     }
 
     /**
@@ -141,6 +233,54 @@ public class ApiManagerConfig {
      */
     public void setSubscriptionListURL(String value) {
         this.subscriptionListURL = value;
+    }
+
+    /**
+     * Gets the value of the username property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getUsername() {
+        return username;
+    }
+
+    /**
+     * Sets the value of the username property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setUsername(String value) {
+        this.username = value;
+    }
+
+    /**
+     * Gets the value of the password property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getPassword() {
+        return password;
+    }
+
+    /**
+     * Sets the value of the password property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setPassword(String value) {
+        this.password = value;
     }
 
     /**

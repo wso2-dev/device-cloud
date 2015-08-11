@@ -21,7 +21,7 @@ import javax.xml.bind.annotation.XmlType;
  *         &lt;element name="Enabled" type="{http://www.w3.org/2001/XMLSchema}boolean"/>
  *         &lt;element name="ControlClass" type="{http://www.w3.org/2001/XMLSchema}string"/>
  *         &lt;element name="Protocol" type="{http://www.w3.org/2001/XMLSchema}string"/>
- *         &lt;element name="ServerURL" type="{}http-url"/>
+ *         &lt;element name="ServerURL" type="{http://www.w3.org/2001/XMLSchema}string"/>
  *         &lt;element name="Port" type="{http://www.w3.org/2001/XMLSchema}short"/>
  *         &lt;element name="Username" type="{http://www.w3.org/2001/XMLSchema}string"/>
  *         &lt;element name="Password" type="{http://www.w3.org/2001/XMLSchema}string"/>

@@ -27,9 +27,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.wso2.carbon.device.mgt.iot.common.config.devicetype.IotDeviceTypeConfigurationManager;
-import org.wso2.carbon.device.mgt.iot.common.config.devicetype.datasource
-		.IoTDeviceTypeConfigManager;
 import org.wso2.carbon.device.mgt.iot.common.config.server.DeviceCloudConfigManager;
 import org.wso2.carbon.device.mgt.iot.common.exception.AccessTokenException;
 
@@ -51,15 +48,11 @@ import javax.net.ssl.X509TrustManager;
 
 public class TokenClient {
 
-	//TODO read from configuration file
 	private static Log log = LogFactory.getLog(TokenClient.class);
 	private String tokenURL;
 	private String grantType;
 	private String scope;
-
-	//TODO: getTokenApp
-	private String appToken =
-			"WDNhSF9OT0VuSFphbVBFcHljVmpZR0ZpaGM4YTprUks3aFg2UmpqZ0V0QmdVd2x1VENnZFNjakVh";
+	private String appToken ="";
 	private String deviceType;
 
 	public TokenClient(String deviceType) {
@@ -72,12 +65,11 @@ public class TokenClient {
 		scope = DeviceCloudConfigManager.getInstance().getDeviceCloudMgtConfig().getApiManager()
 				.getDeviceScopes();
 
-		//todo this is tmp fix for firealarm
-		appToken = DeviceCloudConfigManager.getInstance().getDeviceCloudMgtConfig().getApiManager()
-				.getSubscriptionListURL();
-
+		appToken = ApisAppClient.getInstance().getBase64EncodedConsumerKeyAndSecret(deviceType);
 
 	}
+
+
 
 	public AccessTokenInfo getAccessToken(String username, String deviceId)
 			throws AccessTokenException {

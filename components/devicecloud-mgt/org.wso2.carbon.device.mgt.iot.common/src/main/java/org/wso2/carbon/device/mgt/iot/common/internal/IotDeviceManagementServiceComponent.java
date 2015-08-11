@@ -117,6 +117,7 @@ public class IotDeviceManagementServiceComponent {
 			IoTEventsStatisticsClient.initializeDataSource();
 			UserManagement.registerApiAccessRoles();
 
+
 			bundleContext.registerService(DeviceTypeService.class.getName(),
 										  new DeviceTypeServiceImpl(), null);
 

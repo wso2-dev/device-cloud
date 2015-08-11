@@ -42,7 +42,7 @@ import static java.nio.charset.StandardCharsets.UTF_8;
  * The configuration settings for the MQTT end-point are read from the
  * 'controller.xml' file of the project.
  * This is done using the class 'DefaultDeviceControlConfigs.java' which loads
- * the settings from the default xml org.wso2.carbon.device.mgt.iot.common.devicecloud.configs
+ * the settings from the default xml org.wso2.carbon.device.mgt.iot.common.devicecloud.org.wso2.carbon.device.mgt.iot.common.config.server.configs
  * file -
  * /resources/conf/device-controls/controller.xml
  */

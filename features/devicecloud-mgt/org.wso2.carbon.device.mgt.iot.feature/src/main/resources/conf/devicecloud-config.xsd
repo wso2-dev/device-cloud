@@ -8,7 +8,14 @@
       <xs:element type="ControlQueuesConfig" name="ControlQueues"/>
       <xs:element type="SecurityConfig" name="Security"/>
       <xs:element type="ApiManagerConfig" name="ApiManager"/>
-      <xs:element type="xs:int" name="DeviceUserValidatorCacheSize"/>
+      <xs:element type="DeviceUserValidatorConfig" name="DeviceUserValidator"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="DeviceUserValidatorConfig">
+    <xs:sequence>
+      <xs:element type="xs:int" name="CacheSize"/>
+      <xs:element type="xs:int" name="TTL"/>
     </xs:sequence>
   </xs:complexType>
 
@@ -62,11 +69,17 @@
     <xs:sequence>
       <xs:element type="xs:boolean" name="Enabled"/>
       <xs:element type="xs:string" name="AccessTokenURL"/>
+      <xs:element type="xs:string" name="ServerURL"/>
+      <xs:element type="xs:string" name="ServerPort"/>
+      <xs:element type="xs:string" name="GatewayPort"/>
       <xs:element type="xs:string" name="LoginURL"/>
       <xs:element type="xs:string" name="SubscriptionListURL"/>
+      <xs:element type="xs:string" name="Username"/>
+      <xs:element type="xs:string" name="Password"/>
       <xs:element type="xs:string" name="DeviceGrantType"/>
       <xs:element type="xs:string" name="DeviceScopes"/>
     </xs:sequence>
   </xs:complexType>
+
 
 </xs:schema>

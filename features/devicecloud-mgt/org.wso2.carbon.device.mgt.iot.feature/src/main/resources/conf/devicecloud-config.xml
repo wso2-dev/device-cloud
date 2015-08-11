@@ -39,7 +39,7 @@
             <Enabled>true</Enabled>
             <ControlClass>org.wso2.carbon.device.mgt.iot.common.controlqueue.xmpp.XmppServerClient</ControlClass>
             <Protocol>XMPP</Protocol>
-            <ServerURL>http://192.168.57.129</ServerURL>
+            <ServerURL>http://localhost</ServerURL>
             <Port>9090</Port>
             <Username>.</Username>
             <Password>.</Password>
@@ -54,12 +54,20 @@
     <ApiManager>
         <Enabled>true</Enabled>
         <AccessTokenURL>https://localhost:9444/oauth2/token</AccessTokenURL>
-        <LoginURL>sdf</LoginURL>
-        <SubscriptionListURL>fdas</SubscriptionListURL>
+        <ServerURL>http://localhost</ServerURL>
+        <ServerPort>9764</ServerPort>
+        <GatewayPort></GatewayPort>
+        <LoginURL>/store/site/blocks/user/login/ajax/login.jag</LoginURL>
+        <SubscriptionListURL>/store/site/blocks/subscription/subscription-list/ajax/subscription-list.jag</SubscriptionListURL>
+        <Username>admin</Username>
+        <Password>admin</Password>
         <DeviceGrantType>devicecloud</DeviceGrantType>
-        <DeviceScopes>PRODUCTION</DeviceScopes>
+        <DeviceScopes>PRODUCTION DEVICE</DeviceScopes>
     </ApiManager>
 
-    <DeviceUserValidatorCacheSize>1000</DeviceUserValidatorCacheSize>
+    <DeviceUserValidator>
+        <CacheSize>1000</CacheSize>
+        <TTL>600</TTL>
+    </DeviceUserValidator>
 
 </DeviceCloudConfiguration>

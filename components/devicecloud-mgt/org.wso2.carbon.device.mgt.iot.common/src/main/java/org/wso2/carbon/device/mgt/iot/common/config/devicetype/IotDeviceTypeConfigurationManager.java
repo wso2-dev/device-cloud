@@ -22,6 +22,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.w3c.dom.Document;
 import org.wso2.carbon.device.mgt.common.DeviceManagementException;
+import org.wso2.carbon.device.mgt.iot.common.apimgt.ApisAppClient;
 import org.wso2.carbon.device.mgt.iot.common.config.devicetype.datasource
 		.IoTDeviceTypeConfigManager;
 import org.wso2.carbon.device.mgt.iot.common.config.devicetype.datasource.IotDeviceTypeConfig;
@@ -90,8 +91,14 @@ public class IotDeviceTypeConfigurationManager {
 				if(applicationName==null||applicationName.isEmpty()){
 					iotDeviceTypeConfig.setApiApplicationName(iotDeviceTypeConfig.getType());
 				}
-				iotDeviceTypeConfigMap.put(iotDeviceTypeConfig.getType(),iotDeviceTypeConfig);
+				iotDeviceTypeConfigMap.put(iotDeviceTypeConfig.getType(), iotDeviceTypeConfig);
+
+
 			}
+
+			ApisAppClient.getInstance().setBase64EncodedConsumerKeyAndSecret(iotDeviceTypeConfigList);
+
+
 		} catch (Exception e) {
 			String error = "Error occurred while initializing device configurations";
 			log.error(error);

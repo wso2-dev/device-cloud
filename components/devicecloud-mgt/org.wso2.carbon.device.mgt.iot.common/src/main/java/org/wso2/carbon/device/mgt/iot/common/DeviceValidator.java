@@ -28,14 +28,16 @@ public class DeviceValidator {
     // private static Log log = LogFactory.getLog(DeviceValidator.class);
     static {
 
-        int cacheSize = DeviceCloudConfigManager.getInstance().getDeviceCloudMgtConfig().getDeviceUserValidatorCacheSize();
+        int cacheSize = DeviceCloudConfigManager.getInstance().getDeviceCloudMgtConfig().getDeviceUserValidator().getCacheSize();
         cache = new LRUMap(cacheSize);
 
     }
 
     public boolean isExist(String owner, DeviceIdentifier deviceId)
             throws  DeviceManagementException {
-        return cacheCheck(owner, deviceId);
+        return true;
+        //TODO check cache impl
+        //return cacheCheck(owner, deviceId);
     }
 
     private boolean cacheCheck(String owner, DeviceIdentifier deviceId) throws DeviceManagementException{
