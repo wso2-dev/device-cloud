@@ -3,7 +3,7 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>devicecloud-api</artifactId>
+        <artifactId>iotserver-api</artifactId>
         <groupId>org.wso2.carbon.device.mgt.iot</groupId>
         <version>1.0.0</version>
         <relativePath>../pom.xml</relativePath>
@@ -15,7 +15,7 @@
     <version>1.0.0</version>
 
     <packaging>war</packaging>
-    <name>WSO2 Carbon - Device Cloud API - Common API</name>
+    <name>WSO2 Carbon - IoT Server API - Common API</name>
 
     <dependencies>
         <!-- CDM -->
@@ -104,7 +104,7 @@
             <plugin>
                 <artifactId>maven-war-plugin</artifactId>
                 <configuration>
-                    <warName>devicecloud</warName>
+                    <warName>common</warName>
                     <!--devices.war-->
                     <!--<packagingExcludes>WEB-INF/lib/*.jar</packagingExcludes>-->
                 </configuration>

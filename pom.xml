@@ -22,12 +22,12 @@
 
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.wso2.carbon.device.mgt.iot</groupId>
-    <artifactId>carbon-device-cloud</artifactId>
+    <artifactId>carbon-iot-server</artifactId>
     <packaging>pom</packaging>
     <version>1.0.0-SNAPSHOT</version>
-    <name>WSO2 Carbon - Device Cloud</name>
+    <name>WSO2 Carbon - IoT Server</name>
     <url>http://wso2.org</url>
-    <description>WSO2 Carbon - Device Cloud</description>
+    <description>WSO2 Carbon - IoT Server</description>
 
     <parent>
         <groupId>org.wso2</groupId>
@@ -36,9 +36,9 @@
     </parent>
 
     <modules>
-        <module>components/devicecloud-mgt</module>
-        <module>components/devicecloud-api/</module>
-        <module>features/devicecloud-mgt</module>
+        <module>components/iotserver-mgt</module>
+        <module>components/iotserver-api</module>
+        <module>features/iotserver-feature</module>
     </modules>
 
     <dependencyManagement>
@@ -291,46 +291,6 @@
                 <version>${device.mgt.iot.feature.version}</version>
                 <type>war</type>
             </dependency>
-            <dependency>
-                <groupId>org.wso2.carbon.device.mgt.iot</groupId>
-                <artifactId>org.wso2.carbon.device.mgt.iot.firealarm.api</artifactId>
-                <version>${device.mgt.iot.feature.version}</version>
-                <type>war</type>
-            </dependency>
-            <dependency>
-                <groupId>org.wso2.carbon.device.mgt.iot</groupId>
-                <artifactId>org.wso2.carbon.device.mgt.iot.sensebot.api</artifactId>
-                <version>${device.mgt.iot.feature.version}</version>
-                <type>war</type>
-            </dependency>
-            <dependency>
-                <groupId>org.wso2.carbon.device.mgt.iot</groupId>
-                <artifactId>org.wso2.carbon.device.mgt.iot.raspberrypi.api</artifactId>
-                <version>${device.mgt.iot.feature.version}</version>
-                <type>war</type>
-            </dependency>
-            <dependency>
-                <groupId>org.wso2.carbon.device.mgt.iot</groupId>
-                <artifactId>org.wso2.carbon.device.mgt.iot.digitaldisplay.api</artifactId>
-                <version>${device.mgt.iot.feature.version}</version>
-                <type>war</type>
-            </dependency>
-            <dependency>
-                <groupId>org.wso2.carbon.device.mgt.iot</groupId>
-                <artifactId>org.wso2.carbon.device.mgt.iot.arduino.api</artifactId>
-                <version>${device.mgt.iot.feature.version}</version>
-                <type>war</type>
-            </dependency>
-            <dependency>
-                <groupId>org.wso2.carbon.device.mgt.iot</groupId>
-                <artifactId>org.wso2.carbon.device.mgt.iot.android.sense.api</artifactId>
-                <version>${device.mgt.iot.feature.version}</version>
-                <type>war</type>
-            </dependency>
-
-
-
-
 
             <dependency>
                 <groupId>javax</groupId>
@@ -437,9 +397,8 @@
     </dependencyManagement>
 
     <properties>
-        <!-- IoT device cloud version -->
+        <!-- IoT IoT Server version -->
         <device.mgt.iot.feature.version>1.0.0</device.mgt.iot.feature.version>
-
 
         <!--Carbon kernel versions-->
         <carbon.kernel.version>4.4.0</carbon.kernel.version>

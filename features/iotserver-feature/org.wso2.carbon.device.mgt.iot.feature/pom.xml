@@ -21,7 +21,7 @@
 
     <parent>
         <groupId>org.wso2.carbon.device.mgt.iot</groupId>
-        <artifactId>devicecloud-mgt-feature</artifactId>
+        <artifactId>iotserver-feature</artifactId>
         <version>1.0.0-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
@@ -30,9 +30,9 @@
     <artifactId>org.wso2.carbon.device.mgt.iot.feature</artifactId>
     <packaging>pom</packaging>
     <version>1.0.0-SNAPSHOT</version>
-    <name>WSO2 Carbon - DC - Features</name>
+    <name>WSO2 Carbon - IoT Server - Features</name>
     <url>http://wso2.org</url>
-    <description>This feature contains the core bundles required for IoT Device Cloud </description>
+    <description>This feature contains the core bundles required for IoT Server </description>
 
     <dependencies>
 
@@ -94,56 +94,7 @@
                                     <type>war</type>
                                     <overWrite>true</overWrite>
                                     <outputDirectory>${basedir}/src/main/resources/webapps/</outputDirectory>
-                                    <destFileName>devicecloud.war</destFileName>
-                                </artifactItem>
-                                <artifactItem>
-                                    <groupId>org.wso2.carbon.device.mgt.iot</groupId>
-                                    <artifactId>org.wso2.carbon.device.mgt.iot.firealarm.api</artifactId>
-                                    <type>war</type>
-                                    <overWrite>true</overWrite>
-                                    <outputDirectory>${basedir}/src/main/resources/webapps/</outputDirectory>
-                                    <destFileName>firealarm.war</destFileName>
-                                </artifactItem>
-                                <artifactItem>
-                                    <groupId>org.wso2.carbon.device.mgt.iot</groupId>
-                                    <artifactId>org.wso2.carbon.device.mgt.iot.arduino.api</artifactId>
-                                    <type>war</type>
-                                    <overWrite>true</overWrite>
-                                    <outputDirectory>${basedir}/src/main/resources/webapps/</outputDirectory>
-                                    <destFileName>arduino.war</destFileName>
-                                </artifactItem>
-
-                                <artifactItem>
-                                    <groupId>org.wso2.carbon.device.mgt.iot</groupId>
-                                    <artifactId>org.wso2.carbon.device.mgt.iot.android.sense.api</artifactId>
-                                    <type>war</type>
-                                    <overWrite>true</overWrite>
-                                    <outputDirectory>${basedir}/src/main/resources/webapps/</outputDirectory>
-                                    <destFileName>android_sense.war</destFileName>
-                                </artifactItem>
-                                <artifactItem>
-                                    <groupId>org.wso2.carbon.device.mgt.iot</groupId>
-                                    <artifactId>org.wso2.carbon.device.mgt.iot.sensebot.api</artifactId>
-                                    <type>war</type>
-                                    <overWrite>true</overWrite>
-                                    <outputDirectory>${basedir}/src/main/resources/webapps/</outputDirectory>
-                                    <destFileName>sensebot.war</destFileName>
-                                </artifactItem>
-                                <artifactItem>
-                                    <groupId>org.wso2.carbon.device.mgt.iot</groupId>
-                                    <artifactId>org.wso2.carbon.device.mgt.iot.raspberrypi.api</artifactId>
-                                    <type>war</type>
-                                    <overWrite>true</overWrite>
-                                    <outputDirectory>${basedir}/src/main/resources/webapps/</outputDirectory>
-                                    <destFileName>raspberrypi.war</destFileName>
-                                </artifactItem>
-                                <artifactItem>
-                                    <groupId>org.wso2.carbon.device.mgt.iot</groupId>
-                                    <artifactId>org.wso2.carbon.device.mgt.iot.digitaldisplay.api</artifactId>
-                                    <type>war</type>
-                                    <overWrite>true</overWrite>
-                                    <outputDirectory>${basedir}/src/main/resources/webapps/</outputDirectory>
-                                    <destFileName>digitaldisplay.war</destFileName>
+                                    <destFileName>common.war</destFileName>
                                 </artifactItem>
                             </artifactItems>
                         </configuration>
