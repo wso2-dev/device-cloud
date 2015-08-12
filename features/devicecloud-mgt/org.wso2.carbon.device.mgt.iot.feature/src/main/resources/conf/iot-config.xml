@@ -2,28 +2,4 @@
 
 
 <IoTDeviceTypeConfigManager>
-	<IotDeviceTypeConfig type="firealarm">
-		<DatasourceName>jdbc/FireAlarmDM_DB</DatasourceName>
-		<ApiApplicationName>firealarm</ApiApplicationName>
-	</IotDeviceTypeConfig>
-
-	<IotDeviceTypeConfig type="arduino">
-		<DatasourceName>jdbc/ArduinoDM_DB</DatasourceName>
-	</IotDeviceTypeConfig>
-
-	<IotDeviceTypeConfig type="android_sense">
-		<DatasourceName>jdbc/AndroidSenseDM_DB</DatasourceName>
-	</IotDeviceTypeConfig>
-
-	<IotDeviceTypeConfig type="sensebot">
-		<DatasourceName>jdbc/SensebotDM_DB</DatasourceName>
-	</IotDeviceTypeConfig>
-
-	<IotDeviceTypeConfig type="digital_display">
-		<DatasourceName>jdbc/DigitalDisplayDM_DB</DatasourceName>
-	</IotDeviceTypeConfig>
-
-	<IotDeviceTypeConfig type="raspberrypi">
-		<DatasourceName>jdbc/RaspberrypiDM_DB</DatasourceName>
-	</IotDeviceTypeConfig>
 </IoTDeviceTypeConfigManager>
