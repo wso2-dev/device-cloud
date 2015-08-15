@@ -4,6 +4,7 @@ import org.wso2.carbon.device.mgt.common.Device;
 import org.wso2.carbon.device.mgt.common.DeviceIdentifier;
 import org.wso2.carbon.device.mgt.group.common.Group;
 import org.wso2.carbon.device.mgt.group.common.GroupManagementException;
+import org.wso2.carbon.device.mgt.group.common.GroupUser;
 import org.wso2.carbon.device.mgt.iot.common.GroupManagement;
 import org.wso2.carbon.user.core.Permission;
 
@@ -21,7 +22,7 @@ public class GroupManagerService {
         Group group = new Group();
         group.setName(name);
         group.setDescription(description);
-        group.setOwnerId(username);
+        group.setOwner(username);
         group.setDateOfCreation(new Date().getTime());
         group.setDateOfLastUpdate(new Date().getTime());
         try {
@@ -37,15 +38,13 @@ public class GroupManagerService {
     @Consumes("application/json")
     @Produces("application/json")
     public boolean updateGroup(@PathParam("groupId") int groupId, @FormParam("name") String name, @FormParam("username") String username, @FormParam("description") String description) {
-        Group group = new Group();
-        group.setId(groupId);
-        group.setName(name);
-        group.setDescription(description);
-        group.setOwnerId(username);
-        group.setDateOfLastUpdate(new Date().getTime());
         try {
-            new GroupManagement().getGroupManagementService().updateGroup(group);
-            return true;
+            Group group = new GroupManagement().getGroupManagementService().getGroupById(groupId);
+            group.setName(name);
+            group.setDescription(description);
+            group.setOwner(username);
+            group.setDateOfLastUpdate(new Date().getTime());
+            return new GroupManagement().getGroupManagementService().updateGroup(group);
         } catch (GroupManagementException e) {
             e.printStackTrace();
             return false;
@@ -82,9 +81,9 @@ public class GroupManagerService {
     @GET
     @Consumes("application/json")
     @Produces("application/json")
-    public Group getGroupByName(@PathParam("groupName") String groupName, @FormParam("username") String username) {
+    public List<Group> getGroupByName(@PathParam("groupName") String groupName, @FormParam("username") String username) {
         try {
-            return new GroupManagement().getGroupManagementService().getGroupByName(groupName);
+            return new GroupManagement().getGroupManagementService().getGroupByName(groupName, username);
         } catch (GroupManagementException e) {
             e.printStackTrace();
             return null;
@@ -97,7 +96,7 @@ public class GroupManagerService {
     @Produces("application/json")
     public Group[] getGroupsOfUser(@FormParam("username") String username) {
         try {
-            List<Group> groups = new GroupManagement().getGroupManagementService().getGroupListOfUser(username);
+            List<Group> groups = new GroupManagement().getGroupManagementService().getGroupsOfUser(username);
             Group[] groupArray = new Group[groups.size()];
             return groups.toArray(groupArray);
         } catch (GroupManagementException e) {
@@ -209,10 +208,10 @@ public class GroupManagerService {
     @GET
     @Consumes("application/json")
     @Produces("application/json")
-    public String[] getUsersForGroup(@PathParam("groupId") int groupId) {
+    public GroupUser[] getUsersForGroup(@PathParam("groupId") int groupId) {
         try {
-            List<String> users = new GroupManagement().getGroupManagementService().getUsersForGroup(groupId);
-            String[] usersArray = new String[users.size()];
+            List<GroupUser> users = new GroupManagement().getGroupManagementService().getUsersForGroup(groupId);
+            GroupUser[] usersArray = new GroupUser[users.size()];
             return users.toArray(usersArray);
         } catch (GroupManagementException e) {
             e.printStackTrace();
@@ -241,7 +240,7 @@ public class GroupManagerService {
     @Produces("application/json")
     public boolean addDeviceToGroup(@PathParam("groupId") int groupId, @FormParam("deviceId") String deviceId, @FormParam("deviceType") String deviceType) {
         try {
-            DeviceIdentifier deviceIdentifier = new DeviceIdentifier(deviceId,deviceType);
+            DeviceIdentifier deviceIdentifier = new DeviceIdentifier(deviceId, deviceType);
             return new GroupManagement().getGroupManagementService().addDeviceToGroup(deviceIdentifier, groupId);
         } catch (GroupManagementException e) {
             e.printStackTrace();
