@@ -28,6 +28,7 @@ import org.apache.commons.logging.LogFactory;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.wso2.carbon.device.mgt.iot.common.config.server.DeviceCloudConfigManager;
+import org.wso2.carbon.device.mgt.iot.common.config.server.datasource.ApiManagerConfig;
 import org.wso2.carbon.device.mgt.iot.common.exception.AccessTokenException;
 
 import java.net.URL;
@@ -57,13 +58,14 @@ public class TokenClient {
 
 	public TokenClient(String deviceType) {
 		this.deviceType = deviceType;
-		tokenURL = DeviceCloudConfigManager.getInstance().getDeviceCloudMgtConfig().getApiManager()
-				.getAccessTokenURL();
+
+		ApiManagerConfig apiManagerConfig =DeviceCloudConfigManager.getInstance().getDeviceCloudMgtConfig().getApiManager();
+
+		tokenURL = apiManagerConfig.getAccessTokenURL();
 		grantType = DeviceCloudConfigManager.getInstance().getDeviceCloudMgtConfig()
 				.getApiManager()
 				.getDeviceGrantType();
-		scope = DeviceCloudConfigManager.getInstance().getDeviceCloudMgtConfig().getApiManager()
-				.getDeviceScopes();
+		scope = apiManagerConfig.getDeviceScopes();
 
 		appToken = ApisAppClient.getInstance().getBase64EncodedConsumerKeyAndSecret(deviceType);
 
@@ -133,7 +135,9 @@ public class TokenClient {
 
 
 			response = postMethod.getResponseBodyAsString();
-			log.info(response);
+			if(log.isDebugEnabled()) {
+				log.debug(response);
+			}
 			JSONObject jsonObject = new JSONObject(response);
 
 			AccessTokenInfo accessTokenInfo = new AccessTokenInfo();
