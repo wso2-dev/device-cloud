@@ -32,25 +32,25 @@ public class ZipUtil {
 		contextParams.put("DEVICE_ID", deviceId);
 
 
-		//TODO: Changes needs to be made to the device-config.xml
-//		String serverIP =
-//				DeviceCloudConfigManager.getInstance().getDeviceCloudMgtConfig().getApiManager()
-//						.getServerURL();
-//
-//		int indexOfChar = serverIP.lastIndexOf(File.separator);
-//		if (indexOfChar != -1) {
-//			serverIP = serverIP.substring((indexOfChar + 1), serverIP.length());
-//		}
-//
-//		String serverPort =
-//				DeviceCloudConfigManager.getInstance().getDeviceCloudMgtConfig().getApiManager()
-//						.getGatewayPort();
-//
-//		String serverEndPoint = serverIP + ":" + serverPort;
-//		contextParams.put("SERVER_EP", serverEndPoint);
+
+		String serverIP =
+				DeviceCloudConfigManager.getInstance().getDeviceCloudMgtConfig().getApiManager()
+						.getServerURL();
+
+		int indexOfChar = serverIP.lastIndexOf(File.separator);
+		if (indexOfChar != -1) {
+			serverIP = serverIP.substring((indexOfChar + 1), serverIP.length());
+		}
+
+		String serverPort =
+				DeviceCloudConfigManager.getInstance().getDeviceCloudMgtConfig().getApiManager()
+						.getGatewayPort();
+
+		String serverEndPoint = serverIP + ":" + serverPort;
+		contextParams.put("SERVER_EP", serverEndPoint);
 
 		String endpoint = MqttConfig.getInstance().getMqttQueueEndpoint();
-		int indexOfChar = endpoint.lastIndexOf(File.separator);
+		indexOfChar = endpoint.lastIndexOf(File.separator);
 		if (indexOfChar != -1) {
 			endpoint = endpoint.substring((indexOfChar + 1), endpoint.length());
 		}
