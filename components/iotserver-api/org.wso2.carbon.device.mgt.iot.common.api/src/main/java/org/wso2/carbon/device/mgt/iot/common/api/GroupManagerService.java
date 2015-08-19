@@ -6,13 +6,16 @@ import org.wso2.carbon.device.mgt.group.common.Group;
 import org.wso2.carbon.device.mgt.group.common.GroupManagementException;
 import org.wso2.carbon.device.mgt.group.common.GroupUser;
 import org.wso2.carbon.device.mgt.iot.common.GroupManagement;
-import org.wso2.carbon.user.core.Permission;
 
 import javax.ws.rs.*;
 import java.util.Date;
 import java.util.List;
 
 public class GroupManagerService {
+
+    private static final String DEFAULT_ADMIN_ROLE = "admin";
+
+    private static final String[] DEFAULT_ADMIN_PERMISSIONS = { "/permission/device-mgt/admin/groups", "/permission/device-mgt/user/groups"};
 
     @Path("/group")
     @POST
@@ -26,7 +29,7 @@ public class GroupManagerService {
         group.setDateOfCreation(new Date().getTime());
         group.setDateOfLastUpdate(new Date().getTime());
         try {
-            return new GroupManagement().getGroupManagementService().createGroup(group);
+            return new GroupManagement().getGroupManagementService().createGroup(group, DEFAULT_ADMIN_ROLE, DEFAULT_ADMIN_PERMISSIONS);
         } catch (GroupManagementException e) {
             e.printStackTrace();
             return false;
@@ -150,11 +153,7 @@ public class GroupManagerService {
     @Produces("application/json")
     public boolean addNewSharingRoleForGroup(@FormParam("username") String username, @PathParam("groupId") int groupId, @FormParam("role") String roleName, @FormParam("permissions") String[] permissions) {
         try {
-            Permission[] perms = new Permission[permissions.length];
-            for (int i = 0; i < permissions.length; i++) {
-                perms[i] = new Permission("group-mgt/user", permissions[i]);
-            }
-            return new GroupManagement().getGroupManagementService().addNewSharingRoleForGroup(username, groupId, roleName, perms);
+            return new GroupManagement().getGroupManagementService().addNewSharingRoleForGroup(username, groupId, roleName, permissions);
         } catch (GroupManagementException e) {
             e.printStackTrace();
             return false;
