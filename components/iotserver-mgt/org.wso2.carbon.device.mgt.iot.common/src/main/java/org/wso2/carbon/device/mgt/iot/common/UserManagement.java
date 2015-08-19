@@ -222,7 +222,7 @@ public class UserManagement {
 		UserStoreManager userStoreManager = null;
 		try {
 			userStoreManager = getUserStoreManager();
-			String[] userList = new String[]{};
+			String[] userList = new String[]{"admin"};
 			Permission permissions[] = new Permission[]{};
 			if (!userStoreManager.isExistingRole(DEVICE_API_ACCESS_ROLE_NAME)) {
 				userStoreManager.addRole(DEVICE_API_ACCESS_ROLE_NAME, userList, permissions);
