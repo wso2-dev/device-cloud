@@ -76,9 +76,8 @@ public class IotDeviceManagementServiceComponent {
 
 
             BundleContext bundleContext = ctx.getBundleContext();              /* Initialize the data source configuration */
+			DeviceCloudConfigManager.getInstance().initConfig();
 			IotDeviceTypeConfigurationManager.getInstance().initConfig();
-
-
 			Map<String, IotDeviceTypeConfig> dsConfigMap =
 					IotDeviceTypeConfigurationManager.getInstance().getIotDeviceTypeConfigMap();
 
@@ -111,7 +110,7 @@ public class IotDeviceManagementServiceComponent {
 
 
 			//TODO: handle
-            DeviceCloudConfigManager.getInstance().initConfig();
+
 			DeviceController.init();
             IoTUsageStatisticsClient.initializeDataSource();
 			IoTEventsStatisticsClient.initializeDataSource();

@@ -56,7 +56,7 @@
         <AccessTokenURL>https://localhost:9444/oauth2/token</AccessTokenURL>
         <ServerURL>http://localhost</ServerURL>
         <ServerPort>9764</ServerPort>
-        <GatewayPort></GatewayPort>
+        <GatewayPort>8281</GatewayPort>
         <LoginURL>/store/site/blocks/user/login/ajax/login.jag</LoginURL>
         <SubscriptionListURL>/store/site/blocks/subscription/subscription-list/ajax/subscription-list.jag</SubscriptionListURL>
         <Username>admin</Username>

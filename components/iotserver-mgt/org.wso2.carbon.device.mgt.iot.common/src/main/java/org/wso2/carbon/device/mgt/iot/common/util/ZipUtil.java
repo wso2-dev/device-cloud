@@ -5,6 +5,7 @@ import org.wso2.carbon.device.mgt.iot.common.DeviceManagement;
 import org.wso2.carbon.device.mgt.iot.common.controlqueue.mqtt.MqttConfig;
 import org.wso2.carbon.device.mgt.iot.common.controlqueue.xmpp.XmppConfig;
 import org.wso2.carbon.utils.CarbonUtils;
+import org.wso2.carbon.device.mgt.iot.common.config.server.DeviceCloudConfigManager;
 
 import java.io.File;
 import java.util.HashMap;
@@ -30,8 +31,26 @@ public class ZipUtil {
 		contextParams.put("DEVICE_OWNER", owner);
 		contextParams.put("DEVICE_ID", deviceId);
 
+
+
+		String serverIP =
+				DeviceCloudConfigManager.getInstance().getDeviceCloudMgtConfig().getApiManager()
+						.getServerURL();
+
+		int indexOfChar = serverIP.lastIndexOf(File.separator);
+		if (indexOfChar != -1) {
+			serverIP = serverIP.substring((indexOfChar + 1), serverIP.length());
+		}
+
+		String serverPort =
+				DeviceCloudConfigManager.getInstance().getDeviceCloudMgtConfig().getApiManager()
+						.getGatewayPort();
+
+		String serverEndPoint = serverIP + ":" + serverPort;
+		contextParams.put("SERVER_EP", serverEndPoint);
+
 		String endpoint = MqttConfig.getInstance().getMqttQueueEndpoint();
-		int indexOfChar = endpoint.lastIndexOf(File.separator);
+		indexOfChar = endpoint.lastIndexOf(File.separator);
 		if (indexOfChar != -1) {
 			endpoint = endpoint.substring((indexOfChar + 1), endpoint.length());
 		}
