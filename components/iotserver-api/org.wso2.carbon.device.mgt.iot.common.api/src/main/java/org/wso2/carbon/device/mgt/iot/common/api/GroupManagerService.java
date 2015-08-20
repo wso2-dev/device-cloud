@@ -114,23 +114,14 @@ public class GroupManagerService {
     @GET
     @Consumes("application/json")
     @Produces("application/json")
-    public DeviceGroup[] getGroupsOfUser(@PathParam("username") String username) {
+    public DeviceGroup[] getGroupsOfUser(@PathParam("username") String username, @QueryParam("permission") String permission) {
         try {
-            List<DeviceGroup> groups = new GroupManagement().getGroupManagementService().getGroupsOfUser(username);
-            DeviceGroup[] groupArray = new DeviceGroup[groups.size()];
-            return groups.toArray(groupArray);
-        } catch (GroupManagementException e) {
-            throw new WebApplicationException(Response.Status.INTERNAL_SERVER_ERROR);
-        }
-    }
-
-    @Path("/group/user/{username}/permission/{permission}/all")
-    @GET
-    @Consumes("application/json")
-    @Produces("application/json")
-    public DeviceGroup[] getUserGroupsForPermission(@PathParam("username") String username, @PathParam("permission") String permission) {
-        try {
-            List<DeviceGroup> groups = new GroupManagement().getGroupManagementService().getUserGroupsForPermission(username, permission);
+            List<DeviceGroup> groups;
+            if(permission != null){
+                groups = new GroupManagement().getGroupManagementService().getUserGroupsForPermission(username, permission);
+            }else{
+                groups = new GroupManagement().getGroupManagementService().getGroupsOfUser(username);
+            }
             DeviceGroup[] groupArray = new DeviceGroup[groups.size()];
             return groups.toArray(groupArray);
         } catch (GroupManagementException e) {
