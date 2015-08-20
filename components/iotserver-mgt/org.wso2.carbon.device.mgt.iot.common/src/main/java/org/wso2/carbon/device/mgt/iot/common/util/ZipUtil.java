@@ -31,8 +31,6 @@ public class ZipUtil {
 		contextParams.put("DEVICE_OWNER", owner);
 		contextParams.put("DEVICE_ID", deviceId);
 
-
-
 		String serverIP =
 				DeviceCloudConfigManager.getInstance().getDeviceCloudMgtConfig().getApiManager()
 						.getServerURL();
