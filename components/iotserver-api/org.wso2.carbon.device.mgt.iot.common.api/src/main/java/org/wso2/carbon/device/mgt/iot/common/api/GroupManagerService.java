@@ -1,28 +1,50 @@
+/*
+ *  Copyright (c) 2015, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+ *
+ *  WSO2 Inc. licenses this file to you under the Apache License,
+ *  Version 2.0 (the "License"); you may not use this file except
+ *  in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing,
+ *  software distributed under the License is distributed on an
+ *  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ *  KIND, either express or implied.  See the License for the
+ *  specific language governing permissions and limitations
+ *  under the License.
+ *
+ */
+
 package org.wso2.carbon.device.mgt.iot.common.api;
 
 import org.wso2.carbon.device.mgt.common.Device;
 import org.wso2.carbon.device.mgt.common.DeviceIdentifier;
-import org.wso2.carbon.device.mgt.group.common.Group;
+import org.wso2.carbon.device.mgt.group.common.DeviceGroup;
 import org.wso2.carbon.device.mgt.group.common.GroupManagementException;
 import org.wso2.carbon.device.mgt.group.common.GroupUser;
 import org.wso2.carbon.device.mgt.iot.common.GroupManagement;
 
+import javax.jws.WebService;
 import javax.ws.rs.*;
+import javax.ws.rs.core.Response;
 import java.util.Date;
 import java.util.List;
 
+@WebService
 public class GroupManagerService {
 
     private static final String DEFAULT_ADMIN_ROLE = "admin";
 
-    private static final String[] DEFAULT_ADMIN_PERMISSIONS = { "/permission/device-mgt/admin/groups", "/permission/device-mgt/user/groups"};
+    private static final String[] DEFAULT_ADMIN_PERMISSIONS = {"/permission/device-mgt/admin/groups", "/permission/device-mgt/user/groups"};
 
     @Path("/group")
     @POST
     @Consumes("application/json")
     @Produces("application/json")
     public boolean addGroup(@FormParam("name") String name, @FormParam("username") String username, @FormParam("description") String description) {
-        Group group = new Group();
+        DeviceGroup group = new DeviceGroup();
         group.setName(name);
         group.setDescription(description);
         group.setOwner(username);
@@ -31,8 +53,7 @@ public class GroupManagerService {
         try {
             return new GroupManagement().getGroupManagementService().createGroup(group, DEFAULT_ADMIN_ROLE, DEFAULT_ADMIN_PERMISSIONS);
         } catch (GroupManagementException e) {
-            e.printStackTrace();
-            return false;
+            throw new WebApplicationException(Response.Status.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -42,15 +63,14 @@ public class GroupManagerService {
     @Produces("application/json")
     public boolean updateGroup(@PathParam("groupId") int groupId, @FormParam("name") String name, @FormParam("username") String username, @FormParam("description") String description) {
         try {
-            Group group = new GroupManagement().getGroupManagementService().getGroupById(groupId);
+            DeviceGroup group = new GroupManagement().getGroupManagementService().getGroupById(groupId);
             group.setName(name);
             group.setDescription(description);
             group.setOwner(username);
             group.setDateOfLastUpdate(new Date().getTime());
             return new GroupManagement().getGroupManagementService().updateGroup(group);
         } catch (GroupManagementException e) {
-            e.printStackTrace();
-            return false;
+            throw new WebApplicationException(Response.Status.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -62,8 +82,7 @@ public class GroupManagerService {
         try {
             return new GroupManagement().getGroupManagementService().deleteGroup(groupId);
         } catch (GroupManagementException e) {
-            e.printStackTrace();
-            return false;
+            throw new WebApplicationException(Response.Status.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -71,12 +90,11 @@ public class GroupManagerService {
     @GET
     @Consumes("application/json")
     @Produces("application/json")
-    public Group getGroup(@PathParam("groupId") int groupId, @FormParam("username") String username) {
+    public DeviceGroup getGroup(@PathParam("groupId") int groupId, @FormParam("username") String username) {
         try {
             return new GroupManagement().getGroupManagementService().getGroupById(groupId);
         } catch (GroupManagementException e) {
-            e.printStackTrace();
-            return null;
+            throw new WebApplicationException(Response.Status.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -84,40 +102,51 @@ public class GroupManagerService {
     @GET
     @Consumes("application/json")
     @Produces("application/json")
-    public List<Group> getGroupByName(@PathParam("groupName") String groupName, @FormParam("username") String username) {
+    public List<DeviceGroup> getGroupByName(@PathParam("groupName") String groupName, @FormParam("username") String username) {
         try {
             return new GroupManagement().getGroupManagementService().getGroupByName(groupName, username);
         } catch (GroupManagementException e) {
-            e.printStackTrace();
-            return null;
+            throw new WebApplicationException(Response.Status.INTERNAL_SERVER_ERROR);
         }
     }
 
-    @Path("/group/all")
+    @Path("/group/user/{username}/all")
     @GET
     @Consumes("application/json")
     @Produces("application/json")
-    public Group[] getGroupsOfUser(@FormParam("username") String username) {
+    public DeviceGroup[] getGroupsOfUser(@PathParam("username") String username) {
         try {
-            List<Group> groups = new GroupManagement().getGroupManagementService().getGroupsOfUser(username);
-            Group[] groupArray = new Group[groups.size()];
+            List<DeviceGroup> groups = new GroupManagement().getGroupManagementService().getGroupsOfUser(username);
+            DeviceGroup[] groupArray = new DeviceGroup[groups.size()];
             return groups.toArray(groupArray);
         } catch (GroupManagementException e) {
-            e.printStackTrace();
-            return null;
+            throw new WebApplicationException(Response.Status.INTERNAL_SERVER_ERROR);
         }
     }
 
-    @Path("/group/all/count")
+    @Path("/group/user/{username}/permission/{permission}/all")
     @GET
     @Consumes("application/json")
     @Produces("application/json")
-    public int getGroupCountOfUser(@FormParam("username") String username) {
+    public DeviceGroup[] getUserGroupsForPermission(@PathParam("username") String username, @PathParam("permission") String permission) {
+        try {
+            List<DeviceGroup> groups = new GroupManagement().getGroupManagementService().getUserGroupsForPermission(username, permission);
+            DeviceGroup[] groupArray = new DeviceGroup[groups.size()];
+            return groups.toArray(groupArray);
+        } catch (GroupManagementException e) {
+            throw new WebApplicationException(Response.Status.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @Path("/group/user/{username}/all/count")
+    @GET
+    @Consumes("application/json")
+    @Produces("application/json")
+    public int getGroupCountOfUser(@PathParam("username") String username) {
         try {
             return new GroupManagement().getGroupManagementService().getGroupCountOfUser(username);
         } catch (GroupManagementException e) {
-            e.printStackTrace();
-            return 0;
+            throw new WebApplicationException(Response.Status.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -129,8 +158,7 @@ public class GroupManagerService {
         try {
             return new GroupManagement().getGroupManagementService().shareGroup(shareUser, groupId, sharingRole);
         } catch (GroupManagementException e) {
-            e.printStackTrace();
-            return false;
+            throw new WebApplicationException(Response.Status.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -142,8 +170,7 @@ public class GroupManagerService {
         try {
             return new GroupManagement().getGroupManagementService().unShareGroup(unShareUser, groupId, sharingRole);
         } catch (GroupManagementException e) {
-            e.printStackTrace();
-            return false;
+            throw new WebApplicationException(Response.Status.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -155,8 +182,7 @@ public class GroupManagerService {
         try {
             return new GroupManagement().getGroupManagementService().addNewSharingRoleForGroup(username, groupId, roleName, permissions);
         } catch (GroupManagementException e) {
-            e.printStackTrace();
-            return false;
+            throw new WebApplicationException(Response.Status.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -168,8 +194,7 @@ public class GroupManagerService {
         try {
             return new GroupManagement().getGroupManagementService().removeSharingRoleForGroup(groupId, roleName);
         } catch (GroupManagementException e) {
-            e.printStackTrace();
-            return false;
+            throw new WebApplicationException(Response.Status.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -183,8 +208,7 @@ public class GroupManagerService {
             String[] rolesArray = new String[roles.size()];
             return roles.toArray(rolesArray);
         } catch (GroupManagementException e) {
-            e.printStackTrace();
-            return null;
+            throw new WebApplicationException(Response.Status.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -198,8 +222,7 @@ public class GroupManagerService {
             String[] rolesArray = new String[roles.size()];
             return roles.toArray(rolesArray);
         } catch (GroupManagementException e) {
-            e.printStackTrace();
-            return null;
+            throw new WebApplicationException(Response.Status.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -213,8 +236,7 @@ public class GroupManagerService {
             GroupUser[] usersArray = new GroupUser[users.size()];
             return users.toArray(usersArray);
         } catch (GroupManagementException e) {
-            e.printStackTrace();
-            return null;
+            throw new WebApplicationException(Response.Status.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -228,8 +250,7 @@ public class GroupManagerService {
             Device[] deviceArray = new Device[devices.size()];
             return devices.toArray(deviceArray);
         } catch (GroupManagementException e) {
-            e.printStackTrace();
-            return null;
+            throw new WebApplicationException(Response.Status.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -242,8 +263,19 @@ public class GroupManagerService {
             DeviceIdentifier deviceIdentifier = new DeviceIdentifier(deviceId, deviceType);
             return new GroupManagement().getGroupManagementService().addDeviceToGroup(deviceIdentifier, groupId);
         } catch (GroupManagementException e) {
-            e.printStackTrace();
-            return false;
+            throw new WebApplicationException(Response.Status.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @Path("/group/id/{groupId}/permissions")
+    @GET
+    @Consumes("application/json")
+    @Produces("application/json")
+    public String[] getGroupPermissionsOfUser(@FormParam("username") String username, @PathParam("groupId") int groupId) {
+        try {
+            return new GroupManagement().getGroupManagementService().getGroupPermissionsOfUser(username, groupId);
+        } catch (GroupManagementException e) {
+            throw new WebApplicationException(Response.Status.INTERNAL_SERVER_ERROR);
         }
     }
 
