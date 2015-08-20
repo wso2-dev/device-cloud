@@ -5,20 +5,20 @@
             <Name>WSO2-BAM</Name>
             <Enabled>true</Enabled>
             <PublisherClass>org.wso2.carbon.device.mgt.iot.common.datastore.impl.ThriftDataStoreConnector</PublisherClass>
-            <ServerURL>tcp://localhost</ServerURL>
+            <ServerURL>tcp://192.168.67.21</ServerURL>
             <Port>7613</Port>
             <Username>admin</Username>
-            <Password>admin</Password>
+            <Password>wso2iot123</Password>
         </DataStore>
 
         <DataStore>
             <Name>WSO2-CEP</Name>
             <Enabled>true</Enabled>
             <PublisherClass>org.wso2.carbon.device.mgt.iot.common.datastore.impl.ThriftDataStoreConnector</PublisherClass>
-            <ServerURL>tcp://localhost</ServerURL>
-            <Port>7613</Port>
+            <ServerURL>tcp://192.168.67.22</ServerURL>
+            <Port>7611</Port>
             <Username>admin</Username>
-            <Password>admin</Password>
+            <Password>wso2iot123</Password>
         </DataStore>
     </DataStores>
 
@@ -28,7 +28,7 @@
             <Enabled>true</Enabled>
             <ControlClass>org.wso2.carbon.device.mgt.iot.common.controlqueue.mqtt.MqttControlPublisher</ControlClass>
             <Protocol>MQTT</Protocol>
-            <ServerURL>tcp://localhost</ServerURL>
+            <ServerURL>tcp://192.168.67.21</ServerURL>
             <Port>1883</Port>
             <Username>.</Username>
             <Password>.</Password>
@@ -39,10 +39,10 @@
             <Enabled>true</Enabled>
             <ControlClass>org.wso2.carbon.device.mgt.iot.common.controlqueue.xmpp.XmppServerClient</ControlClass>
             <Protocol>XMPP</Protocol>
-            <ServerURL>http://localhost</ServerURL>
+            <ServerURL>http://204.232.188.215</ServerURL>
             <Port>9090</Port>
-            <Username>.</Username>
-            <Password>.</Password>
+            <Username>admin</Username>
+            <Password>wso2iot123</Password>
         </ControlQueue>
     </ControlQueues>
 
@@ -53,8 +53,8 @@
 
     <ApiManager>
         <Enabled>true</Enabled>
-        <AccessTokenURL>https://localhost:9444/oauth2/token</AccessTokenURL>
-        <ServerURL>http://localhost</ServerURL>
+        <AccessTokenURL>https://192.168.67.21:9444/oauth2/token</AccessTokenURL>
+        <ServerURL>http://192.168.67.21</ServerURL>
         <ServerPort>9764</ServerPort>
         <GatewayPort>8281</GatewayPort>
         <LoginURL>/store/site/blocks/user/login/ajax/login.jag</LoginURL>
