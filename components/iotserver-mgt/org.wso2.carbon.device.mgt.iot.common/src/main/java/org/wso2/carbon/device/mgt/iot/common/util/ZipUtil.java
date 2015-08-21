@@ -14,7 +14,7 @@ import java.util.Map;
 
 public class ZipUtil {
 
-	public ZipArchive downloadSketch(String owner, String deviceType, String deviceId, String
+	public ZipArchive downloadSketch(String owner,String tenantDomain, String deviceType, String deviceId, String
 			token, String refreshToken) throws DeviceManagementException {
 
 		if (owner == null || deviceType == null) {
@@ -64,7 +64,7 @@ public class ZipUtil {
 		contextParams.put("DEVICE_TOKEN", token);
 		contextParams.put("DEVICE_REFRESH_TOKEN", refreshToken);
 
-		DeviceManagement deviceManagement = new DeviceManagement();
+		DeviceManagement deviceManagement = new DeviceManagement(tenantDomain);
 		ZipArchive zipFile = deviceManagement.getSketchArchive(archivesPath, templateSketchPath,
 															   contextParams);
 

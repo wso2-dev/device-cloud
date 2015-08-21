@@ -33,14 +33,14 @@ public class DeviceValidator {
 
     }
 
-    public boolean isExist(String owner, DeviceIdentifier deviceId)
+    public boolean isExist(String owner, String tenantDomain, DeviceIdentifier deviceId)
             throws  DeviceManagementException {
         return true;
         //TODO check cache impl
-        //return cacheCheck(owner, deviceId);
+        //return cacheCheck(owner,tenantDomain, deviceId);
     }
 
-    private boolean cacheCheck(String owner, DeviceIdentifier deviceId) throws DeviceManagementException{
+    private boolean cacheCheck(String owner,String tenantDomain, DeviceIdentifier deviceId) throws DeviceManagementException{
 
         String value = (String) cache.get(deviceId);
 
@@ -49,7 +49,7 @@ public class DeviceValidator {
             return value.equals(owner);
 
         }else{
-            DeviceManagement deviceManagement = new DeviceManagement();
+            DeviceManagement deviceManagement = new DeviceManagement(tenantDomain);
             boolean status = deviceManagement.isExist(owner, deviceId);
             if (status) {
                 addToCache(owner, deviceId );

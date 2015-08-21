@@ -35,8 +35,6 @@ public class TokenManagerService {
 	}
 
 	public String revokeToken() {
-
-
 		return null;
 	}
 }

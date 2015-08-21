@@ -24,28 +24,36 @@ import org.wso2.carbon.device.mgt.common.DeviceManagementException;
 import org.wso2.carbon.device.mgt.common.EnrolmentInfo;
 import org.wso2.carbon.device.mgt.core.dao.DeviceManagementDAOException;
 
+import org.wso2.carbon.device.mgt.group.common.GroupManagementException;
 import org.wso2.carbon.device.mgt.iot.common.DeviceManagement;
 import org.wso2.carbon.device.mgt.iot.common.util.DeviceTypes;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.Response;
 import java.util.ArrayList;
 import java.util.List;
 
 public class DevicesManagerService {
 
+	//TODO; replace this tenant domain
+	private final String SUPER_TENANT = "carbon.super";
+	@Context  //injected response proxy supporting multiple thread
+	private HttpServletResponse response;
+
 	@Path("/devices/username/{username}")
 	@GET
 	@Consumes("application/json")
 	@Produces("application/json")
-	public Device[] getDevices(@PathParam("username") String username)
-			throws DeviceManagementException {
+	public Device[] getDevices(@PathParam("username") String username) {
 
-		DeviceManagement deviceManagement = new DeviceManagement();
-
+		DeviceManagement deviceManagement = new DeviceManagement(SUPER_TENANT);
+		try{
 		List<Device> devices = deviceManagement.getDeviceManagementService().getDevicesOfUser(
 				username);
 		List<Device> activeDevices = new ArrayList<>();
@@ -57,17 +65,23 @@ public class DevicesManagerService {
 			}
 		}
 		return activeDevices.toArray(new Device[]{});
+
+		} catch (DeviceManagementException e) {
+			response.setStatus(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode());
+			return null;
+		} finally {
+			deviceManagement.endTenantFlow();
+		}
 	}
 
 	@Path("/devices/ungrouped/username/{username}")
 	@GET
 	@Consumes("application/json")
 	@Produces("application/json")
-	public Device[] getUnGroupedDevices(@PathParam("username") String username)
-			throws DeviceManagementException {
+	public Device[] getUnGroupedDevices(@PathParam("username") String username){
 
-		DeviceManagement deviceManagement = new DeviceManagement();
-
+		DeviceManagement deviceManagement = new DeviceManagement(SUPER_TENANT);
+		try{
 		List<Device> devices = deviceManagement.getDeviceManagementService().getUnGroupedDevicesOfUser(
 				username);
 		List<Device> activeDevices = new ArrayList<>();
@@ -79,17 +93,22 @@ public class DevicesManagerService {
 			}
 		}
 		return activeDevices.toArray(new Device[]{});
+		} catch (DeviceManagementException e) {
+			response.setStatus(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode());
+			return null;
+		} finally {
+			deviceManagement.endTenantFlow();
+		}
 	}
 
 	@Path("/devices/count/{username}")
 	@GET
 	@Consumes("application/json")
 	@Produces("application/json")
-	public int getDeviceCount(@PathParam("username") String username)
-			throws DeviceManagementException {
+	public int getDeviceCount(@PathParam("username") String username){
 
-		DeviceManagement deviceManagement = new DeviceManagement();
-
+		DeviceManagement deviceManagement = new DeviceManagement(SUPER_TENANT);
+		try{
 		List<Device> devices = deviceManagement.getDeviceManagementService().getDevicesOfUser(
 				username);
 
@@ -104,33 +123,30 @@ public class DevicesManagerService {
 			return activeDevices.size();
 		}
 		return 0;
+		} catch (DeviceManagementException e) {
+			response.setStatus(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode());
+			return 0;
+		} finally {
+			deviceManagement.endTenantFlow();
+		}
 	}
 
-
-//	@Path("/devices/types/{type}")
-//	@GET
-//	@Consumes("application/json")
-//	@Produces("application/json")
-//	public Device[] getDevicesByType(@PathParam("type") String deviceType)
-//			throws DeviceManagementException {
-//
-//		DeviceManagement deviceManagement = new DeviceManagement();
-//
-//		List<Device> devices = deviceManagement.getDeviceManagementService().get(deviceType);
-//
-//		return devices.toArray(new Device[]{});
-//	}
 
 	@Path("/devices/types/")
 	@GET
 	@Consumes("application/json")
 	@Produces("application/json")
-	public DeviceTypes[] getDeviceTypes()
-			throws DeviceManagementDAOException {
+	public DeviceTypes[] getDeviceTypes(){
 
-		DeviceManagement deviceManagement = new DeviceManagement();
-
-		return deviceManagement.getDeviceTypes();
+		DeviceManagement deviceManagement = new DeviceManagement(SUPER_TENANT);
+		try{
+			return deviceManagement.getDeviceTypes();
+		} catch (DeviceManagementDAOException e) {
+			response.setStatus(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode());
+			return null;
+		} finally {
+			deviceManagement.endTenantFlow();
+		}
 	}
 
 }

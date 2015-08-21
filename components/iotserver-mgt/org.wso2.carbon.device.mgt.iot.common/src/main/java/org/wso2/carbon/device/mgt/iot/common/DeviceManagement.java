@@ -40,6 +40,15 @@ import java.util.Map;
 public class DeviceManagement {
 
 	private static Log log = LogFactory.getLog(DeviceManagement.class);
+	private PrivilegedCarbonContext ctx;
+	private String tenantDomain;
+	public DeviceManagement(String tenantDomain){
+		this.tenantDomain=tenantDomain;
+		PrivilegedCarbonContext.startTenantFlow();
+		ctx = PrivilegedCarbonContext.getThreadLocalCarbonContext();
+		ctx.setTenantDomain(tenantDomain, true);
+	}
+
 
 	public boolean isExist(String owner, DeviceIdentifier deviceIdentifier)
 			throws DeviceManagementException {
@@ -58,13 +67,13 @@ public class DeviceManagement {
 	public DeviceManagementProviderService getDeviceManagementService() {
 
 		DeviceManagementProviderService dmService;
-		PrivilegedCarbonContext.startTenantFlow();
-		PrivilegedCarbonContext ctx = PrivilegedCarbonContext.getThreadLocalCarbonContext();
-		ctx.setTenantDomain(MultitenantConstants.SUPER_TENANT_DOMAIN_NAME);
-		ctx.setTenantId(MultitenantConstants.SUPER_TENANT_ID);
 		dmService =(DeviceManagementProviderService) ctx.getOSGiService(DeviceManagementProviderService.class, null);
-		PrivilegedCarbonContext.endTenantFlow();
 		return dmService;
+	}
+
+	public void endTenantFlow(){
+
+		PrivilegedCarbonContext.endTenantFlow();
 	}
 
 
@@ -72,9 +81,8 @@ public class DeviceManagement {
 	public Device[] getActiveDevices(String username)
 			throws DeviceManagementException {
 
-		DeviceManagement deviceManagement = new DeviceManagement();
 
-		List<Device> devices = deviceManagement.getDeviceManagementService().getDevicesOfUser(
+		List<Device> devices = getDeviceManagementService().getDevicesOfUser(
 				username);
 		List<Device> activeDevices = new ArrayList<>();
 		if (devices != null) {
@@ -90,10 +98,8 @@ public class DeviceManagement {
 	public int getActiveDeviceCount(String username)
 			throws DeviceManagementException {
 
-		DeviceManagement deviceManagement = new DeviceManagement();
 
-		List<Device> devices = deviceManagement.getDeviceManagementService().getDevicesOfUser(
-				username);
+		List<Device> devices = getDeviceManagementService().getDevicesOfUser(username);
 
 
 		if (devices != null) {
@@ -123,7 +129,6 @@ public class DeviceManagement {
 	public DeviceTypes[] getDeviceTypes()
 			throws DeviceManagementDAOException {
 
-		DeviceManagement deviceManagement = new DeviceManagement();
 
 		List<DeviceType> deviceTypes = DeviceManagementDAOFactory.getDeviceTypeDAO().getDeviceTypes();
 		DeviceTypes dTypes[] = new DeviceTypes[deviceTypes.size()];
