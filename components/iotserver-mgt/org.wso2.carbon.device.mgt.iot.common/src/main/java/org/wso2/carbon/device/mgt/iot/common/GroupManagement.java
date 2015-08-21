@@ -20,22 +20,32 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.context.PrivilegedCarbonContext;
 import org.wso2.carbon.device.mgt.group.core.providers.GroupManagementServiceProvider;
-import org.wso2.carbon.utils.multitenancy.MultitenantConstants;
 
 public class GroupManagement {
 
-	private static Log log = LogFactory.getLog(GroupManagement.class);
+    private static Log log = LogFactory.getLog(GroupManagement.class);
+
+    PrivilegedCarbonContext ctx;
+
+    public GroupManagement(String tenantDomain) {
+        PrivilegedCarbonContext.startTenantFlow();
+        ctx = PrivilegedCarbonContext.getThreadLocalCarbonContext();
+        ctx.setTenantDomain(tenantDomain, true);
+        if (log.isDebugEnabled()) {
+            log.debug("Get thread local carbon context for tenant domain: " + tenantDomain);
+        }
+    }
 
     public GroupManagementServiceProvider getGroupManagementService() {
+        return (GroupManagementServiceProvider) ctx.getOSGiService(GroupManagementServiceProvider.class, null);
+    }
 
-        GroupManagementServiceProvider groupManagementServiceProvider;
-        PrivilegedCarbonContext.startTenantFlow();
-        PrivilegedCarbonContext ctx = PrivilegedCarbonContext.getThreadLocalCarbonContext();
-        ctx.setTenantDomain(MultitenantConstants.SUPER_TENANT_DOMAIN_NAME);
-        ctx.setTenantId(MultitenantConstants.SUPER_TENANT_ID);
-        groupManagementServiceProvider =(GroupManagementServiceProvider) ctx.getOSGiService(GroupManagementServiceProvider.class, null);
+    public void endTenantFlow() {
         PrivilegedCarbonContext.endTenantFlow();
-        return groupManagementServiceProvider;
+        ctx = null;
+        if (log.isDebugEnabled()) {
+            log.debug("Tenant flow ended");
+        }
     }
 
 }
