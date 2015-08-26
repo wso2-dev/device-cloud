@@ -25,7 +25,7 @@
     <ControlQueues>
         <ControlQueue>
             <Name>MQTT</Name>
-            <Enabled>true</Enabled>
+            <Enabled>false</Enabled>
             <ControlClass>org.wso2.carbon.device.mgt.iot.common.controlqueue.mqtt.MqttControlPublisher</ControlClass>
             <Protocol>MQTT</Protocol>
             <ServerURL>tcp://192.168.67.21</ServerURL>
