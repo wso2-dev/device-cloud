@@ -65,7 +65,8 @@ public class GroupManagerService {
             GroupManagementServiceProvider groupManagementService = groupManagement.getGroupManagementService();
             int groupId = groupManagementService.createGroup(group, DEFAULT_ADMIN_ROLE, DEFAULT_ADMIN_PERMISSIONS);
             response.setStatus(Response.Status.OK.getStatusCode());
-            isAdded = (groupId > 0) && groupManagementService.addNewSharingRoleForGroup(username, groupId, DEFAULT_OPERATOR_ROLE, DEFAULT_OPERATOR_PERMISSIONS);
+            isAdded = (groupId > 0) && groupManagementService.addSharing(username, groupId, DEFAULT_OPERATOR_ROLE,
+                    DEFAULT_OPERATOR_PERMISSIONS);
         } catch (GroupManagementException e) {
             response.setStatus(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode());
         } finally {
@@ -87,7 +88,7 @@ public class GroupManagerService {
         boolean isUpdated = false;
         try {
             GroupManagementServiceProvider groupManagementService = groupManagement.getGroupManagementService();
-            DeviceGroup group = groupManagementService.getGroupById(groupId);
+            DeviceGroup group = groupManagementService.getGroup(groupId);
             group.setName(name);
             group.setDescription(description);
             group.setOwner(username);
@@ -133,7 +134,7 @@ public class GroupManagerService {
         DeviceGroup deviceGroup = null;
         try {
             response.setStatus(Response.Status.OK.getStatusCode());
-            deviceGroup = groupManagement.getGroupManagementService().getGroupById(groupId);
+            deviceGroup = groupManagement.getGroupManagementService().getGroup(groupId);
         } catch (GroupManagementException e) {
             response.setStatus(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode());
         } finally {
@@ -150,7 +151,7 @@ public class GroupManagerService {
         GroupManagement groupManagement = new GroupManagement(SUPER_TENANT);
         DeviceGroup[] deviceGroups = null;
         try {
-            List<DeviceGroup> groups = groupManagement.getGroupManagementService().getGroupByName(groupName, username);
+            List<DeviceGroup> groups = groupManagement.getGroupManagementService().findGroups(groupName, username);
             deviceGroups = new DeviceGroup[groups.size()];
             response.setStatus(Response.Status.OK.getStatusCode());
             groups.toArray(deviceGroups);
@@ -173,9 +174,9 @@ public class GroupManagerService {
             GroupManagementServiceProvider groupManagementService = groupManagement.getGroupManagementService();
             List<DeviceGroup> groups;
             if(permission != null){
-                groups = groupManagementService.getUserGroupsForPermission(username, permission);
+                groups = groupManagementService.getGroups(username, permission);
             }else{
-                groups = groupManagementService.getGroupsOfUser(username);
+                groups = groupManagementService.getGroups(username);
             }
             deviceGroups = new DeviceGroup[groups.size()];
             response.setStatus(Response.Status.OK.getStatusCode());
@@ -197,7 +198,7 @@ public class GroupManagerService {
         int count = -1;
         try {
             response.setStatus(Response.Status.OK.getStatusCode());
-            count = groupManagement.getGroupManagementService().getGroupCountOfUser(username);
+            count = groupManagement.getGroupManagementService().getGroupCount(username);
         } catch (GroupManagementException e) {
             response.setStatus(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode());
         } finally {
@@ -263,7 +264,7 @@ public class GroupManagerService {
         boolean isAdded = false;
         try {
             response.setStatus(Response.Status.OK.getStatusCode());
-            isAdded = groupManagement.getGroupManagementService().addNewSharingRoleForGroup(username, groupId, roleName, permissions);
+            isAdded = groupManagement.getGroupManagementService().addSharing(username, groupId, roleName, permissions);
         } catch (GroupManagementException e) {
             response.setStatus(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode());
         } finally {
@@ -284,7 +285,7 @@ public class GroupManagerService {
         boolean isRemoved = false;
         try {
             response.setStatus(Response.Status.OK.getStatusCode());
-            isRemoved = groupManagement.getGroupManagementService().removeSharingRoleForGroup(groupId, roleName);
+            isRemoved = groupManagement.getGroupManagementService().removeSharing(groupId, roleName);
         } catch (GroupManagementException e) {
             response.setStatus(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode());
         } finally {
@@ -301,7 +302,7 @@ public class GroupManagerService {
         GroupManagement groupManagement = new GroupManagement(SUPER_TENANT);
         String[] rolesArray = null;
         try {
-            List<String> roles = groupManagement.getGroupManagementService().getAllRolesForGroup(groupId);
+            List<String> roles = groupManagement.getGroupManagementService().getRoles(groupId);
             rolesArray = new String[roles.size()];
             response.setStatus(Response.Status.OK.getStatusCode());
             roles.toArray(rolesArray);
@@ -321,7 +322,7 @@ public class GroupManagerService {
         GroupManagement groupManagement = new GroupManagement(SUPER_TENANT);
         String[] rolesArray = null;
         try {
-            List<String> roles = groupManagement.getGroupManagementService().getGroupRolesForUser(user, groupId);
+            List<String> roles = groupManagement.getGroupManagementService().getRoles(user, groupId);
             rolesArray = new String[roles.size()];
             response.setStatus(Response.Status.OK.getStatusCode());
             roles.toArray(rolesArray);
@@ -341,7 +342,7 @@ public class GroupManagerService {
         GroupManagement groupManagement = new GroupManagement(SUPER_TENANT);
         GroupUser[] usersArray = null;
         try {
-            List<GroupUser> users = groupManagement.getGroupManagementService().getUsersForGroup(groupId);
+            List<GroupUser> users = groupManagement.getGroupManagementService().getUsers(groupId);
             usersArray = new GroupUser[users.size()];
             response.setStatus(Response.Status.OK.getStatusCode());
             users.toArray(usersArray);
@@ -361,7 +362,7 @@ public class GroupManagerService {
         GroupManagement groupManagement = new GroupManagement(SUPER_TENANT);
         Device[] deviceArray = null;
         try {
-            List<Device> devices = groupManagement.getGroupManagementService().getAllDevicesInGroup(groupId);
+            List<Device> devices = groupManagement.getGroupManagementService().getDevices(groupId);
             deviceArray = new Device[devices.size()];
             response.setStatus(Response.Status.OK.getStatusCode());
             devices.toArray(deviceArray);
@@ -387,7 +388,7 @@ public class GroupManagerService {
         try {
             DeviceIdentifier deviceIdentifier = new DeviceIdentifier(deviceId, deviceType);
             response.setStatus(Response.Status.OK.getStatusCode());
-            isAdded = groupManagement.getGroupManagementService().addDeviceToGroup(deviceIdentifier, groupId);
+            isAdded = groupManagement.getGroupManagementService().addDevice(deviceIdentifier, groupId);
         } catch (GroupManagementException e) {
             response.setStatus(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode());
         } finally {
@@ -410,7 +411,7 @@ public class GroupManagerService {
         try {
             DeviceIdentifier deviceIdentifier = new DeviceIdentifier(deviceId, deviceType);
             response.setStatus(Response.Status.OK.getStatusCode());
-            isRemoved = groupManagement.getGroupManagementService().removeDeviceFromGroup(deviceIdentifier, groupId);
+            isRemoved = groupManagement.getGroupManagementService().removeDevice(deviceIdentifier, groupId);
         } catch (GroupManagementException e) {
             response.setStatus(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode());
         } finally {
@@ -428,7 +429,7 @@ public class GroupManagerService {
         String[] permissions = null;
         try {
             response.setStatus(Response.Status.OK.getStatusCode());
-            permissions = groupManagement.getGroupManagementService().getGroupPermissionsOfUser(username, groupId);
+            permissions = groupManagement.getGroupManagementService().getPermissions(username, groupId);
         } catch (GroupManagementException e) {
             response.setStatus(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode());
         } finally {
