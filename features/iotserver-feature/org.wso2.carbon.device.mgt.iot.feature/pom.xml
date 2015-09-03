@@ -48,6 +48,11 @@
             <type>war</type>
         </dependency>
 
+        <dependency>
+            <groupId>org.json.wso2</groupId>
+            <artifactId>json</artifactId>
+        </dependency>
+
     </dependencies>
 
     <build>
@@ -123,6 +128,12 @@
                             <bundles>
                                 <bundleDef>
                                     org.wso2.carbon.device.mgt.iot:org.wso2.carbon.device.mgt.iot.common:${carbon.iot.device.mgt.version}
+                                </bundleDef>
+                                <bundleDef>
+                                    org.wso2.carbon.devicemgt:org.wso2.carbon.device.mgt.common:${carbon.device.mgt.version}
+                                </bundleDef>
+                                <bundleDef>
+                                    org.json.wso2:json:${commons-json.version}
                                 </bundleDef>
                             </bundles>
                             <importFeatures>

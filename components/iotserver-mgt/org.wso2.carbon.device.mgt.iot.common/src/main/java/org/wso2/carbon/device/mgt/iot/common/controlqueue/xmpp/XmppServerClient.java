@@ -1,15 +1,13 @@
 package org.wso2.carbon.device.mgt.iot.common.controlqueue.xmpp;
 
-import org.apache.axiom.om.util.Base64;
+import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpStatus;
-import org.apache.commons.httpclient.NameValuePair;
 import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.httpclient.methods.StringRequestEntity;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.http.HttpHeaders;
-import org.json.JSONObject;
 import org.wso2.carbon.device.mgt.iot.common.controlqueue.ControlQueueConnector;
 import org.wso2.carbon.device.mgt.iot.common.exception.DeviceControllerException;
 
@@ -63,7 +61,7 @@ public class XmppServerClient implements ControlQueueConnector {
 			}
 
 			String encodedString = xmppUsername + ":" + xmppPassword;
-			encodedString = Base64.encode(encodedString.getBytes(StandardCharsets.UTF_8));
+			encodedString = new String(new Base64().encode(encodedString.getBytes(StandardCharsets.UTF_8)));
 
 			String authorizationHeader = "Basic " + encodedString;
  			String jsonRequest ="{\n" +
