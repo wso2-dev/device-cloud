@@ -95,7 +95,6 @@ public class IotDeviceTypeConfigurationManager {
 
 
 			}
-
 			ApisAppClient.getInstance().setBase64EncodedConsumerKeyAndSecret(iotDeviceTypeConfigList);
 
 

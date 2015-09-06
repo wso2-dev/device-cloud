@@ -3,7 +3,7 @@
     <DataStores>
         <DataStore>
             <Name>WSO2-BAM</Name>
-            <Enabled>true</Enabled>
+            <Enabled>false</Enabled>
             <PublisherClass>org.wso2.carbon.device.mgt.iot.common.datastore.impl.ThriftDataStoreConnector</PublisherClass>
             <ServerURL>tcp://192.168.67.21</ServerURL>
             <Port>7613</Port>
@@ -13,7 +13,7 @@
 
         <DataStore>
             <Name>WSO2-CEP</Name>
-            <Enabled>true</Enabled>
+            <Enabled>false</Enabled>
             <PublisherClass>org.wso2.carbon.device.mgt.iot.common.datastore.impl.ThriftDataStoreConnector</PublisherClass>
             <ServerURL>tcp://192.168.67.22</ServerURL>
             <Port>7611</Port>
@@ -36,7 +36,7 @@
 
         <ControlQueue>
             <Name>XMPP</Name>
-            <Enabled>true</Enabled>
+            <Enabled>false</Enabled>
             <ControlClass>org.wso2.carbon.device.mgt.iot.common.controlqueue.xmpp.XmppServerClient</ControlClass>
             <Protocol>XMPP</Protocol>
             <ServerURL>http://204.232.188.215</ServerURL>
@@ -52,7 +52,7 @@
     </Security>
 
     <ApiManager>
-        <Enabled>true</Enabled>
+        <Enabled>false</Enabled>
         <AccessTokenURL>https://192.168.67.21:9444/oauth2/token</AccessTokenURL>
         <ServerURL>http://192.168.67.21</ServerURL>
         <ServerPort>9764</ServerPort>
