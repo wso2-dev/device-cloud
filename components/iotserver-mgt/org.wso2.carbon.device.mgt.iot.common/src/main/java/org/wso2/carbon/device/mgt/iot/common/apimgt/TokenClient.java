@@ -126,9 +126,10 @@ public class TokenClient {
 				postMethod.addParameter(nameValuePair);
 
 			}
-
-			postMethod.addRequestHeader("Authorization",
-										"Basic " + appToken);
+			if(appToken!=null) {
+				postMethod.addRequestHeader("Authorization",
+											"Basic " + appToken);
+			}
 			postMethod.addRequestHeader("Content-Type", "application/x-www-form-urlencoded");
 
 			httpClient.executeMethod(postMethod);
