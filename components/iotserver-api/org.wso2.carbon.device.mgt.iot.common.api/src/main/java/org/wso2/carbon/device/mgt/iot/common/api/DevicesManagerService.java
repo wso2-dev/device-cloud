@@ -20,6 +20,7 @@
 package org.wso2.carbon.device.mgt.iot.common.api;
 
 import org.wso2.carbon.device.mgt.common.Device;
+import org.wso2.carbon.device.mgt.common.DeviceIdentifier;
 import org.wso2.carbon.device.mgt.common.DeviceManagementException;
 import org.wso2.carbon.device.mgt.common.EnrolmentInfo;
 import org.wso2.carbon.device.mgt.core.dao.DeviceManagementDAOException;
@@ -131,6 +132,25 @@ public class DevicesManagerService {
 		}
 	}
 
+	@Path("/devices/{type}/{identifier}")
+	@GET
+	@Consumes("application/json")
+	@Produces("application/json")
+	public Device getDevice(@PathParam("type") String type, @PathParam("identifier") String identifier){
+
+		DeviceManagement deviceManagement = new DeviceManagement(SUPER_TENANT);
+		try{
+            DeviceIdentifier deviceIdentifier = new DeviceIdentifier();
+            deviceIdentifier.setId(identifier);
+            deviceIdentifier.setType(type);
+			return deviceManagement.getDeviceManagementService().getDevice(deviceIdentifier);
+		} catch (DeviceManagementException e) {
+			response.setStatus(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode());
+            return null;
+		} finally {
+			deviceManagement.endTenantFlow();
+		}
+	}
 
 	@Path("/devices/types/")
 	@GET
