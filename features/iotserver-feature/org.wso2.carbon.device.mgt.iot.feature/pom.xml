@@ -53,6 +53,17 @@
             <artifactId>json</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>org.wso2.carbon.commons</groupId>
+            <artifactId>org.wso2.carbon.databridge.agent.thrift</artifactId>
+            <version>${carbon.commons.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.wso2.carbon.commons</groupId>
+            <artifactId>org.wso2.carbon.databridge.commons</artifactId>
+            <version>${carbon.commons.version}</version>
+        </dependency>
+
     </dependencies>
 
     <build>
@@ -134,6 +145,15 @@
                                 </bundleDef>
                                 <bundleDef>
                                     org.json.wso2:json:${commons-json.version}
+                                </bundleDef>
+                                <bundleDef>
+                                    org.json.wso2:json:${commons-json.version}
+                                </bundleDef>
+                                <bundleDef>
+                                    org.wso2.carbon.commons:org.wso2.carbon.databridge.agent.thrift:${carbon.commons.version}
+                                </bundleDef>
+                                <bundleDef>
+                                    org.wso2.carbon.commons:org.wso2.carbon.databridge.commons:${carbon.commons.version}
                                 </bundleDef>
                             </bundles>
                             <importFeatures>
