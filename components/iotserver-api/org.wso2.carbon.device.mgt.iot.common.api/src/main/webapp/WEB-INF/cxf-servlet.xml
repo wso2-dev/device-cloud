@@ -43,6 +43,16 @@
         </jaxrs:providers>
     </jaxrs:server>
 
+    <jaxrs:server id="StatsManager" address="/stats_manager">
+        <jaxrs:serviceBeans>
+            <bean id="StatsManagerService"
+                  class="org.wso2.carbon.device.mgt.iot.common.api.StatsManagerService"/>
+        </jaxrs:serviceBeans>
+        <jaxrs:providers>
+            <bean class="org.codehaus.jackson.jaxrs.JacksonJsonProvider" />
+        </jaxrs:providers>
+    </jaxrs:server>
+
     <jaxrs:server id="TokenManager" address="/token_manager">
         <jaxrs:serviceBeans>
             <bean id="TokenManagerService"
@@ -52,7 +62,6 @@
             <bean class="org.codehaus.jackson.jaxrs.JacksonJsonProvider" />
         </jaxrs:providers>
     </jaxrs:server>
-
 
 </beans>
 
