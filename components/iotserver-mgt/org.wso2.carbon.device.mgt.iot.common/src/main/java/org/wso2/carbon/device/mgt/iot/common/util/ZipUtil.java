@@ -1,13 +1,14 @@
 package org.wso2.carbon.device.mgt.iot.common.util;
 
 import org.wso2.carbon.device.mgt.common.DeviceManagementException;
-import org.wso2.carbon.device.mgt.iot.common.DeviceManagement;
+import org.wso2.carbon.device.mgt.iot.common.config.server.DeviceCloudConfigManager;
 import org.wso2.carbon.device.mgt.iot.common.controlqueue.mqtt.MqttConfig;
 import org.wso2.carbon.device.mgt.iot.common.controlqueue.xmpp.XmppConfig;
+import org.wso2.carbon.device.mgt.iot.common.util.iotdevice.util.IotDeviceManagementUtil;
 import org.wso2.carbon.utils.CarbonUtils;
-import org.wso2.carbon.device.mgt.iot.common.config.server.DeviceCloudConfigManager;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -64,9 +65,12 @@ public class ZipUtil {
 		contextParams.put("DEVICE_TOKEN", token);
 		contextParams.put("DEVICE_REFRESH_TOKEN", refreshToken);
 
-		DeviceManagement deviceManagement = new DeviceManagement(tenantDomain);
-		ZipArchive zipFile = deviceManagement.getSketchArchive(archivesPath, templateSketchPath,
-															   contextParams);
+		ZipArchive zipFile;
+		try {
+			zipFile = IotDeviceManagementUtil.getSketchArchive(archivesPath, templateSketchPath, contextParams);
+		} catch (IOException e) {
+			throw new DeviceManagementException("Zip File Creation Failed",e);
+		}
 
 		return zipFile;
 	}
