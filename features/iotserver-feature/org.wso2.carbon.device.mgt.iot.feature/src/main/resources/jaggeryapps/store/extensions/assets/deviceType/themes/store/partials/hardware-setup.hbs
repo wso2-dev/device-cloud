@@ -12,15 +12,22 @@
     }
 
 </style>
-{{dump .}}
-{{#if ingredients_ingredients}}
+{{#if attributes.ingredients_ingredients}}
 	<h3>Hardware Requirements</h3>
 	<div>
-	{{#itr ingredients_ingredients}}
+	{{#itr attributes.ingredients_ingredients}}
         <span class="fw-stack fw-lg margin-right">
             <i class="fw fw-ring fw-stack-2x"> </i>
             <i class="fw fw-right-arrow fw-stack-1x"></i>
         </span>{{value}}<br/>
 	{{/itr}}
 	</div>
+{{/if}}
+{{#if attributes.setupGuide_description}}
+    <br/>
+    <h3>Setup Guide</h3>
+    <p>{{{attributes.setupGuide_description}}}</p>
+{{/if}}
+{{#if attributes.setupGuide_guideImage}}
+    <img class="img-responsive" alt='{{type}} setup guide' src="{{tenantedUrl ""}}/storage/{{type}}/{{id}}/{{attributes.setupGuide_guideImage}}">
 {{/if}}

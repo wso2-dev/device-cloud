@@ -1,6 +1,6 @@
-{{#if overview_actionURL}}
-	{{#if overview_actionName}}
+{{#if overview_actionUrl}}
+	{{#if overview_actionLabel}}
         <br /><br />
-		<a href="{{overview_actionURL}}" class="blue-button">{{overview_actionName}}</a>
+		<a href="{{url ""}}/apis/device/sketch/download?sketchType={{sketches_sketches}}&deviceType={{overview_deviceTypeName}}" class="blue-button">{{overview_actionLabel}}</a>
 	{{/if}}
 {{/if}}

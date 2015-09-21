@@ -1,3 +1,4 @@
+
 asset.configure = function () {
     return {
         table: {
@@ -23,6 +24,7 @@ asset.configure = function () {
             },
             thumbnail: 'overview_thumbnail',
             banner: 'overview_thumbnail'
+            //setupGuide_guideImage: 'setupGuide_guideImage'
         }
     };
 };

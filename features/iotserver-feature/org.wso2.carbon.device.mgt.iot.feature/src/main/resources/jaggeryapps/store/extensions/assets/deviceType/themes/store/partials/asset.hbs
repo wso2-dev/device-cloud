@@ -62,7 +62,7 @@
                             <a href="#tab-properties" data-toggle="tab" data-type="basic">{{t "Description"}}</a>
                         </li>
                         <li>
-                            <a href="#tab-setup" data-toggle="tab" data-type="basic">{{t "Hardware Setup"}}</a>
+                        <a href="#tab-setup" data-toggle="tab" data-type="basic">{{t "Hardware Setup"}}</a>
                         </li>
                         {{#hasAssetPermission . key="ASSET_REVIEWS" type=../../rxt.shortName username=../../cuser.username tenantId=../../cuser.tenantId}}
                         <li>
@@ -78,12 +78,11 @@
                             <div class="content">
                                 {{>overview .}}
                                 {{>quick-startup-steps}}
-                                {{>assert-action-link}}
                             </div>
                         </div>
                         <div class="tab-pane" id="tab-setup">
                             <div class="content">
-                                {{>hardware-setup}}
+                                {{>hardware-setup ..}}
                             </div>
                         </div>
                         <div class="tab-pane" id="tab-share">

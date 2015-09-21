@@ -5,6 +5,9 @@ asset.configure = function () {
                 fields: {
                     thumbnail: {
                         type: 'file'
+                    },
+                    name: {
+                        placeholder: "Device Name Here..."
                     }
                 }
             },

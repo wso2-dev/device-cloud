@@ -23,22 +23,47 @@ app.server = function(ctx) {
             pages: [{
                 title: 'Store | Analytics',
                 url: 'analytics',
-                path: 'device-analytics.jag',
+                path: 'device_analytics.jag',
                 secured:true
             },{
-                title: 'Store | My Devices Page',
-                url: 'my-items',
-                path: 'my_items.jag',
+                title: 'Store | Devices',
+                url: 'devices',
+                path: 'device_listing.jag',
                 secured:true,
                 permission:'APP_MYITEMS'
+            },{
+                title: 'Store | Dashboard',
+                url: 'dashboard',
+                path: 'dashboard.jag',
+                secured:true
+            },{
+                title: 'Store | Groups',
+                url: 'groups',
+                path: 'groups.jag',
+                secured:true
+            },{
+                title: 'Store | Policies',
+                url: 'policies',
+                path: 'policies.jag',
+                secured:true
+            },{
+                title: 'Store | Users',
+                url: 'users',
+                path: 'users.jag',
+                secured:true
             }],
             apis: [{
                 url: 'stats',
                 path: 'stats-api.jag',
                 secured:true
+            },{
+                url: 'devices',
+                path: 'device-api.jag',
+                secured:true
             }]
         },
         configs: {
+            landingPage:'/assets/deviceType/list',
             disabledAssets: ['ebook', 'api', 'wsdl', 'servicex','policy','proxy','schema','sequence','uri','wadl','endpoint', 'swagger','restservice','comments','soapservice', 'service', 'license', 'gadget', 'site','server']
         }
     }
@@ -71,10 +96,11 @@ app.apiHandlers = function (ctx) {
 
 app.renderer = function(ctx) {
     var decoratorApi = require('/modules/page-decorators.js').pageDecorators;
+    var customDecoratorApi = require('../modules/custom-page-decorators.js').pageDecorators;
     return {
         pageDecorators: {
             navigationBar: function(page) {
-                return decoratorApi.navigationBar(ctx, page, this);
+                return customDecoratorApi.navigationBar(ctx, page, this);
             },
             searchBar: function(page) {
                 return decoratorApi.searchBar(ctx, page, this);
