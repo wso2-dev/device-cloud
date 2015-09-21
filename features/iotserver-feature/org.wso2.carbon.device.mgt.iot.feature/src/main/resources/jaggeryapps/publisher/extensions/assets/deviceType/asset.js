@@ -22,6 +22,7 @@ asset.configure = function () {
         meta: {
             lifecycle: {
                 name: 'DeviceLifeCycle',
+                defaultAction: 'Create',
                 defaultLifecycleEnabled: true
             },
             thumbnail: 'overview_thumbnail',
