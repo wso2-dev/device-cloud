@@ -23,7 +23,7 @@ app.server = function(ctx) {
             pages: [{
                 title: 'Store | Analytics',
                 url: 'analytics',
-                path: 'device_analytics.jag',
+                path: 'analytics.jag',
                 secured:true
             },{
                 title: 'Store | Devices',
@@ -53,12 +53,16 @@ app.server = function(ctx) {
                 secured:true
             }],
             apis: [{
-                url: 'stats',
-                path: 'stats-api.jag',
-                secured:true
-            },{
                 url: 'devices',
                 path: 'device-api.jag',
+                secured:true
+            },{
+                url: 'groups',
+                path: 'group-api.jag',
+                secured:true
+            },{
+                url: 'stats',
+                path: 'stats-api.jag',
                 secured:true
             }]
         },

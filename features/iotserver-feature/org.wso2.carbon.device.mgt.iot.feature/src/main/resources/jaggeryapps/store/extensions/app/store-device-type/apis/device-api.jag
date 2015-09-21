@@ -140,7 +140,7 @@ if (!user) {
 	} else if (uriMatcher.match("/{context}/apis/devices/count")) {
 		//URL: https://localhost:9443/devicecloud/manager/devices/username/{username}
 		deviceCloudService = carbonHttpsServletTransport + "/common/device_manager";
-		listAllDevicesEndPoint = deviceCloudService + "/devices/username/" + user.username;
+		listAllDevicesEndPoint = deviceCloudService + "/device/user/" + user.username + "/all";
 		result = get(listAllDevicesEndPoint, {}, "json");
 		var ownDevices = result.data;
 

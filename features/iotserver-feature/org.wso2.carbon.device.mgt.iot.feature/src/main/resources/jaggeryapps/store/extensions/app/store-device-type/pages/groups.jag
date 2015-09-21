@@ -25,11 +25,8 @@ require('/modules/store.js').exec(function(ctx) {
     var user = server.current(ctx.session);
     var ui = require('rxt').ui;
     var page = ui.buildPage(ctx.session, ctx.request);
-    var appManager;
-    appManager = app.createUserAppManager(session);
+    var appManager = app.createUserAppManager(session);
     var output = appManager.render([], page);
     caramel.render(output);
-
-
 }, request, response, session);
 %>

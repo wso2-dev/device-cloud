@@ -18,7 +18,9 @@
  *
  */
 var caramel;
-require('/modules/store.js').exec(function(ctx) {
+
+require('/modules/store.js').exec(function (ctx) {
+	var log = new Log("device_analytics.jag");
 	caramel = require('caramel');
 	var app = require('rxt').app;
 	var server = require('store').server;
@@ -28,26 +30,35 @@ require('/modules/store.js').exec(function(ctx) {
 	var appManager;
 	var groupId = request.getParameter("groupId");
 	var title;
-	if (groupId){
+
+	if (groupId) {
+
 		title = request.getParameter("name");
-	}else{
+
+	} else {
+
 		var carbon = require('carbon');
 		var carbonHttpsServletTransport = carbon.server.address('https');
 		var deviceCloudDeviceService = carbonHttpsServletTransport + "/common/device_manager";
 
 		var deviceId = request.getParameter("deviceId");
 		var deviceType = request.getParameter("deviceType");
-		var endPoint = deviceCloudDeviceService + "/devices/" + deviceType + "/" + deviceId;
+		var endPoint = deviceCloudDeviceService + "/device/type/" + deviceType + "/identifier/" + deviceId;
 		var data = {"username": user.um.username};
 		var device = get(endPoint, data, "json").data;
-		title = device.name;
+
+		if (device) {
+			title = device.name;
+		}else{
+			page.no_such_device = true;
+		}
+
 	}
 	page.title = title + " Analytics";
 	page.page_title = "Analytics";
 	appManager = app.createUserAppManager(session);
 	var output = appManager.render([], page);
 	caramel.render(output);
-
 
 }, request, response, session);
 %>

@@ -40,13 +40,11 @@ response.contentType = 'application/json';
 
 var server = require('store').server;
 var user = server.current(session);
-
 if (!user) {
 	response = responseProcessor.buildErrorResponse(response, 401, "Unauthorized");
 } else {
 	user = user.um;
 	if (uriMatcher.match("/{context}/apis/stats")) {
-
 		deviceId = request.getParameter("deviceId");
 		deviceType = request.getParameter("deviceType");
 
@@ -74,8 +72,8 @@ if (!user) {
 }
 
 function getDeviceData(deviceType, deviceId) {
-	//URL: GET https://localhost:9443/devicecloud/group_manager/group/id/{groupId}/device/all
-	var endPoint = deviceCloudDeviceService + "/devices/" + deviceType + "/" + deviceId;
+	//URL: GET https://localhost:9443/devicecloud/device_manager/device/type/{type}/identifier/{identifier}
+	var endPoint = deviceCloudDeviceService + "/device/type/" + deviceType + "/identifier/" + deviceId;
 	var data = {"username": user.username};
 	var device = get(endPoint, data, "json").data;
 	if (!device) {
@@ -121,19 +119,19 @@ function getFireAlarmData(user, device, from, to) {
 	}
 	stats['temperatureData'].push({
 		"device": device.name,
-		"stats": getSensorData("DEVICE_TEMPERATURE_SUMMARY", "TEMPERATURE", user, device.deviceIdentifier, from, to)
+		"stats": getSensorData("DEVICE_TEMPERATURE_SUMMARY", "TEMPERATURE", user, device.type, device.deviceIdentifier, from, to)
 	});
 	stats['sonarData'].push({
 		"device": device.name,
-		"stats": getSensorData("SONAR_SENSOR_SUMMARY", "sonar", user, device.deviceIdentifier, from, to)
+		"stats": getSensorData("SONAR_SENSOR_SUMMARY", "sonar", user, device.type, device.deviceIdentifier, from, to)
 	});
 	stats['motionData'].push({
 		"device": device.name,
-		"stats": getSensorData("PIR_MOTION_SENSOR_SUMMARY", "motion", user, device.deviceIdentifier, from, to)
+		"stats": getSensorData("PIR_MOTION_SENSOR_SUMMARY", "motion", user, device.type, device.deviceIdentifier, from, to)
 	});
 	stats['lightData'].push({
 		"device": device.name,
-		"stats": getSensorData("LDR_LIGHT_SENSOR_SUMMARY", "light", user, device.deviceIdentifier, from, to)
+		"stats": getSensorData("LDR_LIGHT_SENSOR_SUMMARY", "light", user, device.type, device.deviceIdentifier, from, to)
 	});
 }
 
@@ -189,10 +187,10 @@ function getSensebotData(user, device, from, to) {
 
 	/*
 	 //Comment below section to emulate data
-	 stats['sonarData'].push({"device": device.name, "stats" : getSensorData("SONAR_SENSOR_SUMMARY", "sonar", user, device.deviceIdentifier, from, to)});
-	 stats['motionData'].push({"device": device.name, "stats" : getSensorData("PIR_MOTION_SENSOR_SUMMARY", "motion", user, device.deviceIdentifier, from, to)});
-	 stats['lightData'].push({"device": device.name, "stats" : getSensorData("LDR_LIGHT_SENSOR_SUMMARY", "light", user, device.deviceIdentifier, from, to)});
-	 stats['temperatureData'].push({"device": device.name, "stats" : getSensorData("DEVICE_TEMPERATURE_SUMMARY", "TEMPERATURE", user, device.deviceIdentifier, from, to)});
+	 stats['sonarData'].push({"device": device.name, "stats" : getSensorData("SONAR_SENSOR_SUMMARY", "sonar", user, device.type, device.deviceIdentifier, from, to)});
+	 stats['motionData'].push({"device": device.name, "stats" : getSensorData("PIR_MOTION_SENSOR_SUMMARY", "motion", user, device.type, device.deviceIdentifier, from, to)});
+	 stats['lightData'].push({"device": device.name, "stats" : getSensorData("LDR_LIGHT_SENSOR_SUMMARY", "light", user, device.type, device.deviceIdentifier, from, to)});
+	 stats['temperatureData'].push({"device": device.name, "stats" : getSensorData("DEVICE_TEMPERATURE_SUMMARY", "TEMPERATURE", user, device.type, device.deviceIdentifier, from, to)});
 	 */
 
 }
@@ -203,7 +201,7 @@ function getArduinoData(user, device, from, to) {
 	}
 	stats['temperatureData'].push({
 		"device": device.name,
-		"stats": getSensorData("DEVICE_TEMPERATURE_SUMMARY", "TEMPERATURE", user, device.deviceIdentifier, from, to)
+		"stats": getSensorData("DEVICE_TEMPERATURE_SUMMARY", "TEMPERATURE", user, device.type, device.deviceIdentifier, from, to)
 	});
 }
 
@@ -222,19 +220,19 @@ function getAndroidSenseData(user, device, from, to) {
 	}
 	stats['ramData'].push({
 		"device": device.name,
-		"stats": getSensorData("RAM_USAGE_SUMMARY", "motion", user, device.deviceIdentifier, from, to)
+		"stats": getSensorData("RAM_USAGE_SUMMARY", "motion", user, device.type, device.deviceIdentifier, from, to)
 	});
 	stats['cpuData'].push({
 		"device": device.name,
-		"stats": getSensorData("CPU_LOAD_SUMMARY", "light", user, device.deviceIdentifier, from, to)
+		"stats": getSensorData("CPU_LOAD_SUMMARY", "light", user, device.type, device.deviceIdentifier, from, to)
 	});
 	stats['temperatureData'].push({
 		"device": device.name,
-		"stats": getSensorData("DEVICE_TEMPERATURE_SUMMARY", "TEMPERATURE", user, device.deviceIdentifier, from, to)
+		"stats": getSensorData("DEVICE_TEMPERATURE_SUMMARY", "TEMPERATURE", user, device.type, device.deviceIdentifier, from, to)
 	});
 	stats['motionData'].push({
 		"device": device.name,
-		"stats": getSensorData("PIR_MOTION_SENSOR_SUMMARY", "motion", user, device.deviceIdentifier, from, to)
+		"stats": getSensorData("PIR_MOTION_SENSOR_SUMMARY", "motion", user, device.type, device.deviceIdentifier, from, to)
 	});
 }
 
@@ -250,15 +248,15 @@ function getDigitalDisplayData(user, device, from, to) {
 	}
 	stats['ramData'].push({
 		"device": device.name,
-		"stats": getSensorData("RAM_USAGE_SUMMARY", "motion", user, device.deviceIdentifier, from, to)
+		"stats": getSensorData("RAM_USAGE_SUMMARY", "motion", user, device.type, device.deviceIdentifier, from, to)
 	});
 	stats['cpuData'].push({
 		"device": device.name,
-		"stats": getSensorData("CPU_LOAD_SUMMARY", "light", user, device.deviceIdentifier, from, to)
+		"stats": getSensorData("CPU_LOAD_SUMMARY", "light", user, device.type, device.deviceIdentifier, from, to)
 	});
 	stats['cpuTemperatureData'].push({
 		"device": device.name,
-		"stats": getSensorData("DEVICE_CPU_TEMPERATURE_SUMMARY", "TEMPERATURE", user, device.deviceIdentifier, from, to)
+		"stats": getSensorData("DEVICE_CPU_TEMPERATURE_SUMMARY", "TEMPERATURE", user, device.type, device.deviceIdentifier, from, to)
 	});
 }
 
@@ -286,49 +284,58 @@ function getAllDeviceData(user, device, from, to) {
 	}
 	stats['ramData'].push({
 		"device": device.name,
-		"stats": getSensorData("RAM_USAGE_SUMMARY", "motion", user, device.deviceIdentifier, from, to)
+		"stats": getSensorData("RAM_USAGE_SUMMARY", "motion", user, device.type, device.deviceIdentifier, from, to)
 	});
 	stats['cpuData'].push({
 		"device": device.name,
-		"stats": getSensorData("CPU_LOAD_SUMMARY", "light", user, device.deviceIdentifier, from, to)
+		"stats": getSensorData("CPU_LOAD_SUMMARY", "light", user, device.type, device.deviceIdentifier, from, to)
 	});
 	stats['sonarData'].push({
 		"device": device.name,
-		"stats": getSensorData("SONAR_SENSOR_SUMMARY", "sonar", user, device.deviceIdentifier, from, to)
+		"stats": getSensorData("SONAR_SENSOR_SUMMARY", "sonar", user, device.type, device.deviceIdentifier, from, to)
 	});
 	stats['motionData'].push({
 		"device": device.name,
-		"stats": getSensorData("PIR_MOTION_SENSOR_SUMMARY", "motion", user, device.deviceIdentifier, from, to)
+		"stats": getSensorData("PIR_MOTION_SENSOR_SUMMARY", "motion", user, device.type, device.deviceIdentifier, from, to)
 	});
 	stats['lightData'].push({
 		"device": device.name,
-		"stats": getSensorData("LDR_LIGHT_SENSOR_SUMMARY", "light", user, device.deviceIdentifier, from, to)
+		"stats": getSensorData("LDR_LIGHT_SENSOR_SUMMARY", "light", user, device.type, device.deviceIdentifier, from, to)
 	});
 	stats['temperatureData'].push({
 		"device": device.name,
-		"stats": getSensorData("DEVICE_TEMPERATURE_SUMMARY", "TEMPERATURE", user, device.deviceIdentifier, from, to)
+		"stats": getSensorData("DEVICE_TEMPERATURE_SUMMARY", "TEMPERATURE", user, device.type, device.deviceIdentifier, from, to)
 	});
 	stats['cpuTemperatureData'].push({
 		"device": device.name,
-		"stats": getSensorData("DEVICE_CPU_TEMPERATURE_SUMMARY", "TEMPERATURE", user, device.deviceIdentifier, from, to)
+		"stats": getSensorData("DEVICE_CPU_TEMPERATURE_SUMMARY", "TEMPERATURE", user, device.type, device.deviceIdentifier, from, to)
 	});
 }
 
 
-function getSensorData(table, column, user, deviceIdentifier, from, to) {
+function getSensorData(table, column, user, type, deviceIdentifier, from, to) {
 
 	var fetchedData = null;
 
 	try {
-		fetchedData = statsClient.getDeviceStats(table, column, user, deviceIdentifier, from, to);
+		///stats/device/type/{type}/identifier/{identifier}
+		var endPoint = deviceCloudGroupService + "/stats/device/type/" + type + "/identifier/" + deviceIdentifier;
+		var data = {
+			"table": table,
+			"column": column,
+			"username": user,
+			"deviceIdentifier": deviceIdentifier,
+			"from": from,
+			"to": to
+		};
+		fetchedData = get(endPoint, data, "json").data;
 	} catch (error) {
 		log.error(error);
 	}
 
-	var sensorData = [];
-
 	if (fetchedData == null) return [];
 
+	var sensorData = [];
 	for (var i = 0; i < fetchedData.size(); i++) {
 		sensorData.push({
 			time: fetchedData.get(i).getTime(),
