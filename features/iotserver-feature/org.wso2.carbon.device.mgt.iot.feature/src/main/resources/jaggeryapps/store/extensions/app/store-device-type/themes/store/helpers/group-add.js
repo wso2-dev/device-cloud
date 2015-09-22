@@ -16,22 +16,10 @@
  *  under the License.
  *
  */
-var render = function(theme, data, meta, require) {
-    var log = new Log("groups.js");
-    log.info(data);
-    theme('2-column-right', {
-        title: data.meta.title,
-        header: [{
-            partial: 'header',
-            context: data
-        }],
-        navigation: [{
-            partial: 'navigation',
-            context: data
-        }],
-        body: [{
-            partial: data.partial,
-            context: data
-        }]
-    });
+
+var resources = function (page, meta) {
+    return {
+        js: ['libs/js.cookie.js', 'libs/invoker-lib.js', 'group-add.js'],
+        css: ['group-add.css']
+    };
 };

@@ -20,10 +20,7 @@
 var uri = request.getRequestURI();
 var uriMatcher = new URIMatcher(String(uri));
 
-var log = new Log("api/group-api.jag");
-
-var constants = require("/modules/constants.js");
-var dcProps = require('/config/dc-props.js').config();
+var log = new Log("apis/group-api.jag");
 
 var carbon = require('carbon');
 var carbonHttpsServletTransport = carbon.server.address('https');
@@ -32,221 +29,81 @@ var deviceCloudService = carbonHttpsServletTransport + "/common/group_manager";
 var server = require('store').server;
 var user = server.current(session);
 
-var result;
-var endPoint;
-var data;
-var groupId;
+var groupModule = require("../modules/group.js").groupModule;
+
+var result, endPoint, data, groupId, group, role;
 
 if (!user) {
 	response = responseProcessor.buildErrorResponse(response, 401, "Unauthorized");
 } else {
 	user = user.um;
-	if (uriMatcher.match("/{context}/api/group/add")) {
-
-		var group = request.getContent();
-		var name = group["name"];
-		var description = group["description"];
-		//URL: POST https://localhost:9443/devicecloud/group_manager/group
-		endPoint = deviceCloudService + "/group";
-		data = {"name": name, "username": user.username, "description": description};
-		result = post(endPoint, data, "json");
-
-	} else if (uriMatcher.match("/{context}/api/group/id/{groupId}/update")) {
-
+	if (uriMatcher.match("/{context}/apis/group/add")) {
+		group = request.getContent();
+		result = groupModule.addGroup(group);
+	} else if (uriMatcher.match("/{context}/apis/group/id/{groupId}/update")) {
 		groupId = uriMatcher.elements().groupId;
 		group = request.getContent();
-		name = group["name"];
-		description = group["description"];
-
-		//URL: PUT https://localhost:9443/devicecloud/group_manager/group/id/{groupId}
-		endPoint = deviceCloudService + "/group/id/" + groupId;
-		data = {"name": name, "username": user.username, "description": description};
-		result = put(endPoint, data, "json");
-
-	} else if (uriMatcher.match("/{context}/api/group/id/{groupId}/remove")) {
-
+		result = groupModule.updateGroup(groupId, group);
+	} else if (uriMatcher.match("/{context}/apis/group/id/{groupId}/remove")) {
 		groupId = uriMatcher.elements().groupId;
-
-		//URL: DELETE https://localhost:9443/devicecloud/group_manager/group/id/{groupId}
-		endPoint = deviceCloudService + "/group/id/" + groupId + "?username=" + user.username;
-		result = del(endPoint, {}, "json");
-
-	} else if (uriMatcher.match("/{context}/api/group/id/{groupId}")) {
+		result = groupModule.removeGroup(groupId);
+	} else if (uriMatcher.match("/{context}/apis/group/id/{groupId}")) {
 		groupId = uriMatcher.elements().groupId;
-
-		//URL: GET https://localhost:9443/devicecloud/group_manager/group/id/{groupId}
-		endPoint = deviceCloudService + "/group/id/" + groupId;
-		data = {"username": user.username};
-		result = get(endPoint, data, "json");
-
-	} else if (uriMatcher.match("/{context}/api/group/name/{groupName}")) {
-
-		//URL: GET https://localhost:9443/devicecloud/group_manager/group/name/{name}
-		endPoint = deviceCloudService + "/group/name/" + uriMatcher.elements().groupName;
-		data = {"username": user.username};
-		result = get(endPoint, data, "json");
-
-	} else if (uriMatcher.match("/{context}/api/group/all")) {
-
-		//URL: GET https://localhost:9443/devicecloud/group_manager/group/all
-		endPoint = deviceCloudService + "/group/user/" + user.username + "/all";
-		data = {"username": user.username};
-		result = get(endPoint, data, "json");
-
-	} else if (uriMatcher.match("/{context}/api/group/all/count")) {
-
-		//URL: GET https://localhost:9443/devicecloud/group_manager/group/all/count
-		endPoint = deviceCloudService + "/group/user/" + user.username + "/all/count";
-		data = {"username": user.username};
-		result = get(endPoint, data, "json");
-
-	} else if (uriMatcher.match("/{context}/api/group/id/{groupId}/share")) {
-
+		result = groupModule.getGroup(groupId);
+	} else if (uriMatcher.match("/{context}/apis/group/name/{groupName}")) {
+		var groupName = uriMatcher.elements().groupName;
+		result = groupModule.findGroups(groupName);
+	} else if (uriMatcher.match("/{context}/apis/group/all")) {
+		result = groupModule.getGroups();
+	} else if (uriMatcher.match("/{context}/apis/group/all/count")) {
+		result = groupModule.getGroupCount();
+	} else if (uriMatcher.match("/{context}/apis/group/id/{groupId}/share")) {
 		groupId = uriMatcher.elements().groupId;
 		var shareUser = request.getContent()["shareUser"];
 		role = request.getContent()["role"];
-
-		//URL: PUT https://localhost:9443/devicecloud/group_manager/group/id/{groupId}/share
-		endPoint = deviceCloudService + "/group/id/" + groupId + "/share";
-		data = {"username": user.username, "shareUser": shareUser, "role": role};
-		result = post(endPoint, data, "json");
-
-	} else if (uriMatcher.match("/{context}/api/group/id/{groupId}/unshare")) {
-
+		result = groupModule.shareGroup(groupId, shareUser, role);
+	} else if (uriMatcher.match("/{context}/apis/group/id/{groupId}/unshare")) {
 		groupId = uriMatcher.elements().groupId;
 		var unShareUser = request.getContent()["unShareUser"];
 		role = request.getContent()["role"];
-
-		//URL: DELETE https://localhost:9443/devicecloud/group_manager/group/id/{groupId}/unshare
-		endPoint = deviceCloudService + "/group/id/" + groupId + "/unshare";
-		data = {"username": user.username, "unShareUser": unShareUser, "role": role};
-		result = post(endPoint, data, "json");
-
-	} else if (uriMatcher.match("/{context}/api/group/id/{groupId}/role/add")) {
-
+		result = groupModule.unshareGroup(groupId, unShareUser, role);
+	} else if (uriMatcher.match("/{context}/apis/group/id/{groupId}/role/add")) {
 		groupId = uriMatcher.elements().groupId;
 		var permissions = request.getContent()["permissions"];
 		role = request.getContent()["role"];
-
-		//URL: POST https://localhost:9443/devicecloud/group_manager/group/id/{groupId}/role
-		endPoint = deviceCloudService + "/group/id/" + groupId + "/role";
-		data = {"username": user.username, "permissions": permissions, "role": role};
-		result = post(endPoint, data, "json");
-
-	} else if (uriMatcher.match("/{context}/api/group/id/{groupId}/role/delete")) {
-
+		result = groupModule.addRole(groupId, role, permissions);
+	} else if (uriMatcher.match("/{context}/apis/group/id/{groupId}/role/delete")) {
 		groupId = uriMatcher.elements().groupId;
 		role = request.getContent()["role"];
-
-		//URL: DELETE https://localhost:9443/devicecloud/group_manager/group/id/{groupId}/role
 		endPoint = deviceCloudService + "/group/id/" + groupId + "/role/" + role;
-		result = del(endPoint, {}, "json");
-
-	} else if (uriMatcher.match("/{context}/api/group/id/{groupId}/role/all")) {
-
+		result = groupModule.deleteRole(groupId, role);
+	} else if (uriMatcher.match("/{context}/apis/group/id/{groupId}/role/all")) {
 		groupId = uriMatcher.elements().groupId;
-
-		//URL: GET https://localhost:9443/devicecloud/group_manager/group/id/{groupId}/role/all
-		endPoint = deviceCloudService + "/group/id/" + groupId + "/role/all";
-		data = {"username": user.username};
-		result = get(endPoint, data, "json");
-
-	} else if (uriMatcher.match("/{context}/api/group/id/{groupId}/{userId}/role/all")) {
-
+		result = groupModule.getRoles(groupId);
+	} else if (uriMatcher.match("/{context}/apis/group/id/{groupId}/{userId}/role/all")) {
 		groupId = uriMatcher.elements().groupId;
 		var userId = uriMatcher.elements().userId;
-
-		//URL: GET https://localhost:9443/devicecloud/group_manager/group/id/{groupId}/{user}/role/all
-		endPoint = deviceCloudService + "/group/id/" + groupId + "/" + userId + "/role/all";
-		data = {"username": user.username};
-		result = get(endPoint, data, "json");
-
-	} else if (uriMatcher.match("/{context}/api/group/id/{groupId}/{userId}/rolemapping")) {
-
+		result = groupModule.getRoles(groupId, userId);
+	} else if (uriMatcher.match("/{context}/apis/group/id/{groupId}/{userId}/rolemapping")) {
 		groupId = uriMatcher.elements().groupId;
 		userId = uriMatcher.elements().userId;
-
-		data = {"username": user.username};
-
-		//URL: GET https://localhost:9443/devicecloud/group_manager/group/id/{groupId}/role/all
-		endPoint = deviceCloudService + "/group/id/" + groupId + "/role/all";
-		var allRoles = get(endPoint, data, "json").data;
-
-		//URL: GET https://localhost:9443/devicecloud/group_manager/group/id/{groupId}/{user}/role/all
-		endPoint = deviceCloudService + "/group/id/" + groupId + "/" + userId + "/role/all";
-		var userRolesObj = get(endPoint, data, "json");
-		var userRoles = userRolesObj.data;
-		var roleMap = [];
-		for (var role in allRoles) {
-			var objRole = {"role": allRoles[role], "assigned": false};
-			for (var usrRole in userRoles) {
-				if (allRoles[role] == userRoles[usrRole]) {
-					objRole.assigned = true;
-					break;
-				}
-			}
-			roleMap.push(objRole);
-		}
-		result = {};
-		result.data = roleMap;
-		result.xhr = userRolesObj.xhr;
-
-	} else if (uriMatcher.match("/{context}/api/group/id/{groupId}/{userId}/roleupdate")) {
-
+		result = groupModule.getRoleMapping(groupId, userId);
+	} else if (uriMatcher.match("/{context}/apis/group/id/{groupId}/{userId}/roleupdate")) {
 		groupId = uriMatcher.elements().groupId;
 		userId = uriMatcher.elements().userId;
-		roleMap = request.getContent();
-
-		for (role in roleMap) {
-			if (roleMap[role].assigned == true) {
-				//URL: POST https://localhost:9443/devicecloud/group_manager/group/id/{groupId}/share
-				endPoint = deviceCloudService + "/group/id/" + groupId + "/share";
-				data = {"username": user.username, "shareUser": userId, "role": roleMap[role].role};
-				result = post(endPoint, data, "json");
-			} else {
-				//URL: DELETE https://localhost:9443/devicecloud/group_manager/group/id/{groupId}/unshare
-				endPoint = deviceCloudService + "/group/id/" + groupId + "/unshare";
-				data = {"username": user.username, "unShareUser": userId, "role": roleMap[role].role};
-				result = post(endPoint, data, "json");
-			}
-		}
-
-	} else if (uriMatcher.match("/{context}/api/group/id/{groupId}/user/all")) {
-
+		var roleMap = request.getContent();
+		result = groupModule.setRoleMapping(groupId, userId, roleMap);
+	} else if (uriMatcher.match("/{context}/apis/group/id/{groupId}/user/all")) {
 		groupId = uriMatcher.elements().groupId;
-
-		//URL: GET https://localhost:9443/devicecloud/group_manager/group/id/{groupId}/user/all
-		endPoint = deviceCloudService + "/group/id/" + groupId + "/user/all";
-		data = {"username": user.username};
-		result = get(endPoint, data, "json");
-
-	} else if (uriMatcher.match("/{context}/api/group/id/{groupId}/device/all")) {
-
+		result = groupModule.getUsers(groupId);
+	} else if (uriMatcher.match("/{context}/apis/group/id/{groupId}/device/all")) {
 		groupId = uriMatcher.elements().groupId;
-
-		//URL: GET https://localhost:9443/devicecloud/group_manager/group/id/{groupId}
-		endPoint = deviceCloudService + "/group/id/" + groupId;
-		data = {"username": user.username};
-		var group = get(endPoint, data, "json").data;
-
-		//URL: GET https://localhost:9443/devicecloud/group_manager/group/id/{groupId}/device/all
-		endPoint = deviceCloudService + "/group/id/" + groupId + "/device/all";
-		data = {"username": user.username};
-		result = get(endPoint, data, "json");
-		group.devices = result.data;
-		result.data = {group: group}
-
-	} else if (uriMatcher.match("/{context}/api/group/id/{groupId}/assign")) {
-
+		result = groupModule.getDevices(groupId);
+	} else if (uriMatcher.match("/{context}/apis/group/id/{groupId}/assign")) {
 		groupId = uriMatcher.elements().groupId;
 		var deviceId = request.getContent()["deviceId"];
 		var deviceType = request.getContent()["deviceType"];
-
-		//URL: GET https://localhost:9443/devicecloud/group_manager/group/id/{groupId}/device/assign
-		endPoint = deviceCloudService + "/group/id/" + groupId + "/device/assign";
-		data = {"username": user.username, "deviceId": deviceId, "deviceType": deviceType};
-		result = put(endPoint, data, "json");
-
+		result = groupModule.assignDevice(groupId, deviceId, deviceType);
 	}
 }
 // returning the result.

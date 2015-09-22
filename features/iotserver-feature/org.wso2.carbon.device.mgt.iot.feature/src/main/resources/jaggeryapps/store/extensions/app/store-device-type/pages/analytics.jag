@@ -20,7 +20,7 @@
 var caramel;
 
 require('/modules/store.js').exec(function (ctx) {
-	var log = new Log("device_analytics.jag");
+	var log = new Log("analytics.jag");
 	caramel = require('caramel');
 	var app = require('rxt').app;
 	var server = require('store').server;
@@ -55,7 +55,6 @@ require('/modules/store.js').exec(function (ctx) {
 
 	}
 	page.title = title + " Analytics";
-	page.page_title = "Analytics";
 	appManager = app.createUserAppManager(session);
 	var output = appManager.render([], page);
 	caramel.render(output);
