@@ -17,8 +17,6 @@
  *
  */
 var render = function(theme, data, meta, require) {
-    var log = new Log("groups.js");
-    log.info(data);
     theme('2-column-right', {
         title: data.meta.title,
         header: [{

@@ -30,11 +30,16 @@ require('/modules/store.js').exec(function(ctx) {
 	var uri = request.getRequestURI();
 	var uriMatcher = new URIMatcher(String(uri));
 
-	if (uriMatcher.match("/{context}/pages/groups/add-group")) {
+	if (uriMatcher.match("/{context}/pages/groups/add")) {
 		page.meta.title = "Store | Add Group";
 		page.partial = 'group-add';
 	}else{
 		page.partial = 'group-listing';
+		var groupModule = require("../modules/group.js").groupModule;
+		var groups = groupModule.getGroups().data;
+		if (groups){
+			page.groups = groups;
+		}
 	}
 
     var appManager = app.createUserAppManager(session);

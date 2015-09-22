@@ -19,6 +19,7 @@
 
 var resources = function (page, meta) {
     return {
-        js: ['group-listing.js']
+        js: ['libs/utils.js','libs/js.cookie.js', 'libs/invoker-lib.js', 'group-listing.js'],
+        css: ['custom-item.css']
     };
 };

@@ -17,9 +17,9 @@
  *
  */
 var pageDecorators = {};
-(function(pageDecorators) {
+(function (pageDecorators) {
     var log = new Log();
-    var isActivatedAsset = function(assetType, tenantId) {
+    var isActivatedAsset = function (assetType, tenantId) {
         var app = require('rxt').app;
         var activatedAssets = app.getUIActivatedAssets(tenantId); //ctx.tenantConfigs.assets;
         //return true;
@@ -33,7 +33,7 @@ var pageDecorators = {};
         }
         return false;
     };
-    pageDecorators.navigationBar = function(ctx, page, utils) {
+    pageDecorators.navigationBar = function (ctx, page, utils) {
         var carbonUser = server.current(session);
         page.navigationBar = {};
         var links = {
@@ -44,8 +44,8 @@ var pageDecorators = {};
             "groups": [],
             "store": [],
             "dashboard": [],
-            "analytics" : [],
-            "events" : []
+            "analytics": [],
+            "events": []
         };
         var dashboardLink = {
             title: "Go back to Dashboard",
@@ -80,18 +80,35 @@ var pageDecorators = {};
         links.store.push(storeLink);
 
         links.groups.push(dashboardLink);
+        var uri = request.getRequestURI();
+        var uriMatcher = new URIMatcher(String(uri));
+
+        if (uriMatcher.match("/{context}/pages/groups/add")) {
+            links.groups.push({
+                title: "Go back to Groups",
+                icon: "fw-left-arrow",
+                url: "/store/pages/groups"
+            });
+        } else {
+            links.groups.push({
+                title: "Add Group",
+                icon: "fw-add",
+                url: "/store/pages/groups/add"
+            });
+        }
+
         var groupId = request.getParameter("groupId");
-        if (groupId){
+        if (groupId) {
             links.analytics.push(groupMgtLink);
             links.devices.push(groupMgtLink);
-        }else{
+        } else {
             links.analytics.push(deviceMgtLink);
             links.devices.push(dashboardLink);
         }
 
         if (!carbonUser) {
             //user is not logged in
-        }else{
+        } else {
             var permissions = ctx.tenantConfigs.permissions;
             //if (permissions.ADD_USER) {
             //    links.users.push({
@@ -127,21 +144,13 @@ var pageDecorators = {};
                     icon: "fw-add",
                     url: "/store/pages/groups/add-group"
                 });
-                links.groups.push({
-                    title: "Add Group",
-                    icon: "fw-add",
-                    url: "/store/pages/groups/add-group"
-                });
             }
         }// end-if-user
 
-        log.info("context.meta.pageName " + page.meta.pageName);
         page.navigationBar.currentActions = links[page.meta.pageName];
-        log.info("page.navigationBar.currentActions ");
-        log.info(page.navigationBar.currentActions);
         return page;
     };
-    var assetManager = function(ctx) {
+    var assetManager = function (ctx) {
         var rxt = require('rxt');
         var type = ctx.assetType;
         var am = rxt.asset.createUserAssetManager(ctx.session, type);

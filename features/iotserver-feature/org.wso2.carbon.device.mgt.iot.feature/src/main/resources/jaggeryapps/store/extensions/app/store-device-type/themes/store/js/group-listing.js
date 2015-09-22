@@ -16,33 +16,11 @@
  * under the License.
  */
 
-(function () {
-    var cache = {};
-    var permissionSet = {};
-    var validateAndReturn = function (value) {
-        return (value == undefined || value == null) ? "Unspecified" : value;
-    };
-    Handlebars.registerHelper("groupMap", function (group) {
-        group.ownerId = validateAndReturn(group.ownerId);
-    });
-
-    //This method is used to setup permission for device listing
-    $.setPermission = function (permission) {
-        permissionSet[permission] = true;
-    };
-
-    $.hasPermission = function (permission) {
-        return permissionSet[permission];
-    };
-})();
-
 /*
  * Setting-up global variables.
  */
 var groupCheckbox = "#ast-container .ctrl-wr-asset .itm-select input[type='checkbox']";
 var assetContainer = "#ast-container";
-
-var app_context = $("#app-context").val();
 
 /*
  * DOM ready functions.
@@ -52,13 +30,7 @@ $(document).ready(function () {
     $(groupCheckbox).each(function () {
         addGroupSelectedClass(this);
     });
-
-    var i;
-    var permissionList = $("#permission").data("permission");
-    for (i = 0; i < permissionList.length; i++) {
-        $.setPermission(permissionList[i]);
-    }
-
+    
     /* for device list sorting drop down */
     $(".ctrl-filter-type-switcher").popover({
         html: true,
@@ -66,10 +38,9 @@ $(document).ready(function () {
             return $("#content-filter-types").html();
         }
     });
-
-    loadGroups();
+    attachEvents();
+    formatDates();
     changeGroupView('grid', $('a.ctrl-filter-grid'));
-
 });
 
 /*
@@ -125,54 +96,7 @@ function addGroupSelectedClass(checkbox) {
         $(checkbox).closest(".ctrl-wr-asset").removeClass("selected device-select");
     }
 }
-function loadGroups(searchType, searchParam) {
-    var groupListing = $("#group-listing");
-    var groupListingSrc = groupListing.attr("src");
-    var imageResource = groupListing.data("image-resource");
-    $.template("group-listing", groupListingSrc, function (template) {
-        var serviceURL;
-        if ($.hasPermission("LIST_GROUPS")) {
-            serviceURL = app_context + "api/group/all";
-        } else {
-            $("#ast-container").html("Permission denied");
-            return;
-        }
-        if (searchParam) {
-            if (searchType == "users") {
-                serviceURL = serviceURL + "?user=" + searchParam;
-            } else if (searchType == "user-roles") {
-                serviceURL = serviceURL + "?role=" + searchParam;
-            } else {
-                serviceURL = serviceURL + "?type=" + searchParam;
-            }
-        }
-        var successCallback = function (data) {
-            data = JSON.parse(data);
-            var viewModel = {};
-            viewModel.groups = data;
-            viewModel.appContext = app_context;
-            viewModel.imageLocation = imageResource;
-            if (!data || data.length <= 0) {
-                $("#ast-container").html($("#no-groups-div-content").html());
-            } else {
-                var content = template(viewModel);
-                $("#ast-container").html(content);
-                /*
-                 * On group checkbox select add parent selected style class
-                 */
-                $(groupCheckbox).click(function () {
-                    addGroupSelectedClass(this);
-                });
-                attachEvents();
-                formatDates();
-            }
-        };
-        invokerUtil.get(serviceURL,
-            successCallback, function (jqXHR) {
-                displayErrors(jqXHR);
-            });
-    });
-}
+
 
 function formatDates() {
     $(".formatDate").each(function () {
@@ -180,21 +104,6 @@ function formatDates() {
         $(this).html(new Date(parseInt(timeStamp)).toUTCString());
     });
 }
-
-/**
- * Sorting function of users
- * listed on User Management page in WSO2 MDM Console.
- */
-$(function () {
-    var sortableElem = '.wr-sortable';
-    $(sortableElem).sortable({
-        beforeStop: function () {
-            var sortedIDs = $(this).sortable('toArray');
-            console.log(sortedIDs);
-        }
-    });
-    $(sortableElem).disableSelection();
-});
 
 var modalPopup = ".wr-modalpopup";
 var modalPopupContainer = modalPopup + " .modalpopup-container";
@@ -236,7 +145,7 @@ function attachEvents() {
      */
     $(".view-group-link").click(function () {
         var groupId = $(this).data("groupid");
-        $("#group-data-form-" + groupId).closest('form').submit();
+        window.location = "devices?groupId=" + groupId;
     });
 
     /**
@@ -251,7 +160,7 @@ function attachEvents() {
         $('#user-names').html('Loading...');
         showPopup();
         $("a#share-group-next-link").hide();
-        invokerUtil.get(app_context+ "api/users",
+        invokerUtil.get("../apis/users",
             function (data, txtStatus, jqxhr) {
                 var users = JSON.parse(data);
                 var status = jqxhr.status;
@@ -277,7 +186,7 @@ function attachEvents() {
                         $(modalPopupContent).html($('#share-group-w2-modal-content').html());
                         $('#user-roles').html('Loading...');
                         $("a#share-group-yes-link").hide();
-                        invokerUtil.get(app_context+"api/group/id/" + groupId + "/" + selectedUser + "/rolemapping",
+                        invokerUtil.get("../apis/group/id/" + groupId + "/" + selectedUser + "/rolemapping",
                             function (data, txtStatus, jqxhr) {
                                 var roleMap = JSON.parse(data);
                                 var status = jqxhr.status;
@@ -307,13 +216,13 @@ function attachEvents() {
                                                 updatedRoleMap.push(roleMap[role]);
                                             }
                                         }
-                                        invokerUtil.post(app_context+ "api/group/id/" + groupId + "/" + selectedUser + "/roleupdate",
+                                        invokerUtil.post("../apis/group/id/" + groupId + "/" + selectedUser + "/roleupdate",
                                             updatedRoleMap,
                                             function (data, txtStatus, jqxhr) {
                                                 var status = jqxhr.status;
                                                 if (status == 200) {
                                                     $(modalPopupContent).html($('#share-group-200-content').html());
-                                                    loadGroups();
+                                                    location.reload(false);
                                                     setTimeout(function () {
                                                         hidePopup();
                                                     }, 2000);
@@ -357,7 +266,7 @@ function attachEvents() {
      */
     $("a.remove-group-link").click(function () {
         var groupId = $(this).data("groupid");
-        var removeGroupApi = app_context+ "api/group/id/" + groupId + "/remove";
+        var removeGroupApi = "../apis/group/id/" + groupId + "/remove";
 
         $(modalPopupContent).html($('#remove-group-modal-content').html());
         showPopup();
@@ -369,7 +278,7 @@ function attachEvents() {
                     var status = jqxhr.status;
                     if (status == 200) {
                         $(modalPopupContent).html($('#remove-group-200-content').html());
-                        loadGroups();
+                        location.reload(false);
                         setTimeout(function () {
                             hidePopup();
                         }, 2000);
@@ -398,7 +307,7 @@ function attachEvents() {
         var groupId = $(this).data("groupid");
         var groupName = $(this).data("groupname");
         var groupDescription = $(this).data("groupdescription");
-        var editGroupApi = app_context + "api/group/id/" + groupId + "/update";
+        var editGroupApi = "../apis/group/id/" + groupId + "/update";
 
         $(modalPopupContent).html($('#edit-group-modal-content').html());
         $('#edit-group-name').val(groupName);
