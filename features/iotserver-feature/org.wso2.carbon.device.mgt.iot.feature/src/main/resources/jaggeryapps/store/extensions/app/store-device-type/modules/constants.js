@@ -17,7 +17,7 @@
  */
 
 var WEB_APP_TITLE = "WSO2 IoT - IoT Server";
-var WEB_APP_CONTEXT = "/iotserver";
+var WEB_APP_CONTEXT = "/store";
 var USER_SESSION_KEY = "USER";
 var UNSPECIFIED = "Unspecified";
 var DEVICES_UNIT_PATH="/units/";

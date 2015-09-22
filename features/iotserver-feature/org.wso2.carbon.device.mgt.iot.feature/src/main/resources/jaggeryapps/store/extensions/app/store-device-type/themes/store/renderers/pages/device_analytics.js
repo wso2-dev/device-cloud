@@ -16,13 +16,20 @@
  *  under the License.
  *
  */
-
-var resources = function (page, meta) {
-    return {
-        //js: ['alldevices_util.js']
-        css:['select2.min.css'],
-        js: ['device-listing.js','libs/handlebars/handlebars-v2.0.0.js','libs/handlebars/utils.js',
-            'libs/select2.full.min.js','libs/jquery-ui.js',
-            'libs/invoker_util/invoker-lib.js','libs/invoker_util/js.cookie.js']
-    };
+var render = function(theme, data, meta, require) {
+    theme('2-column-right', {
+        title: data.meta.title,
+        header: [{
+            partial: 'header',
+            context: data
+        }],
+        navigation: [{
+            partial: 'navigation',
+            context: data
+        }],
+        body: [{
+            partial: 'analytics',
+            context: data
+        }]
+    });
 };

@@ -29,6 +29,9 @@ var carbon = require('carbon');
 var carbonHttpServletTransport = carbon.server.address('http');
 var carbonHttpsServletTransport = carbon.server.address('https');
 
+var responseProcessor = require('utils').response;
+response.contentType = 'application/json';
+
 var server = require('store').server;
 var user = server.current(session);
 
@@ -37,7 +40,16 @@ var result;
 if (!user) {
 	response = responseProcessor.buildErrorResponse(response, 401, "Unauthorized");
 } else {
-	if (uriMatcher.match("/{context}/apis/devices/sketch/download/{downloadId}")) {
+	if (uriMatcher.match("/{context}/apis/devices/{deviceTypeName}/thumbnail/")){
+		deviceTypeId = null;
+		if(deviceTypeId){
+			result = deviceTypeId;
+		}else{
+			log.error("Device type `" + deviceTypeName + "` not found!");
+			result = 400;
+		}
+
+	} else if (uriMatcher.match("/{context}/apis/devices/sketch/download/{downloadId}")) {
 		downloadId = uriMatcher.elements().downloadId;
 		//Just download the already created zip archive
 		var CarbonUtils = Packages.org.wso2.carbon.utils.CarbonUtils;
@@ -106,7 +118,6 @@ if (!user) {
 		deviceCloudService = carbonHttpsServletTransport + "/common/device_manager";
 		listAllDevicesEndPoint = deviceCloudService + "/device/user/" + user.username + "/all";
 		result = get(listAllDevicesEndPoint, {}, "json");
-		log.info(result);
 		var ownDevices = result.data;
 		var allDevices = [];
 		deviceCloudService = carbonHttpsServletTransport + "/common/group_manager";
@@ -140,7 +151,7 @@ if (!user) {
 	} else if (uriMatcher.match("/{context}/apis/devices/count")) {
 		//URL: https://localhost:9443/devicecloud/manager/devices/username/{username}
 		deviceCloudService = carbonHttpsServletTransport + "/common/device_manager";
-		listAllDevicesEndPoint = deviceCloudService + "/device/user/" + user.username + "/all";
+		listAllDevicesEndPoint = deviceCloudService + "/devices/username/" + user.username;
 		result = get(listAllDevicesEndPoint, {}, "json");
 		var ownDevices = result.data;
 

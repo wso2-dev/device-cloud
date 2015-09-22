@@ -72,16 +72,14 @@
 
 
     </div>
-    {{#unless isUserDomainAndUrlDomainDifferent}}
-        <div class="site-wide-menu">
-            <div class="inline-block margin-top-sm">
-                {{#hasAppPermission . key="APP_MYITEMS" username=cuser.username tenantId=cuser.tenantId}}
-                    <a href="{{tenantedUrl "/pages/devices"}}" class="bookmark-link" title="{{t "My Devices "}}"><span class="bookmark-link-text">{{t "My Devices "}}</span><i class="fw fw-bookmark fw-inverse fw-lg bookmark-link-icon"></i></a>
-                {{/hasAppPermission}}
-            </div>
+    <div class="wr-filters col-xs-12 col-sm-12 col-md-12 wr-filters-right">
+        <div class="wr-filter-sort pull-right">
+            <a href="javascript:void(0)" onclick="selectAllDevices(this)" class="wr-btn">Select All</a>
+            <a href="javascript:void(0)" onclick="changeDeviceView('grid', this)" class="ico-filter ctrl-filter-grid view-toggle"><i class="fw fw-grid"></i></a>
+            <a href="javascript:void(0)" onclick="changeDeviceView('list', this)" class="ico-filter ctrl-filter-list view-toggle selected"><i class="fw fw-list"></i></a>
+            <span class="wr-filter-type-switcher"><a href="#" class="ico-filter ctrl-filter-type-switcher" data-placement="bottom" data-trigger="focus"><i class="fw fw-list-sort"></i></a></span>
         </div>
-    {{/unless}}
-
+    </div>
 </div>
 <!-- secondary header - app bar -->
 {{> action-bar .}}

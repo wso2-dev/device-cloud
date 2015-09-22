@@ -53,6 +53,10 @@ app.server = function(ctx) {
                 secured:true
             }],
             apis: [{
+                url: 'stats',
+                path: 'stats-api.jag',
+                secured:true
+            },{
                 url: 'devices',
                 path: 'device-api.jag',
                 secured:true
@@ -61,8 +65,8 @@ app.server = function(ctx) {
                 path: 'group-api.jag',
                 secured:true
             },{
-                url: 'stats',
-                path: 'stats-api.jag',
+                url: 'users',
+                path: 'user-api.jag',
                 secured:true
             }]
         },
