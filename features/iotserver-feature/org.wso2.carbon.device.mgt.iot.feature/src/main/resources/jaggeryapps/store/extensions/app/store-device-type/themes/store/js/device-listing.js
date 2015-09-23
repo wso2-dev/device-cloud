@@ -79,7 +79,7 @@ $(document).ready(function () {
  *
  * @param button: Select All Device button
  */
-function selectAllDevices(button) {
+function selectAllItems(button) {
     if (!$(button).data('select')) {
         $(deviceCheckbox).each(function (index) {
             $(this).prop('checked', true);
@@ -103,7 +103,7 @@ function selectAllDevices(button) {
  * @param view: Selected view type
  * @param selection: Selection button
  */
-function changeDeviceView(view, selection) {
+function changeItemView(view, selection) {
     $(".view-toggle").each(function () {
         $(this).removeClass("selected");
     });

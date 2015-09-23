@@ -16,9 +16,10 @@
  */
 var caramel;
 var PAGING = {};
-var log = new Log();
 require('/modules/store.js').exec(function(ctx) {
+	var log = new Log("device_listing.jag");
     caramel = require('caramel');
+    var app = require('rxt').app;
     var permissions = require('rxt').permissions;
     var asset = require('rxt').asset;
     var core = require('rxt').core;
@@ -62,8 +63,8 @@ require('/modules/store.js').exec(function(ctx) {
     }
 
     page.deviceTypesIdList = deviceTypesIdList;
-
-    var output = am.render([], page).list();
-    output.paging = assetApi.assetsPaging(assets, type, ctx.request);
+    page.operations = true;
+    var appManager = app.createUserAppManager(session);
+    var output = appManager.render([], page);
     caramel.render(output);
 }, request, response, session); %>

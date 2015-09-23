@@ -29,6 +29,7 @@
 }
 
 .center-container {
+    top: 50px;
     left: 25%;
     right: 25%;
 }

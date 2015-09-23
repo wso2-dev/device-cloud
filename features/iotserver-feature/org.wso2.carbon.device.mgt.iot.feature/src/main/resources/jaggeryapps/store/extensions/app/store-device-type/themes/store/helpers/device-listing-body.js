@@ -20,9 +20,9 @@
 var resources = function (page, meta) {
     return {
         //js: ['alldevices_util.js']
-        css:['select2.min.css'],
-        js: ['device-listing.js','libs/handlebars/handlebars-v2.0.0.js','libs/handlebars/utils.js',
+        css:['select2.min.css', 'custom-item.css'],
+        js: ['device-listing.js','libs/handlebars-v2.0.0.js','libs/utils.js',
             'libs/select2.full.min.js','libs/jquery-ui.js',
-            'libs/invoker_util/invoker-lib.js','libs/invoker_util/js.cookie.js']
+            'libs/invoker-lib.js','libs/js.cookie.js']
     };
 };

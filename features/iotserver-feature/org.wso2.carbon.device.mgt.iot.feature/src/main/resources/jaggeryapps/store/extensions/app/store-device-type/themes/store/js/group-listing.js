@@ -40,7 +40,7 @@ $(document).ready(function () {
     });
     attachEvents();
     formatDates();
-    changeGroupView('grid', $('a.ctrl-filter-grid'));
+    changeItemView('grid', $('a.ctrl-filter-grid'));
 });
 
 /*
@@ -48,7 +48,7 @@ $(document).ready(function () {
  *
  * @param button: Select All Group button
  */
-function selectAllGroups(button) {
+function selectAllItems(button) {
     if (!$(button).data('select')) {
         $(groupCheckbox).each(function (index) {
             $(this).prop('checked', true);
@@ -72,7 +72,7 @@ function selectAllGroups(button) {
  * @param view: Selected view type
  * @param selection: Selection button
  */
-function changeGroupView(view, selection) {
+function changeItemView(view, selection) {
     $(".view-toggle").each(function () {
         $(this).removeClass("selected");
     });

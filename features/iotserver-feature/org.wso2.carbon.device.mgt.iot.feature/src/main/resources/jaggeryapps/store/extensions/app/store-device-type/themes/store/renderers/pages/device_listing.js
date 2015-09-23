@@ -16,17 +16,7 @@
  *  under the License.
  *
  */
-var render = function(theme, data, meta, require) {
-    var navigation = 'navigation';
-    var navigationContext = data;
-
-    switch (data.assetTypeCount) {
-        case 1:
-            navigation = 'navigation-single';
-            break;
-        default:
-            break;
-    }
+var render = function (theme, data, meta, require) {
     theme('2-column-right', {
         title: data.meta.title,
         header: [{
@@ -34,21 +24,12 @@ var render = function(theme, data, meta, require) {
             context: data
         }],
         navigation: [{
-            partial: navigation,
-            context: navigationContext
+            partial: 'navigation',
+            context: data
         }],
         body: [{
             partial: 'device-listing-body',
             context: data
-        }],
-        right: [{
-                partial: 'device-listing-body',
-                context: data
-            }
-            // {
-            //     partial: 'tags',
-            //     context: data.tags
-            // }
-        ]
+        }]
     });
 };

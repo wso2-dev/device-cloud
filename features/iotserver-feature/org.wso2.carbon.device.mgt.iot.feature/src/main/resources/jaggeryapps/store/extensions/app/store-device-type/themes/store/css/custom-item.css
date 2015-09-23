@@ -211,10 +211,6 @@ a.ast-type-item:hover {
     margin-top: 20px;
 }
 
-.ast-container {
-    clear:both;
-}
-
 .ast-device-desc {
     margin: 6px 0;
 }

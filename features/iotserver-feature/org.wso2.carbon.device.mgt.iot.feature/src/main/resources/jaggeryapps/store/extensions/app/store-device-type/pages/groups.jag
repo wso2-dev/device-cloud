@@ -37,8 +37,9 @@ require('/modules/store.js').exec(function(ctx) {
 		page.partial = 'group-listing';
 		var groupModule = require("../modules/group.js").groupModule;
 		var groups = groupModule.getGroups().data;
-		if (groups){
+		if (groups && groups.length > 0){
 			page.groups = groups;
+			page.operations = true;
 		}
 	}
 

@@ -106,17 +106,22 @@ var pageDecorators = {};
             links.devices.push(dashboardLink);
         }
 
+        links.devices.push({
+            title: "Add Device",
+            icon: "fw-add",
+            url: "/store/pages/devices/add-device"
+        });
+        links.devices.push({
+            title: "Add Group",
+            icon: "fw-add",
+            url: "/store/pages/groups/add-group"
+        });
+
+
         if (!carbonUser) {
             //user is not logged in
         }else{
             var permissions = ctx.tenantConfigs.permissions;
-            //if (permissions.ADD_USER) {
-            //    links.users.push({
-            //        title: "Add User",
-            //        icon: "fw-add-user",
-            //        url: "/iotserver/users/add-user"
-            //    });
-            //}
             if (permissions.ADD_POLICY) {
                 links.policies.push({
                     title: "Add Policy",
@@ -124,38 +129,12 @@ var pageDecorators = {};
                     url: "/store/pages/policies/add-policy"
                 });
             }
-            //if (permissions.ADD_USER) {
-            //    links.profiles.push({
-            //        title: "Add Profile",
-            //        icon: "fw-settings",
-            //        url: "/iotserver/profiles/add-profile"
-            //    });
-            //}
-            if (permissions.ADD_DEVICE) {
-                links.devices.push({
-                    title: "Add Device",
-                    icon: "fw-add",
-                    url: "/store/pages/devices/add-device"
-                });
-            }
-            if (permissions.ADD_DEVICE) {
-                links.groups.push({
-                    title: "Add Group",
-                    icon: "fw-add",
-                    url: "/store/pages/groups/add-group"
-                });
-                links.groups.push({
-                    title: "Add Group",
-                    icon: "fw-add",
-                    url: "/store/pages/groups/add-group"
-                });
-            }
         }// end-if-user
 
         //log.info("context.meta.pageName " + page.meta.pageName);
         page.navigationBar.currentActions = links[page.meta.pageName];
         //log.info("page.navigationBar.currentActions ");
-        //log.info(page.navigationBar.currentActions);
+        log.info(page.navigationBar.currentActions);
         return page;
     };
     var assetManager = function(ctx) {
