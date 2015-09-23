@@ -59,7 +59,7 @@ app.server = function(ctx) {
             },{
                 url: 'devices',
                 path: 'device-api.jag',
-                secured:true
+                secured: true
             },{
                 url: 'group',
                 path: 'group-api.jag',
