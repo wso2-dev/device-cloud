@@ -23,6 +23,9 @@ userModule = function () {
     var constants = require("constants.js");
     var utility = require("utility.js").utility;
 
+    var server = require('store').server;
+    var carbonUser = server.current(session);
+
     var publicMethods = {};
     var privateMethods = {};
 
@@ -245,7 +248,6 @@ userModule = function () {
 
     publicMethods.getUsers = function () {
         var users = [];
-        var carbonUser = session.get(constants.USER_SESSION_KEY);
         if (!carbonUser) {
             log.error("User object was not found in the session");
             throw constants.ERRORS.USER_NOT_FOUND;
@@ -324,7 +326,6 @@ userModule = function () {
     publicMethods.getRoles = function (enableInternalEveryone) {
         var carbonModule = require("carbon");
         var carbonServer = application.get("carbonServer");
-        var carbonUser = session.get(constants.USER_SESSION_KEY);
         if (!carbonUser) {
             log.error("User object was not found in the session");
             throw constants.ERRORS.USER_NOT_FOUND;

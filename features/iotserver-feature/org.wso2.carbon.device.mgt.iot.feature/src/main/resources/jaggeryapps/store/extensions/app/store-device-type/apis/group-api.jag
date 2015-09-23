@@ -79,11 +79,11 @@ if (!user) {
 		result = groupModule.deleteRole(groupId, role);
 	} else if (uriMatcher.match("/{context}/apis/group/id/{groupId}/role/all")) {
 		groupId = uriMatcher.elements().groupId;
-		result = groupModule.getRoles(groupId);
+		result = groupModule.getGroupRoles(groupId);
 	} else if (uriMatcher.match("/{context}/apis/group/id/{groupId}/{userId}/role/all")) {
 		groupId = uriMatcher.elements().groupId;
 		var userId = uriMatcher.elements().userId;
-		result = groupModule.getRoles(groupId, userId);
+		result = groupModule.getUserRoles(groupId, userId);
 	} else if (uriMatcher.match("/{context}/apis/group/id/{groupId}/{userId}/rolemapping")) {
 		groupId = uriMatcher.elements().groupId;
 		userId = uriMatcher.elements().userId;

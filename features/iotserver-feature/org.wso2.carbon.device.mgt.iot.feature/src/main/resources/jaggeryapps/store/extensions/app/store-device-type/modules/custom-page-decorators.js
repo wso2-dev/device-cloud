@@ -109,12 +109,12 @@ var pageDecorators = {};
         links.devices.push({
             title: "Add Device",
             icon: "fw-add",
-            url: "/store/pages/devices/add-device"
+            url: "/store/assets/deviceType/list"
         });
         links.devices.push({
             title: "Add Group",
             icon: "fw-add",
-            url: "/store/pages/groups/add-group"
+            url: "/store/pages/groups/add"
         });
 
 

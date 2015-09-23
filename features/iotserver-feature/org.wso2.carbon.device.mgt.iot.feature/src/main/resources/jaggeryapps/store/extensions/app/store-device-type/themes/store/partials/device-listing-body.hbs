@@ -12,58 +12,45 @@
 
 <div id="no-devices-div-content" class="hide">
     <!-- no devices found -->
-    <div class="container-fluid wr-content-alt">
-        <div class="ctrl-info-panel col-md-6 col-centered">
-            <h2>You don't have any Devices registered at the moment.</h2>
-
-            <p>
-                </a><a href="/iotserver/devices/add-device" class="cu-btn">
-                    <span class="fw-stack">
-                        <i class="fw fw-ring fw-stack-2x"></i>
-                        <i class="fw fw-add fw-stack-1x"></i>
-                    </span>
-                Add New Device
-            </a>
-            </p>
+    <div id="ast-container" class="ast-container list-view">
+        <div id="ast-container" class="ast-container list-view">
+            <div class="assets-container margin-top-double padding-top-double">
+                <div class="top-assets-empty-assert">You don't have any Devices registered at the moment. Please add a
+                    new device first.
+                </div>
+            </div>
         </div>
     </div>
-    <!-- /no devices found -->
 </div>
 
 <div id="no-grouped-devices-div-content" class="hide">
     <!-- no devices found -->
-    <div class="container-fluid wr-content-alt">
-        <div class="ctrl-info-panel col-md-6 col-centered">
-            <h2>You don't have any associated devices with this group.</h2>
-
-            <p>
-                </a><a href="/iotserver/devices" class="cu-btn">
-                    <span class="fw-stack">
-                        <i class="fw fw-ring fw-stack-2x"></i>
-                        <i class="fw fw-add fw-stack-1x"></i>
-                    </span>
-                Associate Existing Device
-            </a>
-            </p>
+    <div id="ast-container" class="ast-container list-view">
+        <div id="ast-container" class="ast-container list-view">
+            <div class="assets-container margin-top-double padding-top-double">
+                <div class="top-assets-empty-assert">You don't have any Devices associated with this group
+					at the moment. Please associate a device first.
+                </div>
+            </div>
         </div>
     </div>
-    <!-- /no devices found -->
 </div>
 
 <div id="no-devices-in-group-div-content" class="hide">
     <!-- no devices found -->
-    <div class="container-fluid">
-        <div class="ctrl-info-panel col-md-6 col-centered">
-            <h3>You don't have any associated devices here.</h3>
+    <div id="ast-container" class="ast-container list-view">
+        <div id="ast-container" class="ast-container list-view">
+            <div class="assets-container margin-top-double padding-top-double">
+                <div class="top-assets-empty-assert">You don't have any associated devices here.</div>
+            </div>
         </div>
     </div>
-    <!-- /no devices found -->
 </div>
 
 <div id="remove-device-modal-content" class="hide">
-    <div class="content">
+    <div class="modal-content">
         <div class="row">
-            <div class="col-lg-5 col-md-6 col-centered">
+            <div class="col-lg-5 col-md-6 col-centered center-container">
                 <h3>Do you really want to remove this device from your Devices List?</h3>
 
                 <div class="buttons">
@@ -81,9 +68,9 @@
 </div>
 
 <div id="remove-device-200-content" class="hide">
-    <div class="content">
+    <div class="modal-content">
         <div class="row">
-            <div class="col-lg-5 col-md-6 col-centered">
+            <div class="col-lg-5 col-md-6 col-centered center-container">
                 <h3>Device was successfully removed.</h3>
             </div>
         </div>
@@ -91,9 +78,9 @@
 </div>
 
 <div id="edit-device-modal-content" class="hide">
-    <div class="content">
+    <div class="modal-content">
         <div class="row">
-            <div class="col-lg-5 col-md-6 col-centered">
+            <div class="col-lg-5 col-md-6 col-centered center-container">
                 <h3>Please enter new name for the device?</h3>
                 <br/>
 
@@ -116,9 +103,9 @@
 </div>
 
 <div id="edit-device-200-content" class="hide">
-    <div class="content">
+    <div class="modal-content">
         <div class="row">
-            <div class="col-lg-5 col-md-6 col-centered">
+            <div class="col-lg-5 col-md-6 col-centered center-container">
                 <h3>Device was successfully updated.</h3>
             </div>
         </div>
@@ -126,9 +113,9 @@
 </div>
 
 <div id="group-device-modal-content" class="hide">
-    <div class="content">
+    <div class="modal-content">
         <div class="row">
-            <div class="col-lg-5 col-md-6 col-centered">
+            <div class="col-lg-5 col-md-6 col-centered center-container">
                 <h3>Please select group</h3>
                 <br/>
 
@@ -148,9 +135,9 @@
 </div>
 
 <div id="group-associate-device-200-content" class="hide">
-    <div class="content">
+    <div class="modal-content">
         <div class="row">
-            <div class="col-lg-5 col-md-6 col-centered">
+            <div class="col-lg-5 col-md-6 col-centered center-container">
                 <h3>Device was successfully associated with group.</h3>
             </div>
         </div>
@@ -158,9 +145,9 @@
 </div>
 
 <div id="group-deassociate-device-200-content" class="hide">
-    <div class="content">
+    <div class="modal-content">
         <div class="row">
-            <div class="col-lg-5 col-md-6 col-centered">
+            <div class="col-lg-5 col-md-6 col-centered center-container">
                 <h3>Device was successfully removed from group.</h3>
             </div>
         </div>
@@ -168,9 +155,9 @@
 </div>
 
 <div id="device-400-content" class="hide">
-    <div class="content">
+    <div class="modal-content">
         <div class="row">
-            <div class="col-lg-5 col-md-6 col-centered">
+            <div class="col-lg-5 col-md-6 col-centered center-container">
                 <h3>Exception at backend. Try Later.</h3>
 
                 <div class="buttons">
@@ -184,9 +171,9 @@
 </div>
 
 <div id="device-403-content" class="hide">
-    <div class="content">
+    <div class="modal-content">
         <div class="row">
-            <div class="col-lg-5 col-md-6 col-centered">
+            <div class="col-lg-5 col-md-6 col-centered center-container">
                 <h3>Operation not permitted.</h3>
 
                 <div class="buttons">
@@ -200,9 +187,9 @@
 </div>
 
 <div id="device-409-content" class="hide">
-    <div class="content">
+    <div class="modal-content">
         <div class="row">
-            <div class="col-lg-5 col-md-6 col-centered">
+            <div class="col-lg-5 col-md-6 col-centered center-container">
                 <h3>Device does not exist.</h3>
 
                 <div class="buttons">
@@ -216,9 +203,9 @@
 </div>
 
 <div id="share-group-w1-modal-content" class="hide">
-    <div class="content">
+    <div class="modal-content">
         <div class="row">
-            <div class="col-lg-5 col-md-6 col-centered">
+            <div class="col-lg-5 col-md-6 col-centered center-container">
                 <h3>Select user to manage group sharing</h3>
                 <div id="user-names">Loading...</div>
                 <div class="buttons">
@@ -236,9 +223,9 @@
 </div>
 
 <div id="share-group-w2-modal-content" class="hide">
-    <div class="content">
+    <div class="modal-content">
         <div class="row">
-            <div class="col-lg-5 col-md-6 col-centered">
+            <div class="col-lg-5 col-md-6 col-centered center-container">
                 <h3>Select sharing roles</h3>
                 <br />
                 <div id="user-roles">Loading...</div>
@@ -257,9 +244,9 @@
 </div>
 
 <div id="share-group-200-content" class="hide">
-    <div class="content">
+    <div class="modal-content">
         <div class="row">
-            <div class="col-lg-5 col-md-6 col-centered">
+            <div class="col-lg-5 col-md-6 col-centered center-container">
                 <h3>Group sharing updated successfully.</h3>
             </div>
         </div>
@@ -267,9 +254,9 @@
 </div>
 
 <div id="remove-group-modal-content" class="hide">
-    <div class="content">
+    <div class="modal-content">
         <div class="row">
-            <div class="col-lg-5 col-md-6 col-centered">
+            <div class="col-lg-5 col-md-6 col-centered center-container">
                 <h3>Do you really want to remove this group from your Group List?</h3>
 
                 <div class="buttons">
@@ -287,9 +274,9 @@
 </div>
 
 <div id="remove-group-200-content" class="hide">
-    <div class="content">
+    <div class="modal-content">
         <div class="row">
-            <div class="col-lg-5 col-md-6 col-centered">
+            <div class="col-lg-5 col-md-6 col-centered center-container">
                 <h3>Group was successfully removed.</h3>
             </div>
         </div>
@@ -297,9 +284,9 @@
 </div>
 
 <div id="edit-group-modal-content" class="hide">
-    <div class="content">
+    <div class="modal-content">
         <div class="row">
-            <div class="col-lg-5 col-md-6 col-centered">
+            <div class="col-lg-5 col-md-6 col-centered center-container">
                 <h3>Please enter new name and description for the group</h3>
                 <br/>
 
@@ -328,9 +315,9 @@
 </div>
 
 <div id="edit-group-200-content" class="hide">
-    <div class="content">
+    <div class="modal-content">
         <div class="row">
-            <div class="col-lg-5 col-md-6 col-centered">
+            <div class="col-lg-5 col-md-6 col-centered center-container">
                 <h3>Group was successfully updated.</h3>
             </div>
         </div>
@@ -338,9 +325,9 @@
 </div>
 
 <div id="group-400-content" class="hide">
-    <div class="content">
+    <div class="modal-content">
         <div class="row">
-            <div class="col-lg-5 col-md-6 col-centered">
+            <div class="col-lg-5 col-md-6 col-centered center-container">
                 <h3>Exception at backend. Try Later.</h3>
 
                 <div class="buttons">
@@ -354,9 +341,9 @@
 </div>
 
 <div id="group-403-content" class="hide">
-    <div class="content">
+    <div class="modal-content">
         <div class="row">
-            <div class="col-lg-5 col-md-6 col-centered">
+            <div class="col-lg-5 col-md-6 col-centered center-container">
                 <h3>Action not permitted.</h3>
 
                 <div class="buttons">
@@ -370,9 +357,9 @@
 </div>
 
 <div id="group-409-content" class="hide">
-    <div class="content">
+    <div class="modal-content">
         <div class="row">
-            <div class="col-lg-5 col-md-6 col-centered">
+            <div class="col-lg-5 col-md-6 col-centered center-container">
                 <h3>Group does not exist.</h3>
 
                 <div class="buttons">
@@ -386,9 +373,9 @@
 </div>
 
 <div id="unexpected-error-content" class="hide">
-    <div class="content">
+    <div class="modal-content">
         <div class="row">
-            <div class="col-lg-5 col-md-6 col-centered">
+            <div class="col-lg-5 col-md-6 col-centered center-container">
                 <h3>Unexpected error occurred!</h3>
 
                 <div class="buttons">

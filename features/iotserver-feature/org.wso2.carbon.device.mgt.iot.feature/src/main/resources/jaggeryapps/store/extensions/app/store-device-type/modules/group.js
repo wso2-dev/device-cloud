@@ -109,14 +109,14 @@ var groupModule = {};
         return del(endPoint, {}, "json");
     };
 
-    groupModule.getRoles = function (groupId) {
+    groupModule.getGroupRoles = function (groupId) {
         //URL: GET https://localhost:9443/devicecloud/group_manager/group/id/{groupId}/role/all
         endPoint = deviceCloudService + "/group/id/" + groupId + "/role/all";
         data = {"username": user.username};
         return get(endPoint, data, "json");
     };
 
-    groupModule.getRoles = function (groupId, userId) {
+    groupModule.getUserRoles = function (groupId, userId) {
         //URL: GET https://localhost:9443/devicecloud/group_manager/group/id/{groupId}/{user}/role/all
         endPoint = deviceCloudService + "/group/id/" + groupId + "/" + userId + "/role/all";
         data = {"username": user.username};
@@ -124,8 +124,10 @@ var groupModule = {};
     };
 
     groupModule.getRoleMapping = function (groupId, userId) {
-        var allRoles = groupModule.getRoles(groupId).data;
-        var userRolesObj = groupModule.getRoles(groupId, userId);
+        var allRoles = groupModule.getGroupRoles(groupId).data;
+        log.info(userId);
+        var userRolesObj = groupModule.getUserRoles(groupId, userId);
+        log.info(userRolesObj);
         var userRoles = userRolesObj.data;
         var roleMap = [];
         for (var role in allRoles) {
