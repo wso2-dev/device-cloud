@@ -28,7 +28,7 @@ var render = function (theme, data, meta, require) {
             context: data
         }],
         body: [{
-            partial: 'device-listing-body',
+            partial: 'device-listing',
             context: data
         }]
     });
