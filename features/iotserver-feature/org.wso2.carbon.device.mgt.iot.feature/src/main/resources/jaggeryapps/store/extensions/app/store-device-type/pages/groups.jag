@@ -22,8 +22,6 @@ require('/modules/store.js').exec(function(ctx) {
 	var log = new Log("groups.jag");
 	caramel = require('caramel');
     var app = require('rxt').app;
-    var server = require('store').server;
-    var user = server.current(ctx.session);
     var ui = require('rxt').ui;
 	var page = ui.buildPage(ctx.session, ctx.request);
 
@@ -42,7 +40,6 @@ require('/modules/store.js').exec(function(ctx) {
 			page.operations = true;
 		}
 	}
-	log.info(page);
     var appManager = app.createUserAppManager(session);
     var output = appManager.render([], page);
     caramel.render(output);

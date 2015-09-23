@@ -28,7 +28,7 @@ var render = function(theme, data, meta, require) {
             context: data
         }],
         body: [{
-            partial: 'dashboard-body',
+            partial: 'dashboard',
             context: data
         }]
     });

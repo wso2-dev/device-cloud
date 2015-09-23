@@ -114,69 +114,10 @@ if (!user) {
 		}
 
 	} else if (uriMatcher.match("/{context}/apis/devices/all")) {
-		result = deviceModule.getDevices();
-		var ownDevices = result.data;
-		var allDevices = [];
-		var groupModule = require("../modules/group.js").groupModule;
-
-		var groups = groupModule.getGroups().data;
-
-		for (var g in groups) {
-			var deviceInGroup = groups[g].devices;
-			allDevices.push(groups[g]);
-			for (var od in ownDevices) {
-				for (var gd in deviceInGroup) {
-					if (deviceInGroup[gd].deviceIdentifier == ownDevices[od].deviceIdentifier) {
-						ownDevices[od].deviceIdentifier = -1;
-					}
-				}
-			}
-		}
-		var unsharedDevices = [];
-		for (var od in ownDevices) {
-			if (ownDevices[od].deviceIdentifier != -1) {
-				unsharedDevices.push(ownDevices[od]);
-			}
-		}
-		allDevices.push({id: 0, devices: unsharedDevices});
-		result.data = allDevices;
-
+		result = deviceModule.getOwnDevices();
 	} else if (uriMatcher.match("/{context}/apis/devices/count")) {
-		//URL: https://localhost:9443/devicecloud/manager/devices/username/{username}
-		deviceCloudService = carbonHttpsServletTransport + "/common/device_manager";
-		listAllDevicesEndPoint = deviceCloudService + "/devices/username/" + user.username;
-		result = get(listAllDevicesEndPoint, {}, "json");
-		var ownDevices = result.data;
-
-		var allDevices = [];
-		deviceCloudService = carbonHttpsServletTransport + "/common/group_manager";
-		var endPoint = deviceCloudService + "/group/user/" + user.username + "/all";
-		var data = {"username": user.username};
-		var groups = get(endPoint, data, "json").data;
-
-		var count = 0;
-		for (var g in groups) {
-			endPoint = deviceCloudService + "/group/id/" + groups[g].id + "/device/all";
-			data = {"username": user.username};
-			var deviceInGroup = get(endPoint, data, "json").data;
-			groups[g].devices = deviceInGroup;
-			allDevices.push(groups[g]);
-			for (var od in ownDevices) {
-				for (var gd in deviceInGroup) {
-					if (deviceInGroup[gd].deviceIdentifier == ownDevices[od].deviceIdentifier) {
-						ownDevices[od].deviceIdentifier = -1;
-					}
-				}
-			}
-			count += deviceInGroup.length;
-		}
-		for (var od in ownDevices) {
-			if (ownDevices[od].deviceIdentifier != -1) {
-				count++;
-			}
-		}
+		var count = deviceModule.getOwnDevicesCount().data;
 		result = count.toString();
-
 	} else if (uriMatcher.match("/{context}/apis/devices/types")) {
 
 		result = deviceModule.listDeviceTypes();

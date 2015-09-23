@@ -24,46 +24,24 @@ require('/modules/store.js').exec(function (ctx) {
 
 	var groupId = request.getParameter("groupId");
 	var allDevices = [];
-
+	var deviceCount = 0;
 	var groupModule = require("../modules/group.js").groupModule;
 	if (groupId && groupId != "0") {
 		var group = groupModule.getDevices(groupId).data;
-		log.info(group);
 		if (group) {
 			allDevices.push(group.group);
+			deviceCount = group.group.devices.count;
 		}
 	} else {
 		var deviceModule = require("../modules/device.js").deviceModule;
-		var ownDevices = deviceModule.getDevices().data;
-
-		var user_groups = groupModule.getGroups().data;
-
-		for (var g in user_groups) {
-			log.info(user_groups[g]);
-			var deviceInGroup = user_groups[g].devices;
-			allDevices.push(user_groups[g]);
-			for (var od in ownDevices) {
-				for (var gd in deviceInGroup) {
-					if (deviceInGroup[gd].deviceIdentifier == ownDevices[od].deviceIdentifier) {
-						ownDevices[od].deviceIdentifier = -1;
-					}
-				}
-			}
-			if (deviceInGroup && deviceInGroup.length == 0){
-				delete user_groups[g]["devices"];
-			}
-		}
-		var unsharedDevices = [];
-		for (var od in ownDevices) {
-			if (ownDevices[od].deviceIdentifier != -1) {
-				unsharedDevices.push(ownDevices[od]);
-			}
-		}
-		allDevices.push({id: 0, devices: unsharedDevices});
+		var result = deviceModule.getAllPermittedDevices();
+		allDevices = result.data;
+		deviceCount = result.device_count;
 	}
-	log.info(allDevices);
 	page.groups = allDevices;
-	page.operations = true;
+	if (deviceCount > 0){
+		page.operations = true;
+	}
 	var appManager = app.createUserAppManager(session);
 	var output = appManager.render([], page);
 	caramel.render(output);
