@@ -1,4 +1,3 @@
-<span id="user-details" data-username="{{cuser.username}}"></span>
 {{#if groups}}
     <div id="ast-container" class="ast-container list-view">
 		{{#each groups}}
@@ -11,11 +10,11 @@
                 </div>
                 <div class="itm-ast">
                     <div class="ast-img view-group-link" data-groupid="{{id}}">
-                        <img src='{{url "/extensions/app/store-device-type/themes/store/img/group-icon.png"}}'/>
+                        <img class="img-responsive" src='{{url "/extensions/app/store-device-type/themes/store/img/group-icon.png"}}'/>
                     </div>
                     <div class="ast-desc">
                         <div class="ast-title view-group-link" data-groupid="{{id}}">
-                            <h3 class="ast-name">{{name}}</h3>
+                            <a class="ast-name">{{name}}</a>
                             <span class="ast-auth">Device Count: {{devices.length}}</span>
                             <span class="ast-auth">Created On: <span class="formatDate">{{dateOfCreation}}</span></span>
                             <span class="ast-ver">Owner: {{owner}}</span>
