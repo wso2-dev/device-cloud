@@ -20,7 +20,7 @@
 var resources = function (page, meta) {
     return {
         //js: ['alldevices_util.js']
-        css:['select2.min.css', 'custom-item.css'],
+        css:['select2.min.css', 'custom-extensions.css'],
         js: ['device-listing.js','libs/handlebars-v2.0.0.js','libs/utils.js',
             'libs/select2.full.min.js','libs/jquery-ui.js',
             'libs/invoker-lib.js','libs/js.cookie.js']

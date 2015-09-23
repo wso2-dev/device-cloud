@@ -15,56 +15,56 @@
  * limitations under the License.
  */
 var caramel;
-var PAGING = {};
-require('/modules/store.js').exec(function(ctx) {
+require('/modules/store.js').exec(function (ctx) {
 	var log = new Log("device_listing.jag");
-    caramel = require('caramel');
-    var app = require('rxt').app;
-    var permissions = require('rxt').permissions;
-    var asset = require('rxt').asset;
-    var core = require('rxt').core;
-    var ui = require('rxt').ui;
-    var constants = require('rxt').constants;
-    var store = ctx.store;
-    var user = ctx.user;
-    var am;
-    var uriMatcher = new URIMatcher(ctx.request.getRequestURI());
-    var assetPageUrl = "/{context}/t/{domain}/pages/devices";
-    var tenantedAssetPageUrl = "/{context}/pages/devices";
-    var options = uriMatcher.match(assetPageUrl) || uriMatcher.match(tenantedAssetPageUrl);
-    options["type"] = "deviceType";
-    var type = options.type;
-    var assets = [];
-    var tenantId = ctx.tenant.tenantId;
-    //var sortOrder = ctx.request.getParameter('sortOrder');
-    var page = ui.buildPage(ctx.session, ctx.request);
-    var tag = ctx.request.getParameter('tag');
-    var assetApi = require('/modules/asset-api.js').api;
-    var tenantApi = require('/modules/tenant-api.js').api;
+	caramel = require('caramel');
+	var app = require('rxt').app;
+	var ui = require('rxt').ui;
+	var page = ui.buildPage(ctx.session, ctx.request);
 
-    PAGING.sortBy = constants.DEFAULT_ASSET_PAGIN.sortBy;
-    PAGING.sortOrder = constants.DEFAULT_ASSET_PAGIN.sortOrder;
-    PAGING.start = constants.DEFAULT_ASSET_PAGIN.start;
-    PAGING.count = constants.DEFAULT_ASSET_PAGIN.count;
-    var carbon = require('carbon');
-    var URLTenantId = carbon.server.tenantId({
-        domain: options.domain || constants.MultitenantConstants.SUPER_TENANT_DOMAIN_NAME
-    });
-    var context;
-    var tenantResources = tenantApi.createTenantAwareAssetResources(session, options);
-    am = tenantResources.am;
-    context = tenantResources.context;
-    assets = am.search(null, PAGING);
+	var groupId = request.getParameter("groupId");
+	var allDevices = [];
 
-    var deviceTypesIdList = {};
-    for (var index in assets) {
-        var singleAsset = assets[index];
-        deviceTypesIdList[singleAsset.attributes.overview_deviceTypeName]=singleAsset.id;
-    }
+	var groupModule = require("../modules/group.js").groupModule;
+	if (groupId && groupId != "0") {
+		var group = groupModule.getDevices(groupId).data;
+		log.info(group);
+		if (group) {
+			allDevices.push(group.group);
+		}
+	} else {
+		var deviceModule = require("../modules/device.js").deviceModule;
+		var ownDevices = deviceModule.getDevices().data;
 
-    page.deviceTypesIdList = deviceTypesIdList;
-    page.operations = true;
-    var appManager = app.createUserAppManager(session);
-    var output = appManager.render([], page);
-    caramel.render(output);
+		var user_groups = groupModule.getGroups().data;
+
+		for (var g in user_groups) {
+			log.info(user_groups[g]);
+			var deviceInGroup = user_groups[g].devices;
+			allDevices.push(user_groups[g]);
+			for (var od in ownDevices) {
+				for (var gd in deviceInGroup) {
+					if (deviceInGroup[gd].deviceIdentifier == ownDevices[od].deviceIdentifier) {
+						ownDevices[od].deviceIdentifier = -1;
+					}
+				}
+			}
+			if (deviceInGroup && deviceInGroup.length == 0){
+				delete user_groups[g]["devices"];
+			}
+		}
+		var unsharedDevices = [];
+		for (var od in ownDevices) {
+			if (ownDevices[od].deviceIdentifier != -1) {
+				unsharedDevices.push(ownDevices[od]);
+			}
+		}
+		allDevices.push({id: 0, devices: unsharedDevices});
+	}
+	log.info(allDevices);
+	page.groups = allDevices;
+	page.operations = true;
+	var appManager = app.createUserAppManager(session);
+	var output = appManager.render([], page);
+	caramel.render(output);
 }, request, response, session); %>

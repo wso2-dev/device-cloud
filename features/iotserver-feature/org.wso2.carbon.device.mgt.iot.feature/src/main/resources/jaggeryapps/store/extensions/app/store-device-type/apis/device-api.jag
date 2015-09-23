@@ -114,22 +114,15 @@ if (!user) {
 		}
 
 	} else if (uriMatcher.match("/{context}/apis/devices/all")) {
-		//URL: https://localhost:9443/devicecloud/manager/devices/username/{username}
-		deviceCloudService = carbonHttpsServletTransport + "/common/device_manager";
-		listAllDevicesEndPoint = deviceCloudService + "/device/user/" + user.username + "/all";
-		result = get(listAllDevicesEndPoint, {}, "json");
+		result = deviceModule.getDevices();
 		var ownDevices = result.data;
 		var allDevices = [];
-		deviceCloudService = carbonHttpsServletTransport + "/common/group_manager";
-		var endPoint = deviceCloudService + "/group/user/" + user.username + "/all";
-		var data = {"username": user.username};
-		var groups = get(endPoint, data, "json").data;
+		var groupModule = require("../modules/group.js").groupModule;
+
+		var groups = groupModule.getGroups().data;
 
 		for (var g in groups) {
-			endPoint = deviceCloudService + "/group/id/" + groups[g].id + "/device/all";
-			data = {"username": user.username};
-			var deviceInGroup = get(endPoint, data, "json").data;
-			groups[g].devices = deviceInGroup;
+			var deviceInGroup = groups[g].devices;
 			allDevices.push(groups[g]);
 			for (var od in ownDevices) {
 				for (var gd in deviceInGroup) {

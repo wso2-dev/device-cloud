@@ -32,11 +32,8 @@ require('/modules/store.js').exec(function (ctx) {
 	var title;
 
 	if (groupId) {
-
 		title = request.getParameter("name");
-
 	} else {
-
 		var carbon = require('carbon');
 		var carbonHttpsServletTransport = carbon.server.address('https');
 		var deviceCloudDeviceService = carbonHttpsServletTransport + "/common/device_manager";
@@ -52,7 +49,6 @@ require('/modules/store.js').exec(function (ctx) {
 		}else{
 			page.no_such_device = true;
 		}
-
 	}
 	page.title = title + " Analytics";
 	appManager = app.createUserAppManager(session);

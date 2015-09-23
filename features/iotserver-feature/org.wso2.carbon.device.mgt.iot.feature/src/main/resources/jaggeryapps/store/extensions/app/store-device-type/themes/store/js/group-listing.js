@@ -241,9 +241,9 @@ function attachEvents() {
                                                 var status = jqxhr.status;
                                                 if (status == 200) {
                                                     $(modalPopupContent).html($('#share-group-200-content').html());
-                                                    location.reload(false);
                                                     setTimeout(function () {
                                                         hidePopup();
+                                                        location.reload(false);
                                                     }, 2000);
                                                 } else {
                                                     displayErrors(status);
@@ -297,9 +297,9 @@ function attachEvents() {
                     var status = jqxhr.status;
                     if (status == 200) {
                         $(modalPopupContent).html($('#remove-group-200-content').html());
-                        location.reload(false);
                         setTimeout(function () {
                             hidePopup();
+                            location.reload(false);
                         }, 2000);
                     } else {
                         displayErrors(status);

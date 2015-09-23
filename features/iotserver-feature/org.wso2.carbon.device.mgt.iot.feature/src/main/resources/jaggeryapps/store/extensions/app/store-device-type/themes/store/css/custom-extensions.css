@@ -303,7 +303,7 @@ a.ast-type-item:hover {
 }
 
 @media (min-width:1800px){
-    .ctrl-wr-asset { width: 15%; }
+    .ctrl-wr-asset { width: 10%; }
 }
 
 .ctrl-wr-asset.selected {
@@ -449,6 +449,8 @@ h3.ast-name {
 .ctrl-wr-asset .ast-img{
     min-height: 100px;
     min-width: 100px;
+    max-width: 160px;
+    max-height: 160px;
 }
 
 .ast-container.list-view .ast-desc span:before {

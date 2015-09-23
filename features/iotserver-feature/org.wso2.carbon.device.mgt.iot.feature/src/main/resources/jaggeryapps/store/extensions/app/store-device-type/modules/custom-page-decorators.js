@@ -134,7 +134,6 @@ var pageDecorators = {};
         //log.info("context.meta.pageName " + page.meta.pageName);
         page.navigationBar.currentActions = links[page.meta.pageName];
         //log.info("page.navigationBar.currentActions ");
-        log.info(page.navigationBar.currentActions);
         return page;
     };
     var assetManager = function(ctx) {

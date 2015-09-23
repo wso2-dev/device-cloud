@@ -71,7 +71,15 @@ $(document).ready(function () {
     });
 
     groupId = $("#request-group-id").data("groupid");
-    loadDevices();
+    /*
+     * On device checkbox select add parent selected style class
+     */
+    $(deviceCheckbox).click(function () {
+        addDeviceSelectedClass(this);
+    });
+    attachGroupEvents();
+    attachDeviceEvents();
+    formatDates();
 });
 
 /*
@@ -126,73 +134,6 @@ function addDeviceSelectedClass(checkbox) {
     } else {
         $(checkbox).closest(".ctrl-wr-asset").removeClass("selected device-select");
     }
-}
-
-function loadDevices() {
-    var groupListing = $("#group-listing");
-    var groupListingSrc = groupListing.attr("src");
-    $.template("group-listing", groupListingSrc, function (template) {
-        var serviceURL;
-        if (groupId && groupId != "0") {
-            serviceURL = "/store/apis/group/id/" + groupId + "/device/all";
-        } else {
-            serviceURL = "/store/apis/devices/all";
-        }
-        var successCallback = function (data) {
-            var viewModel = {};
-            var groups;
-            if (groupId && groupId != "0") {
-                groups = data;
-            } else {
-                groups = data.data;
-            }
-            if (groups.length == 1 && groups[0].id == 0 && groups[0].devices.length == 0) {
-                $("#ast-container-parent").html($("#no-devices-div-content").html());
-            } else {
-                viewModel.groups = groups;
-                var content = template(viewModel);
-                $("#ast-container-parent").html(content);
-                var deviceListing = $("#device-listing");
-                var deviceListingSrc = deviceListing.attr("src");
-                $.template("device-listing", deviceListingSrc, function (template) {
-                    for (var g in groups) {
-                        if (groups[g].devices && groups[g].devices.length > 0) {
-                            viewModel = {};
-                            viewModel.devices = [];
-                            for(var index in groups[g].devices){
-                                var device = groups[g].devices[index];
-                                console.log(device);
-                                device.thumbnailImage = deviceTypesIdList[device.type];
-                                viewModel.devices.push(device);
-                            }
-                            //viewModel.devices = groups[g].devices;
-                            content = template(viewModel);
-                        } else {
-                            if (groupId && groupId != "0") {
-                                content = $("#no-grouped-devices-div-content").html();
-                            } else {
-                                content = $("#no-devices-in-group-div-content").html();
-                            }
-                        }
-                        $("#ast-container-" + groups[g].id).html(content);
-                    }
-                    /*
-                     * On device checkbox select add parent selected style class
-                     */
-                    $(deviceCheckbox).click(function () {
-                        addDeviceSelectedClass(this);
-                    });
-                    attachGroupEvents();
-                    attachDeviceEvents();
-                    formatDates();
-                });
-            }
-        };
-        invokerUtil.get(serviceURL,
-            successCallback, function (jqXHR) {
-                displayDeviceErrors(jqXHR);
-            });
-    });
 }
 
 function formatDates() {
@@ -378,9 +319,9 @@ function attachDeviceEvents() {
                                     var status = jqxhr.status;
                                     if (status == 200) {
                                         $(modalPopupContent).html($('#group-associate-device-200-content').html());
-                                        loadDevices();
                                         setTimeout(function () {
                                             hidePopup();
+                                            location.reload(false);
                                         }, 2000);
                                     } else {
                                         displayDeviceErrors(jqXHR);
@@ -483,9 +424,9 @@ function attachGroupEvents() {
                                                 var status = jqxhr.status;
                                                 if (status == 200) {
                                                     $(modalPopupContent).html($('#share-group-200-content').html());
-                                                    loadDevices();
                                                     setTimeout(function () {
                                                         hidePopup();
+                                                        location.reload(false);
                                                     }, 2000);
                                                 } else {
                                                     displayGroupErrors(status);
@@ -539,9 +480,9 @@ function attachGroupEvents() {
                     var status = jqxhr.status;
                     if (status == 200) {
                         $(modalPopupContent).html($('#remove-group-200-content').html());
-                        loadDevices();
                         setTimeout(function () {
                             hidePopup();
+                            location.reload(false);
                         }, 2000);
                     } else {
                         displayGroupErrors(status);
@@ -587,9 +528,9 @@ function attachGroupEvents() {
                     if (status == 200) {
                         if (data != "false") {
                             $(modalPopupContent).html($('#edit-group-200-content').html());
-                            loadDevices();
                             setTimeout(function () {
                                 hidePopup();
+                                location.reload(false);
                             }, 2000);
                         } else {
                             $(modalPopupContent).html($('#group-409-content').html());

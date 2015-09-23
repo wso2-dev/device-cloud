@@ -166,13 +166,16 @@ var groupModule = {};
     };
 
     groupModule.getDevices = function (groupId) {
-        var group = groupModule.getGroup(groupId).data;
-        //URL: GET https://localhost:9443/devicecloud/group_manager/group/id/{groupId}/device/all
-        endPoint = deviceCloudService + "/group/id/" + groupId + "/device/all";
-        data = {"username": user.username};
-        var result = get(endPoint, data, "json");
-        group.devices = result.data;
-        result.data = {group: group};
+        var result = groupModule.getGroup(groupId);
+        var group = result.data;
+        if (group) {
+            //URL: GET https://localhost:9443/devicecloud/group_manager/group/id/{groupId}/device/all
+            endPoint = deviceCloudService + "/group/id/" + groupId + "/device/all";
+            data = {"username": user.username};
+            result = get(endPoint, data, "json");
+            group.devices = result.data;
+            result.data = {group: group};
+        }
         return result;
     };
 

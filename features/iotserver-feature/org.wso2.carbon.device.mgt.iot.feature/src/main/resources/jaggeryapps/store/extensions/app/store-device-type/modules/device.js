@@ -40,6 +40,9 @@ deviceModule = function () {
     var publicMethods = {};
     var privateMethods = {};
 
+    var server = require('store').server;
+    var user = server.current(session);
+
     privateMethods.validateAndReturn = function (value) {
         return (value == undefined || value == null) ? constants.UNSPECIFIED : value;
     };
@@ -272,6 +275,13 @@ deviceModule = function () {
             deviceObject[constants.DEVICE_ENROLLMENT] = device.getEnrolmentInfo().getDateOfEnrolment();
             return deviceObject;
         }
+    };
+
+    publicMethods.getDevices = function () {
+        //URL: https://localhost:9443/devicecloud/manager/devices/username/{username}
+        deviceCloudService = carbonHttpsServletTransport + "/common/device_manager";
+        listAllDevicesEndPoint = deviceCloudService + "/device/user/" + user.username + "/all";
+        return get(listAllDevicesEndPoint, {}, "json");
     };
 
     return publicMethods;
