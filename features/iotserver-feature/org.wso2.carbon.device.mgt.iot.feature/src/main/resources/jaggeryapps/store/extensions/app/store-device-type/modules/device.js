@@ -277,11 +277,59 @@ deviceModule = function () {
         }
     };
 
-    publicMethods.getDevices = function () {
+    publicMethods.getOwnDevices = function () {
         //URL: https://localhost:9443/devicecloud/manager/devices/username/{username}
         deviceCloudService = carbonHttpsServletTransport + "/common/device_manager";
         listAllDevicesEndPoint = deviceCloudService + "/device/user/" + user.username + "/all";
         return get(listAllDevicesEndPoint, {}, "json");
+    };
+
+    publicMethods.getOwnDevicesCount = function () {
+        //URL: https://localhost:9443/devicecloud/manager/devices/username/{username}
+        deviceCloudService = carbonHttpsServletTransport + "/common/device_manager";
+        listAllDevicesEndPoint = deviceCloudService + "/device/user/" + user.username + "/all/count";
+        return get(listAllDevicesEndPoint, {}, "json");
+    };
+
+    publicMethods.getUnGroupedDevices = function () {
+        //URL: https://localhost:9443/common/device_manager/device/user/{username}/ungrouped
+        deviceCloudService = carbonHttpsServletTransport + "/common/device_manager";
+        listAllDevicesEndPoint = deviceCloudService + "/device/user/" + user.username + "/ungrouped";
+        return get(listAllDevicesEndPoint, {}, "json");
+    };
+
+    publicMethods.getUnGroupedDevicesCount = function () {
+        var result = publicMethods.getUnGroupedDevices();
+        var devices = result.data;
+        var count = 0;
+        if (devices) {
+            count = devices.length;
+        }
+        result.data = count;
+        return result;
+    };
+
+    publicMethods.getAllPermittedDevices = function () {
+        var groupModule = require("../modules/group.js").groupModule;
+
+        var result = publicMethods.getUnGroupedDevices();
+        var unGroupedDevices = result.data;
+        var user_groups = groupModule.getGroups().data;
+        var allDevices = [];
+        var deviceCount = unGroupedDevices.length;
+        for (var g in user_groups) {
+            log.info(user_groups[g]);
+            var deviceInGroup = user_groups[g].devices;
+            deviceCount += deviceInGroup.length;
+            if (deviceInGroup && deviceInGroup.length == 0){
+                delete user_groups[g]["devices"];
+            }
+            allDevices.push(user_groups[g]);
+        }
+        allDevices.push({id: 0, devices: unGroupedDevices});
+        result.data = allDevices;
+        result.device_count = deviceCount;
+        return result;
     };
 
     return publicMethods;
