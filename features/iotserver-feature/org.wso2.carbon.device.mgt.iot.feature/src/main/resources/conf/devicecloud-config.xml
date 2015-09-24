@@ -3,22 +3,22 @@
     <DataStores>
         <DataStore>
             <Name>WSO2-BAM</Name>
-            <Enabled>false</Enabled>
+            <Enabled>true</Enabled>
             <PublisherClass>org.wso2.carbon.device.mgt.iot.common.datastore.impl.ThriftDataStoreConnector</PublisherClass>
-            <ServerURL>tcp://192.168.67.21</ServerURL>
-            <Port>7613</Port>
+            <ServerURL>tcp://localhost</ServerURL>
+            <Port>7611</Port>
             <Username>admin</Username>
-            <Password>wso2iot123</Password>
+            <Password>admin</Password>
         </DataStore>
 
         <DataStore>
             <Name>WSO2-CEP</Name>
             <Enabled>false</Enabled>
             <PublisherClass>org.wso2.carbon.device.mgt.iot.common.datastore.impl.ThriftDataStoreConnector</PublisherClass>
-            <ServerURL>tcp://192.168.67.22</ServerURL>
+            <ServerURL>tcp://localhost</ServerURL>
             <Port>7611</Port>
             <Username>admin</Username>
-            <Password>wso2iot123</Password>
+            <Password>admin</Password>
         </DataStore>
     </DataStores>
 
