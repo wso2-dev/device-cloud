@@ -25,7 +25,7 @@ var format = function(context, data, page, area, meta) {
 var resources = function(page, meta) {
 	return {
 		js : ['asset-helpers.js', 'navigation.js', 'popover.js', 'jquery.validate.js', 'search.js'],
-		css : ['navigation.css']
+		css : ['navigation.css', 'navigation-custom.css']
 	};
 };
 

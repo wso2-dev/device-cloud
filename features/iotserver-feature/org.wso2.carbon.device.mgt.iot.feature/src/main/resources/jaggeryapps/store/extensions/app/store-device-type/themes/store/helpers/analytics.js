@@ -19,7 +19,8 @@
 
 var resources = function (page, meta) {
     return {
-        js: ['libs/jquery-ui.js', 'libs/d3.min.js', 'libs/moment.min.js', 'libs/jquery.daterangepicker.js', 'libs/rickshaw.min.js', 'graph_util.js'],
-        css: ['daterangepicker.css', 'detail.css', 'graph.css', 'legend.css', 'lines.css']
+        js: ['libs/jquery-ui.js', 'libs/d3.min.js', 'libs/moment.min.js', 'libs/jquery.daterangepicker.js',
+            'libs/rickshaw.min.js', 'graph_util.js'],
+        css: ['daterangepicker.css', 'graph.css', 'analytics.css']
     };
 };

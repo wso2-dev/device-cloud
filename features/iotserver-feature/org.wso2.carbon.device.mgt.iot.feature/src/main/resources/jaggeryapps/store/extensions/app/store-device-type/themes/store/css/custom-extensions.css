@@ -16,6 +16,17 @@
  * under the License.
  */
 
+hr {
+    display: block;
+    height: 1px;
+    border: 0;
+    border-top: 1px solid #7f7f7f;
+    margin-top: 0 !important;
+    margin-bottom: 1em !important;
+    padding: 0;
+    opacity: 0.2;
+}
+
 a.ast-type-item {
     width:77px;
     height:77px;
@@ -64,12 +75,22 @@ a.ast-type-item:hover {
     font-weight: 300;
 }
 
+.group-title {
+    padding-top: 10px;
+}
+
 /* device board */
 .wr-device-board {
     background:#fafafa;
     padding:10px 0;
     font-size:20px;
     margin-bottom:10px;
+}
+
+.wr-device-board-title {
+    font-size: inherit;
+    background: #fff;
+    margin-bottom: 0px;
 }
 
 .wr-device-board label {
@@ -330,9 +351,9 @@ h3.ast-name {
 }
 
 .ast-container.list-view .ctrl-wr-asset {
-    width: 100%;
+    width: 99%;
     min-height: 50px;
-    margin: 0;
+    margin: 5px;
 }
 
 .ast-container.list-view .itm-ast {
@@ -445,6 +466,7 @@ a.cu-btn-inner:hover {
 
 /* filter */
 .wr-filters {
+    background: #fafafa;
     padding:14px;
 }
 

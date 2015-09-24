@@ -30,7 +30,7 @@ require('/modules/store.js').exec(function (ctx) {
 		var group = groupModule.getDevices(groupId).data;
 		if (group) {
 			allDevices.push(group.group);
-			deviceCount = group.group.devices.count;
+			deviceCount = group.group.devices.length;
 		}
 	} else {
 		var deviceModule = require("../modules/device.js").deviceModule;
