@@ -17,9 +17,9 @@
  *
  */
 var pageDecorators = {};
-(function(pageDecorators) {
+(function (pageDecorators) {
     var log = new Log();
-    var isActivatedAsset = function(assetType, tenantId) {
+    var isActivatedAsset = function (assetType, tenantId) {
         var app = require('rxt').app;
         var activatedAssets = app.getUIActivatedAssets(tenantId); //ctx.tenantConfigs.assets;
         //return true;
@@ -33,7 +33,7 @@ var pageDecorators = {};
         }
         return false;
     };
-    pageDecorators.navigationBar = function(ctx, page, utils) {
+    pageDecorators.navigationBar = function (ctx, page, utils) {
         var carbonUser = server.current(session);
         page.navigationBar = {};
         var links = {
@@ -44,8 +44,8 @@ var pageDecorators = {};
             "groups": [],
             "store": [],
             "dashboard": [],
-            "analytics" : [],
-            "events" : []
+            "analytics": [],
+            "events": []
         };
         var dashboardLink = {
             title: "Go back to Dashboard",
@@ -71,18 +71,27 @@ var pageDecorators = {};
             url: "/store"
         };
 
-        links.users.push(dashboardLink);
-        links.policies.push(dashboardLink);
-        links.profiles.push(dashboardLink);
-        links.events.push(dashboardLink);
-
-        //links.store.push(dashboardLink);
-        links.store.push(storeLink);
-
-        links.groups.push(dashboardLink);
         var uri = request.getRequestURI();
         var uriMatcher = new URIMatcher(String(uri));
 
+        links.profiles.push(dashboardLink);
+
+        //links.store.push(dashboardLink);
+        links.store.push(storeLink);
+        links.users.push(dashboardLink);
+
+        links.devices.push({
+            title: "Add Device",
+            icon: "fw-add",
+            url: "/store/assets/deviceType/list"
+        });
+        links.devices.push({
+            title: "Add Group",
+            icon: "fw-add",
+            url: "/store/pages/groups/add"
+        });
+
+        links.groups.push(dashboardLink);
         if (uriMatcher.match("/{context}/pages/groups/add")) {
             links.groups.push({
                 title: "Go back to Groups",
@@ -98,45 +107,37 @@ var pageDecorators = {};
         }
 
         var groupId = request.getParameter("groupId");
-        if (groupId){
+        if (groupId) {
             links.analytics.push(groupMgtLink);
             links.devices.push(groupMgtLink);
-        }else{
+        } else {
             links.analytics.push(deviceMgtLink);
             links.devices.push(dashboardLink);
         }
 
-        links.devices.push({
-            title: "Add Device",
-            icon: "fw-add",
-            url: "/store/assets/deviceType/list"
-        });
-        links.devices.push({
-            title: "Add Group",
-            icon: "fw-add",
-            url: "/store/pages/groups/add"
-        });
+        links.events.push(dashboardLink);
 
-
-        if (!carbonUser) {
-            //user is not logged in
-        }else{
-            var permissions = ctx.tenantConfigs.permissions;
-            if (permissions.ADD_POLICY) {
-                links.policies.push({
-                    title: "Add Policy",
-                    icon: "fw-policy",
-                    url: "/store/pages/policies/add-policy"
-                });
-            }
-        }// end-if-user
+        links.policies.push(dashboardLink);
+        if (uriMatcher.match("/{context}/pages/policies/add")) {
+            links.policies.push({
+                title: "Go back to Policies",
+                icon: "fw-left-arrow",
+                url: "/store/pages/policies"
+            });
+        } else {
+            links.policies.push({
+                title: "Add Policy",
+                icon: "fw-policy",
+                url: "/store/pages/policies/add"
+            });
+        }
 
         //log.info("context.meta.pageName " + page.meta.pageName);
         page.navigationBar.currentActions = links[page.meta.pageName];
         //log.info("page.navigationBar.currentActions ");
         return page;
     };
-    var assetManager = function(ctx) {
+    var assetManager = function (ctx) {
         var rxt = require('rxt');
         var type = ctx.assetType;
         var am = rxt.asset.createUserAssetManager(ctx.session, type);

@@ -318,10 +318,9 @@ deviceModule = function () {
         var allDevices = [];
         var deviceCount = unGroupedDevices.length;
         for (var g in user_groups) {
-            log.info(user_groups[g]);
             var deviceInGroup = user_groups[g].devices;
             deviceCount += deviceInGroup.length;
-            if (deviceInGroup && deviceInGroup.length == 0){
+            if (deviceInGroup && deviceInGroup.length == 0) {
                 delete user_groups[g]["devices"];
             }
             allDevices.push(user_groups[g]);
@@ -331,6 +330,14 @@ deviceModule = function () {
         result.device_count = deviceCount;
         return result;
     };
+
+    publicMethods.getDeviceTypes = function () {
+        //URL: https://localhost:9443/common/device_manager/device/type/all
+        deviceCloudService = carbonHttpsServletTransport + "/common/device_manager";
+        listAllDevicesEndPoint = deviceCloudService + "/device/type/all";
+        return get(listAllDevicesEndPoint, {}, "json");
+    };
+
 
     return publicMethods;
 
