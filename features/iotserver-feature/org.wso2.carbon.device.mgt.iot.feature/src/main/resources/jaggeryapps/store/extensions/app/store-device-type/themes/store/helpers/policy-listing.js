@@ -16,20 +16,10 @@
  *  under the License.
  *
  */
-var render = function (theme, data, meta, require) {
-    theme('2-column-right', {
-        title: data.meta.title,
-        header: [{
-            partial: 'header',
-            context: data
-        }],
-        navigation: [{
-            partial: 'navigation',
-            context: data
-        }],
-        body: [{
-            partial: data.partial,
-            context: data
-        }]
-    });
+
+var resources = function (page, meta) {
+    return {
+        js: ['libs/utils.js', 'libs/js.cookie.js', 'libs/invoker-lib.js', 'policy-listing.js'],
+        css: ['custom-extensions.css']
+    };
 };

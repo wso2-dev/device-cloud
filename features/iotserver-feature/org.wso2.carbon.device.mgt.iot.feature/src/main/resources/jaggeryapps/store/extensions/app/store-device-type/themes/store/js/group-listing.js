@@ -30,7 +30,7 @@ $(document).ready(function () {
     $(groupCheckbox).each(function () {
         addGroupSelectedClass(this);
     });
-    
+
     /* for device list sorting drop down */
     $(".ctrl-filter-type-switcher").popover({
         html: true,
@@ -112,15 +112,15 @@ function formatDates() {
         var date = new Date(parseInt(timeStamp));
         var day = date.getDate();
         var monthIndex = date.getMonth() + 1;
-        if(monthIndex<10)monthIndex="0" + monthIndex;
+        if (monthIndex < 10)monthIndex = "0" + monthIndex;
         var year = date.getFullYear();
 
         var hours = date.getHours();
-        var amPm =  hours < 12 ? "AM" : "PM";
-        if(amPm) hours-=12;
-        if(hours==0)hours=12;
+        var amPm = hours < 12 ? "AM" : "PM";
+        if (amPm) hours -= 12;
+        if (hours == 0)hours = 12;
         //+ ' @' + hours + ':' + date.getMinutes()+amPm
-        $(this).html(day + '.' + (monthIndex) + '.' + year);
+        $(this).html(day + '-' + monthNames[monthIndex - 1] + '-' + year);
     });
 }
 

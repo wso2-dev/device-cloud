@@ -18,23 +18,24 @@
  *
  */
 var caramel;
-require('/modules/store.js').exec(function(ctx) {
-    caramel = require('caramel');
-    var app = require('rxt').app;
-    var ui = require('rxt').ui;
-    var page = ui.buildPage(ctx.session, ctx.request);
+require('/modules/store.js').exec(function (ctx) {
+	caramel = require('caramel');
+	var app = require('rxt').app;
+	var ui = require('rxt').ui;
+	var page = ui.buildPage(ctx.session, ctx.request);
 	var deviceModule = require("../modules/device.js").deviceModule;
 	var groupModule = require("../modules/group.js").groupModule;
 	var userModule = require("../modules/user.js").userModule;
+	var policyModule = require("../modules/policy.js").policyModule;
 
 	page.device_count = deviceModule.getAllPermittedDevices().device_count;
 	page.group_count = groupModule.getGroupCount().data;
 	page.user_count = userModule.getUsers().length;
-	page.policy_count = 0; //TODO: Implement policy module and get count
+	page.policy_count = policyModule.getPolicies().length;
 
-    var appManager = app.createUserAppManager(session);
-    var output = appManager.render([], page);
-    caramel.render(output);
+	var appManager = app.createUserAppManager(session);
+	var output = appManager.render([], page);
+	caramel.render(output);
 
 }, request, response, session);
 %>

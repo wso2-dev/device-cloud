@@ -17,62 +17,66 @@
  *
  */
 app.dependencies = ['store-common'];
-app.server = function(ctx) {
+app.server = function (ctx) {
     return {
         endpoints: {
             pages: [{
                 title: 'Store | Analytics',
                 url: 'analytics',
                 path: 'analytics.jag',
-                secured:true
-            },{
+                secured: true
+            }, {
                 title: 'Store | Devices',
                 url: 'devices',
                 path: 'device_listing.jag',
-                secured:true,
-                permission:'APP_MYITEMS'
-            },{
+                secured: true,
+                permission: 'APP_MYITEMS'
+            }, {
                 title: 'Store | Dashboard',
                 url: 'dashboard',
                 path: 'dashboard.jag',
-                secured:true
-            },{
+                secured: true
+            }, {
                 title: 'Store | Groups',
                 url: 'groups',
                 path: 'groups.jag',
-                secured:true
-            },{
+                secured: true
+            }, {
                 title: 'Store | Policies',
                 url: 'policies',
                 path: 'policies.jag',
-                secured:true
-            },{
+                secured: true
+            }, {
                 title: 'Store | Users',
                 url: 'users',
                 path: 'users.jag',
-                secured:true
+                secured: true
             }],
             apis: [{
                 url: 'stats',
                 path: 'stats-api.jag',
-                secured:true
-            },{
+                secured: true
+            }, {
                 url: 'devices',
                 path: 'device-api.jag',
                 secured: true
-            },{
+            }, {
                 url: 'group',
                 path: 'group-api.jag',
-                secured:true
-            },{
+                secured: true
+            }, {
+                url: 'policies',
+                path: 'policy-api.jag',
+                secured: true
+            }, {
                 url: 'users',
                 path: 'user-api.jag',
-                secured:true
+                secured: true
             }]
         },
         configs: {
-            landingPage:'/assets/deviceType/list',
-            disabledAssets: ['ebook', 'api', 'wsdl', 'servicex','policy','proxy','schema','sequence','uri','wadl','endpoint', 'swagger','restservice','comments','soapservice', 'service', 'license', 'gadget', 'site','server']
+            landingPage: '/assets/deviceType/list',
+            disabledAssets: ['ebook', 'api', 'wsdl', 'servicex', 'policy', 'proxy', 'schema', 'sequence', 'uri', 'wadl', 'endpoint', 'swagger', 'restservice', 'comments', 'soapservice', 'service', 'license', 'gadget', 'site', 'server']
         }
     }
 };
@@ -102,25 +106,25 @@ app.apiHandlers = function (ctx) {
     }
 };
 
-app.renderer = function(ctx) {
+app.renderer = function (ctx) {
     var decoratorApi = require('/modules/page-decorators.js').pageDecorators;
     var customDecoratorApi = require('../modules/custom-page-decorators.js').pageDecorators;
     return {
         pageDecorators: {
-            navigationBar: function(page) {
+            navigationBar: function (page) {
                 return customDecoratorApi.navigationBar(ctx, page, this);
             },
-            searchBar: function(page) {
+            searchBar: function (page) {
                 return decoratorApi.searchBar(ctx, page, this);
             },
-            authenticationDetails: function(page) {
+            authenticationDetails: function (page) {
                 return decoratorApi.authenticationDetails(ctx, page, this);
             },
-            recentAssetsOfActivatedTypes: function(page) {
+            recentAssetsOfActivatedTypes: function (page) {
                 return decoratorApi.recentAssetsOfActivatedTypes(ctx, page, this);
             },
-            popularAssets:function(page){
-                return decoratorApi.popularAssets(ctx,page,this);
+            popularAssets: function (page) {
+                return decoratorApi.popularAssets(ctx, page, this);
             }
         }
     }

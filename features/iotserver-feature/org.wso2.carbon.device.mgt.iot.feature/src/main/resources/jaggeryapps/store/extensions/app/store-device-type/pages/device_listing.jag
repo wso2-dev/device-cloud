@@ -25,8 +25,8 @@ require('/modules/store.js').exec(function (ctx) {
 	var groupId = request.getParameter("groupId");
 	var allDevices = [];
 	var deviceCount = 0;
-	var groupModule = require("../modules/group.js").groupModule;
 	if (groupId && groupId != "0") {
+		var groupModule = require("../modules/group.js").groupModule;
 		var group = groupModule.getDevices(groupId).data;
 		if (group) {
 			allDevices.push(group.group);
@@ -39,7 +39,7 @@ require('/modules/store.js').exec(function (ctx) {
 		deviceCount = result.device_count;
 	}
 	page.groups = allDevices;
-	if (deviceCount > 0){
+	if (deviceCount > 0) {
 		page.operations = true;
 	}
 	var appManager = app.createUserAppManager(session);
