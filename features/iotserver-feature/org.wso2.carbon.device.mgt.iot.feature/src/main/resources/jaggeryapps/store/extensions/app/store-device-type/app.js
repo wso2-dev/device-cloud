@@ -35,7 +35,12 @@ app.server = function (ctx) {
                 title: 'Store | Device Details',
                 url: 'device',
                 path: 'device_details.jag',
-                secured: true,
+                secured: true
+            }, {
+                title: 'Store | Device Events',
+                url: 'events',
+                path: 'events.jag',
+                secured: true
             }, {
                 title: 'Store | Dashboard',
                 url: 'dashboard',
