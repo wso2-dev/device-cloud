@@ -34,16 +34,10 @@ require('/modules/store.js').exec(function (ctx) {
 	if (groupId) {
 		title = request.getParameter("name");
 	} else {
-		var carbon = require('carbon');
-		var carbonHttpsServletTransport = carbon.server.address('https');
-		var deviceCloudDeviceService = carbonHttpsServletTransport + "/common/device_manager";
-
 		var deviceId = request.getParameter("deviceId");
 		var deviceType = request.getParameter("deviceType");
-		var endPoint = deviceCloudDeviceService + "/device/type/" + deviceType + "/identifier/" + deviceId;
-		var data = {"username": user.um.username};
-		var device = get(endPoint, data, "json").data;
-
+		var deviceModule = require("../modules/device.js").deviceModule;
+		var device = deviceModule.getDevice(deviceType, deviceId);
 		if (device) {
 			title = device.name;
 		}else{

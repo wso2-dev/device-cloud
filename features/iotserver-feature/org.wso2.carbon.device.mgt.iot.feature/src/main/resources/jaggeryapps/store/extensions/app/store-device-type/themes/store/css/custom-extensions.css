@@ -2167,3 +2167,33 @@ a.ast-name:after {
 a.cu-btn {
     padding-left: 10px !important;
 }
+
+.panel-group .panel {
+    margin-bottom: 0;
+    border-radius: 0;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    border: none;
+}
+
+.panel-group .panel-heading + .panel-collapse > .panel-body, .panel-group .panel-heading + .panel-collapse > .list-group {
+    border-top: none;
+}
+
+.panel-default > .panel-heading {
+    background: transparent;
+    padding: 0;
+}
+
+.panel-title a {
+    color: #333333;
+    padding:15px 0;
+    display: inline-block;
+}
+
+.panel-body {
+    background: transparent;
+    padding: 0;
+}
+
+.list-group-item:first-child, .list-group-item:last-child { border-radius: 0; }
