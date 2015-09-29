@@ -219,7 +219,7 @@ function attachDeviceEvents() {
     $("a.remove-device-link").click(function () {
         var deviceId = $(this).data("deviceid");
         var deviceType = $(this).data("devicetype");
-        var removeDeviceAPI = "/store/api/devices/" + deviceType + "/" + deviceId + "/remove";
+        var removeDeviceAPI = "/store/apis/devices/" + deviceType + "/" + deviceId + "/remove";
 
         $(modalPopupContent).html($('#remove-device-modal-content').html());
         showPopup();

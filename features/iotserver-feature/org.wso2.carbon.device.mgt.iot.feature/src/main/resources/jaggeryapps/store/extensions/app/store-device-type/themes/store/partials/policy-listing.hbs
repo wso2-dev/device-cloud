@@ -1,4 +1,12 @@
 <span id="user-details" data-username="{{cuser.username}}"></span>
+<div class="ast-container " id="ast-container">
+    <div class="container-fluid ">
+        <div class="title">
+            <a class="asset-type-deviceType">Device Policies</a>
+        </div>
+        <hr>
+    </div>
+</div>
 {{#if policies}}
     <div class="wr-list-group wr-sortable">
 		{{#each policies}}
@@ -12,6 +20,16 @@
                                 </div>
                                 <span class="list-group-item-actions">
                                     <a href="#" class="remove-policy-link cu-btn-inner"
+                                       data-devicetype="{{deviceType}}"
+                                       data-policyname="{{policyName}}"
+                                       data-policyuuid="{{id}}">
+                                    <span class="fw-stack">
+                                        <i class="fw fw-ring fw-stack-2x"></i>
+                                        <i class="fw fw-edit fw-stack-1x"></i>
+                                    </span>
+                                        Edit
+                                    </a>
+									<a href="#" class="remove-policy-link cu-btn-inner"
                                        data-devicetype="{{deviceType}}"
                                        data-policyname="{{policyName}}"
                                        data-policyuuid="{{id}}">
