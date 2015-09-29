@@ -20,32 +20,20 @@
 var caramel;
 
 require('/modules/store.js').exec(function (ctx) {
-	var log = new Log("analytics.jag");
+	var log = new Log("events.jag");
 	caramel = require('caramel');
 	var app = require('rxt').app;
 	var server = require('store').server;
 	var user = server.current(ctx.session);
 	var ui = require('rxt').ui;
 	var page = ui.buildPage(ctx.session, ctx.request);
-	var appManager;
-	var groupId = request.getParameter("groupId");
-	var title;
 
-	if (groupId) {
-		title = request.getParameter("name");
-	} else {
-		var deviceId = request.getParameter("deviceId");
-		var deviceType = request.getParameter("deviceType");
-		var deviceModule = require("../modules/device.js").deviceModule;
-		var device = deviceModule.getDevice(deviceType, deviceId);
-		if (device) {
-			title = device.name;
-		}else{
-			page.no_such_device = true;
-		}
+	var eventModule = require("../modules/event.js").eventModule;
+	var data = eventModule.getEventsData(user.username, 50);
+	if (data && data.length > 0){
+		page.data = data;
 	}
-	page.title = title + " Analytics";
-	appManager = app.createUserAppManager(session);
+	var appManager = app.createUserAppManager(session);
 	var output = appManager.render([], page);
 	caramel.render(output);
 

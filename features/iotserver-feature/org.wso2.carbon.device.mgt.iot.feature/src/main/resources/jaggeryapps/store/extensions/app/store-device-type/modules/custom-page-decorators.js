@@ -41,6 +41,7 @@ var pageDecorators = {};
             "policies": [],
             "profiles": [],
             "devices": [],
+            "device": [],
             "groups": [],
             "store": [],
             "dashboard": [],
@@ -80,6 +81,17 @@ var pageDecorators = {};
         links.store.push(storeLink);
         links.users.push(dashboardLink);
 
+        links.device.push(deviceMgtLink);
+
+        var groupId = request.getParameter("groupId");
+        if (groupId) {
+            links.analytics.push(groupMgtLink);
+            links.devices.push(groupMgtLink);
+        } else {
+            links.analytics.push(deviceMgtLink);
+            links.devices.push(dashboardLink);
+        }
+
         links.devices.push({
             title: "Add Device",
             icon: "fw-add",
@@ -104,15 +116,6 @@ var pageDecorators = {};
                 icon: "fw-add",
                 url: "/store/pages/groups/add"
             });
-        }
-
-        var groupId = request.getParameter("groupId");
-        if (groupId) {
-            links.analytics.push(groupMgtLink);
-            links.devices.push(groupMgtLink);
-        } else {
-            links.analytics.push(deviceMgtLink);
-            links.devices.push(dashboardLink);
         }
 
         links.events.push(dashboardLink);

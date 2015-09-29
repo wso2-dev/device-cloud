@@ -16,31 +16,9 @@
  *  under the License.
  *
  */
-var render = function(theme, data, meta, require) {
-    var log = new Log();
-    var navigation = 'navigation';
-    var navigationContext = data;
-    switch (data.assetTypeCount) {
-        case 1:
-            navigation = 'navigation-single';
-            break;
-        default:
-            break;
-    }
-    theme('2-column-right', {
-        title: data.meta.title,
-        header: [{
-            partial: 'header',
-            context: data
-        }],
-        navigation: [{
-            partial: navigation,
-            context: navigationContext
-        }],
-        body: [{
-            partial: 'asset',
-            context: data
-            }
-        ]
-    });
+
+var resources = function (page, meta) {
+    return {
+        js: ['device-details.js']
+    };
 };

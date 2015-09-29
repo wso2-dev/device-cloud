@@ -16,9 +16,20 @@
  *  under the License.
  *
  */
-
-var resources = function (page, meta) {
-    return {
-        css: ['custom-extensions.css']
-    };
+var render = function(theme, data, meta, require) {
+    theme('2-column-right', {
+        title: data.meta.title,
+        header: [{
+            partial: 'header',
+            context: data
+        }],
+        navigation: [{
+            partial: 'navigation',
+            context: data
+        }],
+        body: [{
+            partial: 'events',
+            context: data
+        }]
+    });
 };
