@@ -93,7 +93,7 @@ deviceModule = function () {
             deviceObject[constants.DEVICE_PROPERTIES][constants.DEVICE_OS_VERSION] =
                 privateMethods.validateAndReturn(propertiesList.get(constants.DEVICE_OS_VERSION));
 
-            deviceObject.assetId = privateMethods.getAssetId(deviceObject.deviceType);
+            deviceObject.assetId = privateMethods.getAssetId(deviceObject.type);
             deviceList.push(deviceObject);
         }
         return deviceList;
@@ -132,7 +132,7 @@ deviceModule = function () {
             deviceObject[constants.DEVICE_PROPERTIES][constants.DEVICE_OS_VERSION] =
                 privateMethods.validateAndReturn(propertiesList.get(constants.DEVICE_OS_VERSION));
 
-            deviceObject.assetId = privateMethods.getAssetId(deviceObject.deviceType);
+            deviceObject.assetId = privateMethods.getAssetId(deviceObject.type);
             deviceList.push(deviceObject);
         }
         return deviceList;
@@ -277,7 +277,7 @@ deviceModule = function () {
             deviceObject[constants.DEVICE_PROPERTIES] = properties;
             deviceObject[constants.DEVICE_ENROLLMENT] = device.getEnrolmentInfo().getDateOfEnrolment();
 
-            deviceObject.assetId = privateMethods.getAssetId(deviceObject.deviceType);
+            deviceObject.assetId = privateMethods.getAssetId(deviceObject.type);
             return deviceObject;
         }
     };
@@ -312,7 +312,7 @@ deviceModule = function () {
         var device;
         for (var d in devices){
             device = devices[d];
-            device.assetId = privateMethods.getAssetId(device.deviceType);
+            device.assetId = privateMethods.getAssetId(device.type);
         }
         return result;
     };
@@ -341,6 +341,11 @@ deviceModule = function () {
             deviceCount += deviceInGroup.length;
             if (deviceInGroup && deviceInGroup.length == 0) {
                 delete user_groups[g]["devices"];
+            }
+            var device;
+            for (var d in deviceInGroup){
+                device = deviceInGroup[d];
+                device.assetId = privateMethods.getAssetId(device.type);
             }
             allDevices.push(user_groups[g]);
         }
@@ -376,17 +381,6 @@ deviceModule = function () {
         var assets = assetManager.advanceSearch({"overview_name": deviceType}, paging);
         if (assets && assets.length > 0) {
             return assets[0].id;
-        } else {
-            assets = assetManager.list(paging);
-            if (assets && assets.length == 1) {
-                return assets[0].id;
-            } else if (assets && assets.length > 1) {
-                for (var a in assets){
-                    if (assets[a].overview_name == deviceType){
-                        return assets[a].id;
-                    }
-                }
-            }
         }
         return 0;
     };
