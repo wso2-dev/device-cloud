@@ -15,6 +15,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+
 var deviceModule;
 deviceModule = function () {
     var log = new Log("modules/device.js");
@@ -92,6 +93,7 @@ deviceModule = function () {
             deviceObject[constants.DEVICE_PROPERTIES][constants.DEVICE_OS_VERSION] =
                 privateMethods.validateAndReturn(propertiesList.get(constants.DEVICE_OS_VERSION));
 
+            deviceObject.assetId = privateMethods.getAssetId(deviceObject.deviceType);
             deviceList.push(deviceObject);
         }
         return deviceList;
@@ -130,6 +132,7 @@ deviceModule = function () {
             deviceObject[constants.DEVICE_PROPERTIES][constants.DEVICE_OS_VERSION] =
                 privateMethods.validateAndReturn(propertiesList.get(constants.DEVICE_OS_VERSION));
 
+            deviceObject.assetId = privateMethods.getAssetId(deviceObject.deviceType);
             deviceList.push(deviceObject);
         }
         return deviceList;
@@ -273,6 +276,8 @@ deviceModule = function () {
             }
             deviceObject[constants.DEVICE_PROPERTIES] = properties;
             deviceObject[constants.DEVICE_ENROLLMENT] = device.getEnrolmentInfo().getDateOfEnrolment();
+
+            deviceObject.assetId = privateMethods.getAssetId(deviceObject.deviceType);
             return deviceObject;
         }
     };
@@ -281,7 +286,14 @@ deviceModule = function () {
         //URL: https://localhost:9443/devicecloud/manager/devices/username/{username}
         deviceCloudService = carbonHttpsServletTransport + "/common/device_manager";
         listAllDevicesEndPoint = deviceCloudService + "/device/user/" + user.username + "/all";
-        return get(listAllDevicesEndPoint, {}, "json");
+        var result = get(listAllDevicesEndPoint, {}, "json");
+        var devices = result.data;
+        var device;
+        for (var d in devices){
+            device = devices[d];
+            device.assetId = privateMethods.getAssetId(device.deviceType);
+        }
+        return result;
     };
 
     publicMethods.getOwnDevicesCount = function () {
@@ -295,7 +307,14 @@ deviceModule = function () {
         //URL: https://localhost:9443/common/device_manager/device/user/{username}/ungrouped
         deviceCloudService = carbonHttpsServletTransport + "/common/device_manager";
         listAllDevicesEndPoint = deviceCloudService + "/device/user/" + user.username + "/ungrouped";
-        return get(listAllDevicesEndPoint, {}, "json");
+        var result = get(listAllDevicesEndPoint, {}, "json");
+        var devices = result.data;
+        var device;
+        for (var d in devices){
+            device = devices[d];
+            device.assetId = privateMethods.getAssetId(device.deviceType);
+        }
+        return result;
     };
 
     publicMethods.getUnGroupedDevicesCount = function () {
@@ -333,11 +352,44 @@ deviceModule = function () {
 
     publicMethods.getDeviceTypes = function () {
         //URL: https://localhost:9443/common/device_manager/device/type/all
-        deviceCloudService = carbonHttpsServletTransport + "/common/device_manager";
-        listAllDevicesEndPoint = deviceCloudService + "/device/type/all";
-        return get(listAllDevicesEndPoint, {}, "json");
+        var deviceTypesEndPoint = carbonHttpsServletTransport + "/common/device_manager/device/type/all";
+        var result = get(deviceTypesEndPoint, {}, "json");
+        var types = result.data;
+        var type;
+        for (var t in types){
+            type = types[t];
+            type.assetId = privateMethods.getAssetId(type.name);
+        }
+        return result;
     };
 
+    privateMethods.getAssetId = function (deviceType) {
+        var paging = {
+            'start': 0,
+            'count': 10,
+            'sortOrder': 'ASC',
+            'sortBy': '',
+            'paginationLimit': 1000
+        };
+        var asset = require('rxt').asset;
+        var assetManager = asset.createUserAssetManager(session, "deviceType");
+        var assets = assetManager.advanceSearch({"overview_name": deviceType}, paging);
+        if (assets && assets.length > 0) {
+            return assets[0].id;
+        } else {
+            assets = assetManager.list(paging);
+            if (assets && assets.length == 1) {
+                return assets[0].id;
+            } else if (assets && assets.length > 1) {
+                for (var a in assets){
+                    if (assets[a].overview_name == deviceType){
+                        return assets[a].id;
+                    }
+                }
+            }
+        }
+        return 0;
+    };
 
     return publicMethods;
 

@@ -862,3 +862,7 @@ input[type=checkbox] {
 .wr-form {
     margin: 0;
 }
+
+.d01 img {
+    height: 95px;
+}
