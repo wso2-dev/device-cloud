@@ -38,7 +38,9 @@ var user = server.current(session);
 var result;
 
 if (!user) {
-	response = responseProcessor.buildErrorResponse(response, 401, "Unauthorized");
+	//response = responseProcessor.buildErrorResponse(response, 401, "Unauthorized");
+	response.sendRedirect("/store/login?#login-required");
+	exit();
 } else {
 	if (uriMatcher.match("/{context}/apis/devices/{deviceTypeName}/thumbnail/")){
 		deviceTypeId = null;
@@ -110,7 +112,7 @@ if (!user) {
 
 			sketchGenerateLinkEndPoint = deviceManagerService + "/device/" + sketchType + "/generate_link";
 			var fileId = get(sketchGenerateLinkEndPoint + "?owner=" + user.username, null, "text");
-			result = "curl -k " + carbonHttpsServletTransport + constants.WEB_APP_CONTEXT + "/api/device/sketch/download/" + fileId.data;
+			result = "curl -k " + carbonHttpsServletTransport + constants.WEB_APP_CONTEXT + "/apis/devices/sketch/download/" + fileId.data;
 		}
 
 	} else if (uriMatcher.match("/{context}/apis/devices/all")) {
