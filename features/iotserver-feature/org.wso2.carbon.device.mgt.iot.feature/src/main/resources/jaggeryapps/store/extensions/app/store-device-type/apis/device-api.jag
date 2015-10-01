@@ -112,7 +112,7 @@ if (!user) {
 
 			sketchGenerateLinkEndPoint = deviceManagerService + "/device/" + sketchType + "/generate_link";
 			var fileId = get(sketchGenerateLinkEndPoint + "?owner=" + user.username, null, "text");
-			result = "curl -k " + carbonHttpsServletTransport + constants.WEB_APP_CONTEXT + "/api/device/sketch/download/" + fileId.data;
+			result = "curl -k " + carbonHttpsServletTransport + constants.WEB_APP_CONTEXT + "/apis/devices/sketch/download/" + fileId.data;
 		}
 
 	} else if (uriMatcher.match("/{context}/apis/devices/all")) {

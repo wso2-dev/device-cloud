@@ -65,58 +65,16 @@ function attachEvents() {
         var payload = {"sketchType":sketchType, "deviceType":deviceType};
         $(modalPopupContent).html($('#download-device-modal-content').html());
         showPopup();
-        $("#device-401-link").click(function () {
-            window.location = "/store/login";
-        });
-        $("#device-401-hide").click(function () {
-            hidePopup();
-        });
         $("a#download-device-download-link").click(function () {
+            console.log("----");
             invokerUtil.post(
                 downloadDeviceAPI,
                 payload,
                 function (data, textStatus, jqxhr) {
-                    console.log(data + ", " +jqxhr.status);
-                    if(jqxhr.status == 200) {
-                        if(data == "403"){
-                            $(modalPopupContent).html($('#device-403-content').html());
-                            $("#device-403-link").click(function () {
-                                window.location = "/store/login";
-                            });
-                            showPopup();
-                        }else {
-                            $(modalPopupContent).html($('#download-device-modal-content-links').html());
-                            $("#download-device-url").val(data);
-                            $("#download-device-url").focus(function () {
-                                $(this).select();
-                            });
-                            showPopup();
-                        }
-                    }else{
-                        $(modalPopupContent).html($('#device-403-content').html());
-                        $("#device-403-link").click(function () {
-                            window.location.reload();
-                        });
-                        showPopup();
-                    }
+                    doAction(data);
                 },
-                function (data, textStatus, jqxhr) {
-                    if(data.status == "401"){
-                        $(modalPopupContent).html($('#device-401-content').html());
-                        $("#device-401-link").attr("href", "/store/login");
-                        $("#device-401-link").click(function () {
-                            window.location = "/store/login";
-                        });
-                        $("#device-401-hide").click(function () {
-                            hidePopup();
-                        });
-                        showPopup();
-                    }else {
-                        $(modalPopupContent).html($('#device-unexpected-error-content').html());
-                        $("a#device-unexpected-error-link").click(function () {
-                            hidePopup();
-                        });
-                    }
+                function (data) {
+                    doAction(data);
                 }
             );
         });
@@ -126,4 +84,37 @@ function attachEvents() {
         });
 
     });
+}
+
+function doAction(data){
+    //if it is saml redirection response
+    if(data.status == null) {
+        document.write(data);
+    }
+
+    if(data.status == "200"){
+        $(modalPopupContent).html($('#download-device-modal-content-links').html());
+        $("input#download-device-url").val(data.responseText);
+        $("input#download-device-url").focus(function () {
+            $(this).select();
+        });
+        showPopup();
+    }else if(data.status == "401"){
+        $(modalPopupContent).html($('#device-401-content').html());
+        $("#device-401-link").click(function () {
+            window.location = "/store/login";
+        });
+        showPopup();
+    }else if(data == "403"){
+        $(modalPopupContent).html($('#device-403-content').html());
+        $("#device-403-link").click(function () {
+            window.location = "/store/login";
+        });
+        showPopup();
+    }else {
+        $(modalPopupContent).html($('#device-unexpected-error-content').html());
+        $("a#device-unexpected-error-link").click(function () {
+            hidePopup();
+        });
+    }
 }
