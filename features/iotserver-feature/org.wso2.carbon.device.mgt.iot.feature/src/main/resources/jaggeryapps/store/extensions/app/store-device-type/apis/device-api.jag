@@ -38,7 +38,9 @@ var user = server.current(session);
 var result;
 
 if (!user) {
-	response = responseProcessor.buildErrorResponse(response, 401, "Unauthorized");
+	//response = responseProcessor.buildErrorResponse(response, 401, "Unauthorized");
+	response.sendRedirect("/store/login?#login-required");
+	exit();
 } else {
 	if (uriMatcher.match("/{context}/apis/devices/{deviceTypeName}/thumbnail/")){
 		deviceTypeId = null;

@@ -58,8 +58,9 @@ app.server = function(ctx) {
                 secured:true
             },{
                 url: 'devices',
-                path: 'device-api.jag',
-                secured: true
+                path: 'device-api.jag'
+                //TODO: uncomment this once this resolved https://wso2.org/jira/browse/STORE-1112
+                //secured: true
             },{
                 url: 'group',
                 path: 'group-api.jag',
