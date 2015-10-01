@@ -54,14 +54,9 @@
         </dependency>
 
         <dependency>
-            <groupId>org.wso2.carbon.commons</groupId>
-            <artifactId>org.wso2.carbon.databridge.agent.thrift</artifactId>
-            <version>${carbon.commons.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.wso2.carbon.commons</groupId>
-            <artifactId>org.wso2.carbon.databridge.commons</artifactId>
-            <version>${carbon.commons.version}</version>
+            <groupId>net.sf.ehcache.wso2</groupId>
+            <artifactId>ehcache</artifactId>
+            <version>1.5.0.wso2v3</version>
         </dependency>
 
     </dependencies>
@@ -141,19 +136,10 @@
                                     org.wso2.carbon.device.mgt.iot:org.wso2.carbon.device.mgt.iot.common:${carbon.iot.device.mgt.version}
                                 </bundleDef>
                                 <bundleDef>
-                                    org.wso2.carbon.devicemgt:org.wso2.carbon.device.mgt.common:${carbon.device.mgt.version}
-                                </bundleDef>
-                                <bundleDef>
                                     org.json.wso2:json:${commons-json.version}
                                 </bundleDef>
                                 <bundleDef>
-                                    org.json.wso2:json:${commons-json.version}
-                                </bundleDef>
-                                <bundleDef>
-                                    org.wso2.carbon.commons:org.wso2.carbon.databridge.agent.thrift:${carbon.commons.version}
-                                </bundleDef>
-                                <bundleDef>
-                                    org.wso2.carbon.commons:org.wso2.carbon.databridge.commons:${carbon.commons.version}
+                                    net.sf.ehcache.wso2:ehcache
                                 </bundleDef>
                             </bundles>
                             <importFeatures>
