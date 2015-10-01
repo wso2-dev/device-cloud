@@ -16,31 +16,31 @@
  */
 var caramel;
 require('/modules/store.js').exec(function (ctx) {
-	var log = new Log("device_listing.jag");
+	var log = new Log("device_details.jag");
 	caramel = require('caramel');
 	var app = require('rxt').app;
 	var ui = require('rxt').ui;
 	var page = ui.buildPage(ctx.session, ctx.request);
 
-	var groupId = request.getParameter("groupId");
-	var allDevices = [];
-	var deviceCount = 0;
-	if (groupId && groupId != "0") {
-		var groupModule = require("../modules/group.js").groupModule;
-		var group = groupModule.getDevices(groupId).data;
-		if (group) {
-			allDevices.push(group.group);
-			deviceCount = group.group.devices.length;
-		}
-	} else {
+	var uri = request.getRequestURI();
+	var uriMatcher = new URIMatcher(String(uri));
+	if (uriMatcher.match("/{context}/pages/device/{deviceType}/{+deviceId}")) {
+		var matchedElements = uriMatcher.elements();
+		var deviceType = matchedElements.deviceType;
+		var deviceId = matchedElements.deviceId;
+		page.deviceType = deviceType;
+		page.deviceId = deviceId;
 		var deviceModule = require("../modules/device.js").deviceModule;
-		var result = deviceModule.getAllPermittedDevices();
-		allDevices = result.data;
-		deviceCount = result.device_count;
-	}
-	page.groups = allDevices;
-	if (deviceCount > 0) {
-		page.operations = true;
+		var device = deviceModule.viewDevice(deviceType, deviceId);
+		if (device) {
+			var viewModel = {};
+			var deviceInfo = device.properties.DEVICE_INFO;
+			if (deviceInfo != undefined && String(deviceInfo.toString()).length > 0) {
+				viewModel.enrollment = device.enrollment;
+				device.viewModel = viewModel;
+			}
+		}
+		page.device = device;
 	}
 	var appManager = app.createUserAppManager(session);
 	var output = appManager.render([], page);

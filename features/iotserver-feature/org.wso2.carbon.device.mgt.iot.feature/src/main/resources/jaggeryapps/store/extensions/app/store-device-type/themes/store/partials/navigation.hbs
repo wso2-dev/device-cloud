@@ -73,8 +73,8 @@
 
         </div>
     </div>
-    <div class="wr-filters col-xs-12 col-sm-12 col-md-12">
-		{{#if operations}}
+	{{#if operations}}
+        <div class="wr-filters col-xs-12 col-sm-12 col-md-12">
             <div class="wr-filter-sort pull-right">
                 <a href="javascript:void(0)" onclick="selectAllItems(this)" class="wr-btn">Select All</a>
                 <a href="javascript:void(0)" onclick="changeItemView('grid', this)"
@@ -85,8 +85,8 @@
                                                          data-placement="bottom" data-trigger="focus"><i
                         class="fw fw-list-sort"></i></a></span>
             </div>
-		{{/if}}
-    </div>
+        </div>
+	{{/if}}
 </div>
 <!-- secondary header - app bar -->
 {{> action-bar .}}

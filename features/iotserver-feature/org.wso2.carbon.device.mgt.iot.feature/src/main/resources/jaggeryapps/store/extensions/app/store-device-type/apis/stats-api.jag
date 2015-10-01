@@ -30,7 +30,6 @@ var carbonHttpsServletTransport = carbon.server.address('https');
 var deviceCloudGroupService = carbonHttpsServletTransport + "/common/group_manager";
 var deviceCloudDeviceService = carbonHttpsServletTransport + "/common/device_manager";
 
-var statsClient = new Packages.org.wso2.carbon.device.mgt.iot.common.analytics.statistics.IoTUsageStatisticsClient;
 var stats = {};
 var deviceId;
 var deviceType;
@@ -149,34 +148,32 @@ function getSensebotData(user, device, from, to) {
 		stats['temperatureData'] = [];
 	}
 
-	//Uncomment below section to emulate data
+	stats['sonarData'].push({
+		"device": device.name,
+		"stats": getSensorData("SONAR_SENSOR_SUMMARY", "sonar", user, device.type, device.deviceIdentifier, from, to)
+	});
+	stats['motionData'].push({
+		"device": device.name,
+		"stats": getSensorData("PIR_MOTION_SENSOR_SUMMARY", "motion", user, device.type, device.deviceIdentifier, from, to)
+	});
+	stats['lightData'].push({
+		"device": device.name,
+		"stats": getSensorData("LDR_LIGHT_SENSOR_SUMMARY", "light", user, device.type, device.deviceIdentifier, from, to)
+	});
+	stats['temperatureData'].push({
+		"device": device.name,
+		"stats": getSensorData("DEVICE_TEMPERATURE_SUMMARY", "TEMPERATURE", user, device.type, device.deviceIdentifier, from, to)
+	});
+}
+
+function getArduinoData(user, device, from, to) {
+	if (stats['temperatureData'] == null) {
+		stats['temperatureData'] = [];
+	}
+
+	//Comment to disable data emulation
 	var timeInterval = 30;
-	var i, rnd, chartData;
-	chartData = [];
-	var i = parseInt(from);
-	while (i < parseInt(to)) {
-		rnd = rnd = Math.random() * 50;
-		chartData.push({time: i, value: rnd});
-		i += timeInterval;
-	}
-	stats['sonarData'].push({"device": device.name, "stats": chartData});
-	chartData = [];
-	var i = parseInt(from);
-	while (i < parseInt(to)) {
-		rnd = Math.round(Math.random());
-		chartData.push({time: i, value: rnd});
-		i += timeInterval;
-	}
-	stats['motionData'].push({"device": device.name, "stats": chartData});
-	chartData = [];
-	var i = parseInt(from);
-	while (i < parseInt(to)) {
-		rnd = Math.round(Math.random());
-		chartData.push({time: i, value: rnd});
-		i += timeInterval;
-	}
-	stats['lightData'].push({"device": device.name, "stats": chartData});
-	chartData = [];
+	var rnd, chartData = [];
 	var i = parseInt(from);
 	while (i < parseInt(to)) {
 		rnd = Math.random() * (27 - 24) + 24;
@@ -185,24 +182,13 @@ function getSensebotData(user, device, from, to) {
 	}
 	stats['temperatureData'].push({"device": device.name, "stats": chartData});
 
+	//Uncomment to disable data emulation
 	/*
-	 //Comment below section to emulate data
-	 stats['sonarData'].push({"device": device.name, "stats" : getSensorData("SONAR_SENSOR_SUMMARY", "sonar", user, device.type, device.deviceIdentifier, from, to)});
-	 stats['motionData'].push({"device": device.name, "stats" : getSensorData("PIR_MOTION_SENSOR_SUMMARY", "motion", user, device.type, device.deviceIdentifier, from, to)});
-	 stats['lightData'].push({"device": device.name, "stats" : getSensorData("LDR_LIGHT_SENSOR_SUMMARY", "light", user, device.type, device.deviceIdentifier, from, to)});
-	 stats['temperatureData'].push({"device": device.name, "stats" : getSensorData("DEVICE_TEMPERATURE_SUMMARY", "TEMPERATURE", user, device.type, device.deviceIdentifier, from, to)});
-	 */
-
-}
-
-function getArduinoData(user, device, from, to) {
-	if (stats['temperatureData'] == null) {
-		stats['temperatureData'] = [];
-	}
 	stats['temperatureData'].push({
 		"device": device.name,
 		"stats": getSensorData("DEVICE_TEMPERATURE_SUMMARY", "TEMPERATURE", user, device.type, device.deviceIdentifier, from, to)
 	});
+	*/
 }
 
 function getAndroidSenseData(user, device, from, to) {

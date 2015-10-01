@@ -16,7 +16,7 @@
  *  under the License.
  *
  */
-var render = function(theme, data, meta, require) {
+var render = function (theme, data, meta, require) {
     theme('2-column-right', {
         title: data.meta.title,
         header: [{
@@ -28,7 +28,7 @@ var render = function(theme, data, meta, require) {
             context: data
         }],
         body: [{
-            partial: 'policies-body',
+            partial: data.partial,
             context: data
         }]
     });

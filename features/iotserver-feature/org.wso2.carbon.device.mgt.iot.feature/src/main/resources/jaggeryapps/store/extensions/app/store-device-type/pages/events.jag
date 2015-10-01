@@ -18,21 +18,21 @@
  *
  */
 var caramel;
+
 require('/modules/store.js').exec(function (ctx) {
+	var log = new Log("events.jag");
 	caramel = require('caramel');
 	var app = require('rxt').app;
+	var server = require('store').server;
+	var user = server.current(ctx.session);
 	var ui = require('rxt').ui;
 	var page = ui.buildPage(ctx.session, ctx.request);
-	var deviceModule = require("../modules/device.js").deviceModule;
-	var groupModule = require("../modules/group.js").groupModule;
-	var userModule = require("../modules/user.js").userModule;
-	var policyModule = require("../modules/policy.js").policyModule;
 
-	page.device_count = deviceModule.getAllPermittedDevices().device_count;
-	page.group_count = groupModule.getGroupCount().data;
-	page.user_count = userModule.getUsers().length;
-	page.policy_count = policyModule.getPolicies().length;
-
+	var eventModule = require("../modules/event.js").eventModule;
+	var data = eventModule.getEventsData(user.username, 50);
+	if (data && data.length > 0){
+		page.data = data;
+	}
 	var appManager = app.createUserAppManager(session);
 	var output = appManager.render([], page);
 	caramel.render(output);

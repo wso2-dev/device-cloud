@@ -16,9 +16,20 @@
  *  under the License.
  *
  */
-
-var resources = function (page, meta) {
-    return {
-        js: ['libs/utils.js','libs/js.cookie.js', 'libs/invoker-lib.js', 'group-listing.js']
-    };
+var render = function(theme, data, meta, require) {
+    theme('2-column-right', {
+        title: data.meta.title,
+        header: [{
+            partial: 'header',
+            context: data
+        }],
+        navigation: [{
+            partial: 'navigation',
+            context: data
+        }],
+        body: [{
+            partial: 'events',
+            context: data
+        }]
+    });
 };

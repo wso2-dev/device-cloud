@@ -139,7 +139,26 @@ function addDeviceSelectedClass(checkbox) {
 function formatDates() {
     $(".formatDate").each(function () {
         var timeStamp = $(this).html();
-        $(this).html(new Date(parseInt(timeStamp)).toUTCString());
+
+        var monthNames = [
+            "Jan", "Feb", "Mar",
+            "Apr", "May", "Jun", "Jul",
+            "Aug", "Sept", "Oct",
+            "Nov", "Dec"
+        ];
+
+        var date = new Date(parseInt(timeStamp));
+        var day = date.getDate();
+        var monthIndex = date.getMonth() + 1;
+        if (monthIndex < 10)monthIndex = "0" + monthIndex;
+        var year = date.getFullYear();
+
+        var hours = date.getHours();
+        var amPm = hours < 12 ? "AM" : "PM";
+        if (amPm) hours -= 12;
+        if (hours == 0)hours = 12;
+        //+ ' @' + hours + ':' + date.getMinutes()+amPm
+        $(this).html(day + '-' + monthNames[monthIndex - 1] + '-' + year);
     });
 }
 
@@ -200,7 +219,7 @@ function attachDeviceEvents() {
     $("a.remove-device-link").click(function () {
         var deviceId = $(this).data("deviceid");
         var deviceType = $(this).data("devicetype");
-        var removeDeviceAPI = "/store/api/devices/" + deviceType + "/" + deviceId + "/remove";
+        var removeDeviceAPI = "/store/apis/devices/" + deviceType + "/" + deviceId + "/remove";
 
         $(modalPopupContent).html($('#remove-device-modal-content').html());
         showPopup();

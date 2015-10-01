@@ -1,4 +1,5 @@
 <span id="user-details" data-username="{{cuser.username}}"></span>
+<br/>
 {{#if groups}}
     <div id="ast-container" class="ast-container list-view">
 		{{#each groups}}
@@ -25,14 +26,14 @@
                         </div>
                         <div class="ast-model">
                             <div class="ast-btn-group">
-                                <a href="devices?groupId={{id}}">
+                                <a href="/store/pages/devices?groupId={{id}}">
 											<span class="fw-stack">
 												<i class="fw fw-ring fw-stack-2x"></i>
 												<i class="fw fw-devices fw-stack-1x"></i>
 											</span>
                                     <span class="lbl-action">Devices</span>
                                 </a>
-                                <a href="analytics?groupId={{id}}&name={{name}}">
+                                <a href="/store/pages/analytics?groupId={{id}}&name={{name}}">
 											<span class="fw-stack">
 												<i class="fw fw-ring fw-stack-2x"></i>
 												<i class="fw fw-statistics fw-stack-1x"></i>
