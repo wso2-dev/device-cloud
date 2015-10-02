@@ -19,8 +19,6 @@
 
 var resources = function (page, meta) {
     return {
-        css: ['select2.min.css', 'custom-extensions.css'],
-        js: ['device-listing.js', 'libs/utils.js', 'libs/select2.full.min.js', 'libs/jquery-ui.js',
-            'libs/invoker-lib.js', 'libs/js.cookie.js']
+        css: ['custom-extensions.css']
     };
 };
