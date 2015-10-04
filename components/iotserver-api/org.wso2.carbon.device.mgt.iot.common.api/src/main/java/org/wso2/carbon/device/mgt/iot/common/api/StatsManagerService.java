@@ -21,15 +21,10 @@ package org.wso2.carbon.device.mgt.iot.common.api;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.wso2.carbon.context.CarbonContext;
+import org.wso2.carbon.analytics.datasource.commons.Record;
+import org.wso2.carbon.analytics.datasource.commons.exception.AnalyticsException;
 import org.wso2.carbon.context.PrivilegedCarbonContext;
-import org.wso2.carbon.device.mgt.common.*;
-import org.wso2.carbon.device.mgt.common.configuration.mgt.TenantConfiguration;
-import org.wso2.carbon.device.mgt.common.license.mgt.License;
-import org.wso2.carbon.device.mgt.core.dto.DeviceType;
-import org.wso2.carbon.device.mgt.core.service.DeviceManagementProviderService;
-import org.wso2.carbon.device.mgt.iot.common.analytics.statistics.IoTUsageStatisticsClient;
-import org.wso2.carbon.device.mgt.iot.common.analytics.statistics.IoTUsageStatisticsException;
+import org.wso2.carbon.device.mgt.analytics.service.DeviceAnalyticsService;
 import org.wso2.carbon.device.mgt.iot.common.analytics.statistics.dto.DeviceUsageDTO;
 
 import javax.jws.WebService;
@@ -48,27 +43,6 @@ import java.util.List;
 	@Context  //injected response proxy supporting multiple thread
 	private HttpServletResponse response;
 
-    private PrivilegedCarbonContext ctx;
-
-    private IoTUsageStatisticsClient getServiceProvider() {
-        String tenantDomain = CarbonContext.getThreadLocalCarbonContext().getTenantDomain();
-        PrivilegedCarbonContext.startTenantFlow();
-        ctx = PrivilegedCarbonContext.getThreadLocalCarbonContext();
-        ctx.setTenantDomain(tenantDomain, true);
-        if (log.isDebugEnabled()) {
-            log.debug("Getting thread local carbon context for tenant domain: " + tenantDomain);
-        }
-        return (IoTUsageStatisticsClient) ctx.getOSGiService(IoTUsageStatisticsClient.class, null);
-    }
-
-    private void endTenantFlow() {
-        PrivilegedCarbonContext.endTenantFlow();
-        ctx = null;
-        if (log.isDebugEnabled()) {
-            log.debug("Tenant flow ended");
-        }
-    }
-
     @Path("/stats/device/type/{type}/identifier/{identifier}")
 	@GET
 	@Consumes("application/json")
@@ -76,18 +50,41 @@ import java.util.List;
 	public DeviceUsageDTO[] getDeviceStats(@PathParam("type") String type, @PathParam("identifier") String identifier,
             @FormParam("table") String table, @FormParam("column") String column, @FormParam("username")  String user,
             @FormParam("from") long from, @FormParam("to") long to) {
+
+        String fromDate = String.valueOf(from);
+        String toDate = String.valueOf(to);
+
+        List<DeviceUsageDTO> deviceUsageDTOs = new ArrayList<DeviceUsageDTO>();
+        PrivilegedCarbonContext.startTenantFlow();
+        PrivilegedCarbonContext ctx = PrivilegedCarbonContext.getThreadLocalCarbonContext();
+        ctx.setTenantDomain("carbon.super", true);
+        DeviceAnalyticsService deviceAnalyticsService = (DeviceAnalyticsService) ctx
+                .getOSGiService(DeviceAnalyticsService.class, null);
+        String query;
+        if (fromDate != null && toDate != null) {
+            query = "owner:" + user + " AND deviceId:" + identifier + " AND deviceType:" + type +
+                    " AND time : [" + fromDate + " TO " + toDate + "]";
+        }else{
+            return deviceUsageDTOs.toArray(new DeviceUsageDTO[deviceUsageDTOs.size()]);
+        }
         try {
-            DeviceIdentifier deviceIdentifier = new DeviceIdentifier();
-            deviceIdentifier.setType(type);
-            deviceIdentifier.setId(identifier);
-            List<DeviceUsageDTO> stats = this.getServiceProvider().getDeviceStats(table, column, user, identifier,
-                    String.valueOf(from), String.valueOf(to));
-            return stats.toArray(new DeviceUsageDTO[stats.size()]);
-        } catch (IoTUsageStatisticsException e) {
+            List<Record> records = deviceAnalyticsService.getAllSensorEventsForDevice(table, query);
+
+
+            for (Record record : records) {
+                DeviceUsageDTO deviceUsageDTO = new DeviceUsageDTO();
+                deviceUsageDTO.setTime("" + (long)record.getValue("time"));
+                deviceUsageDTO.setValue("" + (float) record.getValue(column.toLowerCase()));
+                deviceUsageDTOs.add(deviceUsageDTO);
+            }
+            return deviceUsageDTOs.toArray(new DeviceUsageDTO[deviceUsageDTOs.size()]);
+        } catch (AnalyticsException e) {
+            String errorMsg= "Error on retrieving stats on table " + table + " with query " + query;
+            log.error(errorMsg);
             response.setStatus(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode());
-            return null;
+            return deviceUsageDTOs.toArray(new DeviceUsageDTO[deviceUsageDTOs.size()]);
         } finally {
-            this.endTenantFlow();
+            PrivilegedCarbonContext.endTenantFlow();
         }
     }
 

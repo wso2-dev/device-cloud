@@ -271,6 +271,12 @@
                 <version>${carbon.device.mgt.version}</version>
                 <scope>provided</scope>
             </dependency>
+            <dependency>
+                <groupId>org.wso2.carbon.devicemgt</groupId>
+                <artifactId>org.wso2.carbon.device.mgt.analytics</artifactId>
+                <version>${carbon.device.mgt.version}</version>
+                <scope>provided</scope>
+            </dependency>
 
             <!--IOT dependencies-->
 
@@ -392,6 +398,13 @@
                 <version>${commons-json.version}</version>
             </dependency>
 
+            <!--Carbon Analytics Dependency-->
+            <dependency>
+                <groupId>org.wso2.carbon.analytics</groupId>
+                <artifactId>org.wso2.carbon.analytics.datasource.commons</artifactId>
+                <version>${carbon.analytics.version}</version>
+            </dependency>
+
 
         </dependencies>
     </dependencyManagement>
@@ -468,7 +481,8 @@
         <commons-httpclient.orbit.version>3.1.0.wso2v2</commons-httpclient.orbit.version>
         <commons-json.version>3.0.0.wso2v1</commons-json.version>
 
-
+        <!--carbon analytics dependencies-->
+        <carbon.analytics.version>1.0.3</carbon.analytics.version>
 
         <!-- Source code -->
         <wso2.maven.compiler.source>1.7</wso2.maven.compiler.source>
