@@ -20,8 +20,10 @@ var groupModule = {};
 (function (groupModule) {
     var log = new Log("modules/group.js");
 
-    var carbon = require('carbon');
-    var carbonHttpsServletTransport = carbon.server.address('https');
+    var CarbonUtils = Packages.org.wso2.carbon.utils.CarbonUtils;
+    var hostname = CarbonUtils.getServerConfiguration().getFirstProperty("HostName");
+    var carbonHttpsServletTransport = "https://" + hostname + ":9443";
+
     var deviceCloudService = carbonHttpsServletTransport + "/common/group_manager";
 
     var server = require('store').server;

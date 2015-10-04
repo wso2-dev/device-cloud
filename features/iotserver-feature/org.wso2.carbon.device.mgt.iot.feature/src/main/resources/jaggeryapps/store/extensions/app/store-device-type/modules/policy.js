@@ -26,7 +26,9 @@ var policyModule = function () {
     var carbonUser = server.current(session);
 
     var carbonModule = require('carbon');
-    var carbonHttpsServletTransport = carbonModule.server.address('https');
+    var CarbonUtils = Packages.org.wso2.carbon.utils.CarbonUtils;
+    var hostname = CarbonUtils.getServerConfiguration().getFirstProperty("HostName");
+    var carbonHttpsServletTransport = "https://" + hostname + ":9443";
 
     var carbonServer = new carbonModule.server.Server({
         tenanted: true,
