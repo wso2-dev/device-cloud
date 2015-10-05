@@ -479,7 +479,7 @@
         <apache.wss4j.version>2.0.0</apache.wss4j.version>
         <codehaus.plexus.version>3.0.21</codehaus.plexus.version>
         <commons-httpclient.orbit.version>3.1.0.wso2v2</commons-httpclient.orbit.version>
-        <commons-json.version>3.0.0.wso2v1</commons-json.version>
+        <commons-json.version>2.0.0.wso2v1</commons-json.version>
 
         <!--carbon analytics dependencies-->
         <carbon.analytics.version>1.0.3</carbon.analytics.version>

@@ -1,5 +1,6 @@
 package org.wso2.carbon.device.mgt.iot.common.apimgt;
 
+import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.methods.PostMethod;
@@ -11,7 +12,7 @@ import org.json.JSONObject;
 import org.wso2.carbon.device.mgt.iot.common.config.devicetype.datasource.IotDeviceTypeConfig;
 import org.wso2.carbon.device.mgt.iot.common.config.server.DeviceCloudConfigManager;
 import org.wso2.carbon.device.mgt.iot.common.config.server.datasource.ApiManagerConfig;
-import org.apache.commons.codec.binary.Base64;
+
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
@@ -98,34 +99,37 @@ public class ApisAppClient {
 		}
 
 
-		JSONArray jsonSubscriptions=apiJsonResponse.getJSONObject("subscriptions").getJSONArray("applications");
+        try {
+            JSONArray jsonSubscriptions = apiJsonResponse.getJSONObject("subscriptions").getJSONArray("applications");
 
-		HashMap<String,String> subscriptionMap= new HashMap<>();
-		for(int n = 0; n < jsonSubscriptions.length(); n++)
-		{
+            HashMap<String, String> subscriptionMap = new HashMap<>();
+            for (int n = 0; n < jsonSubscriptions.length(); n++) {
 
-			JSONObject object = jsonSubscriptions.getJSONObject(n);
-			String appName =object.getString("name");
-			String prodConsumerKey= object.getString("prodConsumerKey");
-			String prodConsumerSecret = object.getString("prodConsumerSecret");
+                JSONObject object = jsonSubscriptions.getJSONObject(n);
+                String appName = object.getString("name");
+                String prodConsumerKey = object.getString("prodConsumerKey");
+                String prodConsumerSecret = object.getString("prodConsumerSecret");
 
-			subscriptionMap.put(appName, new String(Base64.encodeBase64((prodConsumerKey + ":" + prodConsumerSecret).getBytes())));
+                subscriptionMap.put(appName, new String(Base64.encodeBase64((prodConsumerKey + ":" + prodConsumerSecret).getBytes())));
 
-		}
+            }
 
-		for (IotDeviceTypeConfig iotDeviceTypeConfig : iotDeviceTypeConfigList) {
-			String deviceType = iotDeviceTypeConfig.getType();
-			String deviceTypeApiApplicationName = iotDeviceTypeConfig.getApiApplicationName();
+            for (IotDeviceTypeConfig iotDeviceTypeConfig : iotDeviceTypeConfigList) {
+                String deviceType = iotDeviceTypeConfig.getType();
+                String deviceTypeApiApplicationName = iotDeviceTypeConfig.getApiApplicationName();
 
 
-			String base64EncodedString = subscriptionMap.get(deviceTypeApiApplicationName);
-			if(base64EncodedString!=null&& base64EncodedString.length()!=0){
+                String base64EncodedString = subscriptionMap.get(deviceTypeApiApplicationName);
+                if (base64EncodedString != null && base64EncodedString.length() != 0) {
 
-				deviceTypeToApiAppMap.put(deviceType, base64EncodedString);
+                    deviceTypeToApiAppMap.put(deviceType, base64EncodedString);
 
-			}
-		}
+                }
+            }
 
+        } catch (JSONException e) {
+            log.error("Json exception: " + e.getMessage(), e);
+        }
 
 
 	}
