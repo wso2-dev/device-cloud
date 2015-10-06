@@ -24,7 +24,7 @@ deviceModule = function () {
     var utility = require("utility.js").utility;
 
     var CarbonUtils = Packages.org.wso2.carbon.utils.CarbonUtils;
-    var hostname = CarbonUtils.getServerConfiguration().getFirstProperty("HostName");
+    var hostname = utility.getIoTServerConfig("IoTMgtHost");
     var carbonHttpsServletTransport = "https://" + hostname + ":9443";
 
     var ArrayList = Packages.java.util.ArrayList;

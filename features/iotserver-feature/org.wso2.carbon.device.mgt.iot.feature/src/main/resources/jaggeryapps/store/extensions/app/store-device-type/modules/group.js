@@ -20,8 +20,8 @@ var groupModule = {};
 (function (groupModule) {
     var log = new Log("modules/group.js");
 
-    var CarbonUtils = Packages.org.wso2.carbon.utils.CarbonUtils;
-    var hostname = CarbonUtils.getServerConfiguration().getFirstProperty("HostName");
+    var utility = require("utility.js").utility;
+    var hostname = utility.getIoTServerConfig("IoTMgtHost");
     var carbonHttpsServletTransport = "https://" + hostname + ":9443";
 
     var deviceCloudService = carbonHttpsServletTransport + "/common/group_manager";
