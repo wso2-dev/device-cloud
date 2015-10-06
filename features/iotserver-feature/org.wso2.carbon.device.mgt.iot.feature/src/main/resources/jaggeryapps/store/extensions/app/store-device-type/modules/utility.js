@@ -40,7 +40,6 @@ utility = function () {
         var file = new File(path);
         file.open("r");
         var content = file.readAll();
-        log.info(content);
         file.close();
         var json = parse(content);
         return json[configName];

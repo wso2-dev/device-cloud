@@ -19,6 +19,7 @@
 
 var resources = function (page, meta) {
     return {
-        js: ['libs/utils.js','libs/js.cookie.js', 'libs/invoker-lib.js', 'policy-listing.js']
+        js: ['libs/utils.js','libs/js.cookie.js', 'libs/invoker-lib.js', 'policy-listing.js'],
+        css: ['custom-extensions.css']
     };
 };
