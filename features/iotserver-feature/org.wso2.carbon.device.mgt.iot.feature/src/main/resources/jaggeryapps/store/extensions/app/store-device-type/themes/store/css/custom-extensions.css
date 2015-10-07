@@ -2201,3 +2201,8 @@ a.cu-btn {
 }
 
 .list-group-item:first-child, .list-group-item:last-child { border-radius: 0; }
+
+.ast-type-display {
+    margin-top: -10px;
+    margin-left: -10px;
+}

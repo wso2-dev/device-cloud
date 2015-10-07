@@ -1,4 +1,3 @@
-<%
 /*
  *  Copyright (c) 2005-2014, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
  *
@@ -17,21 +16,20 @@
  *  under the License.
  *
  */
-var caramel;
-require('/modules/store.js').exec(function(ctx) {
-    caramel = require('caramel');
-    var app = require('rxt').app;
-    var constants = require('rxt').constants;
-    var server = require('store').server;
-    var user = server.current(ctx.session);
-    var ui = require('rxt').ui;
-    var page = ui.buildPage(ctx.session, ctx.request);
-    var appManager;
-
-    appManager = app.createUserAppManager(session);
-    var output = appManager.render([], page);
-    caramel.render(output);
-
-
-}, request, response, session); 
-%>
+var render = function(theme, data, meta, require) {
+    theme('2-column-right', {
+        title: 'Store | Advanced Search',
+        header: [{
+            partial: 'header',
+            context: data
+        }],
+        navigation: [{
+            partial: 'navigation',
+            context: data
+        }],
+        body: [{
+            partial: 'advanced-search-body',
+            context: data
+        }]
+    });
+};

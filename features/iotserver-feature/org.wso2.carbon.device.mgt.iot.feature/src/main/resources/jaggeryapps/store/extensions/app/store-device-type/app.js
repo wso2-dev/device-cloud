@@ -29,8 +29,7 @@ app.server = function (ctx) {
                 title: 'Store | Devices',
                 url: 'devices',
                 path: 'device_listing.jag',
-                secured: true,
-                permission: 'APP_MYITEMS'
+                secured: true
             }, {
                 title: 'Store | Device Details',
                 url: 'device',
@@ -61,6 +60,10 @@ app.server = function (ctx) {
                 url: 'users',
                 path: 'users.jag',
                 secured: true
+            }, {
+                title:'Store | Advance Search',
+                url:'advanced-search',
+                path:'advanced-search.jag'
             }],
             apis: [{
                 url: 'stats',
@@ -68,9 +71,8 @@ app.server = function (ctx) {
                 secured: true
             }, {
                 url: 'devices',
-                path: 'device-api.jag'
-                //TODO: uncomment this once this resolved https://wso2.org/jira/browse/STORE-1112
-                //secured: true
+                path: 'device-api.jag',
+                secured: true
             },{
                 url: 'group',
                 path: 'group-api.jag',
