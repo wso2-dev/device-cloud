@@ -174,24 +174,10 @@ function getArduinoData(user, device, from, to) {
 		stats['temperatureData'] = [];
 	}
 
-	//Comment to disable data emulation
-	var timeInterval = 30;
-	var rnd, chartData = [];
-	var i = parseInt(from);
-	while (i < parseInt(to)) {
-		rnd = Math.random() * (27 - 24) + 24;
-		chartData.push({time: i, value: rnd});
-		i += timeInterval;
-	}
-	stats['temperatureData'].push({"device": device.name, "stats": chartData});
-
-	//Uncomment to disable data emulation
-	/*
 	stats['temperatureData'].push({
 		"device": device.name,
 		"stats": getSensorData("DEVICE_TEMPERATURE_SUMMARY", "TEMPERATURE", user, device.type, device.deviceIdentifier, from, to)
 	});
-	*/
 }
 
 function getAndroidSenseData(user, device, from, to) {
@@ -271,6 +257,75 @@ function getAllDeviceData(user, device, from, to) {
 	if (stats['cpuTemperatureData'] == null) {
 		stats['cpuTemperatureData'] = [];
 	}
+
+	//Unomment to disable data emulation
+	/*
+	var timeInterval = 30;
+	var rnd, chartData = [];
+    var i = parseInt(from);
+    while (i < parseInt(to)) {
+        rnd = Math.random() * (512 - 128) + 128;
+        chartData.push({time: i, value: rnd});
+        i += timeInterval;
+    }
+    stats['ramData'].push({"device": device.name, "stats": chartData});
+
+    i = parseInt(from);
+    chartData = [];
+    while (i < parseInt(to)) {
+        rnd = Math.random() * 100;
+        chartData.push({time: i, value: rnd});
+        i += timeInterval;
+    }
+    stats['cpuData'].push({"device": device.name, "stats": chartData});
+
+    i = parseInt(from);
+    chartData = [];
+    while (i < parseInt(to)) {
+        rnd = Math.random() * (27 - 24) + 24;
+        chartData.push({time: i, value: rnd});
+        i += timeInterval;
+    }
+    stats['temperatureData'].push({"device": device.name, "stats": chartData});
+
+    i = parseInt(from);
+    chartData = [];
+    while (i < parseInt(to)) {
+        rnd =  Math.random() * 50;
+        chartData.push({time: i, value: rnd});
+        i += timeInterval;
+    }
+    stats['sonarData'].push({"device": device.name, "stats": chartData});
+
+    i = parseInt(from);
+    chartData = [];
+    while (i < parseInt(to)) {
+        rnd = Math.round(Math.random());
+        chartData.push({time: i, value: rnd});
+        i += timeInterval;
+    }
+    stats['motionData'].push({"device": device.name, "stats": chartData});
+
+    i = parseInt(from);
+    chartData = [];
+    while (i < parseInt(to)) {
+        rnd = Math.round(Math.random());
+        chartData.push({time: i, value: rnd});
+        i += timeInterval;
+    }
+    stats['lightData'].push({"device": device.name, "stats": chartData});
+
+    i = parseInt(from);
+    chartData = [];
+    while (i < parseInt(to)) {
+        rnd = Math.random() * (50 - 30) + 30;
+        chartData.push({time: i, value: rnd});
+        i += timeInterval;
+    }
+    stats['cpuTemperatureData'].push({"device": device.name, "stats": chartData});
+    */
+
+	//Comment to disable data emulation
 	stats['ramData'].push({
 		"device": device.name,
 		"stats": getSensorData("RAM_USAGE_SUMMARY", "motion", user, device.type, device.deviceIdentifier, from, to)
