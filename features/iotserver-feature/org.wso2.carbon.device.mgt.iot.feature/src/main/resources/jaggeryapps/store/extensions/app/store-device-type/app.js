@@ -64,6 +64,9 @@ app.server = function (ctx) {
                 title:'Store | Advance Search',
                 url:'advanced-search',
                 path:'advanced-search.jag'
+            },{
+                url:'sso-login',
+                path:'sso-auth-login-controller.jag'
             }],
             apis: [{
                 url: 'stats',
@@ -98,7 +101,9 @@ app.pageHandlers = function (ctx) {
     return {
         onPageLoad: function () {
             if ((ctx.isAnonContext) && (ctx.endpoint.secured)) {
-                ctx.res.sendRedirect(ctx.appContext + '/login');
+                log.info(ctx.session);
+                var loginUrl = ctx.appContext + '/login?requestedPage=' + encodeURIComponent('/store/pages/' + ctx.endpoint.url) + '&ignoreReferer=true';
+                ctx.res.sendRedirect(loginUrl);
                 return false;
             }
             return true;
@@ -111,7 +116,6 @@ app.apiHandlers = function (ctx) {
         onApiLoad: function () {
             if ((ctx.isAnonContext) && (ctx.endpoint.secured)) {
                 ctx.res.status = '401';
-                ctx.res.sendRedirect(ctx.appContext + '/login');
                 return false;
             }
             return true;
