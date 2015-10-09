@@ -106,8 +106,7 @@ public class IotDeviceManagementServiceComponent {
 				}
 			}
 
-
-
+			IoTCommonDataHolder.getInstance().initialize();
 
 			//TODO: handle
 

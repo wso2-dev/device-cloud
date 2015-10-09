@@ -1,19 +1,24 @@
 package org.wso2.carbon.device.mgt.iot.common.apimgt;
 
 import org.apache.commons.codec.binary.Base64;
-import org.apache.commons.httpclient.HttpClient;
-import org.apache.commons.httpclient.methods.GetMethod;
-import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.wso2.carbon.device.mgt.iot.common.config.devicetype.datasource.IotDeviceTypeConfig;
 import org.wso2.carbon.device.mgt.iot.common.config.server.DeviceCloudConfigManager;
 import org.wso2.carbon.device.mgt.iot.common.config.server.datasource.ApiManagerConfig;
+import org.wso2.carbon.device.mgt.iot.common.exception.IoTException;
+import org.wso2.carbon.device.mgt.iot.common.util.IoTUtil;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.List;
 
@@ -43,7 +48,8 @@ public class ApisAppClient {
 		isEnabled = apiManagerConfig.isEnabled();
 
 		String loginURL = serverUrl+":"+serverPort+apiManagerConfig.getLoginURL();
-		loginEndpoint= loginURL+"?action=login&username="+apiManagerConfig.getUsername()+"&password="+apiManagerConfig.getPassword();
+		loginEndpoint= loginURL+"?action=login&username="+apiManagerConfig.getUsername()
+				+"&password="+apiManagerConfig.getPassword();
 
 		String subscriptionListUrl=serverUrl+":"+serverPort+apiManagerConfig.getSubscriptionListURL();
 		subscriptionListEndpoint=subscriptionListUrl+"?action=getAllSubscriptions";
@@ -56,13 +62,29 @@ public class ApisAppClient {
 
 	public void setBase64EncodedConsumerKeyAndSecret(List<IotDeviceTypeConfig> iotDeviceTypeConfigList) {
 		if(!isEnabled) return;
-		HttpClient httpClient = new HttpClient();
 
-		PostMethod postMethod = new PostMethod(loginEndpoint);
+		URL loginURL = null;
+		try {
+			loginURL = new URL(loginEndpoint);
+		} catch (MalformedURLException e) {
+			String errMsg = "Malformed URL " + loginEndpoint;
+			log.error(errMsg);
+			return;
+		}
+		HttpClient httpClient = null;
+		try {
+			httpClient = IoTUtil.getHttpClient(loginURL.getPort(), loginURL.getProtocol());
+		} catch (Exception e) {
+			log.error("Error on getting a http client for port :" + loginURL.getPort() + " protocol :"
+							  + loginURL.getProtocol());
+			return;
+		}
+
+		HttpPost postMethod = new HttpPost(loginEndpoint);
 		JSONObject apiJsonResponse;
 		try {
-			httpClient.executeMethod(postMethod);
-			String response = postMethod.getResponseBodyAsString();
+			HttpResponse httpResponse = httpClient.execute(postMethod);
+			String response = IoTUtil.getResponseString(httpResponse);
 			if(log.isDebugEnabled()) {
 				log.debug(response);
 			}
@@ -71,11 +93,11 @@ public class ApisAppClient {
 
 			boolean apiError = jsonObject.getBoolean("error");
 			if(!apiError){
-				String cookie = postMethod.getResponseHeader("Set-Cookie").getValue().split(";")[0];
-				GetMethod getMethod=new GetMethod(subscriptionListEndpoint);
-				getMethod.setRequestHeader("cookie", cookie);
-				httpClient.executeMethod(getMethod);
-				response = getMethod.getResponseBodyAsString();
+				String cookie = httpResponse.getHeaders("Set-Cookie")[0].getValue().split(";")[0];
+				HttpGet getMethod=new HttpGet(subscriptionListEndpoint);
+				getMethod.setHeader("cookie", cookie);
+				httpResponse = httpClient.execute(getMethod);
+				response = IoTUtil.getResponseString(httpResponse);
 
 
 				if(log.isDebugEnabled()) {
@@ -92,9 +114,9 @@ public class ApisAppClient {
 				return;
 			}
 
-		} catch (IOException | JSONException
-		e) {
-			log.error("Invalid Api Endpoint loginEndpoint= "+ loginEndpoint +" and subscription api endpoint= "+subscriptionListEndpoint);
+		} catch (IOException | JSONException | IoTException e) {
+			log.error("Invalid Api Endpoint loginEndpoint= "+ loginEndpoint +" and subscription api endpoint= "
+							  + subscriptionListEndpoint);
 			return;
 		}
 
@@ -109,21 +131,16 @@ public class ApisAppClient {
                 String appName = object.getString("name");
                 String prodConsumerKey = object.getString("prodConsumerKey");
                 String prodConsumerSecret = object.getString("prodConsumerSecret");
-
-                subscriptionMap.put(appName, new String(Base64.encodeBase64((prodConsumerKey + ":" + prodConsumerSecret).getBytes())));
-
+                subscriptionMap.put(appName, new String(Base64.encodeBase64(
+						(prodConsumerKey + ":" + prodConsumerSecret).getBytes())));
             }
 
             for (IotDeviceTypeConfig iotDeviceTypeConfig : iotDeviceTypeConfigList) {
                 String deviceType = iotDeviceTypeConfig.getType();
                 String deviceTypeApiApplicationName = iotDeviceTypeConfig.getApiApplicationName();
-
-
                 String base64EncodedString = subscriptionMap.get(deviceTypeApiApplicationName);
                 if (base64EncodedString != null && base64EncodedString.length() != 0) {
-
                     deviceTypeToApiAppMap.put(deviceType, base64EncodedString);
-
                 }
             }
 
