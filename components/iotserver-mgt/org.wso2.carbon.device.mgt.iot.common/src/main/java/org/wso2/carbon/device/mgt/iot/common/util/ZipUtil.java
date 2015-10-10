@@ -15,8 +15,10 @@ import java.util.Map;
 
 public class ZipUtil {
 
-	public ZipArchive downloadSketch(String owner,String tenantDomain, String deviceType, String deviceId, String
-			token, String refreshToken) throws DeviceManagementException {
+	public ZipArchive downloadSketch(String owner, String tenantDomain, String deviceType,
+	                                 String deviceId, String
+			                                 token, String refreshToken)
+			throws DeviceManagementException {
 
 		if (owner == null || deviceType == null) {
 			throw new DeviceManagementException("Invalid parameters for `owner` or `deviceType`");
@@ -28,48 +30,65 @@ public class ZipUtil {
 				+ sep + deviceId;
 		String templateSketchPath = sketchFolder + sep + deviceType;
 
-		Map<String, String> contextParams = new HashMap<String, String>();
-		contextParams.put("DEVICE_OWNER", owner);
-		contextParams.put("DEVICE_ID", deviceId);
+		String iotServerIP = System.getProperty("bind.address");
+		String iotServerPort = System.getProperty("httpsPort");
+		String iotServerServicePort = System.getProperty("httpPort");
 
-		String serverIP =
+		String serverEndPoint = iotServerIP + ":" + iotServerPort;
+		String serverServiceEP = iotServerIP + ":" + iotServerServicePort;
+
+		String apimIP =
 				DeviceCloudConfigManager.getInstance().getDeviceCloudMgtConfig().getApiManager()
 						.getServerURL();
 
-		int indexOfChar = serverIP.lastIndexOf(File.separator);
+		int indexOfChar = apimIP.lastIndexOf(File.separator);
 		if (indexOfChar != -1) {
-			serverIP = serverIP.substring((indexOfChar + 1), serverIP.length());
+			apimIP = apimIP.substring((indexOfChar + 1), apimIP.length());
 		}
 
-		String serverPort =
+		String apimGatewayPort =
 				DeviceCloudConfigManager.getInstance().getDeviceCloudMgtConfig().getApiManager()
 						.getGatewayPort();
 
-		String serverEndPoint = serverIP + ":" + serverPort;
+		String apimEndPoint = apimIP + ":" + apimGatewayPort;
+
+
+		String mqttEndpoint = MqttConfig.getInstance().getMqttQueueEndpoint();
+		indexOfChar = mqttEndpoint.lastIndexOf(File.separator);
+		if (indexOfChar != -1) {
+			mqttEndpoint = mqttEndpoint.substring((indexOfChar + 1), mqttEndpoint.length());
+		}
+
+		String xmppEndpoint = XmppConfig.getInstance().getXmppEndpoint();
+		indexOfChar = xmppEndpoint.lastIndexOf(File.separator);
+		if (indexOfChar != -1) {
+			xmppEndpoint = xmppEndpoint.substring((indexOfChar + 1), xmppEndpoint.length());
+		}
+
+		indexOfChar = xmppEndpoint.indexOf(":");
+		if (indexOfChar != -1) {
+			xmppEndpoint = xmppEndpoint.substring(0, indexOfChar);
+		}
+
+		xmppEndpoint = xmppEndpoint + ":" + XmppConfig.getInstance().getSERVER_CONNECTION_PORT();
+
+		Map<String, String> contextParams = new HashMap<String, String>();
+		contextParams.put("DEVICE_OWNER", owner);
+		contextParams.put("DEVICE_ID", deviceId);
 		contextParams.put("SERVER_EP", serverEndPoint);
-
-		String endpoint = MqttConfig.getInstance().getMqttQueueEndpoint();
-		indexOfChar = endpoint.lastIndexOf(File.separator);
-		if (indexOfChar != -1) {
-			endpoint = endpoint.substring((indexOfChar + 1), endpoint.length());
-		}
-		contextParams.put("MQTT_EP", endpoint);
-
-		endpoint = XmppConfig.getInstance().getXmppEndpoint();
-		indexOfChar = endpoint.lastIndexOf(File.separator);
-		if (indexOfChar != -1) {
-			endpoint = endpoint.substring((indexOfChar + 1), endpoint.length());
-		}
-		contextParams.put("XMPP_EP", endpoint);
-
+		contextParams.put("SERVER_SERVICE_EP", serverServiceEP);
+		contextParams.put("APIM_EP", apimEndPoint);
+		contextParams.put("MQTT_EP", mqttEndpoint);
+		contextParams.put("XMPP_EP", xmppEndpoint);
 		contextParams.put("DEVICE_TOKEN", token);
 		contextParams.put("DEVICE_REFRESH_TOKEN", refreshToken);
 
 		ZipArchive zipFile;
 		try {
-			zipFile = IotDeviceManagementUtil.getSketchArchive(archivesPath, templateSketchPath, contextParams);
+			zipFile = IotDeviceManagementUtil.getSketchArchive(archivesPath, templateSketchPath,
+			                                                   contextParams);
 		} catch (IOException e) {
-			throw new DeviceManagementException("Zip File Creation Failed",e);
+			throw new DeviceManagementException("Zip File Creation Failed", e);
 		}
 
 		return zipFile;

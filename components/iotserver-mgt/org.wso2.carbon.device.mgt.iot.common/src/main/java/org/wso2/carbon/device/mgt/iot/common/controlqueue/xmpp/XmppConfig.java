@@ -13,6 +13,7 @@ public class XmppConfig {
 	private boolean isEnabled;
 
 	private static final String XMPP_QUEUE_CONFIG_NAME = "XMPP";
+	private final String SERVER_CONNECTION_PORT = "5222";
 
 	private ControlQueue xmppControlQueue;
 
@@ -53,5 +54,9 @@ public class XmppConfig {
 
 	public static XmppConfig getInstance() {
 		return xmppConfig;
+	}
+
+	public String getSERVER_CONNECTION_PORT() {
+		return SERVER_CONNECTION_PORT;
 	}
 }
