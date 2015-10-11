@@ -29,11 +29,15 @@ import org.wso2.carbon.device.mgt.iot.common.analytics.statistics.dto.DeviceUsag
 
 import javax.jws.WebService;
 import javax.servlet.http.HttpServletResponse;
-import javax.ws.rs.*;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @WebService public class StatsManagerService {
@@ -48,25 +52,20 @@ import java.util.List;
 	@Consumes("application/json")
 	@Produces("application/json")
 	public DeviceUsageDTO[] getDeviceStats(@PathParam("type") String type, @PathParam("identifier") String identifier,
-            @FormParam("table") String table, @FormParam("column") String column, @FormParam("username")  String user,
-            @FormParam("from") long from, @FormParam("to") long to) {
+            @QueryParam("table") String table, @QueryParam("column") String column, @QueryParam("username")  String user,
+            @QueryParam("from") long from, @QueryParam("to") long to) {
 
         String fromDate = String.valueOf(from);
         String toDate = String.valueOf(to);
 
-        List<DeviceUsageDTO> deviceUsageDTOs = new ArrayList<DeviceUsageDTO>();
+        List<DeviceUsageDTO> deviceUsageDTOs = new ArrayList<>();
         PrivilegedCarbonContext.startTenantFlow();
         PrivilegedCarbonContext ctx = PrivilegedCarbonContext.getThreadLocalCarbonContext();
         ctx.setTenantDomain("carbon.super", true);
         DeviceAnalyticsService deviceAnalyticsService = (DeviceAnalyticsService) ctx
                 .getOSGiService(DeviceAnalyticsService.class, null);
-        String query;
-        if (fromDate != null && toDate != null) {
-            query = "owner:" + user + " AND deviceId:" + identifier + " AND deviceType:" + type +
+        String query = "owner:" + user + " AND deviceId:" + identifier + " AND deviceType:" + type +
                     " AND time : [" + fromDate + " TO " + toDate + "]";
-        }else{
-            return deviceUsageDTOs.toArray(new DeviceUsageDTO[deviceUsageDTOs.size()]);
-        }
         try {
             List<Record> records = deviceAnalyticsService.getAllSensorEventsForDevice(table, query);
 
