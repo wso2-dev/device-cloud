@@ -30,7 +30,8 @@ public class ZipUtil {
 				+ sep + deviceId;
 		String templateSketchPath = sketchFolder + sep + deviceType;
 
-		String iotServerIP = System.getProperty("bind.address");
+//		String iotServerIP = System.getProperty("bind.address");
+		String iotServerIP = System.getProperty("server.host");
 		String iotServerPort = System.getProperty("httpsPort");
 		String iotServerServicePort = System.getProperty("httpPort");
 
