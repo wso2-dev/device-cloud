@@ -10,6 +10,7 @@ import org.apache.http.client.methods.HttpPost;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.wso2.carbon.device.mgt.iot.common.config.devicetype.IotDeviceTypeConfigurationManager;
 import org.wso2.carbon.device.mgt.iot.common.config.devicetype.datasource.IotDeviceTypeConfig;
 import org.wso2.carbon.device.mgt.iot.common.config.server.DeviceCloudConfigManager;
 import org.wso2.carbon.device.mgt.iot.common.config.server.datasource.ApiManagerConfig;
@@ -19,12 +20,14 @@ import org.wso2.carbon.device.mgt.iot.common.util.IoTUtil;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class ApisAppClient {
 
-	private static HashMap<String, String> deviceTypeToApiAppMap = new HashMap<String, String>();
+	private static ConcurrentHashMap<String, String> deviceTypeToApiAppMap = new ConcurrentHashMap<>();
 	private static ApisAppClient instance =null;
 
 	private String loginEndpoint;
@@ -36,7 +39,6 @@ public class ApisAppClient {
 
 		if(instance==null){
 			instance= new ApisAppClient();
-
 		}
 		return instance;
 	}
@@ -57,7 +59,17 @@ public class ApisAppClient {
 
 	public String getBase64EncodedConsumerKeyAndSecret(String deviceType) {
 		if(!isEnabled) return null;
-		return deviceTypeToApiAppMap.get(deviceType);
+		String consumerKeyAndSecret = deviceTypeToApiAppMap.get(deviceType);
+		if(consumerKeyAndSecret == null){
+			ArrayList<IotDeviceTypeConfig> iotDeviceTypeConfigs = new ArrayList<>();
+			IotDeviceTypeConfig DeviceTypeConfig = IotDeviceTypeConfigurationManager.getInstance().getIotDeviceTypeConfigMap().get(deviceType);
+			if(DeviceTypeConfig != null) {
+				iotDeviceTypeConfigs.add(DeviceTypeConfig);
+				setBase64EncodedConsumerKeyAndSecret(iotDeviceTypeConfigs);
+				consumerKeyAndSecret = deviceTypeToApiAppMap.get(deviceType);
+			}
+		}
+		return  consumerKeyAndSecret;
 	}
 
 	public void setBase64EncodedConsumerKeyAndSecret(List<IotDeviceTypeConfig> iotDeviceTypeConfigList) {

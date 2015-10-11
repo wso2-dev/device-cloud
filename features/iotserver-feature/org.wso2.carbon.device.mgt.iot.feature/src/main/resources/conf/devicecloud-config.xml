@@ -53,12 +53,12 @@
 
     <ApiManager>
         <Enabled>true</Enabled>
-        <AccessTokenURL>https://192.168.67.21:9444/oauth2/token</AccessTokenURL>
-        <ServerURL>http://192.168.67.21</ServerURL>
-        <ServerPort>9764</ServerPort>
-        <GatewayPort>8281</GatewayPort>
-        <LoginURL>/store/site/blocks/user/login/ajax/login.jag</LoginURL>
-        <SubscriptionListURL>/store/site/blocks/subscription/subscription-list/ajax/subscription-list.jag</SubscriptionListURL>
+        <AccessTokenURL>https://localhost:9443/oauth2/token</AccessTokenURL>
+        <ServerURL>http://localhost</ServerURL>
+        <ServerPort>9763</ServerPort>
+        <GatewayPort>8280</GatewayPort>
+        <LoginURL>/api-store/site/blocks/user/login/ajax/login.jag</LoginURL>
+        <SubscriptionListURL>/api-store/site/blocks/subscription/subscription-list/ajax/subscription-list.jag</SubscriptionListURL>
         <Username>admin</Username>
         <Password>wso2iot123</Password>
         <DeviceGrantType>devicecloud</DeviceGrantType>

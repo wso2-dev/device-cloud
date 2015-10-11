@@ -72,7 +72,8 @@ public class TokenClient {
 
 		List<NameValuePair> params = new ArrayList<>();
 		params.add(new BasicNameValuePair("grant_type", grantType));
-		params.add(new BasicNameValuePair("device_id", deviceId + "@" + deviceType));
+		params.add(new BasicNameValuePair("device_id", deviceId));
+		params.add(new BasicNameValuePair("device_type", deviceType));
 		params.add(new BasicNameValuePair("username", username));
 		params.add(new BasicNameValuePair("scope", scope));
 
@@ -91,7 +92,7 @@ public class TokenClient {
 	private AccessTokenInfo getTokenInfo(List<NameValuePair> nameValuePairs) throws AccessTokenException {
 
 		try {
-			URL tokenUrl = new URL(tokenURL);
+ 			URL tokenUrl = new URL(tokenURL);
 			HttpClient httpClient = null;
 			try {
 				httpClient = IoTUtil.getHttpClient(tokenUrl.getPort(), tokenUrl.getProtocol());
