@@ -134,7 +134,9 @@ public class IotDeviceManagementUtil {
                 parseTemplate(templateSketchPath + sep + templateFile, archivesPath + sep + templateFile,
                         contextParams);
             }
-            copyFolder(new File(sketchPath), new File(archivesPath), templateFiles);
+
+	        templateFiles.add("sketch.properties");         // ommit copying the props file
+	        copyFolder(new File(sketchPath), new File(archivesPath), templateFiles);
 
         } catch (IOException ex) {
             throw new DeviceManagementException(

@@ -76,7 +76,7 @@ public class ZipUtil {
 		contextParams.put("DEVICE_OWNER", owner);
 		contextParams.put("DEVICE_ID", deviceId);
 		contextParams.put("SERVER_EP", serverEndPoint);
-		contextParams.put("SERVER_SERVICE_EP", serverServiceEP);
+		contextParams.put("SERVICE_EP", serverServiceEP);
 		contextParams.put("APIM_EP", apimEndPoint);
 		contextParams.put("MQTT_EP", mqttEndpoint);
 		contextParams.put("XMPP_EP", xmppEndpoint);
