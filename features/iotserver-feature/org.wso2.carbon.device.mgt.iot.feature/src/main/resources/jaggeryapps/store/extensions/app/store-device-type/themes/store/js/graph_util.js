@@ -272,6 +272,14 @@ function updateGraphs() {
         $('#div-cpuTemperatureData').html("");
     }
 
+    var humidityData = stats['humidityData'];
+    if (typeof humidityData != 'undefined') {
+        $('#div-humidityData').html("").html("<div class='row margin-double shrink'><div><h2 class='grey'>Humidity</h2><hr><div id='canvas-wrapper10'></div></div><hr class='spaced'></div>");
+        drawLineGraph(10, humidityData);
+    } else {
+        $('#div-humidityData').html("");
+    }
+
     scaleGraphs();
 }
 
