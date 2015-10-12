@@ -37,6 +37,7 @@ import org.wso2.carbon.device.mgt.iot.common.config.devicetype.IotDeviceTypeConf
 import org.wso2.carbon.device.mgt.iot.common.util.iotdevice.dao.IotDeviceManagementDAOFactory;
 import org.wso2.carbon.device.mgt.iot.common.util.iotdevice.dao.util.IotDeviceManagementDAOUtil;
 import org.wso2.carbon.ndatasource.core.DataSourceService;
+import org.wso2.carbon.policy.mgt.common.spi.PolicyMonitoringService;
 import org.wso2.carbon.user.core.service.RealmService;
 import org.wso2.carbon.utils.ConfigurationContextService;
 
@@ -118,8 +119,6 @@ public class IotDeviceManagementServiceComponent {
 
 			bundleContext.registerService(DeviceTypeService.class.getName(),
 										  new DeviceTypeServiceImpl(), null);
-
-
 
 			if (log.isDebugEnabled()) {
 				log.debug("Iot Device Management Service Component has been successfully activated");

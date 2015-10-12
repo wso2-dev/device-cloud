@@ -14,17 +14,11 @@
  * limitations under the License.
  */
 
-package org.wso2.carbon.device.mgt.iot.common.controlqueue.mqtt;
-
+package org.wso2.carbon.device.mgt.iot.common.transport.mqtt;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
-import org.eclipse.paho.client.mqttv3.MqttCallback;
-import org.eclipse.paho.client.mqttv3.MqttClient;
-import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
-import org.eclipse.paho.client.mqttv3.MqttException;
-import org.eclipse.paho.client.mqttv3.MqttMessage;
+import org.eclipse.paho.client.mqttv3.*;
 import org.wso2.carbon.device.mgt.iot.common.controlqueue.ControlQueueConnector;
 import org.wso2.carbon.device.mgt.iot.common.exception.DeviceControllerException;
 
@@ -33,33 +27,30 @@ import java.util.HashMap;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 
-
 /**
  * The Class MqttControlPublisher. It is an implementation of the interface
  * ControlQueueConnector.
  * This implementation supports publishing of control signals received to an
  * MQTT end-point.
  * The configuration settings for the MQTT end-point are read from the
- * 'controller.xml' file of the project.
- * This is done using the class 'DefaultDeviceControlConfigs.java' which loads
+ * 'devicecloud-config.xml' file of the project.
+ * This is done using the class 'DeviceCloudConfigManager.java' which loads
  * the settings from the default xml org.wso2.carbon.device.mgt.iot.common.devicecloud.org.wso2.carbon.device.mgt.iot.common.config.server.configs
  * file -
- * /resources/conf/device-controls/controller.xml
+ * /resources/conf/device-controls/devicecloud-config.xml
  */
-//TODO-Make these MQTT, XMPP publishers/ subscribers into "transport" package
-public class MqttControlPublisher implements ControlQueueConnector, MqttCallback {
+public class MqttPublisher implements MqttCallback {
 
-	private static final Log log = LogFactory.getLog(MqttControlPublisher.class);
+	private static final Log log = LogFactory.getLog(MqttPublisher.class);
 
 	private String mqttEndpoint;
 	private String mqttUsername;
 	private String mqttPassword;
 	private boolean mqttEnabled = false;
 
-	public MqttControlPublisher() {
+	public MqttPublisher() {
 	}
 
-	@Override
 	public void initControlQueue() throws DeviceControllerException {
 		mqttEndpoint = MqttConfig.getInstance().getMqttQueueEndpoint();
 		mqttUsername = MqttConfig.getInstance().getMqttQueueUsername();
@@ -67,26 +58,16 @@ public class MqttControlPublisher implements ControlQueueConnector, MqttCallback
 		mqttEnabled = MqttConfig.getInstance().isEnabled();
 	}
 
-
-	@Override
-	public void enqueueControls(HashMap<String, String> deviceControls)
+	public void publish(String publishClientId, String publishTopic, byte[] payload)
 			throws DeviceControllerException {
 
 		if (mqttEnabled) {
 			MqttClient client;
 			MqttConnectOptions options;
 
-			String owner = deviceControls.get("owner");
-			String deviceType = deviceControls.get("deviceType");
-			String deviceId = deviceControls.get("deviceId");
-			String key = deviceControls.get("key");
-			String value = deviceControls.get("value");
-
-			String clientId = owner + "." + deviceId;
-
-			if (clientId.length() > 24) {
+			if (publishClientId.length() > 24) {
 				String errorString =
-						"No of characters '" + clientId.length() + "' for ClientID: '" + clientId +
+						"No of characters '" + publishClientId.length() + "' for ClientID: '" + publishClientId +
 								"' is invalid (should be less than 24, hence please provide a " +
 								"simple " +
 
@@ -95,33 +76,22 @@ public class MqttControlPublisher implements ControlQueueConnector, MqttCallback
 				log.error(errorString);
 				throw new DeviceControllerException(errorString);
 			} else {
-				log.info("No of Characters " + clientId.length() + " for ClientID : '" + clientId +
+				log.info("No of Characters " + publishClientId.length() + " for ClientID : '" + publishClientId +
 								 "' is acceptable");
 			}
 
-			String publishTopic =
-					"wso2" + File.separator + "iot" + File.separator + owner + File.separator +
-							deviceType + File.separator
-							+ deviceId;
-			String payLoad = key + ":" + value;
-
-			log.info("Pubish-Topic: " + publishTopic);
-			log.info("PayLoad: " + payLoad);
-
 			try {
-				client = new MqttClient(mqttEndpoint,clientId);
+				client = new MqttClient(mqttEndpoint,publishClientId);
 				options = new MqttConnectOptions();
 				options.setWill("iotDevice/clienterrors", "crashed".getBytes(UTF_8), 2, true);
 				client.setCallback(this);
 				client.connect(options);
 
-				MqttMessage message = new MqttMessage();
-				message.setPayload(payLoad.getBytes(UTF_8));
-				client.publish(publishTopic, payLoad.getBytes(UTF_8), 0, true);
+				client.publish(publishTopic, payload, 0, true);
 
 				if (log.isDebugEnabled()) {
 					log.debug("MQTT Client successfully published to topic: " + publishTopic +
-									  ", with payload - " + payLoad);
+									  ", with payload - " + payload);
 				}
 				client.disconnect();
 			} catch (MqttException ex) {
