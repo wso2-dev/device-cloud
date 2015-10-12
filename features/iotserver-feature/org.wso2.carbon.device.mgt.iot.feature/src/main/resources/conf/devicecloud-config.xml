@@ -60,7 +60,7 @@
         <LoginURL>/api-store/site/blocks/user/login/ajax/login.jag</LoginURL>
         <SubscriptionListURL>/api-store/site/blocks/subscription/subscription-list/ajax/subscription-list.jag</SubscriptionListURL>
         <Username>admin</Username>
-        <Password>wso2iot123</Password>
+        <Password>admin</Password>
         <DeviceGrantType>devicecloud</DeviceGrantType>
         <DeviceScopes>PRODUCTION DEVICE</DeviceScopes>
     </ApiManager>
