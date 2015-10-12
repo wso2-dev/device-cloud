@@ -156,10 +156,10 @@ function getStats(from, to) {
     var requestData = {};
     var getStatsRequest;
     if (from) {
-        requestData['from'] = from;
+        requestData['from'] = parseInt(from);
     }
     if (to) {
-        requestData['to'] = to;
+        requestData['to'] = parseInt(to);
     }
     if (groupId && groupId != "0") {
         requestData['groupId'] = groupId;

@@ -157,11 +157,11 @@ function getVirtualFireAlarmData(user, device, from, to) {
     });
     stats['humidityData'].push({
         "device": device.name,
-        "stats": getSensorData("HUMIDITY_SENSOR_SUMMARY", "humidity", user, device.type, device.deviceIdentifier, from, to)
+        "stats": []
     });
     stats['lightData'].push({
         "device": device.name,
-        "stats": getSensorData("LDR_LIGHT_SENSOR_SUMMARY", "light", user, device.type, device.deviceIdentifier, from, to)
+        "stats": []
     });
 }
 
@@ -388,7 +388,7 @@ function getAllDeviceData(user, device, from, to) {
 
 function getSensorData(table, column, user, type, deviceIdentifier, from, to) {
 
-    var fetchedData = null;
+    var fetchedData = [];
 
     try {
         ///stats/device/type/{type}/identifier/{identifier}
@@ -396,25 +396,14 @@ function getSensorData(table, column, user, type, deviceIdentifier, from, to) {
         var query = "?table=" + encodeURIComponent(table)
                     + "&column=" + encodeURIComponent(column)
                     + "&username=" + encodeURIComponent(user)
-                    + "&from=" + encodeURIComponent(from)
-                    + "&to=" + encodeURIComponent(to);
+                    + "&from=" + from
+                    + "&to=" + to;
         endPoint = endPoint + query;
         fetchedData = get(endPoint, {}, "json").data;
+        return fetchedData;
     } catch (error) {
         log.error(error);
     }
-
-    if (fetchedData == null) return [];
-
-    var sensorData = [];
-    for (var i = 0; i < fetchedData.size(); i++) {
-        sensorData.push({
-            time: fetchedData.get(i).getTime(),
-            value: fetchedData.get(i).getValue()
-        });
-    }
-
-    return sensorData;
 }
 
 %>
