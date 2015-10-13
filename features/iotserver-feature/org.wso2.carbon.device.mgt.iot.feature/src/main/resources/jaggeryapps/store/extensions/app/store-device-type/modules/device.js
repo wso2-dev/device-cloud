@@ -23,9 +23,9 @@ deviceModule = function () {
     var constants = require("constants.js");
     var utility = require("utility.js").utility;
 
-    var carbon = require('carbon');
-    var carbonHttpServletTransport = carbon.server.address('http');
-    var carbonHttpsServletTransport = carbon.server.address('https');
+    var CarbonUtils = Packages.org.wso2.carbon.utils.CarbonUtils;
+    var hostname = utility.getIoTServerConfig("IoTMgtHost");
+    var carbonHttpsServletTransport = "https://" + hostname + ":9443";
 
     var ArrayList = Packages.java.util.ArrayList;
     var Properties = Packages.java.util.Properties;
@@ -43,6 +43,8 @@ deviceModule = function () {
 
     var server = require('store').server;
     var user = server.current(session);
+
+    var deviceCloudService, listAllDevicesEndPoint;
 
     privateMethods.validateAndReturn = function (value) {
         return (value == undefined || value == null) ? constants.UNSPECIFIED : value;

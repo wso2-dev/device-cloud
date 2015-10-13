@@ -112,7 +112,7 @@ public class IotDeviceManagementUtil {
 
         String sep = File.separator;
         String sketchPath = CarbonUtils.getCarbonHome() + sep + templateSketchPath;
-        //
+
         FileUtils.deleteDirectory(new File(archivesPath));//clear directory
         FileUtils.deleteDirectory(new File(archivesPath + ".zip"));//clear zip
         if (!new File(archivesPath).mkdirs()) { //new dir
@@ -126,12 +126,17 @@ public class IotDeviceManagementUtil {
         try {
             Map<String, List<String>> properties = getProperties(sketchPath + sep + "sketch" + ".properties");
             List<String> templateFiles = properties.get("templates");
-            zipFileName = properties.get("zipfilename").get(0);
+
+//            zipFileName = properties.get("zipfilename").get(0);
+            zipFileName = contextParams.get("DEVICE_OWNER") + "_" +contextParams.get("DEVICE_ID") + ".zip";
+
             for (String templateFile : templateFiles) {
                 parseTemplate(templateSketchPath + sep + templateFile, archivesPath + sep + templateFile,
                         contextParams);
             }
-            copyFolder(new File(sketchPath), new File(archivesPath), templateFiles);
+
+	        templateFiles.add("sketch.properties");         // ommit copying the props file
+	        copyFolder(new File(sketchPath), new File(archivesPath), templateFiles);
 
         } catch (IOException ex) {
             throw new DeviceManagementException(

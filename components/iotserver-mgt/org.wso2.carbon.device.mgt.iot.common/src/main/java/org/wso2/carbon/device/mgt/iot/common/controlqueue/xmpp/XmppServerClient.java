@@ -1,18 +1,24 @@
 package org.wso2.carbon.device.mgt.iot.common.controlqueue.xmpp;
 
 import org.apache.commons.codec.binary.Base64;
-import org.apache.commons.httpclient.HttpClient;
-import org.apache.commons.httpclient.HttpStatus;
-import org.apache.commons.httpclient.methods.PostMethod;
-import org.apache.commons.httpclient.methods.StringRequestEntity;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.http.HttpHeaders;
+import org.apache.http.HttpResponse;
+import org.apache.http.HttpStatus;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.util.EntityUtils;
 import org.wso2.carbon.device.mgt.iot.common.controlqueue.ControlQueueConnector;
 import org.wso2.carbon.device.mgt.iot.common.exception.DeviceControllerException;
+import org.wso2.carbon.device.mgt.iot.common.exception.IoTException;
+import org.wso2.carbon.device.mgt.iot.common.util.IoTUtil;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 
@@ -61,8 +67,7 @@ public class XmppServerClient implements ControlQueueConnector {
 			}
 
 			String encodedString = xmppUsername + ":" + xmppPassword;
-			encodedString = new String(new Base64().encode(encodedString.getBytes(StandardCharsets.UTF_8)));
-
+			encodedString = new String(Base64.encodeBase64(encodedString.getBytes(StandardCharsets.UTF_8)));
 			String authorizationHeader = "Basic " + encodedString;
  			String jsonRequest ="{\n" +
 					"    \"username\": \""+newUserAccount.getUsername()+"\"," +
@@ -82,45 +87,59 @@ public class XmppServerClient implements ControlQueueConnector {
 					"        ]" +
 					"    }" +
 					"}";
-			StringRequestEntity requestEntity = null;
+			StringEntity requestEntity = null;
 			try {
-				requestEntity = new StringRequestEntity(jsonRequest,"application/json","UTF-8");
+				requestEntity = new StringEntity(jsonRequest,"application/json","UTF-8");
 			} catch (UnsupportedEncodingException e) {
 				return false;
 			}
 
-
-			HttpClient httpClient = new HttpClient();
-			PostMethod httpPost = new PostMethod(xmppUsersAPIEndpoint);
-
-			httpPost.addRequestHeader(HttpHeaders.AUTHORIZATION, authorizationHeader);
-			httpPost.setRequestEntity(requestEntity);
-
-
-			int responseStatusFromUserCreation;
-			String responseFromUserCreation = "";
+			URL xmppUserApiUrl = null;
 			try {
-				responseStatusFromUserCreation = httpClient.executeMethod(httpPost);
-				responseFromUserCreation = httpPost.getResponseBodyAsString();
-			} catch (IOException e) {
+				xmppUserApiUrl = new URL(xmppUsersAPIEndpoint);
+			} catch (MalformedURLException e) {
+				String errMsg = "Malformed URL + " + xmppUsersAPIEndpoint;
+				log.error(errMsg);
+				throw new DeviceControllerException(errMsg);
+			}
+			HttpClient httpClient = null;
+			try {
+				httpClient = IoTUtil.getHttpClient(xmppUserApiUrl.getPort(), xmppUserApiUrl.getProtocol());
+			} catch (Exception e) {
+				log.error("Error on getting a http client for port :" + xmppUserApiUrl.getPort() + " protocol :"
+								  + xmppUserApiUrl.getProtocol());
+				return false;
+			}
+			HttpPost httpPost = new HttpPost(xmppUsersAPIEndpoint);
+
+			httpPost.addHeader(HttpHeaders.AUTHORIZATION, authorizationHeader);
+			httpPost.setEntity(requestEntity);
+
+
+
+			try {
+				HttpResponse httpResponse = httpClient.execute(httpPost);
+
+				if (httpResponse.getStatusLine().getStatusCode() != HttpStatus.SC_CREATED) {
+					String response = IoTUtil.getResponseString(httpResponse);
+					String errorMsg = "XMPP Server returned status: '" + httpResponse.getStatusLine().getStatusCode() +
+									"' for account creation with error:\n" + response;
+					log.error(errorMsg);
+					throw new DeviceControllerException(errorMsg);
+				} else {
+					EntityUtils.consume(httpResponse.getEntity());
+					return true;
+				}
+			} catch (IOException | IoTException e) {
 				String errorMsg =
-						"Error occured whilst trying a 'POST' at : " + xmppUsersAPIEndpoint;
+						"Error occured whilst trying a 'POST' at : " + xmppUsersAPIEndpoint + " error: " + e.getMessage();
 				log.error(errorMsg);
 				throw new DeviceControllerException(errorMsg, e);
 			}
 
-			if (responseStatusFromUserCreation != HttpStatus.SC_CREATED) {
-				String errorMsg =
-						"XMPP Server returned status: '" + responseStatusFromUserCreation +
-								" " + HttpStatus.getStatusText(responseStatusFromUserCreation) +
-								"' for account creation with error:\n" + responseFromUserCreation;
-				log.error(errorMsg);
-				throw new DeviceControllerException(errorMsg);
-			}
 		} else {
 			log.warn("XMPP <Enabled> set to false in 'devicecloud-config.xml'");
 			return false;
 		}
-		return true;
 	}
 }

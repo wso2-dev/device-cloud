@@ -48,10 +48,11 @@
 							javax.xml.validation;resolution:=optional,
 							org.apache.commons.codec.binary,
 							org.apache.commons.collections.map,
-							org.apache.commons.httpclient.*,
+							org.apache.http.*,
 							org.apache.commons.io.*,
 							org.apache.commons.logging.*,
 							org.json;version="${commons-json.version}",
+							org.wso2.carbon.base.*,
 							org.wso2.carbon.databridge.*,
 							org.wso2.carbon.user.api,
 							org.wso2.carbon.user.core.service,
@@ -138,8 +139,14 @@
 			<artifactId>org.wso2.carbon.ndatasource.core</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>commons-httpclient.wso2</groupId>
-			<artifactId>commons-httpclient</artifactId>
+			<groupId>org.wso2.carbon.devicemgt</groupId>
+			<artifactId>org.wso2.carbon.policy.mgt.core</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.wso2.carbon.devicemgt</groupId>
+			<artifactId>org.wso2.carbon.policy.mgt.common</artifactId>
+			<scope>provided</scope>
 		</dependency>
 
 		<dependency>
@@ -178,6 +185,10 @@
 		<dependency>
 			<groupId>org.wso2.carbon.commons</groupId>
 			<artifactId>org.wso2.carbon.databridge.commons</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.wso2.orbit.org.apache.httpcomponents</groupId>
+			<artifactId>httpclient</artifactId>
 		</dependency>
 
 

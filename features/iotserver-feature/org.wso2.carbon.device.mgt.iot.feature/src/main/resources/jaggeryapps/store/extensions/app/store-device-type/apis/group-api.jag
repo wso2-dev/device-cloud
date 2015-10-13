@@ -22,8 +22,10 @@ var uriMatcher = new URIMatcher(String(uri));
 
 var log = new Log("apis/group-api.jag");
 
-var carbon = require('carbon');
-var carbonHttpsServletTransport = carbon.server.address('https');
+var utility = require("../modules/utility.js").utility;
+
+var hostname = utility.getIoTServerConfig("IoTMgtHost");
+var carbonHttpsServletTransport = "https://" + hostname + ":9443";
 var deviceCloudService = carbonHttpsServletTransport + "/common/group_manager";
 
 var server = require('store').server;

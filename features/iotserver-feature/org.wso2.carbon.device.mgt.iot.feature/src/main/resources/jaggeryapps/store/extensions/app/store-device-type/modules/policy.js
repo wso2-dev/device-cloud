@@ -26,7 +26,8 @@ var policyModule = function () {
     var carbonUser = server.current(session);
 
     var carbonModule = require('carbon');
-    var carbonHttpsServletTransport = carbonModule.server.address('https');
+    var hostname = utility.getIoTServerConfig("IoTMgtHost");
+    var carbonHttpsServletTransport = "https://" + hostname + ":9443";
 
     var carbonServer = new carbonModule.server.Server({
         tenanted: true,

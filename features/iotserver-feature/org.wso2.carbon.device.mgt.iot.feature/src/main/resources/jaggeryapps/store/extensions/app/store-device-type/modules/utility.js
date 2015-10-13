@@ -35,6 +35,16 @@ utility = function () {
         return getOsgiService('org.wso2.carbon.policy.mgt.core.PolicyManagerService');
     };
 
+    publicMethods.getIoTServerConfig = function(configName){
+        var path = "/config/iot-config.json";
+        var file = new File(path);
+        file.open("r");
+        var content = file.readAll();
+        file.close();
+        var json = parse(content);
+        return json[configName];
+    };
+
     publicMethods.insertAppPermissions = function (userModule, type) {
         userModule.addPermissions([{key: "device-mgt", name: "Device Management"}], "", type);
         userModule.addPermissions([{

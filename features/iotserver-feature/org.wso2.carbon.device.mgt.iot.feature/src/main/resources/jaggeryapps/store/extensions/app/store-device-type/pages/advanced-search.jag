@@ -1,3 +1,4 @@
+<%
 /*
  *  Copyright (c) 2005-2014, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
  *
@@ -16,11 +17,16 @@
  *  under the License.
  *
  */
+var caramel;
+require('/modules/store.js').exec(function(ctx) {
+    caramel = require('caramel');
+    var app = require('rxt').app;
+    var ui = require('rxt').ui;
+    var page = ui.buildPage(ctx.session, ctx.request);
+    page.enableBack = true;
+    var appManager = app.createUserAppManager(session);
+    var output = appManager.render([], page);
+    caramel.render(output);
 
-var resources = function (page, meta) {
-    return {
-        js: ['libs/utils.js','libs/js.cookie.js', 'libs/invoker-lib.js', 'libs/codemirror.js', 'libs/select2.full.min.js',
-            'libs/sql.js', 'policy-add.js'],
-        css: ['codemirror.css', 'select2.min.css', 'policy-add.css']
-    };
-};
+}, request, response, session); 
+%>

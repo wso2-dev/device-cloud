@@ -20,8 +20,10 @@ var groupModule = {};
 (function (groupModule) {
     var log = new Log("modules/group.js");
 
-    var carbon = require('carbon');
-    var carbonHttpsServletTransport = carbon.server.address('https');
+    var utility = require("utility.js").utility;
+    var hostname = utility.getIoTServerConfig("IoTMgtHost");
+    var carbonHttpsServletTransport = "https://" + hostname + ":9443";
+
     var deviceCloudService = carbonHttpsServletTransport + "/common/group_manager";
 
     var server = require('store').server;

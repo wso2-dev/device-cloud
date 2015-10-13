@@ -14,7 +14,7 @@ public class DataStreamDefinitions {
 	}
 
 	public final static String TEMPERATURE_STREAM_DEFINITION =
-			"{" + "     'name':'org_wso2_iot_devices_temperature'," + "     'version':'1.0.0',"
+			"{" + "     'name':'org.wso2.iot.devices.temperature'," + "     'version':'1.0.0',"
 					+ "     'nickName': 'Temperature Data',"
 					+ "     'description': 'Temperature data received from the Device',"
 					+ "     'tags': ['iot', 'temperature']," + "     'metaData': ["

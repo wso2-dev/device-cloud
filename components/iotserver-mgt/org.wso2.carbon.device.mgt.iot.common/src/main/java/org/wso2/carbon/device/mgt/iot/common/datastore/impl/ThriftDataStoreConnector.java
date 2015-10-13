@@ -104,6 +104,7 @@ public class ThriftDataStoreConnector implements DataStoreConnector {
 					}
 					deviceDataStream = dataPublisher.defineStream(
 							DataStreamDefinitions.TEMPERATURE_STREAM_DEFINITION);
+
 					break;
 				case DataStreamDefinitions.StreamTypeLabel.MOTION:
 					if (log.isDebugEnabled()) {

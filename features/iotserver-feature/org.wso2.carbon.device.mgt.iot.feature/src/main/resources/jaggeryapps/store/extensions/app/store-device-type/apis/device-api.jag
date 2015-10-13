@@ -24,10 +24,11 @@ var log = new Log("apis/device-api.jag");
 var constants = require("../modules/constants.js");
 
 var deviceModule = require("../modules/device.js").deviceModule;
+var utility = require("../modules/utility.js").utility;
 
-var carbon = require('carbon');
-var carbonHttpServletTransport = carbon.server.address('http');
-var carbonHttpsServletTransport = carbon.server.address('https');
+var CarbonUtils = Packages.org.wso2.carbon.utils.CarbonUtils;
+var hostname = utility.getIoTServerConfig("IoTMgtHost");
+var carbonHttpsServletTransport = "https://" + hostname + ":9443";
 
 var responseProcessor = require('utils').response;
 response.contentType = 'application/json';
@@ -54,7 +55,6 @@ if (!user) {
 	} else if (uriMatcher.match("/{context}/apis/devices/sketch/download/{downloadId}")) {
 		downloadId = uriMatcher.elements().downloadId;
 		//Just download the already created zip archive
-		var CarbonUtils = Packages.org.wso2.carbon.utils.CarbonUtils;
 		var sketchFolder = "repository/resources/sketches";
 		var archivesPath = "file://" + CarbonUtils.getCarbonHome() + "/" + sketchFolder + "/archives/" + downloadId + ".zip";
 		var zipFile = new File(archivesPath);

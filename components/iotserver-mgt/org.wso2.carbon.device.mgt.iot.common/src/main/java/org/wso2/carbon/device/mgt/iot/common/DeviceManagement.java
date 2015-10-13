@@ -126,11 +126,11 @@ public class DeviceManagement {
 		}
 	}
 
-	public DeviceTypes[] getDeviceTypes()
+	public DeviceTypes[] getDeviceTypes(int tenantId)
 			throws DeviceManagementDAOException {
 
 
-		List<DeviceType> deviceTypes = DeviceManagementDAOFactory.getDeviceTypeDAO().getDeviceTypes();
+		List<DeviceType> deviceTypes = DeviceManagementDAOFactory.getDeviceTypeDAO().getDeviceTypes(tenantId);
 		DeviceTypes dTypes[] = new DeviceTypes[deviceTypes.size()];
 		int iter = 0;
 		for (DeviceType type : deviceTypes) {

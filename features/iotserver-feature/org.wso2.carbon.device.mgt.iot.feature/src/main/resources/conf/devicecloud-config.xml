@@ -5,20 +5,20 @@
             <Name>WSO2-BAM</Name>
             <Enabled>false</Enabled>
             <PublisherClass>org.wso2.carbon.device.mgt.iot.common.datastore.impl.ThriftDataStoreConnector</PublisherClass>
-            <ServerURL>tcp://192.168.67.21</ServerURL>
-            <Port>7613</Port>
+            <ServerURL>tcp://localhost</ServerURL>
+            <Port>7611</Port>
             <Username>admin</Username>
-            <Password>wso2iot123</Password>
+            <Password>admin</Password>
         </DataStore>
 
         <DataStore>
             <Name>WSO2-CEP</Name>
             <Enabled>false</Enabled>
             <PublisherClass>org.wso2.carbon.device.mgt.iot.common.datastore.impl.ThriftDataStoreConnector</PublisherClass>
-            <ServerURL>tcp://192.168.67.22</ServerURL>
+            <ServerURL>tcp://localhost</ServerURL>
             <Port>7611</Port>
             <Username>admin</Username>
-            <Password>wso2iot123</Password>
+            <Password>admin</Password>
         </DataStore>
     </DataStores>
 
@@ -36,7 +36,7 @@
 
         <ControlQueue>
             <Name>XMPP</Name>
-            <Enabled>false</Enabled>
+            <Enabled>true</Enabled>
             <ControlClass>org.wso2.carbon.device.mgt.iot.common.controlqueue.xmpp.XmppServerClient</ControlClass>
             <Protocol>XMPP</Protocol>
             <ServerURL>http://204.232.188.215</ServerURL>
@@ -52,13 +52,13 @@
     </Security>
 
     <ApiManager>
-        <Enabled>false</Enabled>
-        <AccessTokenURL>https://192.168.67.21:9444/oauth2/token</AccessTokenURL>
-        <ServerURL>http://192.168.67.21</ServerURL>
-        <ServerPort>9764</ServerPort>
-        <GatewayPort>8281</GatewayPort>
-        <LoginURL>/store/site/blocks/user/login/ajax/login.jag</LoginURL>
-        <SubscriptionListURL>/store/site/blocks/subscription/subscription-list/ajax/subscription-list.jag</SubscriptionListURL>
+        <Enabled>true</Enabled>
+        <AccessTokenURL>https://localhost:9443/oauth2/token</AccessTokenURL>
+        <ServerURL>http://localhost</ServerURL>
+        <ServerPort>9763</ServerPort>
+        <GatewayPort>8280</GatewayPort>
+        <LoginURL>/api-store/site/blocks/user/login/ajax/login.jag</LoginURL>
+        <SubscriptionListURL>/api-store/site/blocks/subscription/subscription-list/ajax/subscription-list.jag</SubscriptionListURL>
         <Username>admin</Username>
         <Password>admin</Password>
         <DeviceGrantType>devicecloud</DeviceGrantType>
