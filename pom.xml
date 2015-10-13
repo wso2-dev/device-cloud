@@ -416,6 +416,17 @@
                 <version>${carbon.analytics.version}</version>
             </dependency>
 
+            <!--Dependencies on XMPP Client Library-->
+            <dependency>
+                <groupId>org.igniterealtime.smack.wso2</groupId>
+                <artifactId>smack</artifactId>
+                <version>${smack.wso2.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.igniterealtime.smack.wso2</groupId>
+                <artifactId>smackx</artifactId>
+                <version>${smackx.wso2.version}</version>
+            </dependency>
 
         </dependencies>
     </dependencyManagement>
@@ -498,6 +509,10 @@
         <!-- Source code -->
         <wso2.maven.compiler.source>1.7</wso2.maven.compiler.source>
         <wso2.maven.compiler.target>1.7</wso2.maven.compiler.target>
+
+        <!--XMPP/MQTT Version-->
+        <smack.wso2.version>3.0.4.wso2v1</smack.wso2.version>
+        <smackx.wso2.version>3.0.4.wso2v1</smackx.wso2.version>
 
     </properties>
 

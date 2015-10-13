@@ -58,7 +58,6 @@ public class XmppServerClient implements ControlQueueConnector {
 	}
 
 	public boolean createXMPPAccount(XmppAccount newUserAccount) throws DeviceControllerException {
-
 		if (xmppEnabled) {
 			String xmppUsersAPIEndpoint = xmppEndpoint + XMPP_SERVER_API_CONTEXT + USERS_API;
 			if (log.isDebugEnabled()) {
