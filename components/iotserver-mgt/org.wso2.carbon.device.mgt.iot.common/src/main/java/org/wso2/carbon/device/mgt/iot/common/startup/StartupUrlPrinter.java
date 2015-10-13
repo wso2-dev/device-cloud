@@ -17,11 +17,11 @@ public class StartupUrlPrinter implements ServerStartupObserver {
 
 	@Override
 	public void completedServerStartup() {
-		log.info("IoT Server URL : " + this.getUrl());
+		printUrl();
 
 
 	}
-	private String getUrl() {
+	private void printUrl() {
 		// Hostname
 		String hostName = "localhost";
 		try {
@@ -34,7 +34,9 @@ public class StartupUrlPrinter implements ServerStartupObserver {
 
 		int httpsPort = CarbonUtils.getTransportPort(configContextService, mgtConsoleTransport);
 
-		return "https://" + hostName + ":" + httpsPort + "/iotserver";
+		log.info("Api Store: https://" + hostName + ":" + httpsPort + "/api-store");
+		log.info("IOT Server - Device Store: https://" + hostName + ":" + httpsPort + "/store");
+		log.info("IOT Server - Device Publisher: https://" + hostName + ":" + httpsPort + "/publisher");
 	}
 
 }

@@ -67,6 +67,9 @@ public class ApisAppClient {
 				iotDeviceTypeConfigs.add(DeviceTypeConfig);
 				setBase64EncodedConsumerKeyAndSecret(iotDeviceTypeConfigs);
 				consumerKeyAndSecret = deviceTypeToApiAppMap.get(deviceType);
+				if(consumerKeyAndSecret==null){
+					log.warn("There is no API application for the device type " + deviceType);
+				}
 			}
 		}
 		return  consumerKeyAndSecret;
@@ -127,8 +130,7 @@ public class ApisAppClient {
 			}
 
 		} catch (IOException | JSONException | IoTException e) {
-			log.error("Invalid Api Endpoint loginEndpoint= "+ loginEndpoint +" and subscription api endpoint= "
-							  + subscriptionListEndpoint);
+			log.warn("Trying to connect to the Api manager");
 			return;
 		}
 
