@@ -31,15 +31,29 @@ var operationModule = function () {
     var publicMethods = {};
     var privateMethods = {};
 
-    publicMethods.getOperations = function (deviceType) {
+    publicMethods.getControlOperations = function (deviceType) {
         return [{name: "Bulb Status", description: "0:off 1:on", operation: "bulb"}];
     };
 
-    publicMethods.handleOperation = function (deviceType, operation, deviceId, value) {
+    publicMethods.getMonitorOperations = function (deviceType) {
+        return [{name: "Temperature", operation: "readtemperature"}];
+    };
+
+    publicMethods.handlePOSTOperation = function (deviceType, operation, deviceId, value) {
         //URL: POST https://localhost:9443/devicecloud/group_manager/group
-        var endPoint = carbonHttpsServletTransport + "/controller/" + operation + "/" + ((value == 1) ? "ON" : "OFF");
-        var header = '{"owner":"' + user.username + '","deviceId":"' + deviceId + '","protocol":"xmpp"}';
+        var endPoint = carbonHttpsServletTransport + '/' + deviceType + "/controller/" + operation + "/" + ((value == 1) ? "ON" : "OFF");
+        var header = '{"owner":"' + user.username + '","deviceId":"' + deviceId + '","protocol":"mqtt"}';
         return post(endPoint, {}, JSON.parse(header), "json");
+    };
+
+    publicMethods.handleGETOperation = function (deviceType, operation, deviceId) {
+        //URL: POST https://localhost:9443/devicecloud/group_manager/group
+        //var endPoint = carbonHttpsServletTransport + '/' + deviceType + "/controller/" + operation;
+        //var header = '{"owner":"' + user.username + '","deviceId":"' + deviceId + '","protocol":"http"}';
+        //return get(endPoint, {}, JSON.parse(header), "json");
+        var result = {};
+        result.data = {Temperature: Math.floor(Math.random() * (50 - 20) + 20)};
+        return result;
     };
 
     return publicMethods;

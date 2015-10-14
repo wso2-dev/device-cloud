@@ -34,16 +34,25 @@ var user = server.current(session);
 var result;
 
 if (!user) {
-    //response = responseProcessor.buildErrorResponse(response, 401, "Unauthorized");
     response.sendRedirect("/store/login?#login-required");
     exit();
 } else {
-    if (uriMatcher.match("/{context}/apis/operations/{deviceType}/{operation}")){
+    if (uriMatcher.match("/{context}/apis/operations/{deviceType}/stats")) {
+        var deviceType = uriMatcher.elements().deviceType;
+        var deviceId = request.getParameter("deviceId");
+        var monitor_operations = operationModule.getMonitorOperations(deviceType);
+        var stats = [];
+        for (var op in monitor_operations) {
+            result = operationModule.handleGETOperation(deviceType, monitor_operations[op].operation, deviceId);
+            stats.push(result.data);
+        }
+        result.data = stats;
+    } else if (uriMatcher.match("/{context}/apis/operations/{deviceType}/{operation}")) {
         var deviceType = uriMatcher.elements().deviceType;
         var operation = uriMatcher.elements().operation;
         var deviceId = request.getParameter("deviceId");
         var value = request.getParameter("value");
-        result = operationModule.handleOperation(deviceType, operation, deviceId, value);
+        result = operationModule.handlePOSTOperation(deviceType, operation, deviceId, value);
     }
 }
 

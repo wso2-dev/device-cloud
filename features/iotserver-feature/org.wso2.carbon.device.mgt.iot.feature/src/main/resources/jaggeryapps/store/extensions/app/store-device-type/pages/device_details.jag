@@ -54,7 +54,8 @@ require('/modules/store.js').exec(function (ctx) {
         page.policies = devicePolicies;
 
         var operationModule = require("../modules/operation.js").operationModule;
-        page.device_operations = operationModule.getOperations(deviceType);
+        page.control_operations = operationModule.getControlOperations(deviceType);
+        page.monitor_operations = JSON.stringify(operationModule.getMonitorOperations(deviceType));
     }
 	var appManager = app.createUserAppManager(session);
 	var output = appManager.render([], page);

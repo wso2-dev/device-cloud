@@ -117,10 +117,15 @@ function formatDates() {
 
         var hours = date.getHours();
         var amPm = hours < 12 ? "AM" : "PM";
-        if (amPm) hours -= 12;
-        if (hours == 0)hours = 12;
-        //+ ' @' + hours + ':' + date.getMinutes()+amPm
-        $(this).html(day + '-' + monthNames[monthIndex - 1] + '-' + year);
+        if (hours > 12) {
+            hours -= 12;
+        }
+        if (hours == 0) {
+            hours = 12;
+        }
+        $(this).html(day + '-'
+                     + monthNames[monthIndex - 1] + '-'
+                     + year + ' ' + hours + ':' + date.getMinutes() + amPm);
     });
 }
 

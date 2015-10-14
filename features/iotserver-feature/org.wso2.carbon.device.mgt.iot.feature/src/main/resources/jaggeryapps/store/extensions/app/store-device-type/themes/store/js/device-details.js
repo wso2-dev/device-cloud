@@ -19,6 +19,10 @@
 var graph;
 var xAxis;
 
+var deviceType = $("#details").data("devicetype");
+var deviceId = $("#details").data("deviceid");
+var monitor_operations = $("#details").data("monitor");
+
 function formatDates() {
     $(".formatDate").each(function () {
         var timeStamp = $(this).html();
@@ -64,17 +68,26 @@ $(document).ready(function () {
 });
 
 $("form").on('submit', function (e) {
-    var getStatsRequest = $.ajax({
+    var postOperationRequest = $.ajax({
         url: $(this).attr("action") + '&' + $(this).serialize(),
         method: "post"
     });
 
-    getStatsRequest.done(function (data) {
+    var lblSending = $('#lblSending', this);
+    lblSending.removeClass('hidden');
 
+    var lblSent = $('#lblSent', this);
+    postOperationRequest.done(function (data) {
+        lblSending.addClass('hidden');
+        lblSent.removeClass('hidden');
+        setTimeout(function(){
+            lblSent.addClass('hidden');
+        }, 3000);
     });
 
-    getStatsRequest.fail(function (jqXHR, textStatus) {
-        alert("Request failed: " + jqXHR.statusText);
+    postOperationRequest.fail(function (jqXHR, textStatus) {
+        lblSending.addClass('hidden');
+        lblSent.addClass('hidden');
     });
     e.preventDefault();
 });
@@ -82,28 +95,43 @@ $("form").on('submit', function (e) {
 function updateGraphs() {
     var tv = 5000;
 
+    var fields = [];
+    for (var op in monitor_operations){
+        fields.push({name : monitor_operations[op].name});
+    }
+
     // instantiate our graph!
     graph = new Rickshaw.Graph({
         element: document.getElementById("chart"),
         width: $("#chartWrapper").width() - 50,
         height: 300,
         renderer: 'line',
-        series: new Rickshaw.Series.FixedDuration([{name: 'Temperature'}, {name: 'Humidity'}], undefined, {
-            timeInterval: tv,
+        series: new Rickshaw.Series.FixedDuration(fields, undefined, {
+            timeInterval: 10000,
             maxDataPoints: 20,
             timeBase: new Date().getTime() / 1000
         })
     });
 
-    // add some data every so often
-    var i = 0;
     var iv = setInterval(function () {
 
-        var data = {Temperature: Math.floor(Math.random() * 100)};
-        data.Humidity = Math.floor(Math.random() * 100);
+        var getStatsRequest = $.ajax({
+            url: "/store/apis/operations/" + deviceType + "/stats?deviceId=" + deviceId,
+            method: "get"
+        });
 
-        graph.series.addData(data);
-        graph.render();
+        getStatsRequest.done(function (data) {
+            var stats = data.data;
+            for (var s in stats){
+                graph.series.addData(stats[s]);
+            }
+            graph.render();
+        });
+
+        //var data = {Temperature: Math.floor(Math.random() * (50 - 20) + 20)};
+        //
+        //graph.series.addData(data);
+        //graph.render();
 
     }, tv);
 

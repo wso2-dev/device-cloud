@@ -1,3 +1,4 @@
+<span id="details" data-devicetype="{{deviceType}}" data-deviceid="{{deviceId}}" data-monitor="{{monitor_operations}}"></span>
 <br/>
 <div class="ast-container">
     <div class="container-fluid ">
@@ -37,7 +38,7 @@
                     <div class="row">
 
                         <div class="top-device-details">
-                            <i class="fw fw-focus"></i>&nbsp;&nbsp;Last seen: 6 minutes ago
+                            <i class="fw fw-focus"></i>&nbsp;&nbsp;<label id="last_seen">Last seen: while ago</label>
                         </div>
 
                     </div>
@@ -64,16 +65,18 @@
                             <div id="collapseOne" class="panel-collapse collapse in"
                                  role="tabpanel" aria-labelledby="headingOne">
                                 <div id="device-location" class="panel-body">
-                                    {{#if device_operations}}
-                                        {{#each device_operations}}
+                                    {{#if control_operations}}
+                                        {{#each control_operations}}
                                             <form action="/store/apis/operations/{{../deviceType}}/{{operation}}?deviceId={{../deviceId}}" method="post">
                                                 <div class="row">
                                                     <div class="wr-input-control">
                                                         <label class="wr-input-label">{{name}}</label>
-                                                        <input type="text" name="value"
+                                                        <input type="number" name="value"
                                                                placeholder="{{description}}">
                                                         <button class="wr-btn">&nbsp;&nbsp;&nbsp;&nbsp;Send
                                                                                to Device&nbsp;&nbsp;&nbsp;&nbsp;</button>
+                                                        <label id="lblSending" class="wr-input-label hidden"><i class="fw fw-lifecycle fw-spin fw-2x"></i> Sending..</label>
+                                                        <label id="lblSent" class="wr-input-label hidden"><i class="fw fw-check fw-2x"></i> Sent</label>
                                                     </div>
                                                 </div>
                                             </form>
