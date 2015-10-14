@@ -1,7 +1,7 @@
 <span id="user-details" data-username="{{cuser.username}}"></span>
 <br/>
-{{#if groups}}
-    <div id="ast-container" class="ast-container list-view">
+<div id="ast-container" class="ast-container list-view">
+    {{#if groups}}
 		{{#each groups}}
             <div class="ctrl-wr-asset" data-groupid="{{id}}">
                 <div class="itm-select">
@@ -68,18 +68,15 @@
                 </div>
             </div>
 		{{/each}}
-    </div>
-{{else}}
-    <div id="ast-container" class="ast-container list-view">
-        <div id="ast-container" class="ast-container list-view">
-            <div class="assets-container margin-top-double padding-top-double">
-                <div class="top-assets-empty-assert">You don't have any Groups registered at the moment. Please add a
-                    new group first.
-                </div>
+    {{else}}
+        <div class="assets-container margin-top-double padding-top-double">
+            <div class="top-assets-empty-assert">You don't have any Groups registered at the moment.
+                                                 Please add a
+                                                 new group first.
             </div>
         </div>
-    </div>
-{{/if}}
+    {{/if}}
+</div>
 
 <div id="share-group-w1-modal-content" class="hide">
     <div class="modal-content">

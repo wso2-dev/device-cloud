@@ -73,6 +73,10 @@ app.server = function (ctx) {
                 path: 'stats-api.jag',
                 secured: true
             }, {
+                url: 'operations',
+                path: 'operation-api.jag',
+                secured: true
+            }, {
                 url: 'devices',
                 path: 'device-api.jag',
                 secured: true
