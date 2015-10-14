@@ -16,8 +16,7 @@ import java.util.Map;
 public class ZipUtil {
 
 	public ZipArchive downloadSketch(String owner, String tenantDomain, String deviceType,
-	                                 String deviceId, String
-			                                 token, String refreshToken)
+	                                 String deviceId, String token, String refreshToken)
 			throws DeviceManagementException {
 
 		if (owner == null || deviceType == null) {
@@ -32,11 +31,11 @@ public class ZipUtil {
 
 //		String iotServerIP = System.getProperty("bind.address");
 		String iotServerIP = System.getProperty("server.host");
-		String iotServerPort = System.getProperty("httpsPort");
-		String iotServerServicePort = System.getProperty("httpPort");
+		String httpsServerPort = System.getProperty("httpsPort");
+		String httpServerPort = System.getProperty("httpPort");
 
-		String serverEndPoint = iotServerIP + ":" + iotServerPort;
-		String serverServiceEP = iotServerIP + ":" + iotServerServicePort;
+		String httpsServerEP = iotServerIP + ":" + httpsServerPort;
+		String httpServerEP = iotServerIP + ":" + httpServerPort;
 
 		String apimIP =
 				DeviceCloudConfigManager.getInstance().getDeviceCloudMgtConfig().getApiManager()
@@ -76,8 +75,8 @@ public class ZipUtil {
 		Map<String, String> contextParams = new HashMap<String, String>();
 		contextParams.put("DEVICE_OWNER", owner);
 		contextParams.put("DEVICE_ID", deviceId);
-		contextParams.put("SERVER_EP", serverEndPoint);
-		contextParams.put("SERVICE_EP", serverServiceEP);
+		contextParams.put("HTTPS_EP", httpsServerEP);
+		contextParams.put("HTTP_EP", httpServerEP);
 		contextParams.put("APIM_EP", apimEndPoint);
 		contextParams.put("MQTT_EP", mqttEndpoint);
 		contextParams.put("XMPP_EP", xmppEndpoint);
