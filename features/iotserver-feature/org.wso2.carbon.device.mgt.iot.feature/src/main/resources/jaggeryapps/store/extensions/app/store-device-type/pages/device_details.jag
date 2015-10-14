@@ -30,6 +30,7 @@ require('/modules/store.js').exec(function (ctx) {
 		var deviceId = matchedElements.deviceId;
 		page.deviceType = deviceType;
 		page.deviceId = deviceId;
+
 		var deviceModule = require("../modules/device.js").deviceModule;
 		var device = deviceModule.viewDevice(deviceType, deviceId);
 		if (device) {
@@ -41,7 +42,21 @@ require('/modules/store.js').exec(function (ctx) {
 			}
 		}
 		page.device = device;
-	}
+
+        var policyModule = require("../modules/policy.js").policyModule;
+        var policies = policyModule.getPolicies();
+        var devicePolicies = [];
+        for (var p in policies){
+            if (policies[p].deviceType == deviceType){
+                devicePolicies.push(policies[p]);
+            }
+        }
+        page.policies = devicePolicies;
+
+        var operationModule = require("../modules/operation.js").operationModule;
+        page.control_operations = operationModule.getControlOperations(deviceType);
+        page.monitor_operations = JSON.stringify(operationModule.getMonitorOperations(deviceType));
+    }
 	var appManager = app.createUserAppManager(session);
 	var output = appManager.render([], page);
 	caramel.render(output);
