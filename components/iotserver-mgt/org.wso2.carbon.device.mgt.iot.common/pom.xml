@@ -44,6 +44,7 @@
 						<Bundle-Description>IoT Server Impl Bundle</Bundle-Description>
 						<Private-Package>org.wso2.carbon.device.mgt.iot.common.internal</Private-Package>
 						<Import-Package>
+							org.jivesoftware.smack.*,
 							javax.xml.namespace;resolution:=optional,
 							javax.xml.validation;resolution:=optional,
 							org.apache.commons.codec.binary,
@@ -191,12 +192,30 @@
 			<artifactId>httpclient</artifactId>
 		</dependency>
 
-
-
 		<dependency>
 			<groupId>org.eclipse.paho</groupId>
 			<artifactId>mqtt-client</artifactId>
 		</dependency>
+
+		<dependency>
+			<groupId>org.wso2.carbon</groupId>
+			<artifactId>org.wso2.carbon.utils</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.wso2.carbon.devicemgt</groupId>
+			<artifactId>org.wso2.carbon.device.mgt.analytics</artifactId>
+		</dependency>
+
+		<!--Dependencies on XMPP Client Library-->
+		<dependency>
+			<groupId>org.igniterealtime.smack.wso2</groupId>
+			<artifactId>smack</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.igniterealtime.smack.wso2</groupId>
+			<artifactId>smackx</artifactId>
+		</dependency>
+
 	</dependencies>
 
 	<repositories>
