@@ -128,7 +128,7 @@ public class IotDeviceManagementUtil {
             List<String> templateFiles = properties.get("templates");
 
 //            zipFileName = properties.get("zipfilename").get(0);
-            zipFileName = contextParams.get("DEVICE_OWNER") + "_" +contextParams.get("DEVICE_ID") + ".zip";
+            zipFileName = contextParams.get("DEVICE_NAME") + ".zip";
 
             for (String templateFile : templateFiles) {
                 parseTemplate(templateSketchPath + sep + templateFile, archivesPath + sep + templateFile,

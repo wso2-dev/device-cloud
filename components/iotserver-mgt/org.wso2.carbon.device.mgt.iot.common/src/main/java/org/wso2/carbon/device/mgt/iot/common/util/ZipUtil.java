@@ -16,7 +16,8 @@ import java.util.Map;
 public class ZipUtil {
 
 	public ZipArchive downloadSketch(String owner, String tenantDomain, String deviceType,
-	                                 String deviceId, String token, String refreshToken)
+	                                 String deviceId, String deviceName, String token,
+	                                 String refreshToken)
 			throws DeviceManagementException {
 
 		if (owner == null || deviceType == null) {
@@ -37,35 +38,34 @@ public class ZipUtil {
 		String httpsServerEP = iotServerIP + ":" + httpsServerPort;
 		String httpServerEP = iotServerIP + ":" + httpServerPort;
 
-		String apimIP =
+		String apimHost =
 				DeviceCloudConfigManager.getInstance().getDeviceCloudMgtConfig().getApiManager()
 						.getServerURL();
 
-		int indexOfChar = apimIP.lastIndexOf(File.separator);
-		if (indexOfChar != -1) {
-			apimIP = apimIP.substring((indexOfChar + 1), apimIP.length());
-		}
+//		int indexOfChar = apimIP.lastIndexOf(File.separator);
+//		if (indexOfChar != -1) {
+//			apimIP = apimIP.substring((indexOfChar + 1), apimIP.length());
+//		}
 
 		String apimGatewayPort =
 				DeviceCloudConfigManager.getInstance().getDeviceCloudMgtConfig().getApiManager()
 						.getGatewayPort();
 
-		String apimEndPoint = apimIP + ":" + apimGatewayPort;
-
+		String apimEndpoint = apimHost + ":" + apimGatewayPort;
 
 		String mqttEndpoint = MqttConfig.getInstance().getMqttQueueEndpoint();
-		indexOfChar = mqttEndpoint.lastIndexOf(File.separator);
-		if (indexOfChar != -1) {
-			mqttEndpoint = mqttEndpoint.substring((indexOfChar + 1), mqttEndpoint.length());
-		}
+//		indexOfChar = mqttEndpoint.lastIndexOf(File.separator);
+//		if (indexOfChar != -1) {
+//			mqttEndpoint = mqttEndpoint.substring((indexOfChar + 1), mqttEndpoint.length());
+//		}
 
 		String xmppEndpoint = XmppConfig.getInstance().getXmppEndpoint();
-		indexOfChar = xmppEndpoint.lastIndexOf(File.separator);
-		if (indexOfChar != -1) {
-			xmppEndpoint = xmppEndpoint.substring((indexOfChar + 1), xmppEndpoint.length());
-		}
+//		indexOfChar = xmppEndpoint.lastIndexOf(File.separator);
+//		if (indexOfChar != -1) {
+//			xmppEndpoint = xmppEndpoint.substring((indexOfChar + 1), xmppEndpoint.length());
+//		}
 
-		indexOfChar = xmppEndpoint.indexOf(":");
+		int indexOfChar = xmppEndpoint.lastIndexOf(":");
 		if (indexOfChar != -1) {
 			xmppEndpoint = xmppEndpoint.substring(0, indexOfChar);
 		}
@@ -75,9 +75,10 @@ public class ZipUtil {
 		Map<String, String> contextParams = new HashMap<String, String>();
 		contextParams.put("DEVICE_OWNER", owner);
 		contextParams.put("DEVICE_ID", deviceId);
+		contextParams.put("DEVICE_NAME", deviceName);
 		contextParams.put("HTTPS_EP", httpsServerEP);
 		contextParams.put("HTTP_EP", httpServerEP);
-		contextParams.put("APIM_EP", apimEndPoint);
+		contextParams.put("APIM_EP", apimEndpoint);
 		contextParams.put("MQTT_EP", mqttEndpoint);
 		contextParams.put("XMPP_EP", xmppEndpoint);
 		contextParams.put("DEVICE_TOKEN", token);
