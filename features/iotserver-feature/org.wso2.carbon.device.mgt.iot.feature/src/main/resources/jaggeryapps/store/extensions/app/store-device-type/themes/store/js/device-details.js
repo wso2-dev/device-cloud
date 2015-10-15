@@ -77,12 +77,14 @@ $("form").on('submit', function (e) {
     lblSending.removeClass('hidden');
 
     var lblSent = $('#lblSent', this);
+    var sentValue = $(this).find('input[name="value"]').val();
     postOperationRequest.done(function (data) {
         lblSending.addClass('hidden');
         lblSent.removeClass('hidden');
         setTimeout(function(){
             lblSent.addClass('hidden');
         }, 3000);
+        $('#lblLastState').text('Current value: ' + (sentValue == '1' ? 'On' : 'Off'));
     });
 
     postOperationRequest.fail(function (jqXHR, textStatus) {

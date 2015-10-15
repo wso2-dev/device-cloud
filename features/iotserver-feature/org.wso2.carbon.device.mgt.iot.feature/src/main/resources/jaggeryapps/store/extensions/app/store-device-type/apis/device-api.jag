@@ -81,6 +81,7 @@ if (!user) {
 		sketchType = request.getParameter("sketchType");
 		/* This should be registered device type of the CDMF(Connected Device Management Framework) */
 		deviceType = request.getParameter("deviceType");
+		deviceName = request.getParameter("deviceName");
 
 		if (!sketchType) {
 			log.error("Sketch Type is empty!");
@@ -91,7 +92,7 @@ if (!user) {
 			deviceManagerService = carbonHttpsServletTransport + "/" + deviceType + "/manager";
 
 			sketchDownloadEndPoint = deviceManagerService + "/device/" + sketchType + "/download";
-			response.sendRedirect(sketchDownloadEndPoint + "?owner=" + user.username);
+			response.sendRedirect(sketchDownloadEndPoint + "?owner=" + user.username + "?deviceName=" + deviceName);
 			exit();//stop execution
 
 		}
@@ -100,6 +101,7 @@ if (!user) {
 		var contents = request.getContent();
 		sketchType = contents.sketchType;
 		deviceType = contents.deviceType;
+        deviceName = contents.deviceName;
 		generateLink = contents.generateLink;
 
 		if (!sketchType) {
@@ -111,7 +113,7 @@ if (!user) {
 			deviceManagerService = carbonHttpsServletTransport + "/" + deviceType + "/manager";
 
 			sketchGenerateLinkEndPoint = deviceManagerService + "/device/" + sketchType + "/generate_link";
-			var fileId = get(sketchGenerateLinkEndPoint + "?owner=" + user.username, null, "text");
+			var fileId = get(sketchGenerateLinkEndPoint + "?owner=" + user.username + "?deviceName=" + deviceName, null, "text");
 			result = "curl -k " + carbonHttpsServletTransport + constants.WEB_APP_CONTEXT + "/apis/devices/sketch/download/" + fileId.data;
 		}
 

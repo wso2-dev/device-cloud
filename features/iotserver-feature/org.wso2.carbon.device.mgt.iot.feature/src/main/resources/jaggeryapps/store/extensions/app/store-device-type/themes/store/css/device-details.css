@@ -19,6 +19,10 @@ form {
     width: 100px;
 }
 
+.wr-input-label-status {
+    width: 200px;
+}
+
 .wr-btn, a.wr-btn {
     font-weight: normal;
     font-size: 13px;

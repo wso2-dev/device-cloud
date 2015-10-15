@@ -809,21 +809,21 @@ span.ico-sort-desc {
 }
 
 ::-webkit-input-placeholder {
-    color: #fff;
+    color: #999;
 }
 
 :-moz-placeholder {
     /* Firefox 18- */
-    color: #fff;
+    color: #999;
 }
 
 ::-moz-placeholder {
     /* Firefox 19+ */
-    color: #fff;
+    color: #999;
 }
 
 :-ms-input-placeholder {
-    color: #fff;
+    color: #999;
 }
 
 .wr-operations, .wr-operations .operation {
