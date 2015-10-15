@@ -1,5 +1,23 @@
 {{#if attributes.overview_actionLabel}}
-	<br /><br />
+    <br /><br />
+
+    <div id="name-device-modal-content" class="hide">
+        <div class="modal-content">
+            <div class="row">
+                <div class="col-lg-5 col-md-6 col-centered center-container">
+                    <h3>Name your device</h3>
+                    <br/>
+                    <div>
+                        <input class="new-device-name" style="color:#3f3f3f;padding:5px" type="text" placeholder="Ex. Lobby_firealarm" size="60">
+                    </div>
+                    <br/>
+                    <a href="#" id="btn-next" class="blue-button">
+                        &nbsp;&nbsp;&nbsp;&nbsp;Next&nbsp;&nbsp;&nbsp;&nbsp;
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <div id="download-device-modal-content" class="hide">
         <div class="modal-content">
@@ -9,6 +27,7 @@
                     <br/>
                     <div class="buttons">
                         <form id="downloadForm" method="GET" action="{{url ""}}/apis/devices/sketch/download">
+                            <input type="hidden" class="device-name" name="deviceName" value="" />
                             <input type="hidden" name="deviceType" value="{{attributes.overview_name}}" />
                             <input type="hidden" name="sketchType" value="{{attributes.sketches_Sketches}}" />
                             <a class="btn-operations" onclick="$('#downloadForm').submit()">Download Now</a>

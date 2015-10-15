@@ -63,20 +63,28 @@ function attachEvents() {
         var deviceType = $(this).data("devicetype");
         var downloadDeviceAPI = "/store/apis/devices/sketch/generate_link";
         var payload = {"sketchType":sketchType, "deviceType":deviceType};
-        $(modalPopupContent).html($('#download-device-modal-content').html());
+        $(modalPopupContent).html($('#name-device-modal-content').html());
         showPopup();
-        $("a#download-device-download-link").click(function () {
-            console.log("----");
-            invokerUtil.post(
-                downloadDeviceAPI,
-                payload,
-                function (data, textStatus, jqxhr) {
-                    doAction(data);
-                },
-                function (data) {
-                    doAction(data);
+        $("a#btn-next").click(function () {
+            $('.new-device-name').each(function() {
+                if (this.value != ""){
+                    payload.deviceName = this.value;
                 }
-            );
+            });
+            $(modalPopupContent).html($('#download-device-modal-content').html());
+            $('.device-name').val(payload.deviceName);
+            $("a#download-device-download-link").click(function () {
+                invokerUtil.post(
+                        downloadDeviceAPI,
+                        payload,
+                        function (data, textStatus, jqxhr) {
+                            doAction(data);
+                        },
+                        function (data) {
+                            doAction(data);
+                        }
+                );
+            });
         });
 
         $("a#download-device-cancel-link").click(function () {
