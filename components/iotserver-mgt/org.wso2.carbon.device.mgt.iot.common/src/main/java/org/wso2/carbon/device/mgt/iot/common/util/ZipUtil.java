@@ -35,8 +35,8 @@ public class ZipUtil {
 		String httpsServerPort = System.getProperty("httpsPort");
 		String httpServerPort = System.getProperty("httpPort");
 
-		String httpsServerEP = iotServerIP + ":" + httpsServerPort;
-		String httpServerEP = iotServerIP + ":" + httpServerPort;
+		String httpsServerEP = "https://" + iotServerIP + ":" + httpsServerPort;
+		String httpServerEP = "http://" + iotServerIP + ":" + httpServerPort;
 
 		String apimHost =
 				DeviceCloudConfigManager.getInstance().getDeviceCloudMgtConfig().getApiManager()
