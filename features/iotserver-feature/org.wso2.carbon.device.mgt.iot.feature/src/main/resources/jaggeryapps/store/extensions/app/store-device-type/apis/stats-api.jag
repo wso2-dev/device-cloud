@@ -151,10 +151,24 @@ function getVirtualFireAlarmData(user, device, from, to) {
     if (stats['lightData'] == null) {
         stats['lightData'] = [];
     }
+
+    /*
+    var timeInterval = 30;
+    var rnd, chartData = [];
+    var i = parseInt(from);
+    while (i < parseInt(to)) {
+        rnd = Math.floor(Math.random() * (50 - 20) + 20);
+        chartData.push({time: i, value: rnd});
+        i += timeInterval;
+    }
+    stats['temperatureData'].push({"device": device.name, "stats": chartData});
+     */
+
     stats['temperatureData'].push({
         "device": device.name,
         "stats": getSensorData("DEVICE_TEMPERATURE_SUMMARY", "TEMPERATURE", user, device.type, device.deviceIdentifier, from, to)
     });
+
     stats['humidityData'].push({
         "device": device.name,
         "stats": []

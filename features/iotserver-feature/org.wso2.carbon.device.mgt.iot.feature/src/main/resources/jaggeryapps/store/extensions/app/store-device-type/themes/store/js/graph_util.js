@@ -315,8 +315,8 @@ function drawLineGraph(graphId, chartDataRaw) {
     };
 
     var k = 0;
-    var min = Number.MIN_VALUE;
-    var max = Number.MAX_VALUE;
+    var max = Number.MIN_VALUE;
+    var min = Number.MAX_VALUE;
     var range_min = 99999, range_max = 0;
     for (var i = 0; i < chartDataRaw.length; i++) {
         var chartData = [];

@@ -4,7 +4,7 @@
     <div id="name-device-modal-content" class="hide">
         <div class="modal-content">
             <div class="row">
-                <div class="col-lg-5 col-md-6 col-centered center-container">
+                <div class="col-md-7 col-centered center-container">
                     <h3>Name your device</h3>
                     <br/>
                     <div>
@@ -22,7 +22,7 @@
     <div id="download-device-modal-content" class="hide">
         <div class="modal-content">
             <div class="row">
-                <div class="col-lg-5 col-md-6 col-centered center-container">
+                <div class="col-md-7 col-centered center-container">
                     <h3>Please download the file from following link.</h3>
                     <br/>
                     <div class="buttons">
@@ -46,7 +46,7 @@
     <div id="download-device-modal-content-links" class="hide">
         <div class="modal-content">
             <div class="row">
-                <div class="col-lg-5 col-md-6 col-centered center-container">
+                <div class="col-md-7 col-centered center-container">
                     <h3>Please download the file from following link(Press CTRL+C).</h3>
                     <br/>
                     <div>
@@ -60,7 +60,7 @@
     <div id="device-400-content" class="hide">
         <div class="modal-content">
             <div class="row">
-                <div class="col-lg-5 col-md-6 col-centered center-container">
+                <div class="col-md-7 col-centered center-container">
                     <h3>Exception at backend. Try Later.</h3>
                     <div class="buttons">
                         <a href="#" id="device-400-link" class="btn-operations">
@@ -75,7 +75,7 @@
     <div id="device-401-content" class="hide">
         <div class="modal-content">
             <div class="row">
-                <div class="col-lg-5 col-md-6 col-centered center-container">
+                <div class="col-md-7 col-centered center-container">
                     <h3>You have to log in first.</h3><br/>
                     <div class="buttons">
                         <a href="#" id="device-401-link" class="blue-button">
@@ -93,7 +93,7 @@
     <div id="device-403-content" class="hide">
         <div class="modal-content">
             <div class="row">
-                <div class="col-lg-5 col-md-6 col-centered center-container">
+                <div class="col-md-7 col-centered center-container">
                     <h3>Action not permitted.</h3><br/>
                     <div class="buttons">
                         <a href="#" id="device-403-link" class="btn-operations">
@@ -108,7 +108,7 @@
     <div id="device-409-content" class="hide">
         <div class="modal-content">
             <div class="row">
-                <div class="col-lg-5 col-md-6 col-centered center-container">
+                <div class="col-md-7 col-centered center-container">
                     <h3>Device Sketch does not exist.</h3><br/>
                     <div class="buttons">
                         <a href="#" id="device-409-link" class="btn-operations">
@@ -123,7 +123,7 @@
     <div id="device-unexpected-error-content" class="hide">
         <div class="modal-content">
             <div class="row">
-                <div class="col-lg-5 col-md-6 col-centered center-container">
+                <div class="col-md-7 col-centered center-container">
                     <h3>Unexpected error.</h3><br/>
                     <div class="buttons">
                         <a href="#" id="device-unexpected-error-link" class="btn-operations">
@@ -135,7 +135,7 @@
         </div>
     </div>
 
-    <a href="#" class="blue-button download-link" data-devicetype="{{attributes.overview_name}}" data-sketchtype="{{attributes.sketches_Sketches}}"><i class="fw fw-download"></i> Download</a>
+    <a href="#" class="blue-button download-link" data-devicetype="{{attributes.overview_name}}" data-sketchtype="{{attributes.sketches_Sketches}}"><i class="fw fw-download"></i>{{attributes.overview_actionLabel}}</a>
 
     <!--<a href="{{url ""}}/apis/devices/sketch/download?sketchType={{attributes.sketches_Sketches}}&deviceType={{attributes.overview_name}}" class="blue-button">{{attributes.overview_actionLabel}}</a>-->
 {{/if}}
