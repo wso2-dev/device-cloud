@@ -152,6 +152,7 @@ function getVirtualFireAlarmData(user, device, from, to) {
         stats['lightData'] = [];
     }
 
+    /*
     var timeInterval = 30;
     var rnd, chartData = [];
     var i = parseInt(from);
@@ -161,6 +162,12 @@ function getVirtualFireAlarmData(user, device, from, to) {
         i += timeInterval;
     }
     stats['temperatureData'].push({"device": device.name, "stats": chartData});
+     */
+
+    stats['temperatureData'].push({
+        "device": device.name,
+        "stats": getSensorData("DEVICE_TEMPERATURE_SUMMARY", "TEMPERATURE", user, device.type, device.deviceIdentifier, from, to)
+    });
 
     stats['humidityData'].push({
         "device": device.name,

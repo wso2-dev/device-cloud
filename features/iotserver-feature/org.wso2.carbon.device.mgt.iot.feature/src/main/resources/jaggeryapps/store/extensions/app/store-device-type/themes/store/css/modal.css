@@ -4,15 +4,16 @@
 }
 
 .wr-modalpopup .modalpopup-container {
-    display: block;
-    min-height: 100px;
-    width: 100%;
-    position: fixed;
-    background: #11375B;
-    color: #fff;
-    z-index: 1000001;
-    align-content: center;
-    top: 50%;
+  display: block;
+  min-height: 100px;
+  width: 48%;
+  position: fixed;
+  background: #11375B;
+  color: #fff;
+  z-index: 1000001;
+  align-content: center;
+  top: 50%;
+  left: 25%;
 }
 
 .modalpopup-content {
@@ -72,11 +73,13 @@
 /*}*/
 
 .wr-modalpopup .modalpopup-bg {
-    position: fixed;
-    z-index: 1000000;
-    width: 100%;
-    height: 100%;
-    background: #000000;
-    opacity: 0.9;
-    display: block;
+  position: fixed;
+  z-index: 1000000;
+  width: 100%;
+  height: 100%;
+  background: #000000;
+  opacity: 0.25;
+  display: block;
+  left: 0;
+  top: 0;
 }
