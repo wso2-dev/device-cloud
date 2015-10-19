@@ -95,7 +95,7 @@ app.server = function (ctx) {
             }]
         },
         configs: {
-            landingPage: '/assets/deviceType/list',
+            landingPage: '/pages/devices',
             disabledAssets: ['ebook', 'api', 'wsdl', 'servicex', 'policy', 'proxy', 'schema', 'sequence', 'uri', 'wadl', 'endpoint', 'swagger', 'restservice', 'comments', 'soapservice', 'service', 'license', 'gadget', 'site', 'server']
         }
     }
@@ -105,9 +105,13 @@ app.pageHandlers = function (ctx) {
     return {
         onPageLoad: function () {
             if ((ctx.isAnonContext) && (ctx.endpoint.secured)) {
-                log.info(ctx.session);
-                var loginUrl = ctx.appContext + '/login?requestedPage=' + encodeURIComponent('/store/pages/' + ctx.endpoint.url) + '&ignoreReferer=true';
-                ctx.res.sendRedirect(loginUrl);
+                var redirectUrl;
+                if (ctx.endpoint.url == 'devices'){
+                    redirectUrl = ctx.appContext + '/assets/deviceType/list';
+                }else{
+                    redirectUrl = ctx.appContext + '/login?requestedPage=' + encodeURIComponent(ctx.appContext + '/pages/' + ctx.endpoint.url) + '&ignoreReferer=true';
+                }
+                ctx.res.sendRedirect(redirectUrl);
                 return false;
             }
             return true;
@@ -119,7 +123,8 @@ app.apiHandlers = function (ctx) {
     return {
         onApiLoad: function () {
             if ((ctx.isAnonContext) && (ctx.endpoint.secured)) {
-                ctx.res.status = '401';
+                var redirectUrl = ctx.appContext + '/login?requestedPage=' + encodeURIComponent(ctx.appContext + '/pages/devices') + '&ignoreReferer=true';
+                ctx.res.sendRedirect(redirectUrl);
                 return false;
             }
             return true;

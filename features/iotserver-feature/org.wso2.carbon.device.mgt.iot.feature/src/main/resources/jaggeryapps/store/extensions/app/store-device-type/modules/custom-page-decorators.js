@@ -48,11 +48,6 @@ var pageDecorators = {};
             "analytics": [],
             "events": []
         };
-        var dashboardLink = {
-            title: "Go back to Dashboard",
-            icon: "fw-left-arrow",
-            url: "/store/pages/dashboard"
-        };
 
         var deviceMgtLink = {
             title: "Go back to My Devices",
@@ -75,12 +70,10 @@ var pageDecorators = {};
         var uri = request.getRequestURI();
         var uriMatcher = new URIMatcher(String(uri));
 
-        links.profiles.push(dashboardLink);
-
-        //links.store.push(dashboardLink);
+        links.profiles.push(deviceMgtLink);
+        links.store.push(deviceMgtLink);
         links.store.push(storeLink);
-        links.users.push(dashboardLink);
-
+        links.users.push(deviceMgtLink);
         links.device.push(deviceMgtLink);
 
         var groupId = request.getParameter("groupId");
@@ -89,7 +82,6 @@ var pageDecorators = {};
             links.devices.push(groupMgtLink);
         } else {
             links.analytics.push(deviceMgtLink);
-            links.devices.push(dashboardLink);
         }
 
         links.devices.push({
@@ -102,8 +94,14 @@ var pageDecorators = {};
             icon: "fw-add",
             url: "/store/pages/groups/add"
         });
+        links.devices.push({
+            title: "Add Policy",
+            icon: "fw-add",
+            url: "/store/pages/policies/add"
+        });
 
-        links.groups.push(dashboardLink);
+
+        links.groups.push(deviceMgtLink);
         if (uriMatcher.match("/{context}/pages/groups/add")) {
             links.groups.push({
                 title: "Go back to Groups",
@@ -118,9 +116,9 @@ var pageDecorators = {};
             });
         }
 
-        links.events.push(dashboardLink);
+        links.events.push(deviceMgtLink);
 
-        links.policies.push(dashboardLink);
+        links.policies.push(deviceMgtLink);
         if (uriMatcher.match("/{context}/pages/policies/add")) {
             links.policies.push({
                 title: "Go back to Policies",
@@ -130,7 +128,7 @@ var pageDecorators = {};
         } else {
             links.policies.push({
                 title: "Add Policy",
-                icon: "fw-policy",
+                icon: "fw-add",
                 url: "/store/pages/policies/add"
             });
         }
