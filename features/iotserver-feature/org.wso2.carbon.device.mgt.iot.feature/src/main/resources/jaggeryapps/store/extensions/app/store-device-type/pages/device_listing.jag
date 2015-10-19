@@ -38,9 +38,10 @@ require('/modules/store.js').exec(function (ctx) {
 		allDevices = result.data;
 		deviceCount = result.device_count;
 	}
-	page.groups = allDevices;
+
 	if (deviceCount > 0) {
 		page.operations = true;
+		page.groups = allDevices;
 	}
 	var appManager = app.createUserAppManager(session);
 	var output = appManager.render([], page);

@@ -85,7 +85,7 @@ var pageDecorators = {};
         }
 
         links.devices.push({
-            title: "Add Device",
+            title: "Enroll Device",
             icon: "fw-add",
             url: "/store/assets/deviceType/list"
         });

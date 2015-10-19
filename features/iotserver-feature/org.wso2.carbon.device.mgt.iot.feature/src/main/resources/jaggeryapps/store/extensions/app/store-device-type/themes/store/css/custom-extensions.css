@@ -2220,3 +2220,12 @@ a.cu-btn {
     -moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
     box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
 }
+
+.ctrl-info-panel a.cu-btn {
+    background: #11375B;
+    margin-top: 25px;
+}
+
+.ctrl-info-panel a.cu-btn:hover {
+    background-color: #132D45;
+}
