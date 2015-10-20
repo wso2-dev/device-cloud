@@ -38,6 +38,8 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 @WebService public class StatsManagerService {
@@ -69,6 +71,20 @@ import java.util.List;
         try {
             List<Record> records = deviceAnalyticsService.getAllSensorEventsForDevice(table, query);
 
+            Collections.sort(records, new Comparator<Record>() {
+                @Override
+                public int compare(Record o1, Record o2) {
+                    long t1 = (Long) o1.getValue("time");
+                    long t2 = (Long) o2.getValue("time");
+                    if (t1 < t2) {
+                        return -1;
+                    } else if (t1 > t2) {
+                        return 1;
+                    } else {
+                        return 0;
+                    }
+                }
+            });
 
             for (Record record : records) {
                 DeviceUsageDTO deviceUsageDTO = new DeviceUsageDTO();
