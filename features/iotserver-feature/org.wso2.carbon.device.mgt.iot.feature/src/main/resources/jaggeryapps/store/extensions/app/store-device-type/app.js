@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2005-2014, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+ *  Copyright (c) 2015, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
  *
  *  WSO2 Inc. licenses this file to you under the Apache License,
  *  Version 2.0 (the "License"); you may not use this file except
@@ -39,11 +39,6 @@ app.server = function (ctx) {
                 title: 'Store | Device Events',
                 url: 'events',
                 path: 'events.jag',
-                secured: true
-            }, {
-                title: 'Store | Dashboard',
-                url: 'dashboard',
-                path: 'dashboard.jag',
                 secured: true
             }, {
                 title: 'Store | Groups',
