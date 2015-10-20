@@ -1,3 +1,4 @@
+var deviceId, deviceType;
 $('select.select2').select2({
     placeholder: 'Select..'
 });
@@ -80,7 +81,19 @@ function savePolicy() {
 }
 
 $(document).ready(function () {
+    deviceId = getQueryParams('deviceId');
+    deviceType = getQueryParams('deviceType');
+
     initStepper(".wizard-stepper");
+    $(".wr-wizard").html($(".wr-steps").html());
+
+    if (deviceId && deviceType){
+        policy.devicetype = deviceType;
+        policy.deviceId = deviceId;
+        $('.policy-content').removeClass("hidden");
+        $('.policy-devicetype').addClass("hidden");
+    }
+
     $("input[type='radio'].user-select-radio").change(function () {
         $('.user-select').hide();
         $('#' + $(this).val()).show();
@@ -103,19 +116,18 @@ $(document).ready(function () {
         }
 
     });
-    stepperRegistry['policy-profile'] = function (actionButton) {
-        policy.policyDefinition = window.queryEditor.getValue();
-        //All data is collected. Policy can now be created.
-        savePolicy();
+    stepperRegistry['policy-devicetype'] = function (actionButton) {
+        policy.devicetype = $(actionButton).data("devicetype");
+        policy.devicetypeId = $(actionButton).data("devicetype-id");
     };
     stepperRegistry['policy-content'] = function (actionButton) {
         policy.policyName = $("#policy-name-input").val();
         policy.policyDescription = $("#policy-description-input").val();
     };
-    stepperRegistry['policy-devicetype'] = function (actionButton) {
-        policy.devicetype = $(actionButton).data("devicetype");
-        policy.devicetypeId = $(actionButton).data("devicetype-id");
-
+    stepperRegistry['policy-profile'] = function (actionButton) {
+        policy.policyDefinition = window.queryEditor.getValue();
+        //All data is collected. Policy can now be created.
+        savePolicy();
     };
     $(".uu").click(function () {
         var policyName = $("#policy-name-input").val();
@@ -150,3 +162,17 @@ $(document).ready(function () {
     });
 
 });
+
+function getQueryParams(key) {
+    var qs = document.location.search.split('+').join(' ');
+
+    var params = {},
+            tokens,
+            re = /[?&]?([^=]+)=([^&]*)/g;
+
+    while (tokens = re.exec(qs)) {
+        params[decodeURIComponent(tokens[1])] = decodeURIComponent(tokens[2]);
+    }
+
+    return params[key];
+}
