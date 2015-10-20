@@ -95,7 +95,7 @@ deviceModule = function () {
             deviceObject[constants.DEVICE_PROPERTIES][constants.DEVICE_OS_VERSION] =
                 privateMethods.validateAndReturn(propertiesList.get(constants.DEVICE_OS_VERSION));
 
-            deviceObject.assetId = privateMethods.getAssetId(deviceObject.type);
+            deviceObject.assetId = publicMethods.getAssetId(deviceObject.type);
             deviceList.push(deviceObject);
         }
         return deviceList;
@@ -134,7 +134,7 @@ deviceModule = function () {
             deviceObject[constants.DEVICE_PROPERTIES][constants.DEVICE_OS_VERSION] =
                 privateMethods.validateAndReturn(propertiesList.get(constants.DEVICE_OS_VERSION));
 
-            deviceObject.assetId = privateMethods.getAssetId(deviceObject.type);
+            deviceObject.assetId = publicMethods.getAssetId(deviceObject.type);
             deviceList.push(deviceObject);
         }
         return deviceList;
@@ -279,7 +279,7 @@ deviceModule = function () {
             deviceObject[constants.DEVICE_PROPERTIES] = properties;
             deviceObject[constants.DEVICE_ENROLLMENT] = device.getEnrolmentInfo().getDateOfEnrolment();
 
-            deviceObject.assetId = privateMethods.getAssetId(deviceObject.type);
+            deviceObject.assetId = publicMethods.getAssetId(deviceObject.type);
             return deviceObject;
         }
     };
@@ -293,7 +293,7 @@ deviceModule = function () {
         var device;
         for (var d in devices){
             device = devices[d];
-            device.assetId = privateMethods.getAssetId(device.deviceType);
+            device.assetId = publicMethods.getAssetId(device.deviceType);
         }
         return result;
     };
@@ -314,7 +314,7 @@ deviceModule = function () {
         var device;
         for (var d in devices){
             device = devices[d];
-            device.assetId = privateMethods.getAssetId(device.type);
+            device.assetId = publicMethods.getAssetId(device.type);
         }
         return result;
     };
@@ -347,7 +347,7 @@ deviceModule = function () {
             var device;
             for (var d in deviceInGroup){
                 device = deviceInGroup[d];
-                device.assetId = privateMethods.getAssetId(device.type);
+                device.assetId = publicMethods.getAssetId(device.type);
             }
             allDevices.push(user_groups[g]);
         }
@@ -365,12 +365,12 @@ deviceModule = function () {
         var type;
         for (var t in types){
             type = types[t];
-            type.assetId = privateMethods.getAssetId(type.name);
+            type.assetId = publicMethods.getAssetId(type.name);
         }
         return result;
     };
 
-    privateMethods.getAssetId = function (deviceType) {
+    publicMethods.getAssetId = function (deviceType) {
         var paging = {
             'start': 0,
             'count': 10,

@@ -28,6 +28,7 @@ var groupModule = {};
 
     var server = require('store').server;
     var user = server.current(session);
+    var deviceModule = require("device.js").deviceModule;
 
     var endPoint;
     var data;
@@ -127,9 +128,7 @@ var groupModule = {};
 
     groupModule.getRoleMapping = function (groupId, userId) {
         var allRoles = groupModule.getGroupRoles(groupId).data;
-        log.info(userId);
         var userRolesObj = groupModule.getUserRoles(groupId, userId);
-        log.info(userRolesObj);
         var userRoles = userRolesObj.data;
         var roleMap = [];
         for (var role in allRoles) {
@@ -175,7 +174,11 @@ var groupModule = {};
             endPoint = deviceCloudService + "/group/id/" + groupId + "/device/all";
             data = {"username": user.username};
             result = get(endPoint, data, "json");
-            group.devices = result.data;
+            var devices = result.data;
+            for (var d in devices){
+                devices[d].assetId = deviceModule.getAssetId( devices[d].type);
+            }
+            group.devices = devices;
             result.data = {group: group};
         }
         return result;

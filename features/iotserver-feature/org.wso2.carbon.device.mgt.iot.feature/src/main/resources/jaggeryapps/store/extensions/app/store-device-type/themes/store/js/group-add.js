@@ -25,7 +25,7 @@ $(function () {
                             $('.wr-validation-summary strong').removeClass("label-danger");
                             $('.wr-validation-summary strong').addClass("label-success");
                             setTimeout(function () {
-                                history.go(-1);
+                                window.location = "../groups";
                             }, 1500);
                         } else {
                             $('.wr-validation-summary strong').text("Exception at backend.");

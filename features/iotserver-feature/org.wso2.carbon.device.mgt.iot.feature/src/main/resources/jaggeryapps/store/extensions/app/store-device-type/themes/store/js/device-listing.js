@@ -231,9 +231,9 @@ function attachDeviceEvents() {
                     var status = jqxhr.status;
                     if (status == 200) {
                         $(modalPopupContent).html($('#remove-device-200-content').html());
-                        $('div[data-deviceid="' + deviceId + '"]').remove();
                         setTimeout(function () {
                             hidePopup();
+                            location.reload(false);
                         }, 2000);
                     } else {
                         displayDeviceErrors(jqXHR);
