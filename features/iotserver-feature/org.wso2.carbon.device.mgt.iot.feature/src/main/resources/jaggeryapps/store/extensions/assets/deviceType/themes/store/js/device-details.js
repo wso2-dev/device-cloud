@@ -35,12 +35,29 @@ function setPopupMaxHeight() {
 function showPopup() {
     $(modalPopup).show();
     setPopupMaxHeight();
+    $('#downloadForm').validate({
+        rules: {
+            deviceName: {
+                minlength: 4,
+                required: true
+            }
+        },
+        highlight: function (element) {
+            $(element).closest('.control-group').removeClass('success').addClass('error');
+        },
+        success: function (element) {
+            $(element).closest('.control-group').removeClass('error').addClass('success');
+            $('label[for=deviceName]').remove();
+        }
+    });
 }
 
 /*
  * hide popup function.
  */
 function hidePopup() {
+    $('label[for=deviceName]').remove();
+    $('.control-group').removeClass('success').removeClass('error');
     $(modalPopupContent).html('');
     $(modalPopup).hide();
 }
@@ -62,18 +79,19 @@ function attachEvents() {
         var sketchType = $(this).data("sketchtype");
         var deviceType = $(this).data("devicetype");
         var downloadDeviceAPI = "/store/apis/devices/sketch/generate_link";
-        var payload = {"sketchType":sketchType, "deviceType":deviceType};
-        $(modalPopupContent).html($('#name-device-modal-content').html());
+        var payload = {"sketchType": sketchType, "deviceType": deviceType};
+        $(modalPopupContent).html($('#download-device-modal-content').html());
         showPopup();
-        $("a#btn-next").click(function () {
-            $('.new-device-name').each(function() {
-                if (this.value != ""){
-                    payload.deviceName = this.value;
+        var deviceName;
+        $("a#download-device-download-link").click(function () {
+            $('.new-device-name').each(function () {
+                if (this.value != "") {
+                    deviceName = this.value;
                 }
             });
-            $(modalPopupContent).html($('#download-device-modal-content').html());
-            $('.device-name').val(payload.deviceName);
-            $("a#download-device-download-link").click(function () {
+            $('label[for=deviceName]').remove();
+            if (deviceName && deviceName.length >= 4) {
+                payload.deviceName = deviceName;
                 invokerUtil.post(
                         downloadDeviceAPI,
                         payload,
@@ -84,7 +102,13 @@ function attachEvents() {
                             doAction(data);
                         }
                 );
-            });
+            }else if(deviceName){
+                $('.controls').append('<label for="deviceName" generated="true" class="error" style="display: inline-block;">Please enter at least 4 characters.</label>');
+                $('.control-group').removeClass('success').addClass('error');
+            } else {
+                $('.controls').append('<label for="deviceName" generated="true" class="error" style="display: inline-block;">This field is required.</label>');
+                $('.control-group').removeClass('success').addClass('error');
+            }
         });
 
         $("a#download-device-cancel-link").click(function () {
@@ -94,32 +118,48 @@ function attachEvents() {
     });
 }
 
-function doAction(data){
+function downloadAgent() {
+    $('#downloadForm').submit();
+
+    var deviceName;
+    $('.new-device-name').each(function () {
+        if (this.value != "") {
+            deviceName = this.value;
+        }
+    });
+    if (deviceName && deviceName.length >= 4) {
+        setTimeout(function () {
+            hidePopup();
+        }, 1000);
+    }
+}
+
+function doAction(data) {
     //if it is saml redirection response
-    if(data.status == null) {
+    if (data.status == null) {
         document.write(data);
     }
 
-    if(data.status == "200"){
+    if (data.status == "200") {
         $(modalPopupContent).html($('#download-device-modal-content-links').html());
         $("input#download-device-url").val(data.responseText);
         $("input#download-device-url").focus(function () {
             $(this).select();
         });
         showPopup();
-    }else if(data.status == "401"){
+    } else if (data.status == "401") {
         $(modalPopupContent).html($('#device-401-content').html());
         $("#device-401-link").click(function () {
             window.location = "/store/login";
         });
         showPopup();
-    }else if(data == "403"){
+    } else if (data == "403") {
         $(modalPopupContent).html($('#device-403-content').html());
         $("#device-403-link").click(function () {
             window.location = "/store/login";
         });
         showPopup();
-    }else {
+    } else {
         $(modalPopupContent).html($('#device-unexpected-error-content').html());
         $("a#device-unexpected-error-link").click(function () {
             hidePopup();

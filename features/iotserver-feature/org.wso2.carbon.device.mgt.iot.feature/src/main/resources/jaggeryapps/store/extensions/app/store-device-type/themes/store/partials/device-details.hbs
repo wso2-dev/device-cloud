@@ -21,7 +21,7 @@
                 <div class="col-lg-2 ast-desc-image">
                     <div class="row">
                         <div class="col-lg-12 col-sm-4">
-                            <img src="/store/storage/deviceType/{{device.assetId}}/images_thumbnail"
+                            <img src="{{url ""}}/storage/deviceType/{{device.assetId}}/images_thumbnail"
                                  style="width:200px"/>
                         </div>
                         <div class="col-lg-12 col-sm-4 ast-desc">
@@ -67,7 +67,7 @@
                                 <div id="device-location" class="panel-body">
                                     {{#if control_operations}}
                                         {{#each control_operations}}
-                                            <form action="/store/apis/operations/{{../deviceType}}/{{operation}}?deviceId={{../deviceId}}" method="post">
+                                            <form action="{{url ""}}/apis/operations/{{../deviceType}}/{{operation}}?deviceId={{../deviceId}}" method="post">
                                                 <div class="row">
                                                     <div class="wr-input-control">
                                                         <label class="wr-input-label">{{name}}</label>
@@ -116,7 +116,7 @@
                                         <div id="chart" class="custom_rickshaw_graph"></div>
                                         <div class="custom_x_axis"></div>
                                     </div>
-                                    <a class="padding-left" href="/store/pages/analytics?deviceId={{deviceId}}&deviceType={{deviceType}}">
+                                    <a class="padding-left" href="{{url ""}}/pages/analytics?deviceId={{deviceId}}&deviceType={{deviceType}}">
                                         <span class="fw-stack">
                                             <i class="fw fw-ring fw-stack-2x"></i>
                                             <i class="fw fw-statistics fw-stack-1x"></i>
