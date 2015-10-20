@@ -15,19 +15,19 @@
             <div class="col-md-3 col-xs-4">
                 <div class="itm-wiz itm-wiz-current" data-step="policy-devicetype">
                     <div class="wiz-no">1</div>
-                    <div class="wiz-lbl hidden-xs"><span>Select Platform</span></div>
-                </div>
-                <br class="c-both"/>
-            </div>
-            <div class="col-md-3 col-xs-4">
-                <div class="itm-wiz" data-step="policy-profile">
-                    <div class="wiz-no">2</div>
-                    <div class="wiz-lbl hidden-xs"><span>Configure Profile</span></div>
+                    <div class="wiz-lbl hidden-xs"><span>Select Device Type</span></div>
                 </div>
                 <br class="c-both"/>
             </div>
             <div class="col-md-3 col-xs-4">
                 <div class="itm-wiz" data-step="policy-content">
+                    <div class="wiz-no">2</div>
+                    <div class="wiz-lbl hidden-xs"><span>Policy Details</span></div>
+                </div>
+                <br class="c-both"/>
+            </div>
+            <div class="col-md-3 col-xs-4">
+                <div class="itm-wiz" data-step="policy-profile">
                     <div class="wiz-no">3</div>
                     <div class="wiz-lbl hidden-xs"><span>Publish</span></div>
                 </div>
@@ -46,14 +46,14 @@
                         <br class="c-both"/>
                     </div>
                     <div class="col-md-4 col-xs-4">
-                        <div class="itm-wiz" data-step="policy-profile">
+                        <div class="itm-wiz" data-step="policy-content">
                             <div class="wiz-no">2</div>
-                            <div class="wiz-lbl hidden-xs"><span>Configure Profile</span></div>
+                            <div class="wiz-lbl hidden-xs"><span>Policy Details</span></div>
                         </div>
                         <br class="c-both"/>
                     </div>
                     <div class="col-md-4 col-xs-4">
-                        <div class="itm-wiz" data-step="policy-content">
+                        <div class="itm-wiz" data-step="policy-profile">
                             <div class="wiz-no">3</div>
                             <div class="wiz-lbl hidden-xs"><span>Publish</span></div>
                         </div>
@@ -65,7 +65,7 @@
                         <div class="row wr-tile-buttons-list">
                             <div class="wr-input-control">
                                 <div id="ast-container" class="ast-container">
-									{{#each deviceTypes}}
+                                    {{#each deviceTypes}}
                                         <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
                                             <div class="ctrl-device-type">
                                                 <div class="d01"><img
@@ -75,7 +75,7 @@
                                                 <div class="d03">{{storeDescription}}</div>
                                                 <div class="d04">
                                                     <a href="#" class="cu-btn wizard-stepper"
-                                                       data-current="policy-devicetype" data-next="policy-profile"
+                                                       data-current="policy-devicetype" data-next="policy-content"
                                                        data-devicetype="{{name}}" data-devicetype-id="{{id}}">
                     <span class="fw-stack">
                         <i class="fw fw-ring fw-stack-2x"></i>
@@ -86,7 +86,7 @@
                                                 </div>
                                             </div>
                                         </div>
-									{{/each}}
+                                    {{/each}}
                                     <br class="c-both"/>
                                 </div>
                             </div>
@@ -96,46 +96,9 @@
             </div>
         </div>
 
-        <div class="container col-centered wr-content policy-profile hidden">
-
-            <div class="wr-form">
-
-                <h1 class="page-sub-title">Add Policy</h1>
-
-                <div class="row wr-wizard"></div>
-
-                <div class="row">
-                    <div class="col-lg-12">
-                        <div class="wr-advance-operations">
-                            <label class="wr-input-label" title="">
-                                Set Policy Definition
-                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
-                            </label>
-
-                            <div class="wr-input-control">
-                                <div class="cus-col-100">
-                                    <textarea id="policy-definition-input" placeholder="Enter the policy"
-                                              style="width: 100%;" required></textarea>
-                                </div>
-                                <br class="c-both"/>
-                            </div>
-                        </div>
-                        <div class="wr-input-control wr-btn-grp">
-                            <a href="#" class="wr-btn wizard-stepper" data-current="policy-profile" data-back="true"
-                               data-next="policy-devicetype">Back</a>
-                            <a href="#" class="wr-btn wizard-stepper" data-current="policy-profile"
-                               data-next="policy-content">Continue</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
         <div class="container col-centered wr-content policy-content hidden">
 
             <div class="wr-form">
-
-                <h1 class="page-sub-title">Add Policy</h1>
 
                 <div class="row wr-wizard"></div>
 
@@ -170,9 +133,9 @@
                         </div>
                         <div class="wr-input-control wr-btn-grp">
                             <a href="#" class="wr-btn wizard-stepper" data-current="policy-content" data-back="true"
-                               data-next="policy-profile">Back</a>
+                               data-next="policy-devicetype">Back</a>
                             <a href="#" class="wr-btn wizard-stepper" data-current="policy-content"
-                               data-next="policy-message">Save</a>
+                               data-next="policy-profile">Next</a>
                         </div>
                     </div>
                 </div>
@@ -180,18 +143,43 @@
             </div>
         </div>
 
-        <div class="container col-centered wr-content policy-message hidden">
+        <div class="container col-centered wr-content policy-profile hidden">
 
             <div class="wr-form">
 
-                <h1 class="wr-title">Policy creation is successful</h1>
-                Please click <b>"Finish"</b> to complete the process and go back to the policy list
-                <hr/>
-                <button class="wr-btn wizard-stepper" data-current="policy-message" data-direct="{{url ""}}/pages/policies/"
-                        onclick="javascript:history.go(-1)">
-                    &nbsp;&nbsp;&nbsp;&nbsp;Finish&nbsp;&nbsp;&nbsp;&nbsp;
-                </button>
+                <div class="row wr-wizard"></div>
 
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="wr-advance-operations">
+                            <label class="wr-input-label" title="">
+                                Set Policy Definition
+                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                            </label>
+
+                            <div class="wr-input-control">
+                                <div class="cus-col-100">
+                                    <textarea id="policy-definition-input" placeholder="Enter the policy"
+                                              style="width: 100%;" required></textarea>
+                                </div>
+                                <br class="c-both"/>
+                            </div>
+                        </div>
+                        <div class="wr-input-control wr-btn-grp">
+                            <a href="#" class="wr-btn wizard-stepper" data-current="policy-profile" data-back="true"
+                               data-next="policy-content">Back</a>
+                            <a href="#" class="wr-btn wizard-stepper" data-current="policy-profile"
+                               data-next="policy-message">Save</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="container col-centered wr-content policy-message hidden">
+            <div class="wr-form">
+                <h1 class="wr-title">Policy creation is successful</h1>
+                You will be redirected to policy list in a moment.
             </div>
 
         </div>

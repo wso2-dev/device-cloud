@@ -68,10 +68,12 @@ function savePolicy() {
         }
     };
 
-    invokerUtil.post("/store/apis/policies/add", payload, function (data, txtStatus, jqxhr) {
+    invokerUtil.post("../../apis/policies/add", payload, function (data, txtStatus, jqxhr) {
         $(".policy-message").removeClass("hidden");
         $(".add-policy").addClass("hidden");
-        console.log(data);
+        setTimeout(function () {
+            window.location = "../policies";
+        }, 1500);
     }, function (err) {
         console.log(err);
     });
@@ -101,14 +103,14 @@ $(document).ready(function () {
         }
 
     });
-    stepperRegistry['policy-content'] = function (actionButton) {
-        policy.policyName = $("#policy-name-input").val();
-        policy.policyDescription = $("#policy-description-input").val();
+    stepperRegistry['policy-profile'] = function (actionButton) {
+        policy.policyDefinition = window.queryEditor.getValue();
         //All data is collected. Policy can now be created.
         savePolicy();
     };
-    stepperRegistry['policy-profile'] = function (actionButton) {
-        policy.policyDefinition = window.queryEditor.getValue();
+    stepperRegistry['policy-content'] = function (actionButton) {
+        policy.policyName = $("#policy-name-input").val();
+        policy.policyDescription = $("#policy-description-input").val();
     };
     stepperRegistry['policy-devicetype'] = function (actionButton) {
         policy.devicetype = $(actionButton).data("devicetype");
@@ -122,8 +124,6 @@ $(document).ready(function () {
         var selectedUserRoles = $("#user-roles-input").val();
         var selectedUsers = $("#users-input").val();
         var selectedAction = $("#action-input").val();
-
-
     });
 
     var mime = MIME_TYPE_SIDDHI_QL;
