@@ -32,7 +32,7 @@ var operationModule = function () {
     var privateMethods = {};
 
     publicMethods.getControlOperations = function (deviceType) {
-        return [{name: "Bulb Status", description: "0:off 1:on", operation: "bulb"}];
+        return [{name: "Alarm Status", description: "0:off 1:on", operation: "bulb"}];
     };
 
     publicMethods.getMonitorOperations = function (deviceType) {
