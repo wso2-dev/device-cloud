@@ -43,9 +43,6 @@ import java.util.List;
  * Class responsible for the iot device manager configuration initialization.
  */
 public class DeviceCloudConfigManager {
-
-
-
     private static final Log log = LogFactory.getLog(DeviceCloudConfigManager.class);
 
     private static final String IOT_DEVICE_CONFIG_XML_NAME = "devicecloud-config.xml";

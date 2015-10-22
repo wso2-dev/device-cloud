@@ -43,8 +43,7 @@ public class DeviceController {
 	private static HashMap<String, ControlQueueConnector> controlQueueMap = new HashMap<>();
 
 	public static void init() {
-		DeviceCloudConfig config = DeviceCloudConfigManager.getInstance()
-				.getDeviceCloudMgtConfig();
+		DeviceCloudConfig config = DeviceCloudConfigManager.getInstance().getDeviceCloudMgtConfig();
 
 		if (config != null) {
 			initSecurity(config);
@@ -65,7 +64,6 @@ public class DeviceController {
 		for (DataStore dataStore : dataStores) {
 			try {
 				String handlerClass = dataStore.getPublisherClass();
-
 
 				Class<?> dataStoreClass = Class.forName(handlerClass);
 				if (DataStoreConnector.class.isAssignableFrom(dataStoreClass)) {
@@ -115,7 +113,6 @@ public class DeviceController {
 				log.error(ex.getMessage());
 			}
 		}
-
 	}
 
 	private static void initSecurity(DeviceCloudConfig config) {

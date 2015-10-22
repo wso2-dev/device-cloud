@@ -3,9 +3,6 @@ package org.wso2.carbon.device.mgt.iot.common.controlqueue.xmpp;
 import org.wso2.carbon.device.mgt.iot.common.config.server.DeviceCloudConfigManager;
 import org.wso2.carbon.device.mgt.iot.common.config.server.datasource.ControlQueue;
 
-/**
- * Created by smean-MAC on 7/23/15.
- */
 public class XmppConfig {
 	private String xmppServerIP;
 	private int xmppServerPort;
