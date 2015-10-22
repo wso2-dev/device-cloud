@@ -76,6 +76,12 @@ form {
     margin-right: 10px;
 }
 
-.list-group-item{
+.list-group-item {
     height: 50px;
+}
+
+.map-wrapper {
+    height: 400px;
+    margin-left: 35px;
+    margin-bottom: 20px;
 }
