@@ -36,7 +36,7 @@ var operationModule = function () {
     };
 
     publicMethods.getMonitorOperations = function (deviceType) {
-        return [{name: "temperature", operation: "readtemperature"}];
+        return [{name: "temperature", operation: "readtemperature"}, {name: "gps", operation: "readlocation"}];
     };
 
     publicMethods.handlePOSTOperation = function (deviceType, operation, deviceId, value) {
@@ -46,12 +46,14 @@ var operationModule = function () {
     };
 
     publicMethods.handleGETOperation = function (deviceType, operation, deviceId) {
+        if (operation == "readlocation"){
+            var result = {};
+            result.data = {map: {lat: Math.random() * (6.9 - 6.1) + 6.1, lng: Math.random() * (80 - 78) + 79}};
+            return result;
+        }
         var endPoint = carbonHttpsServletTransport + '/' + deviceType + "/controller/" + operation;
         var header = '{"owner":"' + user.username + '","deviceId":"' + deviceId + '","protocol":"mqtt"}';
         return get(endPoint, {}, JSON.parse(header), "json");
-        //var result = {};
-        //result.data = {Temperature: Math.floor(Math.random() * (50 - 20) + 20)};
-        //return result;
     };
 
     return publicMethods;

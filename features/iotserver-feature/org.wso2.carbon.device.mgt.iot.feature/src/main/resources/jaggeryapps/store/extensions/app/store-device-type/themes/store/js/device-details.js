@@ -23,6 +23,18 @@ var deviceType = $("#details").data("devicetype");
 var deviceId = $("#details").data("deviceid");
 var monitor_operations = $("#details").data("monitor");
 
+var marker_1 = '/store/extensions/app/store-device-type/themes/store/img/map-marker-1.png';
+var marker_2 = '/store/extensions/app/store-device-type/themes/store/img/map-marker-2.png';
+
+var map;
+var mapPoints = [], mapPaths = [], mapMarkers = [];
+function initMap() {
+    map = new google.maps.Map(document.getElementById('map'), {
+        center: {lat: 6.9344, lng: 79.8428},
+        zoom: 8
+    });
+}
+
 function formatDates() {
     $(".formatDate").each(function () {
         var timeStamp = $(this).html();
@@ -102,7 +114,11 @@ function updateGraphs() {
 
     var fields = [];
     for (var op in monitor_operations) {
-        fields.push({name: monitor_operations[op].name});
+        if (monitor_operations[op].name == 'gps') {
+            $('#map').removeClass('hidden');
+        } else {
+            fields.push({name: monitor_operations[op].name});
+        }
     }
 
     // instantiate our graph!
@@ -134,7 +150,45 @@ function updateGraphs() {
                     lastUpdate = val.time;
                 }
                 delete val['time'];
-                graph.series.addData(val);
+                if (val.map) {
+                    mapPoints.push(val.map);
+                    var marker = new google.maps.Marker({
+                        position: val.map,
+                        map: map,
+                        icon: marker_1,
+                        title: 'Seen at ' + getDateString(lastUpdate)
+                    });
+                    marker.setMap(map);
+                    mapMarkers.push(marker);
+
+                    if (mapPoints.length > 1 ){
+                        var l = mapPoints.length;
+                        var path = new google.maps.Polyline({
+                            path: [mapPoints[l - 1], mapPoints[l - 2]],
+                            geodesic: true,
+                            strokeColor: '#FF0000',
+                            strokeOpacity: 1.0,
+                            strokeWeight: 2
+                        });
+
+                        path.setMap(map);
+                        mapPaths.push(path);
+
+                        mapMarkers[l - 2].setIcon(marker_2);
+                    }
+
+                    if (mapPoints.length >= 10){
+                        mapMarkers[0].setMap(null);
+                        mapMarkers.splice(0, 1);
+
+                        mapPaths[0].setMap(null);
+                        mapPaths.splice(0, 1);
+
+                        mapPoints.splice(0, 1);
+                    }
+                } else {
+                    graph.series.addData(val);
+                }
             }
 
             if (lastUpdate == -1){

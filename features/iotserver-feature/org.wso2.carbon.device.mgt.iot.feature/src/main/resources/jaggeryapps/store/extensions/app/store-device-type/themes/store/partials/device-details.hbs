@@ -116,6 +116,9 @@
                                         <div id="chart" class="custom_rickshaw_graph"></div>
                                         <div class="custom_x_axis"></div>
                                     </div>
+                                    <div id="map" class="map-wrapper hidden">
+
+                                    </div>
                                     <a class="padding-left" href="{{url ""}}/pages/analytics?deviceId={{deviceId}}&deviceType={{deviceType}}">
                                         <span class="fw-stack">
                                             <i class="fw fw-ring fw-stack-2x"></i>
@@ -246,3 +249,6 @@
         </div>
     </div>
 </div>
+<script async defer
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCO-8KGLeoFkCeqID9BpY_Gh6GOKfaBPVc&callback=initMap">
+</script>
