@@ -345,7 +345,7 @@ function drawLineGraph(graphId, chartDataRaw) {
                 'color': color[k],
                 'data': summerizeLine(chartData),
                 'name': chartDataRaw[i].device,
-                'scale': d3.scale.linear().domain([Math.min(min, min_val), Math.max(max, max_val)]).nice()
+                'scale': d3.scale.linear().domain([Math.min(min, min_val) - 5, Math.max(max, max_val) + 5]).nice()
             });
         }
         if (++k == color.length) {

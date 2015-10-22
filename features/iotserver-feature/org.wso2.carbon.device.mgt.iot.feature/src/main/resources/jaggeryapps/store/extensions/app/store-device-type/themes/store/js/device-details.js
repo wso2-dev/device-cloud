@@ -26,34 +26,37 @@ var monitor_operations = $("#details").data("monitor");
 function formatDates() {
     $(".formatDate").each(function () {
         var timeStamp = $(this).html();
-
-        var monthNames = [
-            "Jan", "Feb", "Mar",
-            "Apr", "May", "Jun", "Jul",
-            "Aug", "Sept", "Oct",
-            "Nov", "Dec"
-        ];
-
-        var date = new Date(parseInt(timeStamp));
-        var day = date.getDate();
-        var monthIndex = date.getMonth() + 1;
-        if (monthIndex < 10) {
-            monthIndex = "0" + monthIndex;
-        }
-        var year = date.getFullYear();
-
-        var hours = date.getHours();
-        var amPm = hours < 12 ? "AM" : "PM";
-        if (hours > 12) {
-            hours -= 12;
-        }
-        if (hours == 0) {
-            hours = 12;
-        }
-        $(this).html(day + '-'
-                     + monthNames[monthIndex - 1] + '-'
-                     + year + ' ' + hours + ':' + date.getMinutes() + amPm);
+        $(this).html(getDateString(timeStamp));
     });
+}
+
+function getDateString(timeStamp) {
+    var monthNames = [
+        "Jan", "Feb", "Mar",
+        "Apr", "May", "Jun", "Jul",
+        "Aug", "Sept", "Oct",
+        "Nov", "Dec"
+    ];
+
+    var date = new Date(parseInt(timeStamp));
+    var day = date.getDate();
+    var monthIndex = date.getMonth() + 1;
+    if (monthIndex < 10) {
+        monthIndex = "0" + monthIndex;
+    }
+    var year = date.getFullYear();
+
+    var hours = date.getHours();
+    var amPm = hours < 12 ? "AM" : "PM";
+    if (hours > 12) {
+        hours -= 12;
+    }
+    if (hours == 0) {
+        hours = 12;
+    }
+    return day + '-'
+                 + monthNames[monthIndex - 1] + '-'
+                 + year + ' ' + hours + ':' + date.getMinutes() + amPm;
 }
 
 $(window).on('resize', function () {
@@ -81,7 +84,7 @@ $("form").on('submit', function (e) {
     postOperationRequest.done(function (data) {
         lblSending.addClass('hidden');
         lblSent.removeClass('hidden');
-        setTimeout(function(){
+        setTimeout(function () {
             lblSent.addClass('hidden');
         }, 3000);
         $('#lblLastState').text('Current value: ' + (sentValue == '1' ? 'On' : 'Off'));
@@ -98,8 +101,8 @@ function updateGraphs() {
     var tv = 5000;
 
     var fields = [];
-    for (var op in monitor_operations){
-        fields.push({name : monitor_operations[op].name});
+    for (var op in monitor_operations) {
+        fields.push({name: monitor_operations[op].name});
     }
 
     // instantiate our graph!
@@ -124,10 +127,32 @@ function updateGraphs() {
 
         getStatsRequest.done(function (data) {
             var stats = data.data;
-            for (var s in stats){
-                graph.series.addData(stats[s]);
+            var lastUpdate = -1;
+            for (var s in stats) {
+                var val = stats[s];
+                if (val.time > lastUpdate) {
+                    lastUpdate = val.time;
+                }
+                delete val['time'];
+                graph.series.addData(val);
             }
-            graph.render();
+
+            if (lastUpdate == -1){
+                $('#last_seen').text("Not seen recently");
+            }
+
+            var timeDiff = new Date().getTime() - lastUpdate;
+            if (timeDiff < tv * 2) {
+                graph.render();
+                $('#last_seen').text("Last seen: A while ago");
+            } else if (timeDiff < 60 * 1000) {
+                graph.render();
+                $('#last_seen').text("Last seen: Less than a minute ago");
+            } else if (timeDiff < 60 * 60 * 1000) {
+                $('#last_seen').text("Last seen: " + Math.round(timeDiff / (60 * 1000)) + " minutes ago");
+            } else {
+                $('#last_seen').text("Last seen: " + getDateString(lastUpdate));
+            }
         });
 
         //var data = {Temperature: Math.floor(Math.random() * (50 - 20) + 20)};
