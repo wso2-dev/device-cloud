@@ -52,7 +52,7 @@ if (!user) {
         var operation = uriMatcher.elements().operation;
         var deviceId = request.getParameter("deviceId");
         var value = request.getParameter("value");
-        result = operationModule.handlePOSTOperation(deviceType, operation, deviceId, value);
+        var result = operationModule.handlePOSTOperation(deviceType, operation, deviceId, value);
     }
 }
 

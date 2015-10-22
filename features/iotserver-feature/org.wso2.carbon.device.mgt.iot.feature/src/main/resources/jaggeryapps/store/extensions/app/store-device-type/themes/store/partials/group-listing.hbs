@@ -69,10 +69,19 @@
             </div>
 		{{/each}}
     {{else}}
-        <div class="assets-container margin-top-double padding-top-double">
-            <div class="top-assets-empty-assert">You don't have any Groups registered at the moment.
-                                                 Please add a
-                                                 new group first.
+        <div id="ast-container" class="ast-container list-view">
+            <div class="ctrl-info-panel col-centered text-center wr-login">
+                <h2>You don't have any Device Groups at the moment.</h2>
+                <br/>
+                <p class="text-center">
+                    <a href="{{url ""}}/assets/deviceType/list" class="cu-btn">
+                    <span class="fw-stack">
+                        <i class="fw fw-ring fw-stack-2x"></i>
+                        <i class="fw fw-add fw-stack-1x"></i>
+                    </span>
+                        Add New Group
+                    </a>
+                </p>
             </div>
         </div>
     {{/if}}
