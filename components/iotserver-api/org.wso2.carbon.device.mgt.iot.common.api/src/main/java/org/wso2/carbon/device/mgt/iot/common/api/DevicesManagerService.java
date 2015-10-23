@@ -28,6 +28,7 @@ import org.wso2.carbon.device.mgt.common.configuration.mgt.TenantConfiguration;
 import org.wso2.carbon.device.mgt.common.license.mgt.License;
 import org.wso2.carbon.device.mgt.core.dto.DeviceType;
 import org.wso2.carbon.device.mgt.core.service.DeviceManagementProviderService;
+import org.wso2.carbon.device.mgt.iot.common.exception.DeviceControllerException;
 import org.wso2.carbon.device.mgt.iot.common.sensormgt.SensorDataManager;
 import org.wso2.carbon.device.mgt.iot.common.sensormgt.SensorRecord;
 
@@ -637,10 +638,18 @@ import java.util.List;
     @Consumes("application/json")
     @Produces("application/json")
     public SensorRecord getSensorValue(@PathParam("type") String type, @PathParam("identifier") String deviceId,
-                                   @PathParam("sensorName") String sensorName){
+                                   @PathParam("sensorName") String sensorName, @HeaderParam("defaultValue") String defaultValue){
 
         try {
             return SensorDataManager.getInstance().getSensorRecord(deviceId, sensorName);
+        } catch (DeviceControllerException e) {
+            log.error("Error on reading sensor value: " + e.getMessage());
+            if(defaultValue != null){
+                return new SensorRecord(defaultValue, Calendar.getInstance().getTimeInMillis());
+            }else{
+                response.setStatus(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode());
+                return null;
+            }
         } finally {
             this.endTenantFlow();
         }
