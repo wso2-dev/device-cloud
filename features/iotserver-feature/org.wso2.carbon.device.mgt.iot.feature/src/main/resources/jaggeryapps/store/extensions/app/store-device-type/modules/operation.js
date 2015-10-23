@@ -32,11 +32,29 @@ var operationModule = function () {
     var privateMethods = {};
 
     publicMethods.getControlOperations = function (deviceType) {
-        return [{name: "Alarm Status", description: "0:off 1:on", operation: "bulb"}];
+        switch (deviceType) {
+            case "virtual_firealarm":
+                return [{name: "Alarm Status", description: "0:off 1:on", operation: "bulb"}];
+            default:
+                return [];
+        }
     };
 
     publicMethods.getMonitorOperations = function (deviceType) {
-        return [{name: "temperature", operation: "readtemperature"}, {name: "gps", operation: "readlocation"}];
+        switch (deviceType) {
+            case "virtual_firealarm":
+                return [{name: "Temperature", operation: "readtemperature"}];
+            case "android_sense":
+                return [
+                    {name: "Temperature", operation: "readtemperature"},
+                    {name: "Battery", operation: "readbattery"},
+                    {name: "gps", operation: "readgps"},
+                    {name: "Light", operation: "readlight"},
+                    {name: "Magnetic", operation: "readmagnetic"}
+                ];
+            default:
+                return [];
+        }
     };
 
     publicMethods.handlePOSTOperation = function (deviceType, operation, deviceId, value) {
@@ -45,15 +63,25 @@ var operationModule = function () {
         return post(endPoint, {}, JSON.parse(header), "json");
     };
 
-    publicMethods.handleGETOperation = function (deviceType, operation, deviceId) {
-        if (operation == "readlocation"){
+    publicMethods.handleGETOperation = function (deviceType, operation, operationName, deviceId) {
+
+        if (operation == "readgps") {
             var result = {};
-            result.data = {map: {lat: Math.random() * (6.9 - 6.1) + 6.1, lng: Math.random() * (80 - 78) + 79}};
+            result.data = {
+                map: {
+                    lat: Math.random() * (6.9 - 6.1) + 6.1,
+                    lng: Math.random() * (80 - 78) + 79
+                }
+            };
             return result;
         }
         var endPoint = carbonHttpsServletTransport + '/' + deviceType + "/controller/" + operation;
         var header = '{"owner":"' + user.username + '","deviceId":"' + deviceId + '","protocol":"mqtt"}';
-        return get(endPoint, {}, JSON.parse(header), "json");
+        result = get(endPoint, {}, JSON.parse(header), "json");
+        if (result.data) {
+            result.data = JSON.parse('{"' + operationName + '":' + result.data.sensorValue + ', "time":' + result.data.time + '}');
+        }
+        return result;
     };
 
     return publicMethods;
