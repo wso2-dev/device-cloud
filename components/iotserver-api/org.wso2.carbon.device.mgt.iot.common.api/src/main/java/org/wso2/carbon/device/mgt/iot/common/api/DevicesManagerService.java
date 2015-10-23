@@ -28,6 +28,8 @@ import org.wso2.carbon.device.mgt.common.configuration.mgt.TenantConfiguration;
 import org.wso2.carbon.device.mgt.common.license.mgt.License;
 import org.wso2.carbon.device.mgt.core.dto.DeviceType;
 import org.wso2.carbon.device.mgt.core.service.DeviceManagementProviderService;
+import org.wso2.carbon.device.mgt.iot.common.sensormgt.SensorDataManager;
+import org.wso2.carbon.device.mgt.iot.common.sensormgt.SensorRecord;
 
 import javax.jws.WebService;
 import javax.servlet.http.HttpServletResponse;
@@ -35,6 +37,7 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -367,7 +370,7 @@ import java.util.List;
     @Produces("application/json")
     public License getLicense(@PathParam("type") String type, @QueryParam("languageCode") String languageCode) {
         try{
-            return this.getServiceProvider().getLicense(type,languageCode);
+            return this.getServiceProvider().getLicense(type, languageCode);
         } catch (DeviceManagementException e) {
             response.setStatus(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode());
             return null;
@@ -613,19 +616,31 @@ import java.util.List;
         }
     }
 
-    @Path("/device/type/{type}/identifier/{identifier}/claimable")
+    @Path("/device/type/{type}/identifier/{identifier}/sensor/{sensorName}")
+    @POST
+    @Consumes("application/json")
+    @Produces("application/json")
+    public boolean setSensorValue(@PathParam("type") String type, @PathParam("identifier") String deviceId,
+                                  @PathParam("sensorName") String sensorName,
+                                  @HeaderParam("sensorValue") String sensorValue){
+
+        try {
+            return SensorDataManager.getInstance().setSensorRecord(deviceId, sensorName, sensorValue, Calendar
+                    .getInstance().getTimeInMillis());
+        } finally {
+            this.endTenantFlow();
+        }
+    }
+
+    @Path("/device/type/{type}/identifier/{identifier}/sensor/{sensorName}")
     @GET
     @Consumes("application/json")
     @Produces("application/json")
-    public boolean isClaimable(@PathParam("type") String type, @PathParam("identifier") String identifier){
-        DeviceIdentifier deviceIdentifier = new DeviceIdentifier();
-        deviceIdentifier.setType(type);
-        deviceIdentifier.setId(identifier);
+    public SensorRecord getSensorValue(@PathParam("type") String type, @PathParam("identifier") String deviceId,
+                                   @PathParam("sensorName") String sensorName){
+
         try {
-            return this.getServiceProvider().isClaimable(deviceIdentifier);
-        } catch (DeviceManagementException e) {
-            response.setStatus(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode());
-            return false;
+            return SensorDataManager.getInstance().getSensorRecord(deviceId, sensorName);
         } finally {
             this.endTenantFlow();
         }
