@@ -16,6 +16,9 @@
 
 package org.wso2.carbon.device.mgt.iot.common.sensormgt;
 
+import org.wso2.carbon.device.mgt.iot.common.exception.DeviceControllerException;
+
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -54,9 +57,13 @@ public class SensorDataManager {
      * @param deviceId
      * @return list of sensor records
      */
-    public SensorRecord[] getSensorRecords(String deviceId){
-        Collection<SensorRecord> list = deviceMap.get(deviceId).getSensorDataList().values();
-        return list.toArray(new SensorRecord[list.size()]);
+    public SensorRecord[] getSensorRecords(String deviceId) throws DeviceControllerException{
+        DeviceRecord deviceRecord = deviceMap.get(deviceId);
+        if(deviceRecord != null){
+            Collection<SensorRecord> list = deviceRecord.getSensorDataList().values();
+            return list.toArray(new SensorRecord[list.size()]);
+        }
+        throw new DeviceControllerException("Error: No records found for the device ID: " + deviceId);
     }
 
     /**
@@ -65,8 +72,17 @@ public class SensorDataManager {
      * @param sensorName
      * @return sensor record
      */
-    public SensorRecord getSensorRecord(String deviceId, String sensorName){
-        return deviceMap.get(deviceId).getSensorDataList().get(sensorName);
+    public SensorRecord getSensorRecord(String deviceId, String sensorName) throws
+            DeviceControllerException{
+        DeviceRecord deviceRecord = deviceMap.get(deviceId);
+        if(deviceRecord != null){
+            SensorRecord sensorRecord = deviceRecord.getSensorDataList().get(sensorName);
+            if(sensorRecord != null){
+                return sensorRecord;
+            }
+            throw new DeviceControllerException("Error: No records found for the Device ID: " + deviceId + " Sensor Name: "+sensorName);
+        }
+        throw new DeviceControllerException("Error: No records found for the device ID: " + deviceId);
     }
 
     /**
@@ -75,8 +91,16 @@ public class SensorDataManager {
      * @param sensorName
      * @return sensor reading
      */
-    public String getSensorRecordValue(String deviceId, String sensorName){
-        return deviceMap.get(deviceId).getSensorDataList().get(sensorName).getSensorValue();
+    public String getSensorRecordValue(String deviceId, String sensorName) throws DeviceControllerException{
+        DeviceRecord deviceRecord = deviceMap.get(deviceId);
+        if(deviceRecord != null){
+            SensorRecord sensorRecord = deviceRecord.getSensorDataList().get(sensorName);
+            if(sensorRecord != null){
+                return sensorRecord.getSensorValue();
+            }
+            throw new DeviceControllerException("Error: No records found for the Device ID: " + deviceId + " Sensor Name: "+sensorName);
+        }
+        throw new DeviceControllerException("Error: No records found for the device ID: " + deviceId);
     }
 
     /**
@@ -85,8 +109,16 @@ public class SensorDataManager {
      * @param sensorName
      * @return time in millis
      */
-    public long getSensorRecordTime(String deviceId, String sensorName){
-        return deviceMap.get(deviceId).getSensorDataList().get(sensorName).getTime();
+    public long getSensorRecordTime(String deviceId, String sensorName) throws DeviceControllerException{
+        DeviceRecord deviceRecord = deviceMap.get(deviceId);
+        if(deviceRecord != null){
+            SensorRecord sensorRecord = deviceRecord.getSensorDataList().get(sensorName);
+            if(sensorRecord != null){
+                return sensorRecord.getTime();
+            }
+            throw new DeviceControllerException("Error: No records found for the Device ID: " + deviceId + " Sensor Name: "+sensorName);
+        }
+        throw new DeviceControllerException("Error: No records found for the device ID: " + deviceId);
     }
 
 }
