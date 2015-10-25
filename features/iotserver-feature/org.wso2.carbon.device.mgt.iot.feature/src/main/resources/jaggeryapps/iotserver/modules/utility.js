@@ -109,11 +109,23 @@ utility = function () {
         userModule.addPermissions([{key: "groups", name: "Groups"}], "device-mgt/user", type);
         userModule.addPermissions([{
             key: "groups/device_monitor",
-            name: "Monitor Devices in Group"
+            name: "Monitor Statistics Devices in Group"
         }], "device-mgt/user", type);
         userModule.addPermissions([{
             key: "groups/device_operation",
             name: "Perform Device Operation"
+        }], "device-mgt/user", type);
+        userModule.addPermissions([{
+            key: "groups/device_policies/add",
+            name: "Apply Device Policies"
+        }], "device-mgt/user", type);
+        userModule.addPermissions([{
+            key: "groups/device_policies/view",
+            name: "View Device Policies"
+        }], "device-mgt/user", type);
+        userModule.addPermissions([{
+            key: "groups/device_events",
+            name: "Monitor Device Events"
         }], "device-mgt/user", type);
         userModule.addPermissions([{
             key: "groups/device_list",
