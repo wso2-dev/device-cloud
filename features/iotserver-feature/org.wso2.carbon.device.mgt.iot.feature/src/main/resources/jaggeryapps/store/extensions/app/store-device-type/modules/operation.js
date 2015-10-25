@@ -46,7 +46,7 @@ var operationModule = function () {
                 return [{name: "Temperature", operation: "readtemperature"}];
             case "android_sense":
                 return [
-                    {name: "Temperature", operation: "readtemperature"},
+                    //{name: "Temperature", operation: "readtemperature"},
                     {name: "Battery", operation: "readbattery"},
                     {name: "gps", operation: "readgps"},
                     {name: "Light", operation: "readlight"},

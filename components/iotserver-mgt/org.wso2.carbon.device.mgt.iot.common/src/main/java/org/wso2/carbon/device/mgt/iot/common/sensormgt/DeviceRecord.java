@@ -34,4 +34,8 @@ public class DeviceRecord implements Serializable{
     public Map<String, SensorRecord> getSensorDataList() {
         return sensorDataList;
     }
+
+    public void addDeviceRecord(String sensorName, String sensorValue, long time){
+        sensorDataList.put(sensorName, new SensorRecord(sensorValue, time));
+    }
 }
