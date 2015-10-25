@@ -1,0 +1,598 @@
+<style type="text/css">
+    .policy-step-desc{
+        font-weight: 300;
+        font-size: 18px;
+    }
+    .policy-container{
+        padding-top: 25px;
+    }
+    .wr-wizard{
+        border-top: 1px solid #f0f0f0;
+    }
+    .itm-wiz{
+        margin-top: 20px;
+    }
+    .panel-group .panel-heading + .panel-collapse > .panel-body, .panel-group .panel-heading + .panel-collapse > .list-group {
+        border-top: none;
+    }
+    .panel-default > .panel-heading{
+        border-color: #e4e4e4;
+        font-size: 24px;
+        font-weight: 300;
+        border-bottom: 1px solid #e4e4e4;
+        margin-bottom: 20px;
+    }
+    .panel-heading{
+        border-top-left-radius: 0;
+        border-top-right-radius: 0;
+    }
+    .wr-hidden-operations-content .panel-title {
+        margin-left: 5px;
+        margin-top: 5px;
+        margin-right: 5px;
+        padding: 20px;
+        background: #ffffff;
+        color: #555;
+    }
+    .wr-hidden-operations-content .sub-title {
+        font-size: 16px;
+    }
+    .wr-hidden-operations-content{
+        border-left: none;
+    }
+    .wr-input-control .helper {
+        font-weight: 100;
+    }
+    .wr-advance-operations .wr-hidden-operations-nav a span.has-configured.status-icon {
+        color: #cccccc;
+    }
+    .wr-advance-operations .wr-hidden-operations-nav a span.status-icon {
+        float: right;
+        font-size: 20px;
+    }
+    .form-control {
+        width: 100%;
+        background-color: #fff;
+        background-image: none;
+        border: 1px solid #999;
+        border-radius: 0;
+        -webkit-box-shadow: inset 0 0 0 rgba(0, 0, 0, .075);
+        box-shadow: inset 0 0 0 rgba(0, 0, 0, .075);
+        -webkit-transition: border-color ease-in-out .15s, -webkit-box-shadow ease-in-out .15s;
+        -o-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+        transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+        display: block;
+        height: 34px;
+        padding: 6px 12px;
+        font-size: 14px;
+        line-height: 1.42857143;
+        color: #555555;
+    }
+    .sub-title {
+        font-weight: 100;
+        font-size: 20px;
+    }
+    .panel-title {
+        margin-top: 0;
+        margin-bottom: 0;
+        font-size: 16px;
+        color: inherit;
+    }
+    hr {
+        margin-top: 20px !important;
+        margin-bottom: 20px !important;
+        border: 0 !important;
+        border-top: 1px solid #eeeeee !important;
+        opacity: 1;
+    }
+    .panel-title a {
+        color: #333333;
+        padding:15px 0;
+        display: inline-block;
+    }
+    .panel-body {
+        background: transparent;
+        padding: 0;
+    }
+    .panel {
+        margin-bottom: 0;
+        background-color: transparent;
+        border: 0 solid #e4e4e4;
+        border-radius: 0;
+        -webkit-box-shadow: 0 0 0 rgba(0, 0, 0, .05);
+        box-shadow: 0 0 0 rgba(0, 0, 0, .05);
+    }
+    .row.no-gutter > [class*='col-']:not(:first-child), .row.no-gutter > [class*='col-']:not(:last-child) {
+        padding-right: 0;
+        padding-left: 0;
+    }
+    .wr-advance-operations {
+        height: 100%;
+        background: #ffffff;
+        border: 1px solid #e8e8e8;
+    }
+    .row.no-gutter {
+        margin-right: 0;
+        margin-left: 0;
+    }
+    .wr-advance-operations .wr-hidden-operations-nav a {
+        display: block;
+        margin: 5px;
+        border: 1px solid #e8e8e8;
+        background: #ffffff;
+        color: #526A84;
+        padding: 10px;
+        text-decoration: none;
+        font-size: 16px;
+    }
+    .wr-advance-operations .wr-hidden-operations-nav a.selected, .wr-hidden-operations .wr-hidden-operations-nav a.selected:hover {
+        color: #ffffff;
+        background: #526A84;
+    }
+    .wr-advance-operations .wr-hidden-operations-nav a {
+        display: block;
+        margin: 5px;
+        border: 1px solid #e8e8e8;
+        background: #ffffff;
+        color: #526A84;
+        padding: 10px;
+        text-decoration: none;
+        font-size: 16px;
+    }
+    .wr-hidden-operations-content .panel-title {
+        margin-left: 5px;
+        margin-top: 5px;
+        margin-right: 5px;
+        padding: 20px;
+        background: #ffffff;
+        color: #555;
+    }
+
+
+    .wr-advance-operations {
+        height: 100%;
+        background: #ffffff;
+        border: 1px solid #e8e8e8;
+    }
+
+    .wr-advance-operations .row:first-child {
+        height: 100%;
+    }
+
+    .wr-advance-operations .wr-hidden-operations-nav a {
+        display: block;
+        margin: 5px;
+        border: 1px solid #e8e8e8;
+        background: #ffffff;
+        color: #526A84;
+        padding: 10px;
+        text-decoration: none;
+        font-size: 16px;
+    }
+
+    .wr-advance-operations .wr-hidden-operations-nav a.has-error,
+    .wr-advance-operations .wr-hidden-operations-nav a.has-error:hover,
+    .wr-advance-operations .wr-hidden-operations-nav a.has-error.selected {
+        background: #B23E37;
+        color: #ffffff;
+    }
+
+    .wr-advance-operations .wr-hidden-operations-nav a.has-success,
+    .wr-advance-operations .wr-hidden-operations-nav a.has-success:hover,
+    .wr-advance-operations .wr-hidden-operations-nav a.has-success.active {
+        /*background: #4F853C;*/
+        /*color: #fff;*/
+    }
+
+    .wr-advance-operations .wr-hidden-operations-nav a span.status-icon {
+        float: right;
+        font-size: 20px;
+    }
+
+    .wr-advance-operations .wr-hidden-operations-nav a span.has-configured.status-icon {
+        color: #cccccc;
+    }
+
+    .wr-advance-operations .wr-hidden-operations-nav a span.has-success.status-icon {
+        color: #A4C639;
+    }
+
+    .wr-advance-operations .wr-hidden-operations-nav a span.has-error.status-icon {
+        color: #F47415;
+    }
+
+    .wr-advance-operations .wr-hidden-operations-nav a:hover {
+        background: #f4f4f4;
+    }
+
+    .wr-advance-operations .wr-hidden-operations-nav a.selected, .wr-hidden-operations .wr-hidden-operations-nav a.selected:hover {
+        color: #ffffff;
+        background: #526A84;
+        opacity: 1;
+    }
+
+    .wr-hidden-operations {
+        width: 900px;
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: -900px;
+        z-index: 10000;
+        -moz-transition: left 0.4s ease;
+        transition: left 0.4s ease 0s;
+        overflow-y: hidden;
+        overflow-x: hidden;
+    }
+
+    .wr-hidden-operation {
+        display: none;
+    }
+
+    .wr-hidden-operations.toggled {
+        left: 0;
+    }
+
+    .wr-hidden-operations-icon {
+        margin-right: 10px;
+    }
+
+    .wr-hidden-operations-content {
+        overflow-y: auto;
+        overflow-x: hidden;
+        height: 100%;
+        background: #ffffff;
+    }
+
+    .wr-hidden-operations-content::-webkit-scrollbar {
+        width: 6px;
+        background: transparent;
+        padding: 0 5px;
+        cursor: all-scroll;
+    }
+    .wr-hidden-operations-content::-webkit-scrollbar-thumb {
+        background: #f5f5f5;
+    }
+    .wr-hidden-operations-content::-webkit-scrollbar-thumb:hover {
+        background: #f5f5f5;
+    }
+    .wr-hidden-operations-content::-webkit-scrollbar-thumb:active {
+        background: #f5f5f5;
+    }
+
+    .wr-hidden-operations-content .panel-body {
+        margin: 5px;
+        /*border: 1px solid #e8e8e8;*/
+        padding: 20px 20px 30px;
+        background: #ffffff;
+    }
+
+    .wr-advance-operations.wizard-content .panel-title .fw-stack {
+        width: 5px;
+    }
+
+    .wr-hidden-operations-content .sub-title {
+        font-size: 16px;
+    }
+
+    .wr-hidden-operations-content .panel-title {
+        margin-left: 5px;
+        margin-top: 5px;
+        margin-right: 5px;
+        /* border: 1px solid #e8e8e8; */
+        padding: 20px;
+        background: #ffffff;
+        color: #555;
+    }
+
+    .wr-hidden-operations-content .panel-title-description {
+        padding-right: 20px;
+        background: #ffffff;
+        color: #555;
+        line-height: 140%;
+    }
+
+    .wr-hidden-operations-content .panel-title a {
+        padding: 0;
+    }
+
+    .wr-hidden-operations-content .panel-title .fw-stack.collapsed .fw-down-arrow:before {
+        content: "\e634";
+    }
+
+    .wr-hidden-operations-content .panel-title .wr-input-control.switch {
+        margin-top: 0;
+        margin-right: 0;
+    }
+
+    .wr-hidden-operations-content .panel-title .wr-input-control.switch input[type="checkbox"]:not(:checked) + .helper:after {
+        background: #ffffff;
+    }
+
+    .wr-hidden-operations-content .panel-title .wr-input-control.switch input[type="checkbox"] + .helper + .text {
+        display: inline-block;
+        float: left;
+        margin-right: 10px;
+        margin-top: -1px;
+    }
+
+    .wr-hidden-operations-content .panel-title .wr-input-control.switch input[type="checkbox"] + .helper + .text:after {
+        content: "Off";
+    }
+
+    .wr-hidden-operations-content .panel-title .wr-input-control.switch input[type="checkbox"]:checked + .helper + .text:after {
+        content: "On";
+    }
+
+    .wr-hidden-operations-content .panel-title label {
+        float: right;
+    }
+
+    .wr-hidden-operations-content .panel-title:after {
+        clear: both;
+        content: " ";
+        display: block;
+        height: 0;
+    }
+
+    .wr-page-content {
+        position: relative;
+        left: 0;
+        -moz-transition: left 0.4s ease;
+        transition: left 0.4s ease;
+    }
+
+    .wr-page-content.toggled {
+        left: 900px;
+    }
+
+    a.show-operations-btn {
+        margin-bottom: 10px;
+    }
+
+    a.show-operations-btn.selected {
+        background: #526A84;
+        color: #fff;
+    }
+
+    a.show-operations-btn.selected .fw-right-arrow-2:before {
+        content: "\e662";
+    }
+
+    a.show-operations-btn.selected .btn-text:before {
+        content: "Hide ";
+    }
+
+    a.show-operations-btn .btn-text:before {
+        content: "View All ";
+    }
+
+</style>
+<br/>
+
+<div class="ast-container " id="ast-container">
+    <div class="container-fluid ">
+        <div class="title">
+            <a class="asset-type-deviceType">{{title}}</a>
+        </div>
+        <hr/>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="hidden wr-steps">
+            {{#if deviceId}}
+                <div class="col-md-3 col-xs-4">
+                    <div class="itm-wiz itm-wiz-current" data-step="policy-content">
+                        <div class="wiz-no">1</div>
+                        <div class="wiz-lbl hidden-xs"><span>Policy Details</span></div>
+                    </div>
+                    <br class="c-both"/>
+                </div>
+                <div class="col-md-3 col-xs-4">
+                    <div class="itm-wiz" data-step="policy-profile">
+                        <div class="wiz-no">2</div>
+                        <div class="wiz-lbl hidden-xs"><span>Publish</span></div>
+                    </div>
+                    <br class="c-both"/>
+                </div>
+            {{else}}
+                <div class="col-md-3 col-xs-4">
+                    <div class="itm-wiz itm-wiz-current" data-step="policy-devicetype">
+                        <div class="wiz-no">1</div>
+                        <div class="wiz-lbl hidden-xs"><span>Select a Device Type</span></div>
+                    </div>
+                    <br class="c-both"/>
+                </div>
+                <div class="col-md-3 col-xs-4">
+                    <div class="itm-wiz" data-step="policy-config-profile">
+                        <div class="wiz-no">2</div>
+                        <div class="wiz-lbl hidden-xs"><span>Configure Profile</span></div>
+                    </div>
+                    <br class="c-both"/>
+                </div>
+                <div class="col-md-3 col-xs-4">
+                    <div class="itm-wiz" data-step="policy-content">
+                        <div class="wiz-no">3</div>
+                        <div class="wiz-lbl hidden-xs"><span>Policy Details</span></div>
+                    </div>
+                    <br class="c-both"/>
+                </div>
+                <div class="col-md-3 col-xs-4">
+                    <div class="itm-wiz" data-step="policy-profile">
+                        <div class="wiz-no">4</div>
+                        <div class="wiz-lbl hidden-xs"><span>Publish</span></div>
+                    </div>
+                    <br class="c-both"/>
+                </div>
+            {{/if}}
+        </div>
+
+        <div class="container col-centered wr-content policy-devicetype">
+            <div class="wr-form">
+                <div class="row wr-wizard">
+                </div>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="row wr-tile-buttons-list">
+                            <div class="wr-input-control">
+                                <span class="policy-step-desc">Step 1: Select a Device Type</span>
+                                <div id="ast-container" class="ast-container policy-container">
+                                    {{#each deviceTypes}}
+                                    <a href="#" class="wizard-stepper"
+                                       data-current="policy-devicetype" data-next="policy-config-profile"
+                                       data-devicetype="{{name}}" data-devicetype-id="{{id}}">
+                                        <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
+                                            <div class="ctrl-device-type" style="height: auto">
+                                                <div class="d01"><img
+                                                        src="{{url ""}}/storage/deviceType/{{assetId}}/images_thumbnail"/>
+                                                </div>
+                                                <div class="d02"><h2 class="white center">{{storeTitle}}</h2></div>
+                                                <div class="d03">{{storeDescription}}</div>
+                                            </div>
+                                        </div>
+                                        </a>
+                                    {{/each}}
+                                    <br class="c-both"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="container col-centered wr-content policy-config-profile hidden">
+            <div class="wr-form">
+                <div class="row wr-wizard">
+                </div>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <span id="policy-profile-page-wizard-title" class="policy-step-desc">Step 2: Add DeviceType Policy</span><br/>
+                        <br>
+                        <div id="policy-profile-main-error-msg" class="alert alert-danger hidden" role="alert">
+                            <i class="icon fw fw-error"></i><span></span>
+                        </div>
+                        <div class="wr-advance-operations">
+                            <div class="wr-advance-operations-init">
+                                <br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                <i class="fw fw-settings fw-spin fw-2x"></i>
+                                &nbsp;&nbsp;&nbsp;
+                                Loading Features . . .
+                                <br>
+                                <br>
+                            </div>
+                        </div>
+                        <div class="wr-input-control wr-btn-grp">
+                            {{#unless deviceId}}
+                                <a href="#" class="wr-btn wizard-stepper"
+                                   data-current="policy-config-profile" data-back="true"
+                                   data-next="policy-devicetype">Back</a>
+                            {{/unless}}
+                            <a href="#" class="wr-btn wizard-stepper" data-current="policy-config-profile"
+                               data-next="policy-content">Next</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="container col-centered wr-content policy-content hidden">
+
+            <div class="wr-form">
+
+                <div class="row wr-wizard"></div>
+
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div>
+                            <label class="wr-input-label" title="">
+                                Set a Name to Your Policy
+                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                            </label>
+
+                            <div class="wr-input-control">
+                                <div class="cus-col-50">
+                                    <input id="policy-name-input" type="text" value="" placeholder="Policy name here"
+                                           required/>
+                                </div>
+                                <br class="c-both"/>
+                            </div>
+
+                            <label class="wr-input-label" title="">
+                                Set Description
+                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                            </label>
+
+                            <div class="wr-input-control">
+                                <div class="cus-col-50">
+                                    <textarea id="policy-description-input" placeholder="Policy description here"
+                                              required></textarea>
+                                </div>
+                                <br class="c-both"/>
+                            </div>
+                        </div>
+                        <div class="wr-input-control wr-btn-grp">
+                            {{#unless deviceId}}
+                                <a href="#" class="wr-btn wizard-stepper"
+                                   data-current="policy-content" data-back="true"
+                                   data-next="policy-config-profile">Back</a>
+                            {{/unless}}
+                            <a href="#" class="wr-btn wizard-stepper" data-current="policy-content"
+                               data-next="policy-profile">Next</a>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="container col-centered wr-content policy-profile hidden">
+
+            <div class="wr-form">
+
+                <div class="row wr-wizard"></div>
+
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="wr-advance-operations">
+                            <label class="wr-input-label" title="">
+                                Set Policy Definition
+                                <span class="wr-help-tip glyphicon glyphicon-question-sign"></span>
+                            </label>
+
+                            <div class="wr-input-control">
+                                <div class="cus-col-100">
+                                    <textarea id="policy-definition-input" placeholder="Enter the policy"
+                                              style="width: 100%;" required></textarea>
+                                </div>
+                                <br class="c-both"/>
+                            </div>
+                        </div>
+                        <div class="wr-input-control wr-btn-grp">
+                            <a href="#" class="wr-btn wizard-stepper" data-current="policy-profile" data-back="true"
+                               data-next="policy-content">Back</a>
+                            <a href="#" class="wr-btn wizard-stepper" data-current="policy-profile"
+                               data-next="policy-message">Save</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="container col-centered wr-content policy-message hidden">
+            <div class="wr-form">
+                <h1 class="wr-title">Policy creation is successful</h1>
+                You will be redirected to policy list in a moment.
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+{{! TODO: Generalize these hbs files into one in order to accept any device type dynamically }}
+<script id="hidden-operations-arduino" src="/store/extensions/app/store-device-type/themes/store/templates/policy-add/hidden-operations-arduino.hbs" type="text/x-handlebars-template" ></script>
+<script id="hidden-operations-raspberrypi" src="/store/extensions/app/store-device-type/themes/store/templates/policy-add/hidden-operations-raspberrypi.hbs" type="text/x-handlebars-template" ></script>
+<script id="hidden-operations-virtual_firealarm" src="/store/extensions/app/store-device-type/themes/store/templates/policy-add/hidden-operations-virtual_firealarm.hbs" type="text/x-handlebars-template" ></script>
