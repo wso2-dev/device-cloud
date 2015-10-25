@@ -46,7 +46,6 @@ var operationModule = function () {
                 return [{name: "Temperature", operation: "readtemperature"}];
             case "android_sense":
                 return [
-                    //{name: "Temperature", operation: "readtemperature"},
                     {name: "Battery", operation: "readbattery"},
                     {name: "gps", operation: "readgps"},
                     {name: "Light", operation: "readlight"},
@@ -64,23 +63,27 @@ var operationModule = function () {
     };
 
     publicMethods.handleGETOperation = function (deviceType, operation, operationName, deviceId) {
-
-        if (operation == "readgps") {
-            var result = {};
-            result.data = {
-                map: {
-                    lat: Math.random() * (6.9 - 6.1) + 6.1,
-                    lng: Math.random() * (80 - 78) + 79
-                }
-            };
-            return result;
-        }
         var endPoint = carbonHttpsServletTransport + '/' + deviceType + "/controller/" + operation;
         var header = '{"owner":"' + user.username + '","deviceId":"' + deviceId + '","protocol":"mqtt"}';
-        result = get(endPoint, {}, JSON.parse(header), "json");
+        var result = get(endPoint, {}, JSON.parse(header), "json");
         if (result.data) {
-            result.data = JSON.parse('{"' + operationName + '":' + result.data.sensorValue + ', "time":' + result.data.time + '}');
+            var values = result.data.sensorValue.split(',');
+            if (operationName == 'gps') {
+                result.data.map = {
+                    lat: parseFloat(values[0]),
+                    lng: parseFloat(values[1])
+                }
+            } else {
+                var sqSum = 0;
+                for (var v in values) {
+                    sqSum += Math.pow(values[v], 2);
+                }
+                var sqRootValue = Math.sqrt(sqSum);
+                result.data[operationName] = sqRootValue;
+            }
+            delete result.data['sensorValue'];
         }
+        log.info(result);
         return result;
     };
 

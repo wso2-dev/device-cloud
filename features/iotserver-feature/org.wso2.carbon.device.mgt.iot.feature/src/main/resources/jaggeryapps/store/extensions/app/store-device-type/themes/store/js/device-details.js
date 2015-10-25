@@ -31,7 +31,7 @@ var mapPoints = [], mapPaths = [], mapMarkers = [];
 function initMap() {
     map = new google.maps.Map(document.getElementById('map'), {
         center: {lat: 6.9344, lng: 79.8428},
-        zoom: 8
+        zoom: 12
     });
 }
 
@@ -146,6 +146,9 @@ function updateGraphs() {
             var lastUpdate = -1;
             for (var s in stats) {
                 var val = stats[s];
+                if (!val || !val.time){
+                    continue;
+                }
                 if (val.time > lastUpdate) {
                     lastUpdate = val.time;
                 }
@@ -159,6 +162,7 @@ function updateGraphs() {
                         title: 'Seen at ' + getDateString(lastUpdate)
                     });
                     marker.setMap(map);
+                    map.panTo(val.map);
                     mapMarkers.push(marker);
 
                     if (mapPoints.length > 1 ){
