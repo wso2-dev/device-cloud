@@ -90,7 +90,7 @@ $(document).ready(function () {
     if (deviceId && deviceType){
         policy.devicetype = deviceType;
         policy.deviceId = deviceId;
-        $('.policy-desc').removeClass("hidden");
+        $('.policy-config-profile').removeClass("hidden");
         $('.policy-devicetype').addClass("hidden");
 
         var deviceType = policy.devicetype;
