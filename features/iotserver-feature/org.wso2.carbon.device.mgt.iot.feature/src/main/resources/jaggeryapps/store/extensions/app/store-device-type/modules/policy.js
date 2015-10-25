@@ -37,7 +37,7 @@ var policyModule = function () {
     var publicMethods = {};
     var privateMethods = {};
 
-    publicMethods.addPolicy = function (policyName, deviceType, policyDefinition, policyDescription) {
+    publicMethods.addPolicy = function (policyName, deviceType, policyDefinition, policyDescription, deviceId) {
         log.info("adding " + policyName);
         if (policyName && deviceType) {
 
@@ -51,6 +51,8 @@ var policyModule = function () {
                 properties: {owner: carbonUser.username}
             };
 
+            var policyId =0;
+
             if (carbonUser) {
                 options.tenantId = carbonUser.tenantId;
                 var registry = new carbonModule.registry.Registry(carbonServer, options);
@@ -58,13 +60,35 @@ var policyModule = function () {
                 log.info("########### Policy type : " + deviceType);
                 log.info("########### Policy Declaration : " + policyDefinition);
                 log.info("########### Policy policyDescription: " + policyDescription);
-                registry.put(constants.POLICY_REGISTRY_PATH + deviceType + "/" + policyName, resource);
+                var queName = "";
+                if(deviceId) {
+                    registry.put(constants.POLICY_REGISTRY_PATH + deviceType + "/"  + deviceId + "/" + policyName, resource);
+                    queName = "wso2/iot/" + carbonUser.username+"/"+ deviceType + "/"+deviceId;
+                    policyId = registry.get(constants.POLICY_REGISTRY_PATH + deviceType + "/"  + deviceId + "/" + policyName, resource).uuid;
+                }else{
+                    registry.put(constants.POLICY_REGISTRY_PATH + deviceType + "/" + policyName, resource);
+                    queName = "wso2/iot/" + carbonUser.username+"/"+ deviceType;
+                    policyId = registry.get(constants.POLICY_REGISTRY_PATH + deviceType + "/" + policyName, resource).uuid;
+                }
             }
+
+            var policyJSON = {
+                "id" : policyId,
+                "type" : "POLICY",
+                "priority" : "1",
+                "reference": {
+                    "deviceId" : "456",
+                    "deviceType" : deviceType
+                },
+                "language" : "siddhi",
+                "content": policyDefinition
+            };
 
             var mqttsenderClass = Packages.org.wso2.device.mgt.mqtt.policy.push.MqttPush;
             var mqttsender = new mqttsenderClass();
+            log.info("Queue : "+queName);
 
-            var result = mqttsender.pushToMQTT("/iot/policymgt/govern/" + deviceType + "/" + carbonUser.username, policyDefinition, "tcp://localhost:1883", "Raspberry-Policy-sender");
+            var result = mqttsender.pushToMQTT(queName , policyJSON, "tcp://192.168.67.21:1883", "Raspberry-Policy-sender");
 
             mqttsender = null;
 
@@ -155,5 +179,3 @@ var policyModule = function () {
 
     return publicMethods;
 }();
-
-

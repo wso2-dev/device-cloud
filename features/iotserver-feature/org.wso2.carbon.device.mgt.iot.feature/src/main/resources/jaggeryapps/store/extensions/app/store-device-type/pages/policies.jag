@@ -36,6 +36,10 @@ require('/modules/store.js').exec(function (ctx) {
         var deviceId = request.getParameter("deviceId");
         var deviceType = request.getParameter("deviceType");
 
+        //TODO: retrieve these from api endpoints
+        page.roles = ["admin"];
+        page.users = ["admin"];
+
         if (deviceId && deviceType) {
             page.deviceId = deviceId;
             page.deviceType = deviceType;

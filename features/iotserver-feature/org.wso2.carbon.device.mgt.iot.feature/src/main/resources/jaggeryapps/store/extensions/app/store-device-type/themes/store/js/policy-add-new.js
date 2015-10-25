@@ -69,7 +69,7 @@ function savePolicy() {
         }
     };
 
-    invokerUtil.post("../../apis/policies/add", payload, function (data, txtStatus, jqxhr) {
+    invokerUtil.post("../../../apis/policies/add", payload, function (data, txtStatus, jqxhr) {
         $(".policy-message").removeClass("hidden");
         $(".add-policy").addClass("hidden");
         setTimeout(function () {
@@ -90,8 +90,25 @@ $(document).ready(function () {
     if (deviceId && deviceType){
         policy.devicetype = deviceType;
         policy.deviceId = deviceId;
-        $('.policy-content').removeClass("hidden");
+        $('.policy-desc').removeClass("hidden");
         $('.policy-devicetype').addClass("hidden");
+
+        var deviceType = policy.devicetype;
+        var hiddenOperationsByDeviceType = $("#hidden-operations-" + deviceType);
+        var hiddenOperationsByDeviceTypeCacheKey = deviceType + "HiddenOperations";
+        var hiddenOperationsByDeviceTypeSrc = hiddenOperationsByDeviceType.attr("src");
+        setTimeout(
+            function () {
+                $.template(hiddenOperationsByDeviceTypeCacheKey, hiddenOperationsByDeviceTypeSrc, function (template) {
+                    var content = template();
+                    $(".wr-advance-operations").html(content);
+                    $(".wr-advance-operations li.grouped-input").each(function () {
+                        updateGroupedInputVisibility(this);
+                    });
+                });
+            },
+            250 // time delayed for the execution of above function, 250 milliseconds
+        );
     }
 
     $("input[type='radio'].user-select-radio").change(function () {
@@ -120,9 +137,6 @@ $(document).ready(function () {
     stepperRegistry['policy-devicetype'] = function (actionButton) {
         policy.devicetype = $(actionButton).data("devicetype");
         policy.devicetypeId = $(actionButton).data("devicetype-id");
-
-        // updating next-page wizard title with selected platform
-        $("#policy-profile-page-wizard-title").text("Step 2: Add " + policy.devicetype + " Policy");
 
         var deviceType = policy.devicetype;
         var hiddenOperationsByDeviceType = $("#hidden-operations-" + deviceType);
@@ -165,13 +179,35 @@ $(document).ready(function () {
         }
     };
 
-    stepperRegistry['policy-content'] = function (actionButton) {
-        policy.policyName = $("#policy-name-input").val();
-        policy.policyDescription = $("#policy-description-input").val();
+    stepperRegistry['policy-config-profile'] = function (actionButton) {
+        if(policy.devicetype == "virtual_firealarm"){
+            var timeInterval = $("#time-interval").val();
+            var triggerTemp = $("#trigger-temp").val();
+            if(timeInterval == "" || timeInterval < 0){
+                timeInterval = 30;
+            }
+            if(triggerTemp == "" ||triggerTemp < 0){
+                triggerTemp = 50;
+            }
+            window.queryEditor.setValue("define stream fireAlarmEventStream (deviceID string, temp int)\n" +
+            "from fireAlarmEventStream#window.time("+timeInterval+" sec)\n" +
+            "select deviceID, max(temp) as maxValue\n"+
+            "group by deviceID\n"+
+            "insert into analyzeStream for expired-events;\n" +
+            "from analyzeStream[maxValue < "+triggerTemp+"]\n"+
+            "select maxValue\n" +
+            "insert into bulbOnStream;\n" +
+            "from fireAlarmEventStream[temp > "+triggerTemp+"]\n" +
+            "select deviceID, temp\n" +
+            "insert into bulbOffStream;\n");
+            window.queryEditor.refresh();
+        }
     };
 
-    stepperRegistry['policy-profile'] = function (actionButton) {
+    stepperRegistry['policy-content'] = function (actionButton) {
         policy.policyDefinition = window.queryEditor.getValue();
+        policy.policyName = $("#policy-name-input").val();
+        policy.policyDescription = $("#policy-description-input").val();
         //All data is collected. Policy can now be created.
         savePolicy();
     };
