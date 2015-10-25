@@ -28,7 +28,7 @@
             <Enabled>true</Enabled>
             <ControlClass>org.wso2.carbon.device.mgt.iot.common.controlqueue.mqtt.MqttControlPublisher</ControlClass>
             <Protocol>MQTT</Protocol>
-            <ServerURL>tcp://192.168.67.21</ServerURL>
+            <ServerURL>tcp://204.232.188.214</ServerURL>
             <Port>1883</Port>
             <Username>.</Username>
             <Password>.</Password>

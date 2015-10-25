@@ -57,6 +57,7 @@ var deviceCheckbox = "#ast-container-parent .ctrl-wr-asset .itm-select input[typ
  * DOM ready functions.
  */
 $(document).ready(function () {
+    username = $("#user-details").data("username");
     /* Adding selected class for selected devices */
     $(deviceCheckbox).each(function () {
         addDeviceSelectedClass(this);
