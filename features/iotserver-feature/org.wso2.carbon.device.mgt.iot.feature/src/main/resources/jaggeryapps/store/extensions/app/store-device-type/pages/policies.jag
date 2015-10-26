@@ -106,6 +106,10 @@ require('/modules/store.js').exec(function (ctx) {
             page.title = "Add Device Policy";
         }
         page.partial = 'policy-add';
+    } else if(uriMatcher.match("/{context}/pages/policies/new")) {
+        var policyModule = require("../modules/policy.js").policyModule;
+        page.partial = 'policy-listing-new';
+        page.policies = policyModule.getPolicies();
     } else {
         var policyModule = require("../modules/policy.js").policyModule;
         page.partial = 'policy-listing';
