@@ -1,0 +1,330 @@
+<style type="text/css">
+
+    /* ========================================================================
+	 * tiles styles
+	 * ======================================================================== */
+    ul.tiles {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+    }
+    ul.tiles li {
+        display: inline-block;
+    }
+    ul.tiles li.square {
+        min-width: 80px;
+        position: relative;
+    }
+    ul.tiles li.square:before {
+        display: block;
+        content: "";
+        width: 100%;
+        padding-top: 100%;
+    }
+    ul.tiles li.square > .square-element {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        border-radius: 0 !important;
+        -moz-border-radius: 0 !important;
+    }
+    ul.tiles li a {
+        text-decoration: none;
+        padding: 5px;
+        background: #f3f3f3;
+        color: #222222;
+        display: block;
+        overflow: hidden;
+        line-height: 1.2em;
+        white-space: normal;
+        text-transform: capitalize;
+        font-size: 14px;
+    }
+    ul.tiles .icon {
+        display: block;
+        font-size: 15px;
+        margin: 0 auto 5px;
+    }
+    .thumbnail.icon{
+        border: none;
+        margin: 0;
+        background: #11375B;
+        color: #fff;
+        text-align: center;
+        position: relative;
+        border-radius: 0 !important;
+        -moz-border-radius: 0 !important;
+    }
+    .thumbnail.icon > .square-element {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+    }
+    .table.list-table.grid-view tr, .table.list-table > thead > tr {
+        display: inline-block;
+        padding: 15px;
+    }
+    .table.list-table tr {
+        border-bottom: 5px solid transparent;
+    }
+    .remove-padding {
+        padding: 0 !important;
+    }
+    .thumbnail.icon:before {
+        display: block;
+        content: "";
+        width: 100%;
+        padding-top: 100%;
+    }
+    .thumbnail.icon .square-element:before {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        -webkit-transform: translate(-50%, -50%);
+        -moz-transform: translate(-50%, -50%);
+        -ms-transform: translate(-50%, -50%);
+        -o-transform: translate(-50%, -50%);
+        transform: translate(-50%, -50%);
+    }
+    h4{
+        font-weight: 300;
+    }
+    .table .form-control {
+        min-width: 100%;
+    }
+    .table thead th {
+        font-weight: 200;
+        text-transform: none;
+    }
+    .no-wrap {
+        white-space: nowrap;
+    }
+    .text-right {
+        text-align: right;
+    }
+</style>
+<br/>
+<span id="user-details" data-username="{{cuser.username}}"></span>
+<div class="ast-container " id="ast-container">
+    <div class="container-fluid ">
+        <div class="title">
+            <a class="asset-type-deviceType">Device Policies</a>
+        </div>
+        <hr>
+    </div>
+</div>
+
+<table class="table table-striped table-hover list-table display responsive nowrap data-table table-selectable grid-view" id="policy-grid">
+    <thead>
+    <tr class="sort-row">
+        <th></th>
+        <th></th>
+        <th>By Platform</th>
+        <th>By Ownership Type</th>
+        <th>By Role</th>
+        <th>By User</th>
+        <th>By Compliance Type</th>
+        <th>By Status</th>
+        <th></th>
+    </tr>
+    <tr class="filter-row filter-box">
+        <th></th>
+        <th></th>
+        <th data-for="By Platform" class="select-filter"></th>
+        <th data-for="By Ownership Type" class="select-filter"></th>
+        <th data-for="By Role" class="select-filter"></th>
+        <th data-for="By User" class="text-filter"></th>
+        <th data-for="By Compliance Type" class="select-filter"></th>
+        <th data-for="By Status" class="select-filter"></th>
+        <th></th>
+    </tr>
+    <tr class="bulk-action-row">
+        <th colspan="9">
+            <ul class="tiles">
+                <li class="square">
+                    <a href="#" data-click-event="remove-form" class="btn square-element policy-remove-link" data-toggle="modal" data-target="#modalDemo">
+                                    <span class="icon fw-stack">
+                                        <i class="fw fw-ring fw-stack-2x"></i>
+                                        <i class="fw fw-delete fw-stack-1x"></i>
+                                    </span>
+                        Remove
+                    </a>
+                </li>
+                <li class="square">
+                    <a href="#" data-click-event="remove-form" class="btn square-element policy-publish-link" data-toggle="modal" data-target="#modalDemo">
+                                    <span class="icon fw-stack">
+                                        <i class="fw fw-ring fw-stack-2x"></i>
+                                        <i class="glyphicon glyphicon-floppy-saved"></i>
+                                    </span>
+                        Publish
+                    </a>
+                </li>
+                <li class="square">
+                    <a href="#" data-click-event="remove-form" class="btn square-element policy-unpublish-link" data-toggle="modal" data-target="#modalDemo">
+                                    <span class="icon fw-stack">
+                                        <i class="fw fw-ring fw-stack-2x"></i>
+                                        <i class="glyphicon glyphicon-floppy-remove"></i>
+                                    </span>
+                        Unpublish
+                    </a>
+                </li>
+            </ul>
+        </th>
+    </tr>
+    </thead>
+
+    <tbody>
+    {{#each policies}}
+        <tr data-type="selectable" data-id="{{id}}">
+            <td class="remove-padding icon-only content-fill">
+                <div class="thumbnail icon">
+                        <i class="square-element text fw fw-policy"></i>
+                </div>
+            </td>
+            <td class="fade-edge" data-search="{{policyName}}" data-display="{{policyName}}">
+                <h4>{{policyName}}</h4>
+                <div>({{deviceType}})</div>
+            </td>
+            <td class="fade-edge remove-padding-top" data-search="{{deviceType}}" data-display="{{deviceType}}"></td>
+            <td class="fade-edge remove-padding-top" data-search="BYOD" data-display="BYOD" data-grid-label="Ownership">BYOD</td>
+            <td class="fade-edge remove-padding-top" data-search="admin" data-display="{{roles}}" data-grid-label="Role(s)">{{roles}}</td>
+            <td class="fade-edge remove-padding-top" data-search="{{cuser.username}}" data-display="{{cuser.username}}" data-grid-label="User(s)">{{users}}</td>
+            <td class="fade-edge remove-padding-top" data-search="JellyBean" data-display="JellyBean" data-grid-label="Compliance">Raspbian</td>
+            <td id = "policy-status" class="fade-edge remove-padding-top" data-search="Active/Updated" data-display="Active/Updated" data-grid-label="Status">
+                    <i class="fw fw-warning icon-success"></i> Active/Updated</span>
+            </td>
+            <td class="text-right content-fill text-left-on-grid-view no-wrap">
+                <a href="/mdm/policies/view?id={{id}}" data-id="{{id}}" data-click-event="remove-form" class="btn padding-reduce-on-grid-view policy-view-link">
+                            <span class="fw-stack">
+                                <i class="fw fw-ring fw-stack-2x"></i>
+                                <i class="fw fw-view fw-stack-1x"></i>
+                            </span>
+                    <span class="hidden-xs hidden-on-grid-view">View</span>
+                </a>
+                <a href="/mdm/policies/view-edit-policy?id={{id}}" data-id="{{id}}" data-click-event="remove-form" class="btn padding-reduce-on-grid-view policy-update-link">
+                            <span class="fw-stack">
+                                <i class="fw fw-ring fw-stack-2x"></i>
+                                <i class="fw fw-settings fw-stack-1x"></i>
+                            </span>
+                    <span class="hidden-xs hidden-on-grid-view">Re-Configure</span>
+                </a>
+                <a href="#" data-id="{{id}}" data-click-event="remove-form" class="btn padding-reduce-on-grid-view remove-policy-link "
+                   data-devicetype="{{deviceType}}"
+                   data-policyname="{{policyName}}"
+                   data-policyuuid="{{id}}">
+                            <span class="fw-stack">
+                                <i class="fw fw-ring fw-stack-2x"></i>
+                                <i class="fw fw-delete fw-stack-1x"></i>
+                            </span>
+                    <span class="hidden-xs hidden-on-grid-view">Remove</span>
+                </a>
+            </td>
+        </tr>
+    {{/each}}
+    <br class="c-both" />
+    </tbody>
+</table>
+
+<div id="remove-policy-modal-content" class="hide">
+    <div class="modal-content">
+        <div class="row">
+            <div class="col-md-7 col-centered center-container">
+                <h3>Do you really want to remove this policy?</h3>
+
+                <div class="buttons">
+                    <a href="#" id="remove-policy-yes-link" class="btn-operations">
+                        &nbsp;&nbsp;&nbsp;&nbsp;Yes&nbsp;&nbsp;&nbsp;&nbsp;
+                    </a>
+                    &nbsp;&nbsp;
+                    <a href="#" id="remove-policy-cancel-link" class="btn-operations">
+                        &nbsp;&nbsp;&nbsp;&nbsp;Cancel&nbsp;&nbsp;&nbsp;&nbsp;
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="remove-policy-200-content" class="hide">
+    <div class="modal-content">
+        <div class="row">
+            <div class="col-md-7 col-centered center-container">
+                <h3>Policy was successfully removed.</h3>
+
+                <div class="buttons">
+                    <a href="#" id="remove-policy-200-link" class="btn-operations">
+                        &nbsp;&nbsp;&nbsp;&nbsp;Ok&nbsp;&nbsp;&nbsp;&nbsp;
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="remove-policy-400-content" class="hide">
+    <div class="modal-content">
+        <div class="row">
+            <div class="col-md-7 col-centered center-container">
+                <h3>Exception at backend. Try Later.</h3>
+
+                <div class="buttons">
+                    <a href="#" id="remove-policy-400-link" class="btn-operations">
+                        &nbsp;&nbsp;&nbsp;&nbsp;Ok&nbsp;&nbsp;&nbsp;&nbsp;
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="remove-policy-403-content" class="hide">
+    <div class="modal-content">
+        <div class="row">
+            <div class="col-md-7 col-centered center-container">
+                <h3>Action not permitted.</h3>
+
+                <div class="buttons">
+                    <a href="#" id="remove-policy-403-link" class="btn-operations">
+                        &nbsp;&nbsp;&nbsp;&nbsp;Ok&nbsp;&nbsp;&nbsp;&nbsp;
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="remove-policy-409-content" class="hide">
+    <div class="modal-content">
+        <div class="row">
+            <div class="col-md-7 col-centered center-container">
+                <h3>Policy does not exist.</h3>
+
+                <div class="buttons">
+                    <a href="#" id="remove-policy-409-link" class="btn-operations">
+                        &nbsp;&nbsp;&nbsp;&nbsp;Ok&nbsp;&nbsp;&nbsp;&nbsp;
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="remove-policy-unexpected-error-content" class="hide">
+    <div class="modal-modal-content">
+        <div class="row">
+            <div class="col-md-7 col-centered center-container">
+                <h3>Policy does not exist.</h3>
+
+                <div class="buttons">
+                    <a href="#" id="remove-policy-unexpected-error-link" class="btn-operations">
+                        &nbsp;&nbsp;&nbsp;&nbsp;Ok&nbsp;&nbsp;&nbsp;&nbsp;
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
