@@ -88,7 +88,7 @@ var policyModule = function () {
             var mqttsender = new mqttsenderClass();
             log.info("Queue : "+queName);
 
-            var result = mqttsender.pushToMQTT(queName , policyJSON, "tcp://192.168.67.21:1883", "Raspberry-Policy-sender");
+            var result = mqttsender.pushToMQTT(queName , stringify(policyJSON), "tcp://192.168.67.21:1883", "Raspberry-Policy-sender");
 
             mqttsender = null;
 

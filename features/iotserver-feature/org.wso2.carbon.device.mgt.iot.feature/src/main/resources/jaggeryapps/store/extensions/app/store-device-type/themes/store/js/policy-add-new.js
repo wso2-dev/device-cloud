@@ -69,7 +69,7 @@ function savePolicy() {
         }
     };
 
-    invokerUtil.post("../../../apis/policies/add", payload, function (data, txtStatus, jqxhr) {
+    invokerUtil.post("../../../apis/policies/add?deviceId="+deviceId, payload, function (data, txtStatus, jqxhr) {
         $(".policy-message").removeClass("hidden");
         $(".add-policy").addClass("hidden");
         setTimeout(function () {
