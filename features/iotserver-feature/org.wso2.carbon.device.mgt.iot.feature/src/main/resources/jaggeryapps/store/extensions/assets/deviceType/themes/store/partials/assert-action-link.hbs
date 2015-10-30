@@ -13,13 +13,21 @@
                         <div class="control-group">
                             <div class="controls">
                                 <input class="new-device-name" style="color:#3f3f3f;padding:5px"
-                                       type="text" placeholder="Ex. Lobby_firealarm"
+                                       type="text"
+                                       placeholder="Ex. Lobby_{{attributes.overview_name}}"
                                        name="deviceName" size="60" required>
+                                <br/>
+                                <input type="hidden" class="deviceType" name="deviceType"
+                                       value="{{attributes.overview_name}}"/>
+                                <input type="hidden" class="sketchType" name="sketchType"
+                                       value="{{attributes.sketches_Sketches}}"/>
+                                <div class="sketchTypes" style="  padding-top: 20px; padding-bottom: 5px; font-size: 18px;">
+                                    {{#each attributes.sketches_Sketches}}
+                                        <input type="radio" name="sketchType" id="{{this}}"
+                                               value="{{this}}"><label for="{{this}}">{{this}}</label>
+                                    {{/each}}
+                                </div>
                             </div>
-                            <input type="hidden" name="deviceType"
-                                   value="{{attributes.overview_name}}"/>
-                            <input type="hidden" name="sketchType"
-                                   value="{{attributes.sketches_Sketches}}"/>
                         </div>
                         <br/>
 
@@ -137,9 +145,6 @@
         </div>
     </div>
 
-    <a href="#" class="blue-button download-link" data-devicetype="{{attributes.overview_name}}"
-       data-sketchtype="{{attributes.sketches_Sketches}}"><i
+    <a href="#" class="blue-button download-link"><i
             class="fw fw-download"></i>{{attributes.overview_actionLabel}}</a>
-
-    <!--<a href="{{url ""}}/apis/devices/sketch/download?sketchType={{attributes.sketches_Sketches}}&deviceType={{attributes.overview_name}}" class="blue-button">{{attributes.overview_actionLabel}}</a>-->
 {{/if}}
