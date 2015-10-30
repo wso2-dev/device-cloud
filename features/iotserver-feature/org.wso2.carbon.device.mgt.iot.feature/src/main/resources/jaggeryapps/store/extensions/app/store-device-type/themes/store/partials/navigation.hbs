@@ -18,8 +18,8 @@
     <div class="wr-action-container">
         <div class="wr-asset-type-switcher">
             <a id="popoverExampleTwo" data-placement="bottom"
-               class="ctrl-asset-type-switcher pull-left wr-hidden-nav-toggle-btn"
-               href="javascript:openCollapsedNav()">
+               class="ctrl-asset-type-switcher pull-left"
+               href="javascript:void(0)" data-click-event="popover">
                 <span class="btn-asset"></span>
             </a>
 
@@ -77,25 +77,6 @@
 
         </div>
     </div>
-    <!-- common navigation -->
-    <div id="hiddenNav" class="wr-hidden-nav">
-        <ul>
-
-            <li><a href="{{url ""}}/pages/devices"><i class="icon fw fw-devices"></i>My
-                Devices</a>
-            </li>
-            <li><a href="{{url ""}}/pages/groups"><i class="icon fw fw-grid"></i>My
-                Groups</a>
-            </li>
-            <li><a href="{{url ""}}/pages/policies"><i class="icon fw fw-policy"></i>Policy
-                Management</a>
-            </li>
-            <li><a href="{{url ""}}/pages/events"><i
-                    class="icon fw fw-apn"></i>Events</a></li>
-
-        </ul>
-    </div>
-    <!-- /common navigation -->
 	{{#if operations}}
         <div class="wr-filters col-xs-12 col-sm-12 col-md-12">
             <div class="wr-filter-sort pull-right">
@@ -112,14 +93,4 @@
 	{{/if}}
 </div>
 <!-- secondary header - app bar -->
-<script type="text/javascript">
-    function openCollapsedNav() {
-        $(".wr-hidden-nav-toggle-btn").addClass("active");
-        $("#hiddenNav").slideToggle("slideDown", function () {
-            if ($(this).css("display") == "none") {
-                $(".wr-hidden-nav-toggle-btn").removeClass("active");
-            }
-        });
-    }
-</script>
 {{> action-bar .}}

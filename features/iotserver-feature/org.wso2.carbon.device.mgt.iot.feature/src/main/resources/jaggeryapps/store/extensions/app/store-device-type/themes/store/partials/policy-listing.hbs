@@ -16,7 +16,11 @@
                                 <i class="wr-list-icon fw fw-policy"></i>
                                 <div class="wr-list-desc">
                                     <h3 class="wr-list-name">{{policyName}}</h3>
-                                    <span class="wr-list-username">{{deviceType}} | Last Updated: <span
+                                    <span class="wr-list-username">Device Type: {{deviceType}}
+                                                                   {{#if device}}
+                                                                       | Device Name: {{device.name}}
+                                                                   {{/if}}
+                                                                   | Last Updated: <span
                                             class="formatDate">{{updated}}</span></span>
                                 </div>
                                 <span class="list-group-item-actions">
