@@ -50,6 +50,20 @@ function showPopup() {
             $('label[for=deviceName]').remove();
         }
     });
+    var deviceType = "";
+    $('.deviceType').each(function () {
+        if (this.value != "") {
+            deviceType = this.value;
+        }
+    });
+    if (deviceType == 'virtual_firealarm'){
+        $('.sketchType').remove();
+        $('input[name="sketchType"][value="virtual_firealarm"]').prop('checked', true);
+        $("label[for='virtual_firealarm']").text("Simple Agent");
+        $("label[for='virtual_firealarm_advanced']").text("Advanced Agent");
+    }else{
+        $('.sketchTypes').remove();
+    }
 }
 
 /*

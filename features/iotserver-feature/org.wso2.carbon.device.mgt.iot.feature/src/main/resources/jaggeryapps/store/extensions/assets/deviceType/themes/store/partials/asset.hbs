@@ -50,7 +50,8 @@
                     <p>{{>overview .}}</p>
                     <hr>
                     {{>tags ../../.}}
-            </div><!-- description column-->
+                    {{>share ../..}}
+                </div><!-- description column-->
         </div>
         </div>
             <div>
@@ -69,7 +70,7 @@
                             <a href="#tab-reviews" data-toggle="tab" data-type="comments">{{t "User Reviews"}}</a>
                         </li>
                         {{/hasAssetPermission}}
-                        <li>
+                        <li class="hidden">
                             <a href="#tab-share" data-toggle="tab" data-type="basic">{{t "Share"}}</a>
                         </li>
                     </ul>
@@ -85,7 +86,7 @@
                                 {{>hardware-setup ..}}
                             </div>
                         </div>
-                        <div class="tab-pane" id="tab-share">
+                        <div class="tab-pane hidden" id="tab-share">
                             <div class="content">
                                 {{>share ../..}}
                             </div>

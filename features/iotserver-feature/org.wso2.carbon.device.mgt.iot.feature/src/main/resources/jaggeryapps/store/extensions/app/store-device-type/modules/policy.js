@@ -34,10 +34,13 @@ var policyModule = function () {
         url: carbonHttpsServletTransport + '/admin'
     });
 
+    var deviceModule = require("device.js").deviceModule;
+
     var publicMethods = {};
     var privateMethods = {};
 
-    publicMethods.addPolicy = function (policyName, deviceType, policyDefinition, policyDescription) {
+    publicMethods.addPolicy = function (policyName, deviceType, policyDefinition, policyDescription,
+                                        deviceId) {
         log.info("adding " + policyName);
         if (policyName && deviceType) {
 
@@ -51,6 +54,8 @@ var policyModule = function () {
                 properties: {owner: carbonUser.username}
             };
 
+            var policyId = 0;
+
             if (carbonUser) {
                 options.tenantId = carbonUser.tenantId;
                 var registry = new carbonModule.registry.Registry(carbonServer, options);
@@ -58,13 +63,35 @@ var policyModule = function () {
                 log.info("########### Policy type : " + deviceType);
                 log.info("########### Policy Declaration : " + policyDefinition);
                 log.info("########### Policy policyDescription: " + policyDescription);
-                registry.put(constants.POLICY_REGISTRY_PATH + deviceType + "/" + policyName, resource);
+                var queName = "";
+                if (deviceId) {
+                    registry.put(constants.POLICY_REGISTRY_PATH + deviceType + "/" + deviceId + "/" + policyName, resource);
+                    queName = "wso2/iot/" + carbonUser.username + "/" + deviceType + "/" + deviceId;
+                    policyId = registry.get(constants.POLICY_REGISTRY_PATH + deviceType + "/" + deviceId + "/" + policyName, resource).uuid;
+                } else {
+                    registry.put(constants.POLICY_REGISTRY_PATH + deviceType + "/" + policyName, resource);
+                    queName = "wso2/iot/" + carbonUser.username + "/" + deviceType;
+                    policyId = registry.get(constants.POLICY_REGISTRY_PATH + deviceType + "/" + policyName, resource).uuid;
+                }
             }
+
+            var policyJSON = {
+                "id": policyId,
+                "type": "POLICY",
+                "priority": "1",
+                "reference": {
+                    "deviceId": "456",
+                    "deviceType": deviceType
+                },
+                "language": "siddhi",
+                "content": policyDefinition
+            };
 
             var mqttsenderClass = Packages.org.wso2.device.mgt.mqtt.policy.push.MqttPush;
             var mqttsender = new mqttsenderClass();
+            log.info("Queue : " + queName);
 
-            var result = mqttsender.pushToMQTT("/iot/policymgt/govern/" + deviceType + "/" + carbonUser.username, policyDefinition, "tcp://localhost:1883", "Raspberry-Policy-sender");
+            var result = mqttsender.pushToMQTT(queName, stringify(policyJSON), "tcp://192.168.67.21:1883", "Raspberry-Policy-sender");
 
             mqttsender = null;
 
@@ -96,37 +123,43 @@ var policyModule = function () {
                     for (var j = 0; j < deviceTypePolicies.content.length; j++) {
                         var deviceTypePolicy = registry.get(deviceTypePolicies.content[j]);
 
-                        if (stringify(registry.properties(deviceTypePolicies.content[j]).owner) != '["' + carbonUser.username + '"]') {
-                            //not owned by current user, skip it
-                            continue;
+                        for (var k = 0; k < deviceTypePolicy.content.length; k++) {
+                            var policy = registry.get(deviceTypePolicy.content[k]);
+                            var owner = registry.properties(deviceTypePolicy.content[k]).owner;
+                            var deviceId = deviceTypePolicy.id.replace(deviceTypePolicies.id + "/", "");
+
+                            var policyObj = {
+                                "id": policy.uuid,                         // Identifier of the policy.
+                                //"priorityId": 1,                 // Priority of the policies. This will be used only for simple evaluation.
+                                //"profile": {},                   // Profile
+                                "policyName": policy.name,  // Name of the policy.
+                                "updated": policy.updated.time,
+                                "deviceType": deviceType,
+                                "owner": owner
+                                //"generic": true,                 // If true, this should be applied to all related device.
+                                //"roles": {},                     // Roles which this policy should be applied.
+                                //"ownershipType": {},             // Ownership type (COPE, BYOD, CPE)
+                                //"devices": {},                   // Individual devices this policy should be applied
+                                //"users": {},                     // Individual users this policy should be applied
+                                //"Compliance": {},
+                                //"policyCriterias": {},
+                                //"startTime": 283468236,          // Start time to apply the policy.
+                                //"endTime": 283468236,            // After this time policy will not be applied
+                                //"startDate": "",                 // Start date to apply the policy
+                                //"endDate": "",                   // After this date policy will not be applied.
+                                //"tenantId": -1234,
+                                //"profileId": 1
+                            };
+
+                            if (deviceId != 'undefined') {
+                                policyObj.device = deviceModule.getDevice(deviceType, deviceId);
+                            }
+
+                            policies.push(policyObj);
                         }
-
-                        var policyObj = {
-                            "id": deviceTypePolicy.uuid,                         // Identifier of the policy.
-                            //"priorityId": 1,                 // Priority of the policies. This will be used only for simple evaluation.
-                            //"profile": {},                   // Profile
-                            "policyName": deviceTypePolicy.name,  // Name of the policy.
-                            "updated": deviceTypePolicy.updated.time,
-                            "deviceType": deviceType
-                            //"generic": true,                 // If true, this should be applied to all related device.
-                            //"roles": {},                     // Roles which this policy should be applied.
-                            //"ownershipType": {},             // Ownership type (COPE, BYOD, CPE)
-                            //"devices": {},                   // Individual devices this policy should be applied
-                            //"users": {},                     // Individual users this policy should be applied
-                            //"Compliance": {},
-                            //"policyCriterias": {},
-                            //"startTime": 283468236,          // Start time to apply the policy.
-                            //"endTime": 283468236,            // After this time policy will not be applied
-                            //"startDate": "",                 // Start date to apply the policy
-                            //"endDate": "",                   // After this date policy will not be applied.
-                            //"tenantId": -1234,
-                            //"profileId": 1
-                        };
-
-                        policies.push(policyObj);
-                    }//end of policy loop
-                }//end of device type policy loop
-            }
+                    }
+                }//end of policy loop
+            }//end of device type policy loop
         }
 
         return policies;
@@ -155,5 +188,3 @@ var policyModule = function () {
 
     return publicMethods;
 }();
-
-
