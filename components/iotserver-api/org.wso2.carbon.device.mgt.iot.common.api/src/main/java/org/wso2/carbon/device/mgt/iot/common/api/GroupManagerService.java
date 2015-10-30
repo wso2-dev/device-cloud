@@ -47,10 +47,18 @@ public class GroupManagerService {
     private HttpServletResponse response;
 
     private static final String DEFAULT_ADMIN_ROLE = "admin";
-    private static final String DEFAULT_OPERATOR_ROLE = "operator";
+    private static final String DEFAULT_OPERATOR_ROLE = "invoke-device-operations";
+    private static final String DEFAULT_STATS_MONITOR_ROLE = "view-statistics";
+    private static final String DEFAULT_VIEW_POLICIES = "view-policies";
+    private static final String DEFAULT_MANAGE_POLICIES = "mange-policies";
+    private static final String DEFAULT_VIEW_EVENTS = "view-events";
     private static final String[] DEFAULT_ADMIN_PERMISSIONS = {"/permission/device-mgt/admin/groups",
             "/permission/device-mgt/user/groups"};
-    private static final String[] DEFAULT_OPERATOR_PERMISSIONS = {"/permission/device-mgt/user/groups"};
+    private static final String[] DEFAULT_OPERATOR_PERMISSIONS = {"/permission/device-mgt/user/groups/device_operation"};
+    private static final String[] DEFAULT_STATS_MONITOR_PERMISSIONS = {"/permission/device-mgt/user/groups/device_monitor"};
+    private static final String[] DEFAULT_MANAGE_POLICIES_PERMISSIONS = {"/permission/device-mgt/user/groups/device_policies/add"};
+    private static final String[] DEFAULT_VIEW_POLICIES_PERMISSIONS = {"/permission/device-mgt/user/groups/device_policies/view"};
+    private static final String[] DEFAULT_VIEW_EVENTS_PERMISSIONS = {"/permission/device-mgt/user/groups/device_events"};
 
     private PrivilegedCarbonContext ctx;
 
@@ -92,6 +100,14 @@ public class GroupManagerService {
             response.setStatus(Response.Status.OK.getStatusCode());
             isAdded = (groupId > 0) && groupManagementService.addSharing(username, groupId, DEFAULT_OPERATOR_ROLE,
                     DEFAULT_OPERATOR_PERMISSIONS);
+            groupManagementService.addSharing(username, groupId, DEFAULT_STATS_MONITOR_ROLE,
+                                              DEFAULT_STATS_MONITOR_PERMISSIONS);
+            groupManagementService.addSharing(username, groupId, DEFAULT_VIEW_POLICIES,
+                                              DEFAULT_VIEW_POLICIES_PERMISSIONS);
+            groupManagementService.addSharing(username, groupId, DEFAULT_MANAGE_POLICIES,
+                                              DEFAULT_MANAGE_POLICIES_PERMISSIONS);
+            groupManagementService.addSharing(username, groupId, DEFAULT_VIEW_EVENTS,
+                                              DEFAULT_VIEW_EVENTS_PERMISSIONS);
         } catch (GroupManagementException e) {
             response.setStatus(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode());
             log.error(e.getErrorMessage(), e);
