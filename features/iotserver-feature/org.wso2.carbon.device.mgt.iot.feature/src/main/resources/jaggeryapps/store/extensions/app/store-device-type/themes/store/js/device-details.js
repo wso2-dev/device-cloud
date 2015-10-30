@@ -31,7 +31,7 @@ var mapPoints = [], mapPaths = [], mapMarkers = [];
 function initMap() {
     map = new google.maps.Map(document.getElementById('map'), {
         center: {lat: 6.9344, lng: 79.8428},
-        zoom: 8
+        zoom: 12
     });
 }
 
@@ -67,8 +67,8 @@ function getDateString(timeStamp) {
         hours = 12;
     }
     return day + '-'
-                 + monthNames[monthIndex - 1] + '-'
-                 + year + ' ' + hours + ':' + date.getMinutes() + amPm;
+           + monthNames[monthIndex - 1] + '-'
+           + year + ' ' + hours + ':' + date.getMinutes() + amPm;
 }
 
 $(window).on('resize', function () {
@@ -144,6 +144,7 @@ function updateGraphs() {
         getStatsRequest.done(function (data) {
             var stats = data.data;
             var lastUpdate = -1;
+            var graphVals = {};
             for (var s in stats) {
                 var val = stats[s];
                 if (val.time > lastUpdate) {
@@ -159,6 +160,7 @@ function updateGraphs() {
                         title: 'Seen at ' + getDateString(lastUpdate)
                     });
                     marker.setMap(map);
+                    map.panTo(val.map);
                     mapMarkers.push(marker);
 
                     if (mapPoints.length > 1 ){
@@ -187,9 +189,12 @@ function updateGraphs() {
                         mapPoints.splice(0, 1);
                     }
                 } else {
-                    graph.series.addData(val);
+                    for (var key in val) {
+                        graphVals[key] = val[key];
+                    }
                 }
             }
+            graph.series.addData(graphVals);
 
             if (lastUpdate == -1){
                 $('#last_seen').text("Not seen recently");
