@@ -18,17 +18,19 @@
         <div class="pagination top-asset-slideshow-pag assetSliderPag" id="top-asset-slideshow-pag-{{rxt.shortName}}"></div>
     </h3> -->
     {{#if assets}}
-    <section class="clearfix">
+    <section class="clearfix real_devices">
         {{>assets-thumbnails .}}
     </section>
     {{else}}
     <div class="top-assets-empty-assert">{{t "We couldn't find anything for you."}}</div>
     {{/if}}
 </div>
-
+<br/>
 <div>
-    <div class="message message-info try-device-message">
-        <p class="try-device-text">Don't have a device? <a href="#" class="btn btn-primary">Try</a> our virtual fire alarm device</p>
-        <img class="try-device-image" src="">
+    <div class="row message message-info try-device-message hidden">
+        <p class="try-device-text">Don't have a device? Try one from our virtual devices below!</p>
     </div>
+    <section class="clearfix virtual_devices">
+        {{>assets-thumbnails .}}
+    </section>
 </div>
