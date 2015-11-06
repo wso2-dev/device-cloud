@@ -147,6 +147,9 @@ function updateGraphs() {
             var graphVals = {};
             for (var s in stats) {
                 var val = stats[s];
+                if (!val){
+                    continue;
+                }
                 if (val.time > lastUpdate) {
                     lastUpdate = val.time;
                 }
