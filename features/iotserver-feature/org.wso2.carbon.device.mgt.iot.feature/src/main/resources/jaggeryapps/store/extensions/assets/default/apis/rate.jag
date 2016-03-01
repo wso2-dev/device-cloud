@@ -17,34 +17,34 @@
  *  under the License.
  *
  */
-require('/modules/store.js').exec(function(ctx) {
+require('/modules/store.js').exec(function (ctx) {
     var log = new Log();
     var app = require('rxt').app;
     var id = request.getParameter('asset');
     var destination = request.getParameter('destination');
     var asset = require('rxt').asset;
-    var constants=require('rxt').constants;
+    var constants = require('rxt').constants;
     var type = request.getParameter('type');
-    var id=request.getParameter('id');
-    var value=request.getParameter('value');
+    var id = request.getParameter('id');
+    var value = request.getParameter('value');
     var redirect = app.getContext() + '/pages/top-assets'; //Assume a detination has not been provided
     var method = request.getMethod();
     var SUBSCRIBE_URL = '/{context}/apis/rate';
     var uriMatcher = new URIMatcher(ctx.request.getRequestURI());
     var options = uriMatcher.match(SUBSCRIBE_URL);
     var ratingApi = require('/modules/rating-api.js').api;
-    var handleRating = function(session,id, type,value,response) {
-        var success =ratingApi.rate(session,{
-                id:id,
-                type:type,
-                value:value
+    var handleRating = function (session, id, type, value, response) {
+        var success = ratingApi.rate(session, {
+            id: id,
+            type: type,
+            value: value
         });
         if (success) {
             //TODO:Move this to response utility method: We need to provide a consistent response object
-            response.status=200;
-            var msg={};
-            msg.code=200;
-            msg.message='Asset has been rated successfully';
+            response.status = 200;
+            var msg = {};
+            msg.code = 200;
+            msg.message = 'Asset has been rated successfully';
             print(msg);
         } else {
             response.sendError(500);
@@ -52,17 +52,17 @@ require('/modules/store.js').exec(function(ctx) {
     };
     if (!type) {
         log.warn('Unable to rate an asset as the type of the asset cannot be determined.');
-        ctx.response.sendError(400,'Unable to rate the asset as the type of the asset cannot be determined.');
-    } else if(!id) {
+        ctx.response.sendError(400, 'Unable to rate the asset as the type of the asset cannot be determined.');
+    } else if (!id) {
         log.warn('Please provide an asset id as the asset query parameter to perform rating operations.');
-        ctx.response.sendError(400,'Please provide an asset id as the asset query parameter to perform rating operations.');
+        ctx.response.sendError(400, 'Please provide an asset id as the asset query parameter to perform rating operations.');
     } else {
         switch (method) {
             case 'GET':
-                if(log.isDebugEnabled()) {
+                if (log.isDebugEnabled()) {
                     log.debug('Get request to rating endpoint');
                 }
-                handleRating(ctx.session,id, type, value, ctx.response);
+                handleRating(ctx.session, id, type, value, ctx.response);
                 break;
             case 'DELETE':
                 ctx.request.sendError(403);
@@ -72,4 +72,5 @@ require('/modules/store.js').exec(function(ctx) {
                 break;
         }
     }
-}, request, response, session); %>
+}, request, response, session);
+%>

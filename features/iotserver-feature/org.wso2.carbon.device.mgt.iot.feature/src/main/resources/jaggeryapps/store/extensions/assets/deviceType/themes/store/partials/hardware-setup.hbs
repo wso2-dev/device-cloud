@@ -1,5 +1,5 @@
 <style>
-	.circle {
+    .circle {
         background: none repeat scroll 0 0 #191919;
         border-radius: 50px;
         height: 50px;
@@ -7,21 +7,22 @@
         width: 50px;
         color: #fff;
     }
+
     .padding-top-double {
         padding-top: 20px;
     }
 
 </style>
 {{#if attributes.ingredients_ingredients}}
-	<h3>Hardware Requirements</h3>
-	<div>
-	{{#itr attributes.ingredients_ingredients}}
-        <span class="fw-stack fw-lg margin-right">
+    <h3>Hardware Requirements</h3>
+    <div>
+        {{#itr attributes.ingredients_ingredients}}
+            <span class="fw-stack fw-lg margin-right">
             <i class="fw fw-ring fw-stack-2x"> </i>
             <i class="fw fw-right-arrow fw-stack-1x"></i>
         </span>{{value}}<br/>
-	{{/itr}}
-	</div>
+        {{/itr}}
+    </div>
 {{/if}}
 {{#if attributes.setupGuide_description}}
     <br/>
@@ -29,5 +30,6 @@
     <p>{{{attributes.setupGuide_description}}}</p>
 {{/if}}
 {{#if attributes.setupGuide_guideImage}}
-    <img class="img-responsive" alt='{{type}} setup guide' src="{{tenantedUrl ""}}/storage/{{type}}/{{id}}/{{attributes.setupGuide_guideImage}}">
+    <img class="img-responsive" alt='{{type}} setup guide'
+         src="{{tenantedUrl ""}}/storage/{{type}}/{{id}}/{{attributes.setupGuide_guideImage}}">
 {{/if}}

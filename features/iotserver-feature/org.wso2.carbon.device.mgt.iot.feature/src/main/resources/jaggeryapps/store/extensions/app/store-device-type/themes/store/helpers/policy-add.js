@@ -19,7 +19,7 @@
 
 var resources = function (page, meta) {
     return {
-        js: ['libs/utils.js','libs/js.cookie.js', 'libs/invoker-lib.js', 'libs/codemirror.js', 'libs/select2.full.min.js',
+        js: ['libs/utils.js', 'libs/js.cookie.js', 'libs/invoker-lib.js', 'libs/codemirror.js', 'libs/select2.full.min.js',
             'libs/sql.js', 'policy-add.js'],
         css: ['codemirror.css', 'select2.min.css', 'policy-add.css']
     };

@@ -18,7 +18,7 @@
  *
  */
 var caramel;
-require('/modules/store.js').exec(function(ctx) {
+require('/modules/store.js').exec(function (ctx) {
     caramel = require('caramel');
     var app = require('rxt').app;
     var constants = require('rxt').constants;
@@ -38,14 +38,15 @@ require('/modules/store.js').exec(function(ctx) {
     if (!type) {
         response.sendRedirect(400);
     }
-    else if(!user){
+    else if (!user) {
         response.sendRedirect(401);
     }
     else {
         am = asset.createUserAssetManager(ctx.session, type);
         //Obtains the subscription details for the current type
-        var subs=am.subscriptions(ctx.session);
-        var output=am.renderBasic(subs,page)._custom();
+        var subs = am.subscriptions(ctx.session);
+        var output = am.renderBasic(subs, page)._custom();
         caramel.render(output);
     }
-}, request, response, session); %>
+}, request, response, session);
+%>

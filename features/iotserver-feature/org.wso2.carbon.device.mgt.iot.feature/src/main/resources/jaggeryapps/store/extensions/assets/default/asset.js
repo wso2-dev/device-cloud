@@ -16,18 +16,18 @@
  *  under the License.
  *
  */
-asset.manager = function(ctx) {
+asset.manager = function (ctx) {
     /**
      * The function augments the provided query to include published state information
      * @param  {[type]} query [description]
-     * @return {[type]}       The provided query object 
+     * @return {[type]}       The provided query object
      */
-    var buildPublishedQuery = function(query) {
+    var buildPublishedQuery = function (query) {
         query = query || {};
         var isLCEnabled = ctx.rxtManager.isLifecycleEnabled(ctx.assetType);
         //If lifecycles are not enabled then do nothing
-        if(!isLCEnabled){
-            if(log.isDebugEnabled()){
+        if (!isLCEnabled) {
+            if (log.isDebugEnabled()) {
                 log.debug('lifecycles disabled,not adding published states to search query');
             }
             return query;
@@ -39,26 +39,26 @@ asset.manager = function(ctx) {
             return query;
         }
         //TODO: Even though an array is sent in only the first search value is accepted
-        query.lcState=[publishedStates[0]];
+        query.lcState = [publishedStates[0]];
         return query;
     };
     return {
-        search: function(query, paging) {
-            query=buildPublishedQuery(query);
+        search: function (query, paging) {
+            query = buildPublishedQuery(query);
             var assets = this._super.search.call(this, query, paging);
             return assets;
         },
-        list: function(paging) {
+        list: function (paging) {
             var assets = this._super.list.call(this, paging);
             return assets;
         },
-        get: function(id) {
+        get: function (id) {
             var asset = this._super.get.call(this, id);
             return asset;
         }
     };
 };
-asset.server = function(ctx) {
+asset.server = function (ctx) {
     var type = ctx.assetType;
     var typeDetails = ctx.rxtManager.listRxtTypeDetails(type);
     var typeSingularLabel = type; //Assume the type details are not returned
@@ -66,7 +66,8 @@ asset.server = function(ctx) {
         typeSingularLabel = typeDetails.singularLabel;
     }
     return {
-        onUserLoggedIn: function() {},
+        onUserLoggedIn: function () {
+        },
         endpoints: {
             apis: [{
                 url: 'assets',
@@ -82,12 +83,12 @@ asset.server = function(ctx) {
                 title: 'Store |  ' + typeSingularLabel,
                 url: 'details',
                 path: 'details.jag',
-                permission:'ASSET_DETAILS'
+                permission: 'ASSET_DETAILS'
             }, {
                 title: 'Store | ' + typeSingularLabel,
                 url: 'list',
                 path: 'list.jag',
-                permission:'ASSET_LIST'
+                permission: 'ASSET_LIST'
             }, {
                 title: 'Store | ' + typeSingularLabel,
                 url: 'subscriptions',
@@ -96,7 +97,7 @@ asset.server = function(ctx) {
         }
     };
 };
-asset.configure = function() {
+asset.configure = function () {
     return {
         table: {
             overview: {
@@ -124,7 +125,7 @@ asset.configure = function() {
                 defaultAction: 'Promote',
                 deletableStates: [],
                 publishedStates: ['Published'],
-                lifecycleEnabled:true
+                lifecycleEnabled: true
             },
             ui: {
                 icon: 'fw fw-resource'
@@ -140,61 +141,61 @@ asset.configure = function() {
             },
             thumbnail: 'images_thumbnail',
             banner: 'images_banner',
-            versionAttribute:'overview_version',
-            providerAttribute:'overview_provider',
-            timestamp:'overview_createdtime',
-            grouping:{
-                groupingEnabled:false,
-                groupingAttributes:['overview_name']
+            versionAttribute: 'overview_version',
+            providerAttribute: 'overview_provider',
+            timestamp: 'overview_createdtime',
+            grouping: {
+                groupingEnabled: false,
+                groupingAttributes: ['overview_name']
             }
         }
     };
 };
-asset.renderer = function(ctx) {
+asset.renderer = function (ctx) {
     var decoratorApi = require('/modules/page-decorators.js').pageDecorators;
 
     return {
         pageDecorators: {
-            navigationBar: function(page) {
+            navigationBar: function (page) {
                 return decoratorApi.navigationBar(ctx, page, this);
             },
-            searchBar: function(page) {
+            searchBar: function (page) {
                 return decoratorApi.searchBar(ctx, page, this);
             },
-            categoryBox: function(page) {
+            categoryBox: function (page) {
                 return decoratorApi.categoryBox(ctx, page, this);
             },
-            authenticationDetails: function(page) {
+            authenticationDetails: function (page) {
                 return decoratorApi.authenticationDetails(ctx, page, this);
             },
-            recentAssets: function(page) {
+            recentAssets: function (page) {
                 return decoratorApi.recentAssets(ctx, page);
             },
-            tags: function(page) {
+            tags: function (page) {
                 return decoratorApi.tags(ctx, page);
             },
-            myAssets: function(page) {
+            myAssets: function (page) {
                 return decoratorApi.myAssets(ctx, page);
             },
-            socialFeature: function(page) {
+            socialFeature: function (page) {
                 return decoratorApi.socialFeature(ctx, page);
             },
-            socialSites: function(page, meta) {
-                return decoratorApi.socialSites(ctx,page, meta, this);
+            socialSites: function (page, meta) {
+                return decoratorApi.socialSites(ctx, page, meta, this);
             },
-            embedLinks: function(page, meta) {
-                return decoratorApi.embedLinks(ctx,page, meta);
+            embedLinks: function (page, meta) {
+                return decoratorApi.embedLinks(ctx, page, meta);
             },
-            populateAssetVersionDetails:function(page,meta){
-                return decoratorApi.populateAssetVersionDetails(ctx,page,this);
+            populateAssetVersionDetails: function (page, meta) {
+                return decoratorApi.populateAssetVersionDetails(ctx, page, this);
             },
-            populateGroupingFeatureDetails: function(page,meta){
-                return decoratorApi.populateGroupingFeatureDetails(ctx,page,this);
+            populateGroupingFeatureDetails: function (page, meta) {
+                return decoratorApi.populateGroupingFeatureDetails(ctx, page, this);
             },
-            sorting: function(page,meta){
-                return decoratorApi.sorting(ctx,page,this);
+            sorting: function (page, meta) {
+                return decoratorApi.sorting(ctx, page, this);
             },
-            populateActionBar: function(page,meta){
+            populateActionBar: function (page, meta) {
                 page.actionBar = {};
                 page.actionBar.actions = [];
                 //Format

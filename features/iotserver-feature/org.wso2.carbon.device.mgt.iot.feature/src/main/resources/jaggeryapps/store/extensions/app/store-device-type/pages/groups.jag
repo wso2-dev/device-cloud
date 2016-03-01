@@ -18,28 +18,28 @@
  *
  */
 var caramel;
-require('/modules/store.js').exec(function(ctx) {
-	var log = new Log("groups.jag");
-	caramel = require('caramel');
+require('/modules/store.js').exec(function (ctx) {
+    var log = new Log("groups.jag");
+    caramel = require('caramel');
     var app = require('rxt').app;
     var ui = require('rxt').ui;
-	var page = ui.buildPage(ctx.session, ctx.request);
+    var page = ui.buildPage(ctx.session, ctx.request);
 
-	var uri = request.getRequestURI();
-	var uriMatcher = new URIMatcher(String(uri));
+    var uri = request.getRequestURI();
+    var uriMatcher = new URIMatcher(String(uri));
 
-	if (uriMatcher.match("/{context}/pages/groups/add")) {
-		page.meta.title = "Store | Add Group";
-		page.partial = 'group-add';
-	}else{
-		page.partial = 'group-listing';
-		var groupModule = require("../modules/group.js").groupModule;
-		var groups = groupModule.getGroups().data;
-		if (groups && groups.length > 0){
-			page.groups = groups;
-			page.operations = true;
-		}
-	}
+    if (uriMatcher.match("/{context}/pages/groups/add")) {
+        page.meta.title = "Store | Add Group";
+        page.partial = 'group-add';
+    } else {
+        page.partial = 'group-listing';
+        var groupModule = require("../modules/group.js").groupModule;
+        var groups = groupModule.getGroups().data;
+        if (groups && groups.length > 0) {
+            page.groups = groups;
+            page.operations = true;
+        }
+    }
     var appManager = app.createUserAppManager(session);
     var output = appManager.render([], page);
     caramel.render(output);

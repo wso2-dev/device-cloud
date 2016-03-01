@@ -16,28 +16,28 @@
  *  under the License.
  *
  */
-var format = function(context, data, page, area, meta) {
-	context = context();
-	context.user = data.user;
-	return context;
+var format = function (context, data, page, area, meta) {
+    context = context();
+    context.user = data.user;
+    return context;
 };
 
-var resources = function(page, meta) {
-	return {
-		js : ['asset-helpers.js', 'navigation.js', 'popover.js', 'jquery.validate.js', 'search.js'],
-		css : ['navigation.css', 'navigation-custom.css']
-	};
+var resources = function (page, meta) {
+    return {
+        js: ['asset-helpers.js', 'navigation.js', 'popover.js', 'jquery.validate.js', 'search.js'],
+        css: ['navigation.css', 'navigation-custom.css']
+    };
 };
 
-var currentPage = function(navigation, type, search) {
-	var asset;
+var currentPage = function (navigation, type, search) {
+    var asset;
 
-	for (asset in navigation.assets) {
-		if (asset == type) {
-			navigation.assets[asset].selected = true;
-			break;
-		}
-	}
-	navigation.search = search;
-	return navigation;
+    for (asset in navigation.assets) {
+        if (asset == type) {
+            navigation.assets[asset].selected = true;
+            break;
+        }
+    }
+    navigation.search = search;
+    return navigation;
 };

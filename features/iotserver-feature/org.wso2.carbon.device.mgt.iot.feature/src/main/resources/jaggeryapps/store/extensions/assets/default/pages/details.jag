@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 var caramel;
-require('/modules/store.js').exec(function(ctx) {
+require('/modules/store.js').exec(function (ctx) {
     caramel = require('caramel');
     var rxt = require('rxt');
     var process = require('process');
@@ -61,7 +61,7 @@ require('/modules/store.js').exec(function(ctx) {
                 assets.isSubscribed = am.isSubscribed(options.id, ctx.session);
             }
         } catch (e) {
-            if(e.javaException.getMessage().startsWith("Error in retrieving governance artifact by path")){
+            if (e.javaException.getMessage().startsWith("Error in retrieving governance artifact by path")) {
                 response.sendError(401, 'Error in retrieving governance artifact by path');
                 return;
             }
@@ -75,4 +75,5 @@ require('/modules/store.js').exec(function(ctx) {
             caramel.render(output);
         }
     }
-}, request, response, session); %>
+}, request, response, session);
+%>

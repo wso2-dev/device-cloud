@@ -291,7 +291,7 @@ deviceModule = function () {
         var result = get(listAllDevicesEndPoint, {}, "json");
         var devices = result.data;
         var device;
-        for (var d in devices){
+        for (var d in devices) {
             device = devices[d];
             device.assetId = privateMethods.getAssetId(device.deviceType);
         }
@@ -312,7 +312,7 @@ deviceModule = function () {
         var result = get(listAllDevicesEndPoint, {}, "json");
         var devices = result.data;
         var device;
-        for (var d in devices){
+        for (var d in devices) {
             device = devices[d];
             device.assetId = privateMethods.getAssetId(device.type);
         }
@@ -345,7 +345,7 @@ deviceModule = function () {
                 delete user_groups[g]["devices"];
             }
             var device;
-            for (var d in deviceInGroup){
+            for (var d in deviceInGroup) {
                 device = deviceInGroup[d];
                 device.assetId = privateMethods.getAssetId(device.type);
             }
@@ -363,7 +363,7 @@ deviceModule = function () {
         var result = get(deviceTypesEndPoint, {}, "json");
         var types = result.data;
         var type;
-        for (var t in types){
+        for (var t in types) {
             type = types[t];
             type.assetId = privateMethods.getAssetId(type.name);
         }

@@ -16,9 +16,9 @@
  *  under the License.
  *
  */
-var resources = function(){
-	return {
-		js:['libs/jquery.form.min.js','advance-search-api.js'],
-		css:['custom-extensions.css']
-	}
+var resources = function () {
+    return {
+        js: ['libs/jquery.form.min.js', 'advance-search-api.js'],
+        css: ['custom-extensions.css']
+    }
 };

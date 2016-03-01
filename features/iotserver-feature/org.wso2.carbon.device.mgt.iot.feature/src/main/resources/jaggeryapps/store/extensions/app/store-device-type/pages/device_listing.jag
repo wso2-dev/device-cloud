@@ -16,33 +16,34 @@
  */
 var caramel;
 require('/modules/store.js').exec(function (ctx) {
-	var log = new Log("device_listing.jag");
-	caramel = require('caramel');
-	var app = require('rxt').app;
-	var ui = require('rxt').ui;
-	var page = ui.buildPage(ctx.session, ctx.request);
+    var log = new Log("device_listing.jag");
+    caramel = require('caramel');
+    var app = require('rxt').app;
+    var ui = require('rxt').ui;
+    var page = ui.buildPage(ctx.session, ctx.request);
 
-	var groupId = request.getParameter("groupId");
-	var allDevices = [];
-	var deviceCount = 0;
-	if (groupId && groupId != "0") {
-		var groupModule = require("../modules/group.js").groupModule;
-		var group = groupModule.getDevices(groupId).data;
-		if (group) {
-			allDevices.push(group.group);
-			deviceCount = group.group.devices.length;
-		}
-	} else {
-		var deviceModule = require("../modules/device.js").deviceModule;
-		var result = deviceModule.getAllPermittedDevices();
-		allDevices = result.data;
-		deviceCount = result.device_count;
-	}
-	page.groups = allDevices;
-	if (deviceCount > 0) {
-		page.operations = true;
-	}
-	var appManager = app.createUserAppManager(session);
-	var output = appManager.render([], page);
-	caramel.render(output);
-}, request, response, session); %>
+    var groupId = request.getParameter("groupId");
+    var allDevices = [];
+    var deviceCount = 0;
+    if (groupId && groupId != "0") {
+        var groupModule = require("../modules/group.js").groupModule;
+        var group = groupModule.getDevices(groupId).data;
+        if (group) {
+            allDevices.push(group.group);
+            deviceCount = group.group.devices.length;
+        }
+    } else {
+        var deviceModule = require("../modules/device.js").deviceModule;
+        var result = deviceModule.getAllPermittedDevices();
+        allDevices = result.data;
+        deviceCount = result.device_count;
+    }
+    page.groups = allDevices;
+    if (deviceCount > 0) {
+        page.operations = true;
+    }
+    var appManager = app.createUserAppManager(session);
+    var output = appManager.render([], page);
+    caramel.render(output);
+}, request, response, session);
+%>

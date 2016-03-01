@@ -1,4 +1,4 @@
-var tenantLoad = function(ctx) {
+var tenantLoad = function (ctx) {
     var log = new Log();
     var Utils = ctx.utils;
     var Permissions = ctx.permissions;
@@ -6,22 +6,22 @@ var tenantLoad = function(ctx) {
     var DEFAULT_ROLE = 'Internal/store';
     var tenantId = ctx.tenantId;
     var ANON_ROLE = Utils.anonRole(tenantId);
-    var listPermission = function(type) {
+    var listPermission = function (type) {
         return Utils.assetFeaturePermissionString('list', type); //'/permission/admin/manage/resources/govern/' + type + '/list';
     };
-    var bookmarkPermission = function(type) {
+    var bookmarkPermission = function (type) {
         return Utils.assetFeaturePermissionString('bookmark', type);
     };
-    var reviewPermission = function(type) {
+    var reviewPermission = function (type) {
         return Utils.assetFeaturePermissionString('reviews', type);
     };
-    var storeLoginPermission = function(){
+    var storeLoginPermission = function () {
         return Utils.appFeaturePermissionString('login');
     };
-    var myitemsPermission = function(){
+    var myitemsPermission = function () {
         return Utils.appFeaturePermissionString('myitems');
     };
-    var populateAssetPermissions = function(tenantId) {
+    var populateAssetPermissions = function (tenantId) {
         var types = rxtManager.listRxtTypes();
         var type;
         var permissions = Permissions;
@@ -43,14 +43,14 @@ var tenantLoad = function(ctx) {
             Utils.registerPermissions(obj, tenantId);
         }
     };
-    var populateAppPermissions = function(tenantId) {
+    var populateAppPermissions = function (tenantId) {
         var permissions = Permissions;
         var permission;
         var key;
-        var features = ['myitems','login'];
+        var features = ['myitems', 'login'];
         var feature;
         var obj = {};
-        for(var index = 0; index < features.length; index++){
+        for (var index = 0; index < features.length; index++) {
             feature = features[index];
             key = Utils.appFeaturePermissionKey(feature);
             permission = Utils.appFeaturePermissionString(feature);
@@ -58,9 +58,9 @@ var tenantLoad = function(ctx) {
             obj[key] = permission;
             //log.info('New app permission: '+key+' : '+permission);
         }
-        Utils.registerPermissions(obj,tenantId);
+        Utils.registerPermissions(obj, tenantId);
     };
-    var assignAllPermissionsToDefaultRole = function() {
+    var assignAllPermissionsToDefaultRole = function () {
         var types = rxtManager.listRxtTypes();
         var type;
         var permissions;
@@ -76,7 +76,7 @@ var tenantLoad = function(ctx) {
             Utils.addPermissionsToRole(permissions, DEFAULT_ROLE, tenantId);
         }
     };
-    var assignPermissionsToAnonRole = function(tenantId) {
+    var assignPermissionsToAnonRole = function (tenantId) {
         var types = rxtManager.listRxtTypes();
         var type;
         var permissions;
@@ -88,55 +88,55 @@ var tenantLoad = function(ctx) {
             Utils.addPermissionsToRole(permissions, ANON_ROLE, tenantId);
         }
     };
-    if(log.isDebugEnabled()){
+    if (log.isDebugEnabled()) {
         log.debug('Starting permission operations and registering default permissions');
     }
-    Permissions.ASSET_LIST = function(ctx) {
+    Permissions.ASSET_LIST = function (ctx) {
         if (!ctx.type) {
             throw 'Unable to resolve type to determine the ASSET_LIST permission';
         }
         return ctx.utils.assetFeaturePermissionString('list', ctx.type);
     };
-    Permissions.ASSET_BOOKMARK = function(ctx) {
+    Permissions.ASSET_BOOKMARK = function (ctx) {
         if (!ctx.type) {
             throw 'Unable to resolve type to determine the ASSET_BOOKMARK permission';
         }
         return ctx.utils.assetFeaturePermissionString('bookmark', ctx.type);
     };
-    Permissions.ASSET_REVIEWS = function(ctx) {
+    Permissions.ASSET_REVIEWS = function (ctx) {
         if (!ctx.type) {
             throw 'Unable to resolve type to determine the ASSET_REVIEWS permission';
         }
         return ctx.utils.assetFeaturePermissionString('reviews', ctx.type);
     };
-    Permissions.ASSET_DETAILS = function(ctx) {
-        if(!ctx.type) {
+    Permissions.ASSET_DETAILS = function (ctx) {
+        if (!ctx.type) {
             throw 'Unable to resolve type to determine the ASSET_DETAILS permission';
         }
         return ctx.utils.assetFeaturePermissionString('list', ctx.type);
     };
-    Permissions.APP_MYITEMS = function(ctx){
+    Permissions.APP_MYITEMS = function (ctx) {
         return ctx.utils.appFeaturePermissionString('myitems');
     };
-    Permissions.APP_LOGIN = function(ctx){
+    Permissions.APP_LOGIN = function (ctx) {
         return ctx.utils.appFeaturePermissionString('login');
     };
-    if(log.isDebugEnabled()){
+    if (log.isDebugEnabled()) {
         log.debug('Registering asset permissions not in the WSO2 permission tree');
     }
     populateAssetPermissions(tenantId);
     populateAppPermissions(tenantId);
-    if(log.isDebugEnabled()){
+    if (log.isDebugEnabled()) {
         log.debug('Adding permissions to role: ' + DEFAULT_ROLE);
     }
     assignAllPermissionsToDefaultRole();
-    if(log.isDebugEnabled()){
+    if (log.isDebugEnabled()) {
         log.debug('Registering store anonymous role : ' + ANON_ROLE);
         log.debug('Anonymous role registered successfully : ' + Utils.addRole(ANON_ROLE));
         log.debug('Assigning store permissions to anonymous role');
     }
     assignPermissionsToAnonRole(tenantId);
-    if(log.isDebugEnabled()){
+    if (log.isDebugEnabled()) {
         log.debug('Permission operations have finished.');
     }
 };

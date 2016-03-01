@@ -10,7 +10,7 @@
 </div>
 {{#if policies}}
     <div class="wr-list-group wr-sortable">
-		{{#each policies}}
+        {{#each policies}}
             <span id="{{id}}" class="list-group-item">
                                 <i class="wr-sortable-icon fw fw-sort hide"></i>
                                 <i class="wr-list-icon fw fw-policy"></i>
@@ -21,14 +21,14 @@
                                 </div>
                                 <span class="list-group-item-actions">
                                     <!--<a href="#" class="remove-policy-link cu-btn-inner"-->
-                                       <!--data-devicetype="{{deviceType}}"-->
-                                       <!--data-policyname="{{policyName}}"-->
-                                       <!--data-policyuuid="{{id}}">-->
+                                    <!--data-devicetype="{{deviceType}}"-->
+                                    <!--data-policyname="{{policyName}}"-->
+                                    <!--data-policyuuid="{{id}}">-->
                                     <!--<span class="fw-stack">-->
-                                        <!--<i class="fw fw-ring fw-stack-2x"></i>-->
-                                        <!--<i class="fw fw-edit fw-stack-1x"></i>-->
+                                    <!--<i class="fw fw-ring fw-stack-2x"></i>-->
+                                    <!--<i class="fw fw-edit fw-stack-1x"></i>-->
                                     <!--</span>-->
-                                        <!--Edit-->
+                                    <!--Edit-->
                                     <!--</a>-->
 									<a href="#" class="remove-policy-link cu-btn-inner"
                                        data-devicetype="{{deviceType}}"
@@ -43,14 +43,15 @@
                                 </span>
                                 <div class="clearfix"></div>
                             </span>
-		{{/each}}
+        {{/each}}
     </div>
 {{else}}
     <!-- no policies found -->
     <div id="ast-container" class="ast-container list-view">
         <div id="ast-container" class="ast-container list-view">
             <div class="assets-container margin-top-double padding-top-double">
-                <div class="top-assets-empty-assert">You don't have any Policies added at the moment. Please add new
+                <div class="top-assets-empty-assert">You don't have any Policies added at the moment. Please
+                    add new
                     policy first.
                 </div>
             </div>

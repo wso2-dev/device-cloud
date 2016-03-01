@@ -18,30 +18,30 @@
  *
  */
 var caramel;
-require('/modules/store.js').exec(function(ctx) {
-	caramel = require('caramel');
-	var app = require('rxt').app;
-	var server = require('store').server;
-	var user = server.current(ctx.session);
-	var ui = require('rxt').ui;
-	var page = ui.buildPage(ctx.session, ctx.request);
-	var appManager;
-	var groupId = request.getParameter("groupId");
-	var title;
-	if (groupId){
-		title = request.getParameter("name");
-	}else{
-		var deviceId = request.getParameter("deviceId");
-		var deviceType = request.getParameter("deviceType");
+require('/modules/store.js').exec(function (ctx) {
+    caramel = require('caramel');
+    var app = require('rxt').app;
+    var server = require('store').server;
+    var user = server.current(ctx.session);
+    var ui = require('rxt').ui;
+    var page = ui.buildPage(ctx.session, ctx.request);
+    var appManager;
+    var groupId = request.getParameter("groupId");
+    var title;
+    if (groupId) {
+        title = request.getParameter("name");
+    } else {
+        var deviceId = request.getParameter("deviceId");
+        var deviceType = request.getParameter("deviceType");
         var deviceModule = require("../modules/device.js").deviceModule;
         var device = deviceModule.viewDevice(type, deviceId);
-		title = device.name;
-	}
-	page.title = title + " Analytics";
-	page.page_title = "Analytics";
-	appManager = app.createUserAppManager(session);
-	var output = appManager.render([], page);
-	caramel.render(output);
+        title = device.name;
+    }
+    page.title = title + " Analytics";
+    page.page_title = "Analytics";
+    appManager = app.createUserAppManager(session);
+    var output = appManager.render([], page);
+    caramel.render(output);
 
 
 }, request, response, session);

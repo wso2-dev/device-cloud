@@ -18,7 +18,7 @@
  *
  */
 var caramel;
-require('/modules/store.js').exec(function(ctx) {
+require('/modules/store.js').exec(function (ctx) {
     caramel = require('caramel');
     var app = require('rxt').app;
     var ui = require('rxt').ui;
@@ -28,5 +28,5 @@ require('/modules/store.js').exec(function(ctx) {
     var output = appManager.render([], page);
     caramel.render(output);
 
-}, request, response, session); 
+}, request, response, session);
 %>

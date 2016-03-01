@@ -35,7 +35,7 @@ utility = function () {
         return getOsgiService('org.wso2.carbon.policy.mgt.core.PolicyManagerService');
     };
 
-    publicMethods.getIoTServerConfig = function(configName){
+    publicMethods.getIoTServerConfig = function (configName) {
         var path = "/config/iot-config.json";
         var file = new File(path);
         file.open("r");

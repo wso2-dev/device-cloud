@@ -1,4 +1,3 @@
-
 asset.configure = function () {
     return {
         table: {

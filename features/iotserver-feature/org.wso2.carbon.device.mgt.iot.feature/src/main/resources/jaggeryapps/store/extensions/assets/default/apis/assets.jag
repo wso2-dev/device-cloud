@@ -28,7 +28,7 @@ var DEFAULT_PAGIN = {
     'sortBy': '',
     'paginationLimit': 1000
 };
-require('/modules/store.js').exec(function(ctx) {
+require('/modules/store.js').exec(function (ctx) {
     var log = new Log();
     var ref = require('utils').request;
     var responseProcessor = require('utils').response;
@@ -96,18 +96,18 @@ require('/modules/store.js').exec(function(ctx) {
 
             if (uriMatcher.match(LIST_ASSETS_URL)) {
                 var assets = [];
-                if(options.type) {
-                    if(log.isDebugEnabled()){
-                       log.debug('Type specific advanced search');
+                if (options.type) {
+                    if (log.isDebugEnabled()) {
+                        log.debug('Type specific advanced search');
                     }
                     assets = assetApi.advanceSearch(options, req, res, session);
                 } else {
-                    if(log.isDebugEnabled()){
+                    if (log.isDebugEnabled()) {
                         log.debug('Generic advanced search');
                     }
-                    assets = assetApi.genericAdvanceSearch(options,req,res,session);
+                    assets = assetApi.genericAdvanceSearch(options, req, res, session);
                 }
-                
+
                 response = responseProcessor.buildSuccessResponse(response, 200, assets);
             } else if (uriMatcher.match(GET_ASSET_URL)) {
                 options.id = uriMatcher.elements().id;
@@ -120,7 +120,7 @@ require('/modules/store.js').exec(function(ctx) {
             } else if (uriMatcher.match(GET_STATE_URL)) {
                 options.id = uriMatcher.elements().id;
                 var state = lcApi.getState(options, req, res, session);
-                response = responseProcessor.buildSuccessResponse(response, 200,state);
+                response = responseProcessor.buildSuccessResponse(response, 200, state);
             } else {
                 response = responseProcessor.buildErrorResponse(response, 404, 'Unable to locate this GET endpoint');
             }
@@ -130,12 +130,12 @@ require('/modules/store.js').exec(function(ctx) {
             options.type = req.getParameter('type');
             if (uriMatcher.match(DELETE_ASSET_URL)) {
                 options.id = uriMatcher.elements().id;
-                var done=assetApi.remove(options, req, res, session);
+                var done = assetApi.remove(options, req, res, session);
                 var result = [];
-                if(done){
-                    response = responseProcessor.buildSuccessResponse(response,200,result);
-                }else{
-                    response = responseProcessor.buildErrorResponse(response,400,"No matching asset found");
+                if (done) {
+                    response = responseProcessor.buildSuccessResponse(response, 200, result);
+                } else {
+                    response = responseProcessor.buildErrorResponse(response, 400, "No matching asset found");
                 }
             }
             else {
@@ -146,4 +146,5 @@ require('/modules/store.js').exec(function(ctx) {
         default:
             response = responseProcessor.buildErrorResponse(response, 501, 'The endpoint that you have requested is not implemented for the ' + method + ' method.Try making the request with the appropriate verb (hint: create/update operations use POST).');
     }
-}, request, response, session); %>
+}, request, response, session);
+%>

@@ -152,9 +152,9 @@ var groupModule = {};
         var result;
         for (var role in roleMap) {
             if (roleMap[role].assigned == true) {
-                result = groupModule.shareGroup(groupId,userId,roleMap[role].role);
+                result = groupModule.shareGroup(groupId, userId, roleMap[role].role);
             } else {
-                result = groupModule.unshareGroup(groupId,userId,roleMap[role].role);
+                result = groupModule.unshareGroup(groupId, userId, roleMap[role].role);
             }
         }
         return result;

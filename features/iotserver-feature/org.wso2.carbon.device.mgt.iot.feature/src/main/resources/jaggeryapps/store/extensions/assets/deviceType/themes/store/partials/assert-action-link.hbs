@@ -1,5 +1,5 @@
 {{#if attributes.overview_actionLabel}}
-	<br /><br />
+    <br/><br/>
 
     <div id="download-device-modal-content" class="hide">
         <div class="modal-content">
@@ -9,8 +9,8 @@
                     <br/>
                     <div class="buttons">
                         <form id="downloadForm" method="GET" action="{{url ""}}/apis/devices/sketch/download">
-                            <input type="hidden" name="deviceType" value="{{attributes.overview_name}}" />
-                            <input type="hidden" name="sketchType" value="{{attributes.sketches_Sketches}}" />
+                            <input type="hidden" name="deviceType" value="{{attributes.overview_name}}"/>
+                            <input type="hidden" name="sketchType" value="{{attributes.sketches_Sketches}}"/>
                             <a class="btn-operations" onclick="$('#downloadForm').submit()">Download Now</a>
                             &nbsp;&nbsp;
                             <a href="#" id="download-device-download-link" class="blue-button">
@@ -31,7 +31,8 @@
                     <h3>Please download the file from following link(Press CTRL+C).</h3>
                     <br/>
                     <div>
-                        <input id="download-device-url" style="color:#3f3f3f;padding:5px" type="text" value="" placeholder="Type here" size="60">
+                        <input id="download-device-url" style="color:#3f3f3f;padding:5px" type="text" value=""
+                               placeholder="Type here" size="60">
                     </div>
                 </div>
             </div>
@@ -116,7 +117,8 @@
         </div>
     </div>
 
-    <a href="#" class="blue-button download-link" data-devicetype="{{attributes.overview_name}}" data-sketchtype="{{attributes.sketches_Sketches}}"><i class="fw fw-download"></i> Download</a>
+    <a href="#" class="blue-button download-link" data-devicetype="{{attributes.overview_name}}"
+       data-sketchtype="{{attributes.sketches_Sketches}}"><i class="fw fw-download"></i> Download</a>
 
     <!--<a href="{{url ""}}/apis/devices/sketch/download?sketchType={{attributes.sketches_Sketches}}&deviceType={{attributes.overview_name}}" class="blue-button">{{attributes.overview_actionLabel}}</a>-->
 {{/if}}

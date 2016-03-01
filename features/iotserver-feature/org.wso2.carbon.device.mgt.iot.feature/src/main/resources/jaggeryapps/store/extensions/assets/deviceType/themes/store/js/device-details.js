@@ -62,11 +62,10 @@ function attachEvents() {
         var sketchType = $(this).data("sketchtype");
         var deviceType = $(this).data("devicetype");
         var downloadDeviceAPI = "/store/apis/devices/sketch/generate_link";
-        var payload = {"sketchType":sketchType, "deviceType":deviceType};
+        var payload = {"sketchType": sketchType, "deviceType": deviceType};
         $(modalPopupContent).html($('#download-device-modal-content').html());
         showPopup();
         $("a#download-device-download-link").click(function () {
-            console.log("----");
             invokerUtil.post(
                 downloadDeviceAPI,
                 payload,
@@ -86,32 +85,32 @@ function attachEvents() {
     });
 }
 
-function doAction(data){
+function doAction(data) {
     //if it is saml redirection response
-    if(data.status == null) {
+    if (data.status == null) {
         document.write(data);
     }
 
-    if(data.status == "200"){
+    if (data.status == "200") {
         $(modalPopupContent).html($('#download-device-modal-content-links').html());
         $("input#download-device-url").val(data.responseText);
         $("input#download-device-url").focus(function () {
             $(this).select();
         });
         showPopup();
-    }else if(data.status == "401"){
+    } else if (data.status == "401") {
         $(modalPopupContent).html($('#device-401-content').html());
         $("#device-401-link").click(function () {
             window.location = "/store/login";
         });
         showPopup();
-    }else if(data == "403"){
+    } else if (data == "403") {
         $(modalPopupContent).html($('#device-403-content').html());
         $("#device-403-link").click(function () {
             window.location = "/store/login";
         });
         showPopup();
-    }else {
+    } else {
         $(modalPopupContent).html($('#device-unexpected-error-content').html());
         $("a#device-unexpected-error-link").click(function () {
             hidePopup();

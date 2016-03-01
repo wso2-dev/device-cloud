@@ -1,22 +1,22 @@
 <div class="col-md-12 wr-page-content">
     <!-- form content placeholder -->
-	{{#if groups}}
+    {{#if groups}}
         <div id="ast-container-parent" class="ast-container">
-			{{#each groups}}
+            {{#each groups}}
                 <div class="ast-container list-view group-title">
                     <div class="row wr-device-board list-view" style="font-size: inherit; background: #fff;">
                         <div class="ast-container " id="ast-container">
                             <div class="container-fluid ">
                                 <div class="title">
                                     <a class="asset-type-deviceType">
-										{{#if name}}
-											{{name}} Devices
-										{{else}}
+                                        {{#if name}}
+                                            {{name}} Devices
+                                        {{else}}
                                             Ungrouped Devices
-										{{/if}}
+                                        {{/if}}
                                     </a>
                                 </div>
-								{{#if name}}
+                                {{#if name}}
                                     <div class="ast-model">
                                         <a href="/store/pages/analytics?groupId={{id}}&name={{name}}">
 											<span class="fw-stack">
@@ -49,7 +49,7 @@
                                             <span class="lbl-action">Delete</span>
                                         </a>
                                     </div>
-								{{/if}}
+                                {{/if}}
                                 <hr>
                             </div>
                         </div>
@@ -57,9 +57,10 @@
                 </div>
 
                 <div id="ast-container-{{id}}" class="ast-container devices-set list-view">
-					{{#if devices}}
-						{{#each devices}}
-                            <div class="ctrl-wr-asset" data-deviceid="{{deviceIdentifier}}" data-type="{{type}}">
+                    {{#if devices}}
+                        {{#each devices}}
+                            <div class="ctrl-wr-asset" data-deviceid="{{deviceIdentifier}}"
+                                 data-type="{{type}}">
                                 <div class="itm-select">
                                     <label class="wr-input-control checkbox">
                                         <input type="checkbox"/>
@@ -135,17 +136,18 @@
                                 </div>
                                 <br/>
                             </div>
-						{{/each}}
-					{{else}}
-						{{#if name}}
+                        {{/each}}
+                    {{else}}
+                        {{#if name}}
                             <div id="ast-container" class="ast-container list-view">
                                 <div class="assets-container margin-top-double padding-top-double">
-                                    <div class="top-assets-empty-assert">You don't have any associated device here.
+                                    <div class="top-assets-empty-assert">You don't have any associated device
+                                        here.
                                         Please associate a device.
                                     </div>
                                 </div>
                             </div>
-						{{else}}
+                        {{else}}
                             <div id="ast-container" class="ast-container list-view">
                                 <div class="assets-container margin-top-double padding-top-double">
                                     <div class="top-assets-empty-assert">You don't have any Device here.
@@ -153,21 +155,21 @@
                                     </div>
                                 </div>
                             </div>
-						{{/if}}
-					{{/if}}
+                        {{/if}}
+                    {{/if}}
                     <br class="c-both"/>
                 </div>
                 <br/>
-			{{/each}}
+            {{/each}}
         </div>
-	{{else}}
+    {{else}}
         <div id="ast-container" class="ast-container list-view">
             <div class="assets-container margin-top-double padding-top-double">
                 <div class="top-assets-empty-assert">Something went wrong!
                 </div>
             </div>
         </div>
-	{{/if}}
+    {{/if}}
 
     <div id="remove-device-modal-content" class="hide">
         <div class="modal-content">
@@ -425,7 +427,8 @@
                     <br/>
 
                     <div>
-                        <input id="edit-group-description" style="color:#3f3f3f;padding:5px" type="text" value=""
+                        <input id="edit-group-description" style="color:#3f3f3f;padding:5px" type="text"
+                               value=""
                                placeholder="Group Description" size="60">
                     </div>
                     <br/>

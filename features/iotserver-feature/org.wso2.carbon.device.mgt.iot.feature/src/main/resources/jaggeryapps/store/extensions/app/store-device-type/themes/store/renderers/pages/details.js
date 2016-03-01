@@ -16,7 +16,7 @@
  *  under the License.
  *
  */
-var render = function(theme, data, meta, require) {
+var render = function (theme, data, meta, require) {
     var log = new Log();
     var navigation = 'navigation';
     var navigationContext = data;
@@ -40,7 +40,7 @@ var render = function(theme, data, meta, require) {
         body: [{
             partial: 'asset-lll',
             context: data
-            }
+        }
         ]
     });
 };

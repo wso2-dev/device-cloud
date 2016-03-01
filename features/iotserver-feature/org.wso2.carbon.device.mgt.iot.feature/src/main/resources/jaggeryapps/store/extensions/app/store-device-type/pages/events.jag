@@ -20,22 +20,22 @@
 var caramel;
 
 require('/modules/store.js').exec(function (ctx) {
-	var log = new Log("events.jag");
-	caramel = require('caramel');
-	var app = require('rxt').app;
-	var server = require('store').server;
-	var user = server.current(ctx.session);
-	var ui = require('rxt').ui;
-	var page = ui.buildPage(ctx.session, ctx.request);
+    var log = new Log("events.jag");
+    caramel = require('caramel');
+    var app = require('rxt').app;
+    var server = require('store').server;
+    var user = server.current(ctx.session);
+    var ui = require('rxt').ui;
+    var page = ui.buildPage(ctx.session, ctx.request);
 
-	var eventModule = require("../modules/event.js").eventModule;
-	var data = eventModule.getEventsData(user.username, 50);
-	if (data && data.length > 0){
-		page.data = data;
-	}
-	var appManager = app.createUserAppManager(session);
-	var output = appManager.render([], page);
-	caramel.render(output);
+    var eventModule = require("../modules/event.js").eventModule;
+    var data = eventModule.getEventsData(user.username, 50);
+    if (data && data.length > 0) {
+        page.data = data;
+    }
+    var appManager = app.createUserAppManager(session);
+    var output = appManager.render([], page);
+    caramel.render(output);
 
 }, request, response, session);
 %>

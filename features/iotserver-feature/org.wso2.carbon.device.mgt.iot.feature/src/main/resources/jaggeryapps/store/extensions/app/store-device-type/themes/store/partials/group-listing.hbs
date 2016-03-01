@@ -2,7 +2,7 @@
 <br/>
 {{#if groups}}
     <div id="ast-container" class="ast-container list-view">
-		{{#each groups}}
+        {{#each groups}}
             <div class="ctrl-wr-asset" data-groupid="{{id}}">
                 <div class="itm-select">
                     <label class="wr-input-control checkbox">
@@ -19,7 +19,8 @@
                         <div class="ast-title view-group-link" data-groupid="{{id}}">
                             <a class="ast-name">{{name}}</a>
                             <span class="ast-auth">Device Count: {{devices.length}}</span>
-                            <span class="ast-auth">Created On: <span class="formatDate">{{dateOfCreation}}</span></span>
+                            <span class="ast-auth">Created On: <span
+                                    class="formatDate">{{dateOfCreation}}</span></span>
                             <span class="ast-ver">Owner: {{owner}}</span>
                             <br/>
                             <span class="ast-ver">Shared with: {{#each users}}{{username}}, {{/each}}</span>
@@ -47,7 +48,8 @@
 											</span>
                                     <span class="lbl-action">Share</span>
                                 </a>
-                                <a href="#" class="edit-group-link" data-groupid="{{id}}" data-groupname="{{name}}"
+                                <a href="#" class="edit-group-link" data-groupid="{{id}}"
+                                   data-groupname="{{name}}"
                                    data-groupdescription="{{description}}">
 											<span class="fw-stack">
 												<i class="fw fw-ring fw-stack-2x"></i>
@@ -67,13 +69,14 @@
                     </div>
                 </div>
             </div>
-		{{/each}}
+        {{/each}}
     </div>
 {{else}}
     <div id="ast-container" class="ast-container list-view">
         <div id="ast-container" class="ast-container list-view">
             <div class="assets-container margin-top-double padding-top-double">
-                <div class="top-assets-empty-assert">You don't have any Groups registered at the moment. Please add a
+                <div class="top-assets-empty-assert">You don't have any Groups registered at the moment.
+                    Please add a
                     new group first.
                 </div>
             </div>

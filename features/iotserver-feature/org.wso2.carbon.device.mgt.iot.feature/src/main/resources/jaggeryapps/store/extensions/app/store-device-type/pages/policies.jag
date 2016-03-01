@@ -19,52 +19,52 @@
  */
 var caramel;
 require('/modules/store.js').exec(function (ctx) {
-	caramel = require('caramel');
-	var app = require('rxt').app;
-	var server = require('store').server;
-	var user = server.current(ctx.session);
-	var ui = require('rxt').ui;
-	var page = ui.buildPage(ctx.session, ctx.request);
-	var appManager;
+    caramel = require('caramel');
+    var app = require('rxt').app;
+    var server = require('store').server;
+    var user = server.current(ctx.session);
+    var ui = require('rxt').ui;
+    var page = ui.buildPage(ctx.session, ctx.request);
+    var appManager;
 
-	var uri = request.getRequestURI();
-	var uriMatcher = new URIMatcher(String(uri));
+    var uri = request.getRequestURI();
+    var uriMatcher = new URIMatcher(String(uri));
 
-	if (uriMatcher.match("/{context}/pages/policies/add")) {
-		var deviceModule = require("../modules/device.js").deviceModule;
-		var deviceTypes = deviceModule.getDeviceTypes().data;
+    if (uriMatcher.match("/{context}/pages/policies/add")) {
+        var deviceModule = require("../modules/device.js").deviceModule;
+        var deviceTypes = deviceModule.getDeviceTypes().data;
 
-		for (var i = 0; i < deviceTypes.length; i++) {
-			var deviceType = deviceTypes[i];
+        for (var i = 0; i < deviceTypes.length; i++) {
+            var deviceType = deviceTypes[i];
 
-			//setting defaults
-			var storeTitle = deviceType.name;
-			var storeDescription = "Add policy for " + deviceType.name;
+            //setting defaults
+            var storeTitle = deviceType.name;
+            var storeDescription = "Add policy for " + deviceType.name;
 
-			if (deviceType.storeTitle != null) {
-				storeTitle = deviceType.storeTitle;
-			}
+            if (deviceType.storeTitle != null) {
+                storeTitle = deviceType.storeTitle;
+            }
 
-			if (deviceType.storeDescription != null) {
-				storeDescription = deviceType.storeDescription;
-			}
+            if (deviceType.storeDescription != null) {
+                storeDescription = deviceType.storeDescription;
+            }
 
-			deviceTypes[i].storeTitle = storeTitle;
-			deviceTypes[i].storeDescription = storeDescription;
-		}
+            deviceTypes[i].storeTitle = storeTitle;
+            deviceTypes[i].storeDescription = storeDescription;
+        }
 
-		page.deviceTypes = deviceTypes;
-		page.meta.title = "Store | Add Policy";
-		page.partial = 'policy-add';
-	} else {
-		var policyModule = require("../modules/policy.js").policyModule;
-		page.partial = 'policy-listing';
-		page.policies = policyModule.getPolicies();
-	}
+        page.deviceTypes = deviceTypes;
+        page.meta.title = "Store | Add Policy";
+        page.partial = 'policy-add';
+    } else {
+        var policyModule = require("../modules/policy.js").policyModule;
+        page.partial = 'policy-listing';
+        page.policies = policyModule.getPolicies();
+    }
 
-	appManager = app.createUserAppManager(session);
-	var output = appManager.render([], page);
-	caramel.render(output);
+    appManager = app.createUserAppManager(session);
+    var output = appManager.render([], page);
+    caramel.render(output);
 
 }, request, response, session);
 %>

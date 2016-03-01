@@ -18,7 +18,7 @@
  *
  */
 var caramel;
-require('/modules/store.js').exec(function(ctx) {
+require('/modules/store.js').exec(function (ctx) {
     caramel = require('caramel');
     var app = require('rxt').app;
     var server = require('store').server;

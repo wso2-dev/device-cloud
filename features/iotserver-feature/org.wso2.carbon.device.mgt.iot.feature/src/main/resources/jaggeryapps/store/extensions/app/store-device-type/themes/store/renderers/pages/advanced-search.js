@@ -16,7 +16,7 @@
  *  under the License.
  *
  */
-var render = function(theme, data, meta, require) {
+var render = function (theme, data, meta, require) {
     theme('2-column-right', {
         title: 'Store | Advanced Search',
         header: [{

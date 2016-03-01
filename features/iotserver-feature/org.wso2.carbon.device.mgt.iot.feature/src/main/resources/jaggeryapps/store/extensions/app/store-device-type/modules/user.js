@@ -236,10 +236,10 @@ userModule = function () {
         for (i = 0; i < permissionList.length; i++) {
             permission = permissionList[i];
             resource = {
-                collection : true,
-                name : permission.name,
-                properties : {
-                    name : permission.name
+                collection: true,
+                name: permission.name,
+                properties: {
+                    name: permission.name
                 }
             };
             registry.put("/_system/governance/permission/" + path + "/" + permission.key, resource);
@@ -262,16 +262,16 @@ userModule = function () {
         for (i = 0; i < userList.length; i++) {
             username = userList[i];
             userObject = userManager.getUser(username);
-            email = userManager.getClaim(username,"http://wso2.org/claims/emailaddress", null);
-            firstname = userManager.getClaim(username,"http://wso2.org/claims/givenname", null);
-            lastname = userManager.getClaim(username,"http://wso2.org/claims/lastname", null);
+            email = userManager.getClaim(username, "http://wso2.org/claims/emailaddress", null);
+            firstname = userManager.getClaim(username, "http://wso2.org/claims/givenname", null);
+            lastname = userManager.getClaim(username, "http://wso2.org/claims/lastname", null);
             //log.info(userManager.getClaimsForSet(username, "http://wso2.org/claims/emailaddress,http://wso2.org/claims/givenname,http://wso2.org/claims/lastname".split(","), null));
             userObj = {
-                "username" : userObject.username,
-                "email" : email,
-                "name" : firstname + " " + lastname
+                "username": userObject.username,
+                "email": email,
+                "name": firstname + " " + lastname
             };
-            if(userObj.username == "admin"){
+            if (userObj.username == "admin") {
                 userObj.name = "admin";
             }
             users.push(userObj);
@@ -292,7 +292,7 @@ userModule = function () {
         return user.isAuthorized(permission, "ui.execute");
     };
 
-    publicMethods.getUIPermissions = function(){
+    publicMethods.getUIPermissions = function () {
         var permissions = {};
         if (publicMethods.isAuthorized("/permission/device-mgt/admin/devices/list") ||
             publicMethods.isAuthorized("/permission/device-mgt/user/devices/list")) {
@@ -349,7 +349,6 @@ userModule = function () {
         session.invalidate();
         successCallback();
     };
-
 
 
     return publicMethods;

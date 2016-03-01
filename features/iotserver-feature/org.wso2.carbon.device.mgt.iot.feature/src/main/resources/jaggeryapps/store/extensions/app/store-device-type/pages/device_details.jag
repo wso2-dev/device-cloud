@@ -16,33 +16,34 @@
  */
 var caramel;
 require('/modules/store.js').exec(function (ctx) {
-	var log = new Log("device_details.jag");
-	caramel = require('caramel');
-	var app = require('rxt').app;
-	var ui = require('rxt').ui;
-	var page = ui.buildPage(ctx.session, ctx.request);
+    var log = new Log("device_details.jag");
+    caramel = require('caramel');
+    var app = require('rxt').app;
+    var ui = require('rxt').ui;
+    var page = ui.buildPage(ctx.session, ctx.request);
 
-	var uri = request.getRequestURI();
-	var uriMatcher = new URIMatcher(String(uri));
-	if (uriMatcher.match("/{context}/pages/device/{deviceType}/{+deviceId}")) {
-		var matchedElements = uriMatcher.elements();
-		var deviceType = matchedElements.deviceType;
-		var deviceId = matchedElements.deviceId;
-		page.deviceType = deviceType;
-		page.deviceId = deviceId;
-		var deviceModule = require("../modules/device.js").deviceModule;
-		var device = deviceModule.viewDevice(deviceType, deviceId);
-		if (device) {
-			var viewModel = {};
-			var deviceInfo = device.properties.DEVICE_INFO;
-			if (deviceInfo != undefined && String(deviceInfo.toString()).length > 0) {
-				viewModel.enrollment = device.enrollment;
-				device.viewModel = viewModel;
-			}
-		}
-		page.device = device;
-	}
-	var appManager = app.createUserAppManager(session);
-	var output = appManager.render([], page);
-	caramel.render(output);
-}, request, response, session); %>
+    var uri = request.getRequestURI();
+    var uriMatcher = new URIMatcher(String(uri));
+    if (uriMatcher.match("/{context}/pages/device/{deviceType}/{+deviceId}")) {
+        var matchedElements = uriMatcher.elements();
+        var deviceType = matchedElements.deviceType;
+        var deviceId = matchedElements.deviceId;
+        page.deviceType = deviceType;
+        page.deviceId = deviceId;
+        var deviceModule = require("../modules/device.js").deviceModule;
+        var device = deviceModule.viewDevice(deviceType, deviceId);
+        if (device) {
+            var viewModel = {};
+            var deviceInfo = device.properties.DEVICE_INFO;
+            if (deviceInfo != undefined && String(deviceInfo.toString()).length > 0) {
+                viewModel.enrollment = device.enrollment;
+                device.viewModel = viewModel;
+            }
+        }
+        page.device = device;
+    }
+    var appManager = app.createUserAppManager(session);
+    var output = appManager.render([], page);
+    caramel.render(output);
+}, request, response, session);
+%>

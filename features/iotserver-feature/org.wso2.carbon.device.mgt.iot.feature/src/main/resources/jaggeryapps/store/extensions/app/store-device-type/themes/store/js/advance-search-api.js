@@ -16,19 +16,19 @@
  *  under the License.
  *
  */
-$(function(){
-	var SEARCH_API = '/apis/assets?q=';
-	var SEARCH_BUTTON = '#search-btn';
-	var SEARCH_FORM = '#search-form';
+$(function () {
+    var SEARCH_API = '/apis/assets?q=';
+    var SEARCH_BUTTON = '#search-btn';
+    var SEARCH_FORM = '#search-form';
     var rows_added = 0;
     var last_to = 0;
     var items_per_row = 0;
     var doPagination = true;
-    store.infiniteScroll ={};
-    store.infiniteScroll.recalculateRowsAdded = function(){
-        return (last_to - last_to%items_per_row)/items_per_row;
+    store.infiniteScroll = {};
+    store.infiniteScroll.recalculateRowsAdded = function () {
+        return (last_to - last_to % items_per_row) / items_per_row;
     };
-    store.infiniteScroll.addItemsToPage = function(query){
+    store.infiniteScroll.addItemsToPage = function (query) {
 
         var screen_width = $(window).width();
         var screen_height = $(window).height();
@@ -42,63 +42,63 @@ $(function(){
         screen_width = screen_width - gutter_width; // reduce the padding from the screen size
         screen_height = screen_height - header_height;
 
-        items_per_row = (screen_width-screen_width%thumb_width)/thumb_width;
+        items_per_row = (screen_width - screen_width % thumb_width) / thumb_width;
         //var rows_per_page = (screen_height-screen_height%thumb_height)/thumb_height;
         var scroll_pos = $(document).scrollTop();
-        var row_current =  (screen_height+scroll_pos-(screen_height+scroll_pos)%thumb_height)/thumb_height;
-        row_current +=3 ; // We increase the row current by 2 since we need to provide one additional row to scroll down without loading it from backend
+        var row_current = (screen_height + scroll_pos - (screen_height + scroll_pos) % thumb_height) / thumb_height;
+        row_current += 3; // We increase the row current by 2 since we need to provide one additional row to scroll down without loading it from backend
 
 
         var from = 0;
         var to = 0;
-        if(row_current > rows_added && doPagination){
+        if (row_current > rows_added && doPagination) {
             from = rows_added * items_per_row;
-            to = row_current*items_per_row;
+            to = row_current * items_per_row;
             last_to = to; //We store this os we can recalculate rows_added when resolution change
             rows_added = row_current;
-            store.infiniteScroll.getItems(from,to,query);
+            store.infiniteScroll.getItems(from, to, query);
             //console.info('getting items from ' + from + " to " + to + " screen_width " + screen_width + " items_per_row " + items_per_row);
         }
 
     };
-    store.infiniteScroll.getItems = function(from, to, query ){
-        var count = to-from;
+    store.infiniteScroll.getItems = function (from, to, query) {
+        var count = to - from;
         var dynamicData = {};
         dynamicData["from"] = from;
         dynamicData["to"] = to;
         var path = window.location.href; //current page path
         // Returns the jQuery ajax method
-        var url = caramel.tenantedUrl(SEARCH_API+query+"&paginationLimit=" + to + "&start="+from+"&count="+count);
+        var url = caramel.tenantedUrl(SEARCH_API + query + "&paginationLimit=" + to + "&start=" + from + "&count=" + count);
         console.info(url);
 
-        caramel.render('loading','Loading assets from ' + from + ' to ' + to + '.', function( info , content ){
+        caramel.render('loading', 'Loading assets from ' + from + ' to ' + to + '.', function (info, content) {
             $('.loading-animation-big').remove();
             $('body').append($(content));
         });
 
         $.ajax({
-            url:url,
-            method:'GET',
-            success:function(data){
+            url: url,
+            method: 'GET',
+            success: function (data) {
 
                 var results = data.data || [];
-                if(results.length==0) {
-                        if(from == 0){
-                            $('#search-results').html('We are sorry but we could not find any matching assets');
-                        }
-                        $('.loading-animation-big').remove();
-                        doPagination = false;
+                if (results.length == 0) {
+                    if (from == 0) {
+                        $('#search-results').html('We are sorry but we could not find any matching assets');
+                    }
+                    $('.loading-animation-big').remove();
+                    doPagination = false;
                 } else {
                     for (var index in results) {
                         var asset = results[index];
                         //Doing this because when there are no value specified in column such as thumbnail column it return string "null"
                         // value which need be explicitly set to null
-                        if(asset.thumbnail == 'null') {
+                        if (asset.thumbnail == 'null') {
                             asset.thumbnail = null;
                         }
                     }
-                    results = {assets:results,showType:true};
-                    loadPartials('assets', function(partials) {
+                    results = {assets: results, showType: true};
+                    loadPartials('assets', function (partials) {
                         caramel.partials(partials, function () {
                             caramel.render('assets-thumbnails', results, function (info, content) {
                                 $('#search-results').append($(content));
@@ -107,15 +107,15 @@ $(function(){
                         });
                     });
                 }
-            },error:function(){
+            }, error: function () {
                 doPagination = false;
                 $('.loading-animation-big').remove();
             }
         });
     };
-    store.infiniteScroll.showAll = function(query){
+    store.infiniteScroll.showAll = function (query) {
         store.infiniteScroll.addItemsToPage(query);
-        $(window).scroll(function(){
+        $(window).scroll(function () {
             store.infiniteScroll.addItemsToPage(query);
         });
         $(window).resize(function () {
@@ -125,47 +125,47 @@ $(function(){
         });
     };
 
-	var processInputField = function(field){
-		var result = field;
-		switch(field.type) {
-			case 'text':
-				result = field;
-				break;
-			default:
-				break;
-		}
-		return result;
-	};
-	var getInputFields = function(){
-		var obj = {};
-		var fields = $(SEARCH_FORM).find(':input');
-		var field;
-		for(var index = 0; index < fields.length; index++){
-			field = fields[index];
-			field = processInputField(field);
-			if((field.name)&&(field.value)){
-				obj[field.name] = field.value;
-			}
-		}
-		return obj;
-	};
-	var createQueryString = function(key,value){
-		return '"'+key+'":"'+value+'"';
-	};
-	var buildQuery = function(){
-		var fields = getInputFields();
-		var queryString =[];
-		var value;
-		for(var key in fields){
-			value = fields[key];
-			queryString.push(createQueryString(key,value));
-		}
-		return queryString.join(',');
-	};
-	var isEmptyQuery = function(query) {
-		query = query.trim();
-		return (query.length <= 0);
-	};
+    var processInputField = function (field) {
+        var result = field;
+        switch (field.type) {
+            case 'text':
+                result = field;
+                break;
+            default:
+                break;
+        }
+        return result;
+    };
+    var getInputFields = function () {
+        var obj = {};
+        var fields = $(SEARCH_FORM).find(':input');
+        var field;
+        for (var index = 0; index < fields.length; index++) {
+            field = fields[index];
+            field = processInputField(field);
+            if ((field.name) && (field.value)) {
+                obj[field.name] = field.value;
+            }
+        }
+        return obj;
+    };
+    var createQueryString = function (key, value) {
+        return '"' + key + '":"' + value + '"';
+    };
+    var buildQuery = function () {
+        var fields = getInputFields();
+        var queryString = [];
+        var value;
+        for (var key in fields) {
+            value = fields[key];
+            queryString.push(createQueryString(key, value));
+        }
+        return queryString.join(',');
+    };
+    var isEmptyQuery = function (query) {
+        query = query.trim();
+        return (query.length <= 0);
+    };
     var loadPartials = function (partial, done) {
         $.ajax({
             url: caramel.url('/apis/partials') + '?partial=' + partial,
@@ -177,16 +177,16 @@ $(function(){
             }
         });
     };
-	$(SEARCH_BUTTON).on('click',function(e){
-		e.preventDefault();
+    $(SEARCH_BUTTON).on('click', function (e) {
+        e.preventDefault();
         doPagination = true;
         rows_added = 0;
-        $('#search-results').html('');       
-		var query = buildQuery();
-		if(isEmptyQuery(query)) {
-			console.log('User has not entered anything');
-			return;
-		}
+        $('#search-results').html('');
+        var query = buildQuery();
+        if (isEmptyQuery(query)) {
+            console.log('User has not entered anything');
+            return;
+        }
         store.infiniteScroll.showAll(query);
-	});
+    });
 });

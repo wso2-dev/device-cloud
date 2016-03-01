@@ -65,17 +65,19 @@
                         <div class="row wr-tile-buttons-list">
                             <div class="wr-input-control">
                                 <div id="ast-container" class="ast-container">
-									{{#each deviceTypes}}
+                                    {{#each deviceTypes}}
                                         <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
                                             <div class="ctrl-device-type">
                                                 <div class="d01"><img
                                                         src="/store/storage/deviceType/{{assetId}}/images_thumbnail"/>
                                                 </div>
-                                                <div class="d02"><h2 class="white center">{{storeTitle}}</h2></div>
+                                                <div class="d02"><h2 class="white center">{{storeTitle}}</h2>
+                                                </div>
                                                 <div class="d03">{{storeDescription}}</div>
                                                 <div class="d04">
                                                     <a href="#" class="cu-btn wizard-stepper"
-                                                       data-current="policy-devicetype" data-next="policy-profile"
+                                                       data-current="policy-devicetype"
+                                                       data-next="policy-profile"
                                                        data-devicetype="{{name}}" data-devicetype-id="{{id}}">
                     <span class="fw-stack">
                         <i class="fw fw-ring fw-stack-2x"></i>
@@ -86,7 +88,7 @@
                                                 </div>
                                             </div>
                                         </div>
-									{{/each}}
+                                    {{/each}}
                                     <br class="c-both"/>
                                 </div>
                             </div>
@@ -121,7 +123,8 @@
                             </div>
                         </div>
                         <div class="wr-input-control wr-btn-grp">
-                            <a href="#" class="wr-btn wizard-stepper" data-current="policy-profile" data-back="true"
+                            <a href="#" class="wr-btn wizard-stepper" data-current="policy-profile"
+                               data-back="true"
                                data-next="policy-devicetype">Back</a>
                             <a href="#" class="wr-btn wizard-stepper" data-current="policy-profile"
                                data-next="policy-content">Continue</a>
@@ -149,7 +152,8 @@
 
                             <div class="wr-input-control">
                                 <div class="cus-col-50">
-                                    <input id="policy-name-input" type="text" value="" placeholder="Policy name here"
+                                    <input id="policy-name-input" type="text" value=""
+                                           placeholder="Policy name here"
                                            required/>
                                 </div>
                                 <br class="c-both"/>
@@ -162,14 +166,16 @@
 
                             <div class="wr-input-control">
                                 <div class="cus-col-50">
-                                    <textarea id="policy-description-input" placeholder="Policy description here"
+                                    <textarea id="policy-description-input"
+                                              placeholder="Policy description here"
                                               required></textarea>
                                 </div>
                                 <br class="c-both"/>
                             </div>
                         </div>
                         <div class="wr-input-control wr-btn-grp">
-                            <a href="#" class="wr-btn wizard-stepper" data-current="policy-content" data-back="true"
+                            <a href="#" class="wr-btn wizard-stepper" data-current="policy-content"
+                               data-back="true"
                                data-next="policy-profile">Back</a>
                             <a href="#" class="wr-btn wizard-stepper" data-current="policy-content"
                                data-next="policy-message">Save</a>
@@ -187,7 +193,8 @@
                 <h1 class="wr-title">Policy creation is successful</h1>
                 Please click <b>"Finish"</b> to complete the process and go back to the policy list
                 <hr/>
-                <button class="wr-btn wizard-stepper" data-current="policy-message" data-direct="/store/pages/policies/"
+                <button class="wr-btn wizard-stepper" data-current="policy-message"
+                        data-direct="/store/pages/policies/"
                         onclick="javascript:history.go(-1)">
                     &nbsp;&nbsp;&nbsp;&nbsp;Finish&nbsp;&nbsp;&nbsp;&nbsp;
                 </button>

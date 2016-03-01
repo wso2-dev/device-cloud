@@ -17,15 +17,15 @@
  *  under the License.
  *
  */
-(function(){
+(function () {
     var log = new Log('sso-login');
     var configs = require('/config/store.js').config(),
-            sso = require("sso"),
-            sessionId = session.getId(),
-            requestedPage = request.getParameter("requestedPage"),
-            attr = configs.authentication.methods.sso.attributes,
-            referer = request.getHeader("referer"),
-            ignoreReferer = request.getParameter("ignoreReferer");
+        sso = require("sso"),
+        sessionId = session.getId(),
+        requestedPage = request.getParameter("requestedPage"),
+        attr = configs.authentication.methods.sso.attributes,
+        referer = request.getHeader("referer"),
+        ignoreReferer = request.getParameter("ignoreReferer");
 
     if (ignoreReferer) {
         referer = requestedPage;
@@ -46,25 +46,55 @@
     }
     session.remove("Loged");
     if (!session.get("Loged")) {
-        %>
+    %>
 
-                <div>
+    <
+        div >
 
-                            <p>You are now being redirected to Identity Server. If the
-                            redirection fails, please click on the button below.</p>
-                            <form method="post" action="<%=postUrl%>">
-                            <p>
-                               <input type="hidden" name="SAMLRequest" value="<%= encodedSAMLAuthRequest %>"/>
-                               <input type="hidden" name="RelayState" value="<%= relayState %>"/>
-                               <input type="hidden" name="SSOAuthSessionID" value="<%= sessionId %>"/>
-                               <button type="submit">Redirect manually</button>
-                           </p>
-                       </form>
-                   </div>
-                   <script type = "text/javascript" >
-                          document.forms[0].submit();
-                   </script>
-        <%
+        < p > You
+        are
+        now
+        being
+        redirected
+        to
+        Identity
+        Server.If
+        the
+        redirection
+        fails, please
+        click
+        on
+        the
+        button
+        below. < / p >
+        < form
+        method = "post"
+        action = "<%=postUrl%>" >
+            < p >
+            < input
+        type = "hidden"
+        name = "SAMLRequest"
+        value = "<%= encodedSAMLAuthRequest %>" / >
+            < input
+        type = "hidden"
+        name = "RelayState"
+        value = "<%= relayState %>" / >
+            < input
+        type = "hidden"
+        name = "SSOAuthSessionID"
+        value = "<%= sessionId %>" / >
+            < button
+        type = "submit" > Redirect
+        manually < / button >
+        < / p >
+        < / form >
+        < / div >
+        < script
+        type = "text/javascript" >
+            document.forms[0].submit();
+    </
+        script >
+        < %
     }
 }());
 %>

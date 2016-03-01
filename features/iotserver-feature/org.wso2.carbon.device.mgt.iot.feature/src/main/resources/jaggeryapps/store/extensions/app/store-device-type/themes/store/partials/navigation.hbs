@@ -26,38 +26,43 @@
                 <div class="arrow left"></div>
                 <div class="popover-content">
                     <ul class="tiles clearfix">
-                        <li><a href="{{url ""}}/pages/dashboard"><i class="icon fw fw-dashboard"></i>Dashboard</a></li>
-                        <li><a href="{{url ""}}/pages/devices"><i class="icon fw fw-devices"></i>My Devices</a></li>
-                        <li><a href="{{url ""}}/pages/groups"><i class="icon fw fw-grid"></i>My Groups</a></li>
-						{{#if permissions.ADD_USER}}
-                            <li><a href="{{url ""}}/pages/users"><i class="icon fw fw-user"></i>User Management</a></li>
-						{{/if}}
-                        <li><a href="{{url ""}}/pages/policies"><i class="icon fw fw-policy"></i>Policy Management</a>
+                        <li><a href="{{url ""}}/pages/dashboard"><i class="icon fw fw-dashboard"></i>Dashboard</a>
+                        </li>
+                        <li><a href="{{url ""}}/pages/devices"><i class="icon fw fw-devices"></i>My
+                            Devices</a></li>
+                        <li><a href="{{url ""}}/pages/groups"><i class="icon fw fw-grid"></i>My Groups</a>
+                        </li>
+                        {{#if permissions.ADD_USER}}
+                            <li><a href="{{url ""}}/pages/users"><i class="icon fw fw-user"></i>User
+                                Management</a></li>
+                        {{/if}}
+                        <li><a href="{{url ""}}/pages/policies"><i class="icon fw fw-policy"></i>Policy
+                            Management</a>
                         </li>
                     </ul>
                 </div>
             </div>
-			{{!#if navigationBar.types.pluralLabel}}
+            {{!#if navigationBar.types.pluralLabel}}
             <a class="pull-left switcher-link" href='{{url ""}}'>{{meta.pageName}}</a>
-			{{!/if}}
+            {{!/if}}
         </div>
         <div id="navbar" class="navbar-collapse collapse">
 
             <div class="wr-action-btn-bar">
                 <ul class="nav navbar-nav">
 
-					{{#each navigationBar.currentActions}}
+                    {{#each navigationBar.currentActions}}
                         <li>
                             <a href="{{this.url}}" class="cu-btn {{this.class}}">
             <span class="fw-stack">
                 <i class="fw fw-ring fw-stack-2x"></i>
                 <i class="fw {{this.icon}} fw-stack-1x"></i>
             </span>
-								{{this.title}}
+                                {{this.title}}
                             </a>
                         </li>
-					{{/each}}
-					{{#if enableBack}}
+                    {{/each}}
+                    {{#if enableBack}}
                         <li>
                             <a href="javascript:history.go(-1)" class="cu-btn">
                 <span class="fw-stack">
@@ -67,13 +72,13 @@
                                 Go Back
                             </a>
                         </li>
-					{{/if}}
+                    {{/if}}
                 </ul>
             </div>
 
         </div>
     </div>
-	{{#if operations}}
+    {{#if operations}}
         <div class="wr-filters col-xs-12 col-sm-12 col-md-12">
             <div class="wr-filter-sort pull-right">
                 <a href="javascript:void(0)" onclick="selectAllItems(this)" class="wr-btn">Select All</a>
@@ -86,7 +91,7 @@
                         class="fw fw-list-sort"></i></a></span>
             </div>
         </div>
-	{{/if}}
+    {{/if}}
 </div>
 <!-- secondary header - app bar -->
 {{> action-bar .}}

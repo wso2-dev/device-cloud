@@ -17,7 +17,7 @@
 var caramel;
 var PAGING = {};
 var log = new Log();
-require('/modules/store.js').exec(function(ctx) {
+require('/modules/store.js').exec(function (ctx) {
     caramel = require('caramel');
     var permissions = require('rxt').permissions;
     var asset = require('rxt').asset;
@@ -66,19 +66,19 @@ require('/modules/store.js').exec(function(ctx) {
     //     context = core.createAssetContext(ctx.session, type, URLTenantId);
     //     am = asset.createUserAssetManager(ctx.session, type);
     // }
-    var addGroupingStateToQuery = function(q, type, req, rxtManager) {
+    var addGroupingStateToQuery = function (q, type, req, rxtManager) {
         if (!rxtManager.isGroupingEnabled(type)) {
             return q;
         }
         //Check if grouping is enabled for the asset type
-        var groupQuery = req.getParameter('group')||'';
-        groupQuery = (groupQuery.toLowerCase() === 'true')?true:false;
+        var groupQuery = req.getParameter('group') || '';
+        groupQuery = (groupQuery.toLowerCase() === 'true') ? true : false;
         if (groupQuery) {
             q[constants.Q_PROP_GROUP] = groupQuery;
         }
         return q;
     };
-    var replaceCategoryQuery = function(q, rxtManager, type) {
+    var replaceCategoryQuery = function (q, rxtManager, type) {
         //Determine if a category was provided
         if (!q.hasOwnProperty('category')) {
             return q;
@@ -93,7 +93,7 @@ require('/modules/store.js').exec(function(ctx) {
         q[categoryField] = categoryValue;
         return q;
     };
-    var replaceNameQuery = function(q, rxtManager, type) {
+    var replaceNameQuery = function (q, rxtManager, type) {
         //Determine if a name was provided
         if (!q.hasOwnProperty('name')) {
             return q;
@@ -118,7 +118,7 @@ require('/modules/store.js').exec(function(ctx) {
         var qString = '{' + q + '}';
         var query = parse(qString);
         //query = replaceNameQuery(query,rxtManager,type);
-        query = replaceCategoryQuery(query,rxtManager,type);
+        query = replaceCategoryQuery(query, rxtManager, type);
         query = addGroupingStateToQuery(query, type, ctx.request, rxtManager);
         if (log.isDebugEnabled()) {
             log.debug('list page search query: ' + stringify(query));
@@ -138,7 +138,7 @@ require('/modules/store.js').exec(function(ctx) {
     var username = user ? user.username : null;
     var bookmarkable = permissions.hasAssetPermission(permissions.ASSET_BOOKMARK, type, tenantId,
             username) && !page.isUserDomainAndUrlDomainDifferent;
-    assets.forEach(function(asset) {
+    assets.forEach(function (asset) {
         asset.bookmarkable = bookmarkable;
     });
     //Add subscription details to the assets
@@ -148,4 +148,5 @@ require('/modules/store.js').exec(function(ctx) {
     var output = am.render(assets, page).list();
     output.paging = assetApi.assetsPaging(assets, type, ctx.request);
     caramel.render(output);
-}, request, response, session); %>
+}, request, response, session);
+%>

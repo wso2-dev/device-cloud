@@ -17,7 +17,7 @@
  *  under the License.
  *
  */
-require('/modules/store.js').exec(function(ctx) {
+require('/modules/store.js').exec(function (ctx) {
     var log = new Log();
     var app = require('rxt').app;
     var id = request.getParameter('asset');
@@ -30,7 +30,7 @@ require('/modules/store.js').exec(function(ctx) {
     var uriMatcher = new URIMatcher(ctx.request.getRequestURI());
     var options = uriMatcher.match(SUBSCRIBE_URL);
     var subApi = require('/modules/subscriptions-api.js').api;
-    var handleSubscribe = function(session,id, type, destination, redirect, response) {
+    var handleSubscribe = function (session, id, type, destination, redirect, response) {
         //Determine where the request should be routed
         if (destination) {
             redirect = destination;
@@ -45,8 +45,8 @@ require('/modules/store.js').exec(function(ctx) {
             response.sendError(500);
         }
     };
-    var handleUnSubscribe = function(session,id,type, response) {
-        if(log.isDebugEnabled()) {
+    var handleUnSubscribe = function (session, id, type, response) {
+        if (log.isDebugEnabled()) {
             log.debug('Attempting to unsubscribe');
         }
         //Determine where the request should be routed
@@ -61,19 +61,19 @@ require('/modules/store.js').exec(function(ctx) {
         }
         return success;
     };
-    if(log.isDebugEnabled()) {
-        log.debug('type: '+type+' asset: '+id);
+    if (log.isDebugEnabled()) {
+        log.debug('type: ' + type + ' asset: ' + id);
     }
     if (!type) {
         log.warn('Unable to subscribe to the asset as the type of the asset cannot be determined.');
-        ctx.response.sendError(400,'Unable to subscribe to the asset as the type of the asset cannot be determined.');
-    } else if(!id) {
+        ctx.response.sendError(400, 'Unable to subscribe to the asset as the type of the asset cannot be determined.');
+    } else if (!id) {
         log.warn('Please provide an asset id as the asset query parameter to perform subscriptions operations.');
-        ctx.response.sendError(400,'Please provide an asset id as the asset query parameter to perform subscriptions operations.');
+        ctx.response.sendError(400, 'Please provide an asset id as the asset query parameter to perform subscriptions operations.');
     } else {
         switch (method) {
             case 'GET':
-                handleSubscribe(ctx.session,id, type, destination, redirect, ctx.response);
+                handleSubscribe(ctx.session, id, type, destination, redirect, ctx.response);
                 break;
             case 'DELETE':
                 handleUnSubscribe(ctx.session, id, type, ctx.response);
@@ -83,4 +83,5 @@ require('/modules/store.js').exec(function(ctx) {
                 break;
         }
     }
-}, request, response, session); %>
+}, request, response, session);
+%>

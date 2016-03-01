@@ -101,13 +101,13 @@ $(document).ready(function () {
     $('#date-range').html(DateRange);
     $('#date-range').dateRangePicker(configObject)
         .bind('datepicker-apply', function (event, dateRange) {
-            $(this).addClass('active');
-            $(this).siblings().removeClass('active');
-            fromDate = dateRange.date1 != "Invalid Date" ? dateRange.date1.getTime() / 1000 : null;
-            toDate = dateRange.date2 != "Invalid Date" ? dateRange.date2.getTime() / 1000 : null;
-            getStats(fromDate, toDate);
-        }
-    );
+                $(this).addClass('active');
+                $(this).siblings().removeClass('active');
+                fromDate = dateRange.date1 != "Invalid Date" ? dateRange.date1.getTime() / 1000 : null;
+                toDate = dateRange.date2 != "Invalid Date" ? dateRange.date2.getTime() / 1000 : null;
+                getStats(fromDate, toDate);
+            }
+        );
     getDateTime(currentDay.getTime() - 3600000, currentDay.getTime());
     $('#hour-btn').addClass('active');
 });
@@ -191,8 +191,8 @@ function getStats(from, to) {
     });
 }
 
-$(window).on('resize', function(){
-    if (stats){
+$(window).on('resize', function () {
+    if (stats) {
         updateGraphs();
     }
 });

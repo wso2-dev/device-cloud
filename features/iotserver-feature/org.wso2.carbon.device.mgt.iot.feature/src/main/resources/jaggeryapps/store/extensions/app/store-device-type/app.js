@@ -61,12 +61,12 @@ app.server = function (ctx) {
                 path: 'users.jag',
                 secured: true
             }, {
-                title:'Store | Advance Search',
-                url:'advanced-search',
-                path:'advanced-search.jag'
-            },{
-                url:'sso-login',
-                path:'sso-auth-login-controller.jag'
+                title: 'Store | Advance Search',
+                url: 'advanced-search',
+                path: 'advanced-search.jag'
+            }, {
+                url: 'sso-login',
+                path: 'sso-auth-login-controller.jag'
             }],
             apis: [{
                 url: 'stats',
@@ -76,7 +76,7 @@ app.server = function (ctx) {
                 url: 'devices',
                 path: 'device-api.jag',
                 secured: true
-            },{
+            }, {
                 url: 'group',
                 path: 'group-api.jag',
                 secured: true
