@@ -31,19 +31,14 @@ var format = function (context) {
 
     if (context.type === 'gadget') {
         context.asset_css = "cog";
-
     } else if (context.type === 'site') {
         context.asset_css = "globe";
-
     } else if (context.type === 'ebook') {
         context.asset_css = "book";
-
     } else {
         context.asset_css = "link";
     }
-
     context.asset.rating.ratingPx = ratingToPixels(avg);
-
     return context;
 };
 
@@ -53,9 +48,8 @@ var formatRatings = function (context) {
         avg = context[i].rating;
         context[i].ratingPx = ratingToPixels(avg);
     }
-
     return context;
-}
+};
 
 var formatAssetFromProviderRatings = function (context) {
     var avg;
@@ -64,7 +58,6 @@ var formatAssetFromProviderRatings = function (context) {
         avg = assets[i].rating.average;
         assets[i].ratingPx = ratingToPixels(avg);
     }
-
     return context;
 };
 
@@ -74,5 +67,4 @@ var ratingToPixels = function (avg) {
 
     var ratingPx = (avg / MAX_RATING) * STAR_WIDTH;
     return ratingPx;
-}
-
+};
