@@ -78,7 +78,7 @@
 						</Import-Package>
 						<Export-Package>
 							!org.wso2.carbon.device.mgt.iot.common.internal,
-							org.wso2.carbon.device.mgt.iot.common.*;version="${pom.version}",
+							org.wso2.carbon.device.mgt.iot.common.*;version="${project.version}",
 							org.eclipse.paho.client.mqttv3.*;version="${eclipse.paho.version}"
 						</Export-Package>
 
@@ -195,11 +195,6 @@
 		<dependency>
 			<groupId>org.eclipse.paho</groupId>
 			<artifactId>mqtt-client</artifactId>
-		</dependency>
-
-		<dependency>
-			<groupId>org.wso2.carbon</groupId>
-			<artifactId>org.wso2.carbon.utils</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.wso2.carbon.devicemgt</groupId>

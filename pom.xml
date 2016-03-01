@@ -405,7 +405,7 @@
 
             <dependency>
                 <groupId>org.wso2.orbit.org.apache.httpcomponents</groupId>
-                <artifactId>httpclient</artifactId>
+                <artifactId>httpclient.version</artifactId>
                 <version>${httpclient.version}</version>
             </dependency>
 
