@@ -22,7 +22,7 @@ var modalPopupContent = modalPopup + " .modalpopup-content";
 var body = "body";
 
 /*
- * set popup maximum height function.
+ * Set popup maximum height.
  */
 function setPopupMaxHeight() {
     $(modalPopupContent).css('max-height', ($(body).height() - ($(body).height() / 100 * 30)));
@@ -30,7 +30,7 @@ function setPopupMaxHeight() {
 }
 
 /*
- * show popup function.
+ * Shows the popup.
  */
 function showPopup() {
     $(modalPopup).show();
@@ -38,7 +38,7 @@ function showPopup() {
 }
 
 /*
- * hide popup function.
+ * Hides the popup.
  */
 function hidePopup() {
     $(modalPopupContent).html('');
