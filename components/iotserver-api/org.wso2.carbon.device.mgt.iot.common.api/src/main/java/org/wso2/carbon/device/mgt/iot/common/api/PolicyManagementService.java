@@ -46,13 +46,15 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
+import java.util.Collections;
 
 @WebService
+@Path("/policies")
 public class PolicyManagementService {
 
     private static Log log = LogFactory.getLog(PolicyManagementService.class);
 
-    @Context  //injected response proxy supporting multiple thread
+    @Context  //Injected response proxy supporting multiple thread
     private HttpServletResponse response;
 
     private PrivilegedCarbonContext startTenantFlow() {
@@ -85,59 +87,54 @@ public class PolicyManagementService {
     }
 
     @POST
-    @Path("/inactive-policy")
+    @Path("/inactive")
     @Produces("application/json")
-    public boolean addPolicy(Policy policy) {
+    public Response addPolicy(Policy policy) {
         try {
             PrivilegedCarbonContext ctx = startTenantFlow();
             PolicyManagerService policyManagerService = getPolicyServiceProvider(ctx);
             PolicyAdministratorPoint pap = policyManagerService.getPAP();
             pap.addPolicy(policy);
-            response.setStatus(Response.Status.CREATED.getStatusCode());
             if (log.isDebugEnabled()) {
                 log.debug("Policy has been added successfully.");
             }
-            return true;
+            return Response.ok().build();
         } catch (PolicyManagementException e) {
             String error = "Policy Management related exception.";
             log.error(error, e);
-            response.setStatus(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode());
-            return false;
+            return Response.serverError().build();
         } catch (DeviceManagementException e) {
             String error = "Error occurred while invoking Policy Management Service.";
             log.error(error, e);
             response.setStatus(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode());
-            return false;
+            return Response.serverError().build();
         } finally {
             endTenantFlow();
         }
     }
 
     @POST
-    @Path("/active-policy")
+    @Path("/active")
     @Produces("application/json")
-    public boolean addActivePolicy(Policy policy) {
+    public Response addActivePolicy(Policy policy) {
         policy.setActive(true);
         try {
             PrivilegedCarbonContext ctx = startTenantFlow();
             PolicyManagerService policyManagerService = getPolicyServiceProvider(ctx);
             PolicyAdministratorPoint pap = policyManagerService.getPAP();
             pap.addPolicy(policy);
-            response.setStatus(Response.Status.CREATED.getStatusCode());
             if (log.isDebugEnabled()) {
                 log.debug("Policy has been added successfully.");
             }
-            return true;
+            return Response.ok().build();
         } catch (PolicyManagementException e) {
             String error = "Policy Management related exception.";
             log.error(error, e);
-            response.setStatus(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode());
-            return false;
+            return Response.serverError().build();
         } catch (DeviceManagementException e) {
             String error = "Error occurred while invoking Policy Management Service.";
             log.error(error, e);
-            response.setStatus(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode());
-            return false;
+            return Response.serverError().build();
         } finally {
             endTenantFlow();
         }
@@ -145,23 +142,22 @@ public class PolicyManagementService {
 
     @GET
     @Produces("application/json")
-    public Policy[] getAllPolicies() {
+    @Path("/")
+    public Response getAllPolicies() {
         try {
             PrivilegedCarbonContext ctx = startTenantFlow();
             PolicyManagerService policyManagerService = getPolicyServiceProvider(ctx);
             PolicyAdministratorPoint policyAdministratorPoint = policyManagerService.getPAP();
             List<Policy> policies = policyAdministratorPoint.getPolicies();
-            return policyAdministratorPoint.getPolicies().toArray(new Policy[policies.size()]);
+            return Response.serverError().entity(policies).build();
         } catch (PolicyManagementException e) {
             String error = "Policy Management related exception";
             log.error(error, e);
-            response.setStatus(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode());
-            return null;
+            return Response.serverError().entity(Collections.emptyList()).build();
         } catch (DeviceManagementException e) {
             String error = "Error occurred while invoking Policy Management Service.";
             log.error(error, e);
-            response.setStatus(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode());
-            return null;
+            return Response.serverError().entity(Collections.emptyList()).build();
         } finally {
             endTenantFlow();
         }
@@ -170,7 +166,7 @@ public class PolicyManagementService {
     @GET
     @Produces("application/json")
     @Path("/{id}")
-    public Policy getPolicy(@PathParam("id") int policyId) {
+    public Response getPolicy(@PathParam("id") int policyId) {
         try {
             PolicyManagerService policyManagerService = getPolicyServiceProvider();
             PolicyAdministratorPoint policyAdministratorPoint = policyManagerService.getPAP();
@@ -179,22 +175,19 @@ public class PolicyManagementService {
                 if (log.isDebugEnabled()) {
                     log.debug("Sending policy for ID " + policyId);
                 }
-                return policy;
+                return Response.ok().entity(policy).build();
             } else {
                 log.error("Policy for ID " + policyId + " not found.");
-                response.setStatus(Response.Status.NOT_FOUND.getStatusCode());
-                return null;
+                return Response.status(Response.Status.NOT_FOUND).build();
             }
         } catch (PolicyManagementException e) {
             String error = "Policy Management related exception";
             log.error(error, e);
-            response.setStatus(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode());
-            return null;
+            return Response.serverError().build();
         } catch (DeviceManagementException e) {
             String error = "Error occurred while invoking Policy Management Service.";
             log.error(error, e);
-            response.setStatus(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode());
-            return null;
+            return Response.serverError().build();
         } finally {
             endTenantFlow();
         }
@@ -202,22 +195,21 @@ public class PolicyManagementService {
 
     @GET
     @Path("/count")
-    public int getPolicyCount() {
+    public Response getPolicyCount() {
         try {
             PrivilegedCarbonContext ctx = startTenantFlow();
             PolicyManagerService policyManagerService = getPolicyServiceProvider(ctx);
             PolicyAdministratorPoint policyAdministratorPoint = policyManagerService.getPAP();
-            return policyAdministratorPoint.getPolicyCount();
+            return Response.ok().entity(policyAdministratorPoint.getPolicyCount()).build();
         } catch (PolicyManagementException e) {
             String error = "Policy Management related exception";
             log.error(error, e);
             response.setStatus(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode());
-            return -1;
+            return Response.serverError().entity(-1).build();
         } catch (DeviceManagementException e) {
             String error = "Error occurred while invoking Policy Management Service.";
             log.error(error, e);
-            response.setStatus(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode());
-            return -1;
+            return Response.serverError().entity(-1).build();
         } finally {
             endTenantFlow();
         }
@@ -226,7 +218,7 @@ public class PolicyManagementService {
     @PUT
     @Path("/{id}")
     @Produces("application/json")
-    public boolean updatePolicy(Policy policy, @PathParam("id") int policyId) {
+    public Response updatePolicy(Policy policy, @PathParam("id") int policyId) {
         try {
             PrivilegedCarbonContext ctx = startTenantFlow();
             PolicyManagerService policyManagerService = getPolicyServiceProvider(ctx);
@@ -238,17 +230,15 @@ public class PolicyManagementService {
             if (log.isDebugEnabled()) {
                 log.debug("Policy with ID " + policyId + " has been updated successfully.");
             }
-            return true;
+            return Response.noContent().build();
         } catch (PolicyManagementException e) {
             String error = "Policy Management related exception";
             log.error(error, e);
-            response.setStatus(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode());
-            return false;
+            return Response.serverError().build();
         } catch (DeviceManagementException e) {
             String error = "Error occurred while invoking Policy Management Service.";
             log.error(error, e);
-            response.setStatus(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode());
-            return false;
+            return Response.serverError().build();
         } finally {
             endTenantFlow();
         }
@@ -258,7 +248,7 @@ public class PolicyManagementService {
     @Path("/priorities")
     @Consumes("application/json")
     @Produces("application/json")
-    public boolean updatePolicyPriorities(List<Policy> priorityUpdatedPolicies) {
+    public Response updatePolicyPriorities(List<Policy> priorityUpdatedPolicies) {
         try {
             PrivilegedCarbonContext ctx = startTenantFlow();
             PolicyManagerService policyManagerService = getPolicyServiceProvider(ctx);
@@ -268,24 +258,21 @@ public class PolicyManagementService {
                 if (log.isDebugEnabled()) {
                     log.debug("Policy Priorities successfully updated.");
                 }
-                return true;
+                return Response.noContent().build();
             } else {
                 if (log.isDebugEnabled()) {
                     log.debug("Policy priorities did not update. Bad Request.");
                 }
-                response.setStatus(Response.Status.BAD_REQUEST.getStatusCode());
-                return false;
+                return Response.status(Response.Status.BAD_REQUEST).build();
             }
         } catch (PolicyManagementException e) {
             String error = "Exception in updating policy priorities.";
             log.error(error, e);
-            response.setStatus(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode());
-            return false;
+            return Response.serverError().build();
         } catch (DeviceManagementException e) {
             String error = "Error occurred while invoking Policy Management Service.";
             log.error(error, e);
-            response.setStatus(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode());
-            return false;
+            return Response.serverError().build();
         } finally {
             endTenantFlow();
         }
@@ -294,7 +281,7 @@ public class PolicyManagementService {
     @DELETE
     @Path("/{id}")
     @Produces("application/json")
-    public boolean deletePolicy(@PathParam("id") int policyId) {
+    public Response deletePolicy(@PathParam("id") int policyId) {
         try {
             PrivilegedCarbonContext ctx = startTenantFlow();
             PolicyManagerService policyManagerService = getPolicyServiceProvider(ctx);
@@ -305,24 +292,21 @@ public class PolicyManagementService {
                 if (log.isDebugEnabled()) {
                     log.debug("Policy by id:" + policyId + " has been successfully deleted.");
                 }
-                return true;
+                return Response.noContent().build();
             } else {
                 if (log.isDebugEnabled()) {
                     log.debug("Policy by id:" + policyId + " does not exist.");
                 }
-                response.setStatus(Response.Status.NOT_FOUND.getStatusCode());
-                return false;
+                return Response.status(Response.Status.NOT_FOUND).build();
             }
         } catch (PolicyManagementException e) {
             String error = "Exception in deleting policy by id:" + policyId;
             log.error(error, e);
-            response.setStatus(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode());
-            return false;
+            return Response.serverError().build();
         } catch (DeviceManagementException e) {
             String error = "Error occurred while invoking Policy Management Service.";
             log.error(error, e);
-            response.setStatus(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode());
-            return false;
+            return Response.serverError().build();
         } finally {
             endTenantFlow();
         }
@@ -331,7 +315,7 @@ public class PolicyManagementService {
     @PUT
     @Produces("application/json")
     @Path("/activate/{id}")
-    public boolean activatePolicy(@PathParam("id") int policyId) {
+    public Response activatePolicy(@PathParam("id") int policyId) {
         try {
             PrivilegedCarbonContext ctx = startTenantFlow();
             PolicyManagerService policyManagerService = getPolicyServiceProvider(ctx);
@@ -340,17 +324,15 @@ public class PolicyManagementService {
             if (log.isDebugEnabled()) {
                 log.debug("Policy by id:" + policyId + " has been successfully activated.");
             }
-            return true;
+            return Response.noContent().build();
         } catch (PolicyManagementException e) {
             String error = "Exception in activating policy by id:" + policyId;
             log.error(error, e);
-            response.setStatus(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode());
-            return false;
+            return Response.serverError().build();
         } catch (DeviceManagementException e) {
             String error = "Error occurred while invoking Policy Management Service.";
             log.error(error, e);
-            response.setStatus(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode());
-            return false;
+            return Response.serverError().build();
         } finally {
             endTenantFlow();
         }
@@ -359,7 +341,7 @@ public class PolicyManagementService {
     @PUT
     @Produces("application/json")
     @Path("/inactivate/{id}")
-    public boolean inactivatePolicy(@PathParam("id") int policyId) {
+    public Response inactivatePolicy(@PathParam("id") int policyId) {
         try {
             PrivilegedCarbonContext ctx = startTenantFlow();
             PolicyManagerService policyManagerService = getPolicyServiceProvider(ctx);
@@ -368,16 +350,15 @@ public class PolicyManagementService {
             if (log.isDebugEnabled()) {
                 log.debug("Policy by id:" + policyId + " has been successfully inactivated.");
             }
-            return true;
+            return Response.noContent().build();
         } catch (PolicyManagementException e) {
             String error = "Exception in inactivating policy by id:" + policyId;
             log.error(error, e);
-            return false;
+            return Response.serverError().build();
         } catch (DeviceManagementException e) {
             String error = "Error occurred while invoking Policy Management Service.";
             log.error(error, e);
-            response.setStatus(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode());
-            return false;
+            return Response.serverError().build();
         } finally {
             endTenantFlow();
         }
@@ -385,8 +366,8 @@ public class PolicyManagementService {
 
     @PUT
     @Produces("application/json")
-    @Path("/apply-changes")
-    public boolean applyChanges() {
+    @Path("/publish-changes")
+    public Response applyChanges() {
         try {
             PrivilegedCarbonContext ctx = startTenantFlow();
             PolicyManagerService policyManagerService = getPolicyServiceProvider(ctx);
@@ -395,24 +376,23 @@ public class PolicyManagementService {
             if (log.isDebugEnabled()) {
                 log.debug("Changes have been successfully updated.");
             }
-            return true;
+            return Response.noContent().build();
         } catch (PolicyManagementException e) {
             String error = "Exception in applying changes.";
             log.error(error, e);
-            return false;
+            return Response.serverError().build();
         } catch (DeviceManagementException e) {
             String error = "Error occurred while invoking Policy Management Service.";
             log.error(error, e);
-            response.setStatus(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode());
-            return false;
+            return Response.serverError().build();
         } finally {
             endTenantFlow();
         }
     }
 
-    @GET
+    @POST
     @Path("/start-task/{milliseconds}")
-    public boolean startTaskService(@PathParam("milliseconds") int monitoringFrequency) {
+    public Response startTaskService(@PathParam("milliseconds") int monitoringFrequency) {
         try {
             PrivilegedCarbonContext ctx = startTenantFlow();
             PolicyManagerService policyManagerService = getPolicyServiceProvider(ctx);
@@ -421,24 +401,23 @@ public class PolicyManagementService {
             if (log.isDebugEnabled()) {
                 log.debug("Policy monitoring service started successfully.");
             }
-            return true;
+            return Response.ok().build();
         } catch (PolicyMonitoringTaskException e) {
             String error = "Policy Management related exception.";
             log.error(error, e);
-            return false;
+            return Response.serverError().build();
         } catch (DeviceManagementException e) {
             String error = "Error occurred while invoking Policy Management Service.";
             log.error(error, e);
-            response.setStatus(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode());
-            return false;
+            return Response.serverError().build();
         } finally {
             endTenantFlow();
         }
     }
 
-    @GET
+    @PUT
     @Path("/update-task/{milliseconds}")
-    public boolean updateTaskService(@PathParam("milliseconds") int monitoringFrequency) {
+    public Response updateTaskService(@PathParam("milliseconds") int monitoringFrequency) {
         try {
             PrivilegedCarbonContext ctx = startTenantFlow();
             PolicyManagerService policyManagerService = getPolicyServiceProvider(ctx);
@@ -447,16 +426,15 @@ public class PolicyManagementService {
             if (log.isDebugEnabled()) {
                 log.debug("Policy monitoring service updated successfully.");
             }
-            return true;
+            return Response.noContent().build();
         } catch (PolicyMonitoringTaskException e) {
             String error = "Policy Management related exception.";
             log.error(error, e);
-            return false;
+            return Response.serverError().build();
         } catch (DeviceManagementException e) {
             String error = "Error occurred while invoking Policy Management Service.";
             log.error(error, e);
-            response.setStatus(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode());
-            return false;
+            return Response.serverError().build();
         } finally {
             endTenantFlow();
         }
@@ -464,7 +442,7 @@ public class PolicyManagementService {
 
     @GET
     @Path("/stop-task")
-    public boolean stopTaskService() {
+    public Response stopTaskService() {
         try {
             PrivilegedCarbonContext ctx = startTenantFlow();
             PolicyManagerService policyManagerService = getPolicyServiceProvider(ctx);
@@ -473,16 +451,15 @@ public class PolicyManagementService {
             if (log.isDebugEnabled()) {
                 log.debug("Policy monitoring service stopped successfully.");
             }
-            return true;
+            return Response.noContent().build();
         } catch (PolicyMonitoringTaskException e) {
             String error = "Policy Management related exception.";
             log.error(error, e);
-            return false;
+            return Response.serverError().build();
         } catch (DeviceManagementException e) {
             String error = "Error occurred while invoking Policy Management Service.";
             log.error(error, e);
-            response.setStatus(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode());
-            return false;
+            return Response.serverError().build();
         } finally {
             endTenantFlow();
         }
@@ -490,25 +467,23 @@ public class PolicyManagementService {
 
     @GET
     @Path("/{type}/{id}")
-    public ComplianceData getComplianceDataOfDevice(@PathParam("id") String deviceId,
-                                                    @PathParam("type") String deviceType) {
+    public Response getComplianceDataOfDevice(@PathParam("id") String deviceId, @PathParam("type") String deviceType) {
         try {
             PrivilegedCarbonContext ctx = startTenantFlow();
             PolicyManagerService policyManagerService = getPolicyServiceProvider(ctx);
             DeviceIdentifier deviceIdentifier = new DeviceIdentifier();
             deviceIdentifier.setType(deviceType);
             deviceIdentifier.setId(deviceId);
-            return policyManagerService.getDeviceCompliance(deviceIdentifier);
+            ComplianceData complianceData = policyManagerService.getDeviceCompliance(deviceIdentifier);
+            return Response.ok().entity(complianceData).build();
         } catch (PolicyComplianceException e) {
             String error = "Error occurred while getting the compliance data.";
             log.error(error, e);
-            response.setStatus(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode());
-            return null;
+            return Response.serverError().build();
         } catch (DeviceManagementException e) {
             String error = "Error occurred while invoking Policy Management Service.";
             log.error(error, e);
-            response.setStatus(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode());
-            return null;
+            return Response.serverError().build();
         } finally {
             endTenantFlow();
         }
