@@ -24,7 +24,6 @@ import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.context.CarbonContext;
 import org.wso2.carbon.context.PrivilegedCarbonContext;
 import org.wso2.carbon.device.mgt.common.DeviceIdentifier;
-import org.wso2.carbon.device.mgt.common.DeviceManagementException;
 import org.wso2.carbon.policy.mgt.common.Policy;
 import org.wso2.carbon.policy.mgt.common.PolicyAdministratorPoint;
 import org.wso2.carbon.policy.mgt.common.PolicyManagementException;
@@ -94,8 +93,7 @@ public class PolicyManagementService {
             }
             return Response.ok().build();
         } catch (PolicyManagementException e) {
-            String error = "Policy Management related exception.";
-            log.error(error, e);
+            log.error("Error occurred while creating an inactive policy", e);
             return Response.serverError().build();
         } finally {
             endTenantFlow();
@@ -122,8 +120,7 @@ public class PolicyManagementService {
             }
             return Response.ok().build();
         } catch (PolicyManagementException e) {
-            String error = "Policy Management related exception.";
-            log.error(error, e);
+            log.error("Error occurred while creating an active policy", e);
             return Response.serverError().build();
         } finally {
             endTenantFlow();
@@ -146,8 +143,7 @@ public class PolicyManagementService {
             List<Policy> policies = policyAdministratorPoint.getPolicies();
             return Response.serverError().entity(policies).build();
         } catch (PolicyManagementException e) {
-            String error = "Policy Management related exception";
-            log.error(error, e);
+            log.error("Error occurred while retrieving all policies", e);
             return Response.serverError().entity(Collections.emptyList()).build();
         } finally {
             endTenantFlow();
@@ -178,8 +174,7 @@ public class PolicyManagementService {
                 return Response.status(Response.Status.NOT_FOUND).build();
             }
         } catch (PolicyManagementException e) {
-            String error = "Policy Management related exception";
-            log.error(error, e);
+            log.error("Error occurred while retrieving policy with id:" + policyId, e);
             return Response.serverError().build();
         } finally {
             endTenantFlow();
@@ -200,8 +195,7 @@ public class PolicyManagementService {
             PolicyAdministratorPoint policyAdministratorPoint = policyManagerService.getPAP();
             return Response.ok().entity(policyAdministratorPoint.getPolicyCount()).build();
         } catch (PolicyManagementException e) {
-            String error = "Policy Management related exception";
-            log.error(error, e);
+            log.error("Error occurred while retrieving policy count", e);
             response.setStatus(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode());
             return Response.serverError().entity(-1).build();
         } finally {
@@ -231,8 +225,7 @@ public class PolicyManagementService {
             }
             return Response.noContent().build();
         } catch (PolicyManagementException e) {
-            String error = "Policy Management related exception";
-            log.error(error, e);
+            log.error("Error occurred while updating the policy with id: " + policyId, e);
             return Response.serverError().build();
         } finally {
             endTenantFlow();
@@ -266,8 +259,7 @@ public class PolicyManagementService {
                 return Response.status(Response.Status.BAD_REQUEST).build();
             }
         } catch (PolicyManagementException e) {
-            String error = "Exception in updating policy priorities.";
-            log.error(error, e);
+            log.error("Exception in updating policy priorities.", e);
             return Response.serverError().build();
         } finally {
             endTenantFlow();
@@ -301,8 +293,7 @@ public class PolicyManagementService {
                 return Response.status(Response.Status.NOT_FOUND).build();
             }
         } catch (PolicyManagementException e) {
-            String error = "Exception in deleting policy by id:" + policyId;
-            log.error(error, e);
+            log.error("Exception in deleting policy by id:" + policyId, e);
             return Response.serverError().build();
         } finally {
             endTenantFlow();
@@ -328,8 +319,7 @@ public class PolicyManagementService {
             }
             return Response.noContent().build();
         } catch (PolicyManagementException e) {
-            String error = "Exception in activating policy by id:" + policyId;
-            log.error(error, e);
+            log.error("Exception in activating policy by id:" + policyId, e);
             return Response.serverError().build();
         } finally {
             endTenantFlow();
@@ -355,8 +345,7 @@ public class PolicyManagementService {
             }
             return Response.noContent().build();
         } catch (PolicyManagementException e) {
-            String error = "Exception in inactivating policy by id:" + policyId;
-            log.error(error, e);
+            log.error("Exception in inactivating policy by id:" + policyId , e);
             return Response.serverError().build();
         } finally {
             endTenantFlow();
@@ -382,8 +371,7 @@ public class PolicyManagementService {
             }
             return Response.noContent().build();
         } catch (PolicyManagementException e) {
-            String error = "Exception in applying changes.";
-            log.error(error, e);
+            log.error("Error occurred while publishing-changes on the PAP", e);
             return Response.serverError().build();
         } finally {
             endTenantFlow();
@@ -408,8 +396,8 @@ public class PolicyManagementService {
             }
             return Response.ok().build();
         } catch (PolicyMonitoringTaskException e) {
-            String error = "Policy Management related exception.";
-            log.error(error, e);
+            log.error("Error occurred while starting task schedule service with monitor frequency: " +
+                              monitoringFrequency, e);
             return Response.serverError().build();
         } finally {
             endTenantFlow();
@@ -434,8 +422,8 @@ public class PolicyManagementService {
             }
             return Response.noContent().build();
         } catch (PolicyMonitoringTaskException e) {
-            String error = "Policy Management related exception.";
-            log.error(error, e);
+            log.error("Error occurred while updating task schedule service with monitor frequency: " +
+                              monitoringFrequency, e);
             return Response.serverError().build();
         } finally {
             endTenantFlow();
@@ -460,8 +448,7 @@ public class PolicyManagementService {
             }
             return Response.noContent().build();
         } catch (PolicyMonitoringTaskException e) {
-            String error = "Policy Management related exception.";
-            log.error(error, e);
+            log.error("Error occurred while stopping the task schedule service", e);
             return Response.serverError().build();
         } finally {
             endTenantFlow();
@@ -485,8 +472,7 @@ public class PolicyManagementService {
             ComplianceData complianceData = policyManagerService.getDeviceCompliance(deviceIdentifier);
             return Response.ok().entity(complianceData).build();
         } catch (PolicyComplianceException e) {
-            String error = "Error occurred while getting the compliance data.";
-            log.error(error, e);
+            log.error("Error occurred while getting the compliance data with device-id: " + deviceId + "and device-type:" + deviceType, e);
             return Response.serverError().build();
         } finally {
             endTenantFlow();
