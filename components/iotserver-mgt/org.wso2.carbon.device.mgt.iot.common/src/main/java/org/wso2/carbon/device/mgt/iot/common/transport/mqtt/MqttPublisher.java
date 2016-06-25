@@ -18,113 +18,97 @@ package org.wso2.carbon.device.mgt.iot.common.transport.mqtt;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.eclipse.paho.client.mqttv3.*;
-import org.wso2.carbon.device.mgt.iot.common.controlqueue.ControlQueueConnector;
+import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
+import org.eclipse.paho.client.mqttv3.MqttCallback;
+import org.eclipse.paho.client.mqttv3.MqttClient;
+import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
+import org.eclipse.paho.client.mqttv3.MqttException;
+import org.eclipse.paho.client.mqttv3.MqttMessage;
 import org.wso2.carbon.device.mgt.iot.common.exception.DeviceControllerException;
-
-import java.io.File;
-import java.util.HashMap;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 
 /**
- * The Class MqttControlPublisher. It is an implementation of the interface
- * ControlQueueConnector.
- * This implementation supports publishing of control signals received to an
- * MQTT end-point.
- * The configuration settings for the MQTT end-point are read from the
- * 'devicecloud-config.xml' file of the project.
- * This is done using the class 'DeviceCloudConfigManager.java' which loads
- * the settings from the default xml org.wso2.carbon.device.mgt.iot.common.devicecloud.org.wso2.carbon.device.mgt.iot.common.config.server.configs
- * file -
- * /resources/conf/device-controls/devicecloud-config.xml
+ * This class is used for publishing control signals into MQTT queues.
  */
 public class MqttPublisher implements MqttCallback {
 
-	private static final Log log = LogFactory.getLog(MqttPublisher.class);
+    private static final Log log = LogFactory.getLog(MqttPublisher.class);
 
-	private String mqttEndpoint;
-	private String mqttUsername;
-	private String mqttPassword;
-	private boolean mqttEnabled = false;
+    private String mqttEndpoint;
+    private String mqttUsername;
+    private String mqttPassword;
+    private boolean mqttEnabled = false;
 
-	public MqttPublisher() {
-	}
+    public MqttPublisher() {
+        initControlQueue();
+    }
 
-	public void initControlQueue() throws DeviceControllerException {
-		mqttEndpoint = MqttConfig.getInstance().getMqttQueueEndpoint();
-		mqttUsername = MqttConfig.getInstance().getMqttQueueUsername();
-		mqttPassword = MqttConfig.getInstance().getMqttQueuePassword();
-		mqttEnabled = MqttConfig.getInstance().isEnabled();
-	}
+    private void initControlQueue() {
+        MqttConfig mqttConfig = MqttConfig.getInstance();
+        mqttEndpoint = mqttConfig.getMqttQueueEndpoint();
+        mqttUsername = mqttConfig.getMqttQueueUsername();
+        mqttPassword = mqttConfig.getMqttQueuePassword();
+        mqttEnabled = mqttConfig.isEnabled();
+    }
 
-	public void publish(String publishClientId, String publishTopic, byte[] payload)
-			throws DeviceControllerException {
+    public void publish(String publishClientId, String publishTopic, byte[] payload) throws DeviceControllerException {
+        if (mqttEnabled) {
+            int clientIdLength = publishClientId.length();
+            if (clientIdLength > 24) {
+                throw new DeviceControllerException(
+                        "ClientID '" + publishClientId + "' should be less than 24 characters.");
+            }
 
-		if (mqttEnabled) {
-			MqttClient client;
-			MqttConnectOptions options;
+            MqttConnectOptions options = new MqttConnectOptions();
+            MqttClient client = null;
+            try {
+                client = new MqttClient(mqttEndpoint, publishClientId);
+                int qosLevelDeliverOnce = 2;
+                options.setWill("iotDevice/clienterrors", "crashed".getBytes(UTF_8), qosLevelDeliverOnce, true);
+                client.setCallback(this);
+                client.connect(options);
+                int qosLevelFireandForget = 0;
+                client.publish(publishTopic, payload, qosLevelFireandForget, true);
 
-			if (publishClientId.length() > 24) {
-				String errorString =
-						"No of characters '" + publishClientId.length() + "' for ClientID: '" + publishClientId +
-								"' is invalid (should be less than 24, hence please provide a " +
-								"simple " +
+                if (log.isDebugEnabled()) {
+                    log.debug("MQTT client successfully published to topic: " + publishTopic + ", with payload - "
+                                      + payload);
+                }
+            } catch (MqttException ex) {
+                throw new DeviceControllerException("MQTT client error occurred while publishing message to client id:"
+                                                            + publishClientId + " for the topic: " + publishTopic, ex);
+            } finally {
+                if (client != null) {
+                    try {
+                        client.disconnect();
+                    } catch (MqttException e) {
+                        //do nothing
+                    }
+                }
+            }
+        } else {
+            log.warn("MQTT <Enabled> set to false in 'devicecloud-config.xml'");
+        }
+    }
 
+    @Override
+    public void connectionLost(Throwable throwable) {
+        log.error("Connection to MQTT Endpoint Lost");
+    }
 
-								"'owner' tag)";
-				log.error(errorString);
-				throw new DeviceControllerException(errorString);
-			} else {
-				log.info("No of Characters " + publishClientId.length() + " for ClientID : '" + publishClientId +
-								 "' is acceptable");
-			}
+    @Override
+    public void deliveryComplete(IMqttDeliveryToken topic) {
+        if (log.isDebugEnabled()) {
+            log.debug("Published topic: '" + topic.getTopics()[0] + "' successfully to client: '" +
+                              topic.getClient().getClientId() + "'");
+        }
+    }
 
-			try {
-				client = new MqttClient(mqttEndpoint,publishClientId);
-				options = new MqttConnectOptions();
-				options.setWill("iotDevice/clienterrors", "crashed".getBytes(UTF_8), 2, true);
-				client.setCallback(this);
-				client.connect(options);
-
-				client.publish(publishTopic, payload, 0, true);
-
-				if (log.isDebugEnabled()) {
-					log.debug("MQTT Client successfully published to topic: " + publishTopic +
-									  ", with payload - " + payload);
-				}
-				client.disconnect();
-			} catch (MqttException ex) {
-				String errorMsg =
-						"MQTT Client Error" + "\n\tReason:  " + ex.getReasonCode() +
-								"\n\tMessage: " +
-								ex.getMessage() + "\n\tLocalMsg: " + ex.getLocalizedMessage() +
-								"\n\tCause: " + ex.getCause() + "\n\tException: " + ex;
-
-				log.error(errorMsg, ex);
-				throw new DeviceControllerException(errorMsg, ex);
-			}
-		} else {
-			log.warn("MQTT <Enabled> set to false in 'devicecloud-config.xml'");
-		}
-	}
-
-	@Override
-	public void connectionLost(Throwable arg0) {
-		log.error("Connection to MQTT Endpoint Lost");
-	}
-
-
-	@Override
-	public void deliveryComplete(IMqttDeliveryToken topic) {
-		log.info("Published topic: '" + topic.getTopics()[0] + "' successfully to client: '" +
-						 topic.getClient().getClientId() + "'");
-	}
-
-	@Override
-	public void messageArrived(String arg0, MqttMessage arg1) throws Exception {
-		log.info("MQTT Message recieved: " + arg1.toString());
-	}
-
-
+    @Override
+    public void messageArrived(String topic, MqttMessage message) throws Exception {
+        if (log.isDebugEnabled()) {
+            log.debug("MQTT Message relieved: " + message.toString());
+        }
+    }
 }
