@@ -68,17 +68,6 @@ public class PolicyManagementService {
         return ctx;
     }
 
-    private PolicyManagerService getPolicyServiceProvider(PrivilegedCarbonContext ctx) throws DeviceManagementException {
-        PolicyManagerService policyManagerService = (PolicyManagerService) ctx.getOSGiService(
-                PolicyManagerService.class, null);
-        if (policyManagerService == null) {
-            String msg = "Policy Management service not initialized";
-            log.error(msg);
-            throw new DeviceManagementException(msg);
-        }
-        return policyManagerService;
-    }
-
     private void endTenantFlow() {
         PrivilegedCarbonContext.endTenantFlow();
         if (log.isDebugEnabled()) {
@@ -92,7 +81,12 @@ public class PolicyManagementService {
     public Response addPolicy(Policy policy) {
         try {
             PrivilegedCarbonContext ctx = startTenantFlow();
-            PolicyManagerService policyManagerService = getPolicyServiceProvider(ctx);
+            PolicyManagerService policyManagerService = (PolicyManagerService) ctx.getOSGiService(
+                    PolicyManagerService.class, null);
+            if (policyManagerService == null) {
+                log.error("Policy Management service not initialized");
+                return Response.serverError().build();
+            }
             PolicyAdministratorPoint pap = policyManagerService.getPAP();
             pap.addPolicy(policy);
             if (log.isDebugEnabled()) {
@@ -102,11 +96,6 @@ public class PolicyManagementService {
         } catch (PolicyManagementException e) {
             String error = "Policy Management related exception.";
             log.error(error, e);
-            return Response.serverError().build();
-        } catch (DeviceManagementException e) {
-            String error = "Error occurred while invoking Policy Management Service.";
-            log.error(error, e);
-            response.setStatus(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode());
             return Response.serverError().build();
         } finally {
             endTenantFlow();
@@ -120,7 +109,12 @@ public class PolicyManagementService {
         policy.setActive(true);
         try {
             PrivilegedCarbonContext ctx = startTenantFlow();
-            PolicyManagerService policyManagerService = getPolicyServiceProvider(ctx);
+            PolicyManagerService policyManagerService = (PolicyManagerService) ctx.getOSGiService(
+                    PolicyManagerService.class, null);
+            if (policyManagerService == null) {
+                log.error("Policy Management service not initialized");
+                return Response.serverError().build();
+            }
             PolicyAdministratorPoint pap = policyManagerService.getPAP();
             pap.addPolicy(policy);
             if (log.isDebugEnabled()) {
@@ -129,10 +123,6 @@ public class PolicyManagementService {
             return Response.ok().build();
         } catch (PolicyManagementException e) {
             String error = "Policy Management related exception.";
-            log.error(error, e);
-            return Response.serverError().build();
-        } catch (DeviceManagementException e) {
-            String error = "Error occurred while invoking Policy Management Service.";
             log.error(error, e);
             return Response.serverError().build();
         } finally {
@@ -146,16 +136,17 @@ public class PolicyManagementService {
     public Response getAllPolicies() {
         try {
             PrivilegedCarbonContext ctx = startTenantFlow();
-            PolicyManagerService policyManagerService = getPolicyServiceProvider(ctx);
+            PolicyManagerService policyManagerService = (PolicyManagerService) ctx.getOSGiService(
+                    PolicyManagerService.class, null);
+            if (policyManagerService == null) {
+                log.error("Policy Management service not initialized");
+                return Response.serverError().build();
+            }
             PolicyAdministratorPoint policyAdministratorPoint = policyManagerService.getPAP();
             List<Policy> policies = policyAdministratorPoint.getPolicies();
             return Response.serverError().entity(policies).build();
         } catch (PolicyManagementException e) {
             String error = "Policy Management related exception";
-            log.error(error, e);
-            return Response.serverError().entity(Collections.emptyList()).build();
-        } catch (DeviceManagementException e) {
-            String error = "Error occurred while invoking Policy Management Service.";
             log.error(error, e);
             return Response.serverError().entity(Collections.emptyList()).build();
         } finally {
@@ -168,7 +159,13 @@ public class PolicyManagementService {
     @Path("/{id}")
     public Response getPolicy(@PathParam("id") int policyId) {
         try {
-            PolicyManagerService policyManagerService = getPolicyServiceProvider();
+            PrivilegedCarbonContext ctx = startTenantFlow();
+            PolicyManagerService policyManagerService = (PolicyManagerService) ctx.getOSGiService(
+                    PolicyManagerService.class, null);
+            if (policyManagerService == null) {
+                log.error("Policy Management service not initialized");
+                return Response.serverError().build();
+            }
             PolicyAdministratorPoint policyAdministratorPoint = policyManagerService.getPAP();
             Policy policy = policyAdministratorPoint.getPolicy(policyId);
             if (policy != null) {
@@ -184,10 +181,6 @@ public class PolicyManagementService {
             String error = "Policy Management related exception";
             log.error(error, e);
             return Response.serverError().build();
-        } catch (DeviceManagementException e) {
-            String error = "Error occurred while invoking Policy Management Service.";
-            log.error(error, e);
-            return Response.serverError().build();
         } finally {
             endTenantFlow();
         }
@@ -198,17 +191,18 @@ public class PolicyManagementService {
     public Response getPolicyCount() {
         try {
             PrivilegedCarbonContext ctx = startTenantFlow();
-            PolicyManagerService policyManagerService = getPolicyServiceProvider(ctx);
+            PolicyManagerService policyManagerService = (PolicyManagerService) ctx.getOSGiService(
+                    PolicyManagerService.class, null);
+            if (policyManagerService == null) {
+                log.error("Policy Management service not initialized");
+                return Response.serverError().build();
+            }
             PolicyAdministratorPoint policyAdministratorPoint = policyManagerService.getPAP();
             return Response.ok().entity(policyAdministratorPoint.getPolicyCount()).build();
         } catch (PolicyManagementException e) {
             String error = "Policy Management related exception";
             log.error(error, e);
             response.setStatus(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode());
-            return Response.serverError().entity(-1).build();
-        } catch (DeviceManagementException e) {
-            String error = "Error occurred while invoking Policy Management Service.";
-            log.error(error, e);
             return Response.serverError().entity(-1).build();
         } finally {
             endTenantFlow();
@@ -221,7 +215,12 @@ public class PolicyManagementService {
     public Response updatePolicy(Policy policy, @PathParam("id") int policyId) {
         try {
             PrivilegedCarbonContext ctx = startTenantFlow();
-            PolicyManagerService policyManagerService = getPolicyServiceProvider(ctx);
+            PolicyManagerService policyManagerService = (PolicyManagerService) ctx.getOSGiService(
+                    PolicyManagerService.class, null);
+            if (policyManagerService == null) {
+                log.error("Policy Management service not initialized");
+                return Response.serverError().build();
+            }
             PolicyAdministratorPoint pap = policyManagerService.getPAP();
             org.wso2.carbon.policy.mgt.common.Policy previousPolicy = pap.getPolicy(policyId);
             policy.setProfile(pap.getProfile(previousPolicy.getProfileId()));
@@ -233,10 +232,6 @@ public class PolicyManagementService {
             return Response.noContent().build();
         } catch (PolicyManagementException e) {
             String error = "Policy Management related exception";
-            log.error(error, e);
-            return Response.serverError().build();
-        } catch (DeviceManagementException e) {
-            String error = "Error occurred while invoking Policy Management Service.";
             log.error(error, e);
             return Response.serverError().build();
         } finally {
@@ -251,7 +246,12 @@ public class PolicyManagementService {
     public Response updatePolicyPriorities(List<Policy> priorityUpdatedPolicies) {
         try {
             PrivilegedCarbonContext ctx = startTenantFlow();
-            PolicyManagerService policyManagerService = getPolicyServiceProvider(ctx);
+            PolicyManagerService policyManagerService = (PolicyManagerService) ctx.getOSGiService(
+                    PolicyManagerService.class, null);
+            if (policyManagerService == null) {
+                log.error("Policy Management service not initialized");
+                return Response.serverError().build();
+            }
             PolicyAdministratorPoint pap = policyManagerService.getPAP();
             boolean policiesUpdated = pap.updatePolicyPriorities(priorityUpdatedPolicies);
             if (policiesUpdated) {
@@ -269,10 +269,6 @@ public class PolicyManagementService {
             String error = "Exception in updating policy priorities.";
             log.error(error, e);
             return Response.serverError().build();
-        } catch (DeviceManagementException e) {
-            String error = "Error occurred while invoking Policy Management Service.";
-            log.error(error, e);
-            return Response.serverError().build();
         } finally {
             endTenantFlow();
         }
@@ -284,7 +280,12 @@ public class PolicyManagementService {
     public Response deletePolicy(@PathParam("id") int policyId) {
         try {
             PrivilegedCarbonContext ctx = startTenantFlow();
-            PolicyManagerService policyManagerService = getPolicyServiceProvider(ctx);
+            PolicyManagerService policyManagerService = (PolicyManagerService) ctx.getOSGiService(
+                    PolicyManagerService.class, null);
+            if (policyManagerService == null) {
+                log.error("Policy Management service not initialized");
+                return Response.serverError().build();
+            }
             PolicyAdministratorPoint pap = policyManagerService.getPAP();
             org.wso2.carbon.policy.mgt.common.Policy policy = pap.getPolicy(policyId);
             boolean policyDeleted = pap.deletePolicy(policy);
@@ -303,10 +304,6 @@ public class PolicyManagementService {
             String error = "Exception in deleting policy by id:" + policyId;
             log.error(error, e);
             return Response.serverError().build();
-        } catch (DeviceManagementException e) {
-            String error = "Error occurred while invoking Policy Management Service.";
-            log.error(error, e);
-            return Response.serverError().build();
         } finally {
             endTenantFlow();
         }
@@ -318,7 +315,12 @@ public class PolicyManagementService {
     public Response activatePolicy(@PathParam("id") int policyId) {
         try {
             PrivilegedCarbonContext ctx = startTenantFlow();
-            PolicyManagerService policyManagerService = getPolicyServiceProvider(ctx);
+            PolicyManagerService policyManagerService = (PolicyManagerService) ctx.getOSGiService(
+                    PolicyManagerService.class, null);
+            if (policyManagerService == null) {
+                log.error("Policy Management service not initialized");
+                return Response.serverError().build();
+            }
             PolicyAdministratorPoint pap = policyManagerService.getPAP();
             pap.activatePolicy(policyId);
             if (log.isDebugEnabled()) {
@@ -327,10 +329,6 @@ public class PolicyManagementService {
             return Response.noContent().build();
         } catch (PolicyManagementException e) {
             String error = "Exception in activating policy by id:" + policyId;
-            log.error(error, e);
-            return Response.serverError().build();
-        } catch (DeviceManagementException e) {
-            String error = "Error occurred while invoking Policy Management Service.";
             log.error(error, e);
             return Response.serverError().build();
         } finally {
@@ -344,7 +342,12 @@ public class PolicyManagementService {
     public Response inactivatePolicy(@PathParam("id") int policyId) {
         try {
             PrivilegedCarbonContext ctx = startTenantFlow();
-            PolicyManagerService policyManagerService = getPolicyServiceProvider(ctx);
+            PolicyManagerService policyManagerService = (PolicyManagerService) ctx.getOSGiService(
+                    PolicyManagerService.class, null);
+            if (policyManagerService == null) {
+                log.error("Policy Management service not initialized");
+                return Response.serverError().build();
+            }
             PolicyAdministratorPoint pap = policyManagerService.getPAP();
             pap.inactivatePolicy(policyId);
             if (log.isDebugEnabled()) {
@@ -353,10 +356,6 @@ public class PolicyManagementService {
             return Response.noContent().build();
         } catch (PolicyManagementException e) {
             String error = "Exception in inactivating policy by id:" + policyId;
-            log.error(error, e);
-            return Response.serverError().build();
-        } catch (DeviceManagementException e) {
-            String error = "Error occurred while invoking Policy Management Service.";
             log.error(error, e);
             return Response.serverError().build();
         } finally {
@@ -370,7 +369,12 @@ public class PolicyManagementService {
     public Response applyChanges() {
         try {
             PrivilegedCarbonContext ctx = startTenantFlow();
-            PolicyManagerService policyManagerService = getPolicyServiceProvider(ctx);
+            PolicyManagerService policyManagerService = (PolicyManagerService) ctx.getOSGiService(
+                    PolicyManagerService.class, null);
+            if (policyManagerService == null) {
+                log.error("Policy Management service not initialized");
+                return Response.serverError().build();
+            }
             PolicyAdministratorPoint pap = policyManagerService.getPAP();
             pap.publishChanges();
             if (log.isDebugEnabled()) {
@@ -379,10 +383,6 @@ public class PolicyManagementService {
             return Response.noContent().build();
         } catch (PolicyManagementException e) {
             String error = "Exception in applying changes.";
-            log.error(error, e);
-            return Response.serverError().build();
-        } catch (DeviceManagementException e) {
-            String error = "Error occurred while invoking Policy Management Service.";
             log.error(error, e);
             return Response.serverError().build();
         } finally {
@@ -395,7 +395,12 @@ public class PolicyManagementService {
     public Response startTaskService(@PathParam("milliseconds") int monitoringFrequency) {
         try {
             PrivilegedCarbonContext ctx = startTenantFlow();
-            PolicyManagerService policyManagerService = getPolicyServiceProvider(ctx);
+            PolicyManagerService policyManagerService = (PolicyManagerService) ctx.getOSGiService(
+                    PolicyManagerService.class, null);
+            if (policyManagerService == null) {
+                log.error("Policy Management service not initialized");
+                return Response.serverError().build();
+            }
             TaskScheduleService taskScheduleService = policyManagerService.getTaskScheduleService();
             taskScheduleService.startTask(monitoringFrequency);
             if (log.isDebugEnabled()) {
@@ -404,10 +409,6 @@ public class PolicyManagementService {
             return Response.ok().build();
         } catch (PolicyMonitoringTaskException e) {
             String error = "Policy Management related exception.";
-            log.error(error, e);
-            return Response.serverError().build();
-        } catch (DeviceManagementException e) {
-            String error = "Error occurred while invoking Policy Management Service.";
             log.error(error, e);
             return Response.serverError().build();
         } finally {
@@ -420,7 +421,12 @@ public class PolicyManagementService {
     public Response updateTaskService(@PathParam("milliseconds") int monitoringFrequency) {
         try {
             PrivilegedCarbonContext ctx = startTenantFlow();
-            PolicyManagerService policyManagerService = getPolicyServiceProvider(ctx);
+            PolicyManagerService policyManagerService = (PolicyManagerService) ctx.getOSGiService(
+                    PolicyManagerService.class, null);
+            if (policyManagerService == null) {
+                log.error("Policy Management service not initialized");
+                return Response.serverError().build();
+            }
             TaskScheduleService taskScheduleService = policyManagerService.getTaskScheduleService();
             taskScheduleService.updateTask(monitoringFrequency);
             if (log.isDebugEnabled()) {
@@ -429,10 +435,6 @@ public class PolicyManagementService {
             return Response.noContent().build();
         } catch (PolicyMonitoringTaskException e) {
             String error = "Policy Management related exception.";
-            log.error(error, e);
-            return Response.serverError().build();
-        } catch (DeviceManagementException e) {
-            String error = "Error occurred while invoking Policy Management Service.";
             log.error(error, e);
             return Response.serverError().build();
         } finally {
@@ -445,7 +447,12 @@ public class PolicyManagementService {
     public Response stopTaskService() {
         try {
             PrivilegedCarbonContext ctx = startTenantFlow();
-            PolicyManagerService policyManagerService = getPolicyServiceProvider(ctx);
+            PolicyManagerService policyManagerService = (PolicyManagerService) ctx.getOSGiService(
+                    PolicyManagerService.class, null);
+            if (policyManagerService == null) {
+                log.error("Policy Management service not initialized");
+                return Response.serverError().build();
+            }
             TaskScheduleService taskScheduleService = policyManagerService.getTaskScheduleService();
             taskScheduleService.stopTask();
             if (log.isDebugEnabled()) {
@@ -454,10 +461,6 @@ public class PolicyManagementService {
             return Response.noContent().build();
         } catch (PolicyMonitoringTaskException e) {
             String error = "Policy Management related exception.";
-            log.error(error, e);
-            return Response.serverError().build();
-        } catch (DeviceManagementException e) {
-            String error = "Error occurred while invoking Policy Management Service.";
             log.error(error, e);
             return Response.serverError().build();
         } finally {
@@ -470,7 +473,12 @@ public class PolicyManagementService {
     public Response getComplianceDataOfDevice(@PathParam("id") String deviceId, @PathParam("type") String deviceType) {
         try {
             PrivilegedCarbonContext ctx = startTenantFlow();
-            PolicyManagerService policyManagerService = getPolicyServiceProvider(ctx);
+            PolicyManagerService policyManagerService = (PolicyManagerService) ctx.getOSGiService(
+                    PolicyManagerService.class, null);
+            if (policyManagerService == null) {
+                log.error("Policy Management service not initialized");
+                return Response.serverError().build();
+            }
             DeviceIdentifier deviceIdentifier = new DeviceIdentifier();
             deviceIdentifier.setType(deviceType);
             deviceIdentifier.setId(deviceId);
@@ -478,10 +486,6 @@ public class PolicyManagementService {
             return Response.ok().entity(complianceData).build();
         } catch (PolicyComplianceException e) {
             String error = "Error occurred while getting the compliance data.";
-            log.error(error, e);
-            return Response.serverError().build();
-        } catch (DeviceManagementException e) {
-            String error = "Error occurred while invoking Policy Management Service.";
             log.error(error, e);
             return Response.serverError().build();
         } finally {
