@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+ * Copyright (c) 2016, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,12 +19,13 @@ package org.wso2.carbon.device.mgt.iot.common.sensormgt;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 @XmlRootElement
-public class DeviceRecord implements Serializable{
-    private Map<String, SensorRecord> sensorDataList = new HashMap<>();
+public class DeviceRecord implements Serializable {
+
+    private Map<String, SensorRecord> sensorDataList = new ConcurrentHashMap<>();
 
     public DeviceRecord(String sensorName, String sensorValue, long time) {
         sensorDataList.put(sensorName, new SensorRecord(sensorValue, time));
@@ -35,7 +36,8 @@ public class DeviceRecord implements Serializable{
         return sensorDataList;
     }
 
-    public void addDeviceRecord(String sensorName, String sensorValue, long time){
+    public void addDeviceRecord(String sensorName, String sensorValue, long time) {
         sensorDataList.put(sensorName, new SensorRecord(sensorValue, time));
     }
+
 }

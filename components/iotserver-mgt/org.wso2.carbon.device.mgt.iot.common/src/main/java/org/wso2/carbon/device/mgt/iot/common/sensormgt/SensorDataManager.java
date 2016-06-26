@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+ * Copyright (c) 2016, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +18,6 @@ package org.wso2.carbon.device.mgt.iot.common.sensormgt;
 
 import org.wso2.carbon.device.mgt.iot.common.exception.DeviceControllerException;
 
-import java.util.Calendar;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -29,7 +28,8 @@ import java.util.Map;
 public class SensorDataManager {
 
     private static final SensorDataManager instance = new SensorDataManager();
-    private Map<String, DeviceRecord> deviceMap = new HashMap<>();
+    //key is deviceId
+    private Map<String, DeviceRecord> deviceRecords = new HashMap<>();
 
     private SensorDataManager() {
     }
@@ -40,89 +40,97 @@ public class SensorDataManager {
 
     /**
      * Store sensor record in a map.
+     *
      * @param deviceId
      * @param sensorName
      * @param sensorValue
      * @param time
      * @return if success returns true
      */
-    public boolean setSensorRecord(String deviceId, String sensorName, String sensorValue, long time){
+    public boolean setSensorRecord(String deviceId, String sensorName, String sensorValue, long time) {
 
-        DeviceRecord deviceRecord = deviceMap.get(deviceId);
-        if(deviceRecord==null){
+        DeviceRecord deviceRecord = deviceRecords.get(deviceId);
+        if (deviceRecord == null) {
             deviceRecord = new DeviceRecord(sensorName, sensorValue, time);
-        }else{
+        } else {
             deviceRecord.addDeviceRecord(sensorName, sensorValue, time);
         }
-        deviceMap.put(deviceId, deviceRecord);
+        deviceRecords.put(deviceId, deviceRecord);
         return true;
     }
 
     /**
      * Returns last updated sensor records list for a device
+     *
      * @param deviceId
      * @return list of sensor records
      */
-    public SensorRecord[] getSensorRecords(String deviceId) throws DeviceControllerException{
-        DeviceRecord deviceRecord = deviceMap.get(deviceId);
-        if(deviceRecord != null){
+    public SensorRecord[] getSensorRecords(String deviceId) throws DeviceControllerException {
+        DeviceRecord deviceRecord = deviceRecords.get(deviceId);
+        if (deviceRecord != null) {
             Collection<SensorRecord> list = deviceRecord.getSensorDataList().values();
             return list.toArray(new SensorRecord[list.size()]);
         }
-        throw new DeviceControllerException("Error: No records found for the device ID: " + deviceId);
+        throw new DeviceControllerException("No records found for the device ID: " + deviceId);
     }
 
     /**
      * Returns last updated sensor record for a device's sensor
+     *
      * @param deviceId
      * @param sensorName
      * @return sensor record
      */
     public SensorRecord getSensorRecord(String deviceId, String sensorName) throws
-            DeviceControllerException{
-        DeviceRecord deviceRecord = deviceMap.get(deviceId);
-        if(deviceRecord != null){
+                                                                            DeviceControllerException {
+        DeviceRecord deviceRecord = deviceRecords.get(deviceId);
+        if (deviceRecord != null) {
             SensorRecord sensorRecord = deviceRecord.getSensorDataList().get(sensorName);
-            if(sensorRecord != null){
+            if (sensorRecord != null) {
                 return sensorRecord;
             }
-            throw new DeviceControllerException("Error: No records found for the Device ID: " + deviceId + " Sensor Name: "+sensorName);
+            throw new DeviceControllerException(
+                    "No records found for the Device ID: " + deviceId + " Sensor Name: " + sensorName);
         }
         throw new DeviceControllerException("Error: No records found for the device ID: " + deviceId);
     }
 
     /**
      * Returns last updated sensor value for a device's sensor
+     *
      * @param deviceId
      * @param sensorName
      * @return sensor reading
      */
-    public String getSensorRecordValue(String deviceId, String sensorName) throws DeviceControllerException{
-        DeviceRecord deviceRecord = deviceMap.get(deviceId);
-        if(deviceRecord != null){
+    public String getSensorRecordValue(String deviceId, String sensorName) throws DeviceControllerException {
+        DeviceRecord deviceRecord = deviceRecords.get(deviceId);
+        if (deviceRecord != null) {
             SensorRecord sensorRecord = deviceRecord.getSensorDataList().get(sensorName);
-            if(sensorRecord != null){
+            if (sensorRecord != null) {
                 return sensorRecord.getSensorValue();
             }
-            throw new DeviceControllerException("Error: No records found for the Device ID: " + deviceId + " Sensor Name: "+sensorName);
+            throw new DeviceControllerException(
+                    "No records found for the Device ID: " + deviceId + " Sensor Name: " + sensorName);
         }
         throw new DeviceControllerException("Error: No records found for the device ID: " + deviceId);
     }
 
     /**
      * Returns last updated sensor value reading time for a device's sensor
+     *
      * @param deviceId
      * @param sensorName
      * @return time in millis
      */
-    public long getSensorRecordTime(String deviceId, String sensorName) throws DeviceControllerException{
-        DeviceRecord deviceRecord = deviceMap.get(deviceId);
-        if(deviceRecord != null){
+    public long getSensorRecordTime(String deviceId, String sensorName) throws DeviceControllerException {
+        DeviceRecord deviceRecord = deviceRecords.get(deviceId);
+        if (deviceRecord != null) {
             SensorRecord sensorRecord = deviceRecord.getSensorDataList().get(sensorName);
-            if(sensorRecord != null){
+            if (sensorRecord != null) {
                 return sensorRecord.getTime();
             }
-            throw new DeviceControllerException("Error: No records found for the Device ID: " + deviceId + " Sensor Name: "+sensorName);
+            throw new DeviceControllerException(
+                    "No records found for the Device ID: " + deviceId + " Sensor Name: " + sensorName);
         }
         throw new DeviceControllerException("Error: No records found for the device ID: " + deviceId);
     }
