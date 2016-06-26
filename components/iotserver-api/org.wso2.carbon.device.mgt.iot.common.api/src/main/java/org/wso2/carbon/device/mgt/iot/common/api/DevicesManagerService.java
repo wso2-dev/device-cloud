@@ -31,42 +31,49 @@ import org.wso2.carbon.device.mgt.core.service.DeviceManagementProviderService;
 
 import javax.jws.WebService;
 import javax.servlet.http.HttpServletResponse;
-import javax.ws.rs.*;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
+import javax.ws.rs.FormParam;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-@WebService public class DevicesManagerService {
+@WebService
+public class DevicesManagerService {
 
     private static Log log = LogFactory.getLog(DevicesManagerService.class);
 
-	@Context  //injected response proxy supporting multiple thread
-	private HttpServletResponse response;
+    @Context  //injected response proxy supporting multiple thread
+    private HttpServletResponse response;
 
-    private PrivilegedCarbonContext ctx;
-
-    private DeviceManagementProviderService getServiceProvider() {
+    private PrivilegedCarbonContext startTenantFlow() {
         String tenantDomain = CarbonContext.getThreadLocalCarbonContext().getTenantDomain();
         PrivilegedCarbonContext.startTenantFlow();
-        ctx = PrivilegedCarbonContext.getThreadLocalCarbonContext();
+        PrivilegedCarbonContext ctx = PrivilegedCarbonContext.getThreadLocalCarbonContext()
         ctx.setTenantDomain(tenantDomain, true);
         if (log.isDebugEnabled()) {
             log.debug("Getting thread local carbon context for tenant domain: " + tenantDomain);
         }
-        return (DeviceManagementProviderService) ctx.getOSGiService(DeviceManagementProviderService.class, null);
+        return ctx;
     }
 
     private void endTenantFlow() {
         PrivilegedCarbonContext.endTenantFlow();
-        ctx = null;
         if (log.isDebugEnabled()) {
             log.debug("Tenant flow ended");
         }
     }
 
-    private Device[] getActiveDevices(List<Device> devices){
+    private List<Device> getActiveDevices(List<Device> devices) {
         List<Device> activeDevices = new ArrayList<>();
         if (devices != null) {
             for (Device device : devices) {
@@ -75,48 +82,69 @@ import java.util.List;
                 }
             }
         }
-        return activeDevices.toArray(new Device[activeDevices.size()]);
+        return activeDevices;
     }
 
     @Path("/device/user/{username}/all")
-	@GET
-	@Consumes("application/json")
-	@Produces("application/json")
-	public Device[] getDevicesOfUser(@PathParam("username") String username) {
+    @GET
+    @Consumes("application/json")
+    @Produces("application/json")
+    public Response getDevicesOfUser(@PathParam("username") String username) {
         try {
-            List<Device> devices = this.getServiceProvider().getDevicesOfUser(username);
-            return this.getActiveDevices(devices);
+            PrivilegedCarbonContext ctx = startTenantFlow();
+            DeviceManagementProviderService deviceManagementProviderService =
+                    (DeviceManagementProviderService) ctx.getOSGiService(DeviceManagementProviderService.class, null);
+            if (deviceManagementProviderService == null) {
+                log.error("DeviceManagementProviderService is not initialized.");
+                return Response.serverError().build();
+            }
+            List<Device> devices = deviceManagementProviderService.getDevicesOfUser(username);
+            return Response.ok().entity(getActiveDevices(devices)).build();
         } catch (DeviceManagementException e) {
-            response.setStatus(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode());
-            return null;
+            log.error("Error occurred while retrieving devices with username:" + username);
+            return Response.serverError().build();
         } finally {
-            this.endTenantFlow();
+            endTenantFlow();
         }
     }
 
-	@Path("/device/user/{username}/ungrouped")
-	@GET
-	@Consumes("application/json")
-	@Produces("application/json")
-	public Device[] getUnGroupedDevices(@PathParam("username") String username){
-        try{
-    		List<Device> devices = this.getServiceProvider().getUnGroupedDevices(username);
-            return this.getActiveDevices(devices);
-		} catch (DeviceManagementException e) {
-			response.setStatus(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode());
-			return null;
-		} finally {
-			this.endTenantFlow();
-		}
-	}
-
-	@Path("/device/user/{username}/all/count")
-	@GET
-	@Consumes("application/json")
-	@Produces("application/json")
-	public int getDeviceCount(@PathParam("username") String username){
+    @Path("/device/user/{username}/ungrouped")
+    @GET
+    @Consumes("application/json")
+    @Produces("application/json")
+    public Response getUnGroupedDevices(@PathParam("username") String username) {
         try {
-            List<Device> devices = this.getServiceProvider().getDevicesOfUser(username);
+            PrivilegedCarbonContext ctx = startTenantFlow();
+            DeviceManagementProviderService deviceManagementProviderService =
+                    (DeviceManagementProviderService) ctx.getOSGiService(DeviceManagementProviderService.class, null);
+            if (deviceManagementProviderService == null) {
+                log.error("DeviceManagementProviderService is not initialized.");
+                return Response.serverError().build();
+            }
+            List<Device> devices = deviceManagementProviderService.getUnGroupedDevices(username);
+            return Response.ok().entity(getActiveDevices(devices)).build();
+        } catch (DeviceManagementException e) {
+            log.error("Error occurred while retrieving ungrouped devices with username:" + username);
+            return Response.serverError().build();
+        } finally {
+            endTenantFlow();
+        }
+    }
+
+    @Path("/device/user/{username}/all/count")
+    @GET
+    @Consumes("application/json")
+    @Produces("application/json")
+    public Response getDeviceCount(@PathParam("username") String username) {
+        try {
+            PrivilegedCarbonContext ctx = startTenantFlow();
+            DeviceManagementProviderService deviceManagementProviderService =
+                    (DeviceManagementProviderService) ctx.getOSGiService(DeviceManagementProviderService.class, null);
+            if (deviceManagementProviderService == null) {
+                log.error("DeviceManagementProviderService is not initialized.");
+                return Response.serverError().build();
+            }
+            List<Device> devices = deviceManagementProviderService.getDevicesOfUser(username);
             if (devices != null) {
                 List<Device> activeDevices = new ArrayList<>();
                 for (Device device : devices) {
@@ -124,65 +152,87 @@ import java.util.List;
                         activeDevices.add(device);
                     }
                 }
-                return activeDevices.size();
+                return Response.ok().entity(activeDevices.size()).build();
             }
-            return 0;
-		} catch (DeviceManagementException e) {
-			response.setStatus(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode());
-			return 0;
-		} finally {
-			this.endTenantFlow();
-		}
-	}
+            return Response.ok().entity(0).build();
+        } catch (DeviceManagementException e) {
+            log.error("Error occurred while retrieving device count for username:" + username);
+            return Response.serverError().build();
+        } finally {
+            endTenantFlow();
+        }
+    }
 
-	@Path("/device/type/{type}/identifier/{identifier}")
-	@GET
-	@Consumes("application/json")
-	@Produces("application/json")
-	public Device getDevice(@PathParam("type") String type, @PathParam("identifier") String identifier){
+    @Path("/device/type/{type}/identifier/{identifier}")
+    @GET
+    @Consumes("application/json")
+    @Produces("application/json")
+    public Response getDevice(@PathParam("type") String type, @PathParam("identifier") String identifier) {
 
-		try{
+        try {
+            PrivilegedCarbonContext ctx = startTenantFlow();
+            DeviceManagementProviderService deviceManagementProviderService =
+                    (DeviceManagementProviderService) ctx.getOSGiService(DeviceManagementProviderService.class, null);
+            if (deviceManagementProviderService == null) {
+                log.error("DeviceManagementProviderService is not initialized.");
+                return Response.serverError().build();
+            }
             DeviceIdentifier deviceIdentifier = new DeviceIdentifier();
             deviceIdentifier.setId(identifier);
             deviceIdentifier.setType(type);
-			return this.getServiceProvider().getDevice(deviceIdentifier);
-		} catch (DeviceManagementException e) {
-			response.setStatus(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode());
-            return null;
-		} finally {
-			this.endTenantFlow();
-		}
-	}
+            return Response.ok().entity(deviceManagementProviderService.getDevice(deviceIdentifier)).build();
+        } catch (DeviceManagementException e) {
+            log.error("Error occurred while retrieving device with identifier:" + identifier + " of device-type:"
+                              + type);
+            return Response.serverError().build();
+        } finally {
+            endTenantFlow();
+        }
+    }
 
-	@Path("/device/type/all")
-	@GET
-	@Consumes("application/json")
-	@Produces("application/json")
-	public DeviceType[] getDeviceTypes(){
-		try{
-			List<DeviceType> deviceTypes = this.getServiceProvider().getDeviceTypes();
-            return deviceTypes.toArray(new DeviceType[deviceTypes.size()]);
-		} catch (DeviceManagementException e) {
-			response.setStatus(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode());
-			return null;
-		} finally {
-            this.endTenantFlow();
-		}
-	}
+    @Path("/device/type/all")
+    @GET
+    @Consumes("application/json")
+    @Produces("application/json")
+    public Response getDeviceTypes() {
+        try {
+            PrivilegedCarbonContext ctx = startTenantFlow();
+            DeviceManagementProviderService deviceManagementProviderService =
+                    (DeviceManagementProviderService) ctx.getOSGiService(DeviceManagementProviderService.class, null);
+            if (deviceManagementProviderService == null) {
+                log.error("DeviceManagementProviderService is not initialized.");
+                return Response.serverError().build();
+            }
+            List<DeviceType> deviceTypes = deviceManagementProviderService.getDeviceTypes();
+            return Response.ok().entity(deviceTypes).build();
+        } catch (DeviceManagementException e) {
+            log.error("Error occurred while retrieving all devices-types");
+            return Response.serverError().build();
+        } finally {
+            endTenantFlow();
+        }
+    }
 
     @Path("/device/type/{type}/all")
     @GET
     @Consumes("application/json")
     @Produces("application/json")
-    public Device[] getAllDevices(@PathParam("type") String type){
-        try{
-            List<Device> devices = this.getServiceProvider().getAllDevices(type);
-            return this.getActiveDevices(devices);
+    public Response getAllDevices(@PathParam("type") String type) {
+        try {
+            PrivilegedCarbonContext ctx = startTenantFlow();
+            DeviceManagementProviderService deviceManagementProviderService =
+                    (DeviceManagementProviderService) ctx.getOSGiService(DeviceManagementProviderService.class, null);
+            if (deviceManagementProviderService == null) {
+                log.error("DeviceManagementProviderService is not initialized.");
+                return Response.serverError().build();
+            }
+            List<Device> devices = deviceManagementProviderService.getAllDevices(type);
+            return Response.ok().entity(getActiveDevices(devices)).build();
         } catch (DeviceManagementException e) {
-            response.setStatus(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode());
-            return null;
+            log.error("Error occurred while retrieving all devices by device-type:" + type);
+            return Response.serverError().build();
         } finally {
-            this.endTenantFlow();
+            endTenantFlow();
         }
     }
 
@@ -190,15 +240,21 @@ import java.util.List;
     @GET
     @Consumes("application/json")
     @Produces("application/json")
-    public Device[] getAllDevices(){
-        try{
-            List<Device> devices = this.getServiceProvider().getAllDevices();
-            return this.getActiveDevices(devices);
+    public Response getAllDevices() {
+        try {
+            PrivilegedCarbonContext ctx = startTenantFlow();
+            DeviceManagementProviderService deviceManagementProviderService =
+                    (DeviceManagementProviderService) ctx.getOSGiService(DeviceManagementProviderService.class, null);
+            if (deviceManagementProviderService == null) {
+                log.error("DeviceManagementProviderService is not initialized.");
+                return Response.serverError().build();
+            }
+            List<Device> devices = deviceManagementProviderService.getAllDevices();
+            return Response.ok().entity(getActiveDevices(devices)).build();
         } catch (DeviceManagementException e) {
-            response.setStatus(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode());
-            return null;
+            return Response.serverError().build();
         } finally {
-            this.endTenantFlow();
+            endTenantFlow();
         }
     }
 
@@ -206,12 +262,14 @@ import java.util.List;
     @POST
     @Consumes("application/json")
     @Produces("application/json")
-    public void sendEnrolmentInvitation(@FormParam("messageBody") String messageBody,
-            @FormParam("mailTo") String[] mailTo, @FormParam("ccList") String[] ccList,
-            @FormParam("bccList") String[] bccList, @FormParam("subject") String subject,
-            @FormParam("firstName") String firstName, @FormParam("enrolmentUrl") String enrolmentUrl,
-            @FormParam("title") String title, @FormParam("password") String password,
-            @FormParam("userName") String userName){
+    public Response sendEnrolmentInvitation(@FormParam("messageBody") String messageBody,
+                                            @FormParam("mailTo") String[] mailTo, @FormParam("ccList") String[] ccList,
+                                            @FormParam("bccList") String[] bccList,
+                                            @FormParam("subject") String subject,
+                                            @FormParam("firstName") String firstName,
+                                            @FormParam("enrolmentUrl") String enrolmentUrl,
+                                            @FormParam("title") String title, @FormParam("password") String password,
+                                            @FormParam("userName") String userName) {
         EmailMessageProperties config = new EmailMessageProperties();
         config.setMessageBody(messageBody);
         config.setMailTo(mailTo);
@@ -224,11 +282,21 @@ import java.util.List;
         config.setUserName(userName);
         config.setPassword(password);
         try {
-            this.getServiceProvider().sendEnrolmentInvitation(config);
+            PrivilegedCarbonContext ctx = startTenantFlow();
+            DeviceManagementProviderService deviceManagementProviderService =
+                    (DeviceManagementProviderService) ctx.getOSGiService(DeviceManagementProviderService.class, null);
+            if (deviceManagementProviderService == null) {
+                log.error("DeviceManagementProviderService is not initialized.");
+                return Response.serverError().build();
+            }
+            deviceManagementProviderService.sendEnrolmentInvitation(config);
+            return Response.ok().build();
         } catch (DeviceManagementException e) {
-            response.setStatus(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode());
+            log.error("Error occurred while sending enrollment invitation  for user-name:" + userName + " with email: "
+                              + mailTo);
+            return Response.serverError().build();
         } finally {
-            this.endTenantFlow();
+            endTenantFlow();
         }
     }
 
@@ -236,12 +304,13 @@ import java.util.List;
     @POST
     @Consumes("application/json")
     @Produces("application/json")
-    public void sendRegistrationEmail(@FormParam("messageBody") String messageBody,
-            @FormParam("mailTo") String[] mailTo, @FormParam("ccList") String[] ccList,
-            @FormParam("bccList") String[] bccList, @FormParam("subject") String subject,
-            @FormParam("firstName") String firstName, @FormParam("enrolmentUrl") String enrolmentUrl,
-            @FormParam("title") String title, @FormParam("password") String password,
-            @FormParam("userName") String userName){
+    public Response sendRegistrationEmail(@FormParam("messageBody") String messageBody,
+                                          @FormParam("mailTo") String[] mailTo, @FormParam("ccList") String[] ccList,
+                                          @FormParam("bccList") String[] bccList, @FormParam("subject") String subject,
+                                          @FormParam("firstName") String firstName,
+                                          @FormParam("enrolmentUrl") String enrolmentUrl,
+                                          @FormParam("title") String title, @FormParam("password") String password,
+                                          @FormParam("userName") String userName) {
         EmailMessageProperties config = new EmailMessageProperties();
         config.setMessageBody(messageBody);
         config.setMailTo(mailTo);
@@ -254,11 +323,21 @@ import java.util.List;
         config.setUserName(userName);
         config.setPassword(password);
         try {
-            this.getServiceProvider().sendRegistrationEmail(config);
+            PrivilegedCarbonContext ctx = startTenantFlow();
+            DeviceManagementProviderService deviceManagementProviderService =
+                    (DeviceManagementProviderService) ctx.getOSGiService(DeviceManagementProviderService.class, null);
+            if (deviceManagementProviderService == null) {
+                log.error("DeviceManagementProviderService is not initialized.");
+                return Response.serverError().build();
+            }
+            deviceManagementProviderService.sendRegistrationEmail(config);
+            return Response.ok().build();
         } catch (DeviceManagementException e) {
-            response.setStatus(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode());
+            log.error("Error occurred while sending registration email for user-name:" + userName + " with email: " +
+                              mailTo);
+            return Response.serverError().build();
         } finally {
-            this.endTenantFlow();
+            endTenantFlow();
         }
     }
 
@@ -266,14 +345,21 @@ import java.util.List;
     @GET
     @Consumes("application/json")
     @Produces("application/json")
-    public TenantConfiguration getConfiguration(@PathParam("type") String type){
+    public Response getConfiguration(@PathParam("type") String type) {
         try {
-            return this.getServiceProvider().getConfiguration(type);
+            PrivilegedCarbonContext ctx = startTenantFlow();
+            DeviceManagementProviderService deviceManagementProviderService =
+                    (DeviceManagementProviderService) ctx.getOSGiService(DeviceManagementProviderService.class, null);
+            if (deviceManagementProviderService == null) {
+                log.error("DeviceManagementProviderService is not initialized.");
+                return Response.serverError().build();
+            }
+            return Response.ok().entity(deviceManagementProviderService.getConfiguration(type)).build();
         } catch (DeviceManagementException e) {
-            response.setStatus(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode());
-            return null;
+            log.error("Error occurred while retrieving configuration for device-type: " + type);
+            return Response.serverError().build();
         } finally {
-            this.endTenantFlow();
+            endTenantFlow();
         }
     }
 
@@ -281,15 +367,22 @@ import java.util.List;
     @GET
     @Consumes("application/json")
     @Produces("application/json")
-    public Device[] getDevices(@PathParam("groupId") int groupId){
-        try{
-            List<Device> devices = this.getServiceProvider().getDevices(groupId);
-            return this.getActiveDevices(devices);
+    public Response getDevices(@PathParam("groupId") int groupId) {
+        try {
+            PrivilegedCarbonContext ctx = startTenantFlow();
+            DeviceManagementProviderService deviceManagementProviderService =
+                    (DeviceManagementProviderService) ctx.getOSGiService(DeviceManagementProviderService.class, null);
+            if (deviceManagementProviderService == null) {
+                log.error("DeviceManagementProviderService is not initialized.");
+                return Response.serverError().build();
+            }
+            List<Device> devices = deviceManagementProviderService.getDevices(groupId);
+            return Response.ok().entity(getActiveDevices(devices)).build();
         } catch (DeviceManagementException e) {
-            response.setStatus(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode());
-            return null;
+            log.error("Error occurred while retrieving all devices with group-id: " + groupId);
+            return Response.serverError().build();
         } finally {
-            this.endTenantFlow();
+            endTenantFlow();
         }
     }
 
@@ -297,15 +390,22 @@ import java.util.List;
     @GET
     @Consumes("application/json")
     @Produces("application/json")
-    public Device[] getAllDevicesOfRole(@PathParam("role") String roleName){
-        try{
-            List<Device> devices = this.getServiceProvider().getAllDevicesOfRole(roleName);
-            return this.getActiveDevices(devices);
+    public Response getAllDevicesOfRole(@PathParam("role") String roleName) {
+        try {
+            PrivilegedCarbonContext ctx = startTenantFlow();
+            DeviceManagementProviderService deviceManagementProviderService =
+                    (DeviceManagementProviderService) ctx.getOSGiService(DeviceManagementProviderService.class, null);
+            if (deviceManagementProviderService == null) {
+                log.error("DeviceManagementProviderService is not initialized.");
+                return Response.serverError().build();
+            }
+            List<Device> devices = deviceManagementProviderService.getAllDevicesOfRole(roleName);
+            return Response.ok().entity(getActiveDevices(devices)).build();
         } catch (DeviceManagementException e) {
-            response.setStatus(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode());
-            return null;
+            log.error("Error occurred while reading all devices by role-name:" + roleName);
+            return Response.serverError().build();
         } finally {
-            this.endTenantFlow();
+            endTenantFlow();
         }
     }
 
@@ -313,15 +413,22 @@ import java.util.List;
     @GET
     @Consumes("application/json")
     @Produces("application/json")
-    public Device[] getDevicesByName(@PathParam("name") String name) {
-        try{
-            List<Device> devices = this.getServiceProvider().getDevicesByName(name);
-            return this.getActiveDevices(devices);
+    public Response getDevicesByName(@PathParam("name") String name) {
+        try {
+            PrivilegedCarbonContext ctx = startTenantFlow();
+            DeviceManagementProviderService deviceManagementProviderService =
+                    (DeviceManagementProviderService) ctx.getOSGiService(DeviceManagementProviderService.class, null);
+            if (deviceManagementProviderService == null) {
+                log.error("DeviceManagementProviderService is not initialized.");
+                return Response.serverError().build();
+            }
+            List<Device> devices = deviceManagementProviderService.getDevicesByName(name);
+            return Response.ok().entity(getActiveDevices(devices)).build();
         } catch (DeviceManagementException e) {
-            response.setStatus(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode());
-            return null;
+            log.error("Error occurred while reading devices with name: " + name);
+            return Response.serverError().build();
         } finally {
-            this.endTenantFlow();
+            endTenantFlow();
         }
     }
 
@@ -329,19 +436,29 @@ import java.util.List;
     @PUT
     @Consumes("application/json")
     @Produces("application/json")
-    void updateDeviceEnrolmentInfo(@PathParam("type") String type, @PathParam("identifier") String identifier,
-            @FormParam("status") EnrolmentInfo.Status status) {
-        DeviceManagementProviderService providerService = this.getServiceProvider();
+    public Response updateDeviceEnrolmentInfo(@PathParam("type") String type,
+                                              @PathParam("identifier") String identifier,
+                                              @FormParam("status") EnrolmentInfo.Status status) {
+        PrivilegedCarbonContext ctx = startTenantFlow();
+        DeviceManagementProviderService deviceManagementProviderService =
+                (DeviceManagementProviderService) ctx.getOSGiService(DeviceManagementProviderService.class, null);
+        if (deviceManagementProviderService == null) {
+            log.error("DeviceManagementProviderService is not initialized.");
+            return Response.serverError().build();
+        }
         DeviceIdentifier deviceIdentifier = new DeviceIdentifier();
         deviceIdentifier.setType(type);
         deviceIdentifier.setId(identifier);
         try {
-            Device device = providerService.getDevice(deviceIdentifier);
-            providerService.updateDeviceEnrolmentInfo(device, status);
+            Device device = deviceManagementProviderService.getDevice(deviceIdentifier);
+            deviceManagementProviderService.updateDeviceEnrolmentInfo(device, status);
+            return Response.noContent().build();
         } catch (DeviceManagementException e) {
-            response.setStatus(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode());
+            log.error("Error occurred while updating enrollment information with device identifier: " + identifier
+                              + " of deviceType: " + type);
+            return Response.serverError().build();
         } finally {
-            this.endTenantFlow();
+            endTenantFlow();
         }
     }
 
@@ -349,15 +466,22 @@ import java.util.List;
     @GET
     @Consumes("application/json")
     @Produces("application/json")
-    public Device[] getDevicesByStatus(@PathParam("status") EnrolmentInfo.Status status) {
-        try{
-            List<Device> devices = this.getServiceProvider().getDevicesByStatus(status);
-            return this.getActiveDevices(devices);
+    public Response getDevicesByStatus(@PathParam("status") EnrolmentInfo.Status status) {
+        try {
+            PrivilegedCarbonContext ctx = startTenantFlow();
+            DeviceManagementProviderService deviceManagementProviderService =
+                    (DeviceManagementProviderService) ctx.getOSGiService(DeviceManagementProviderService.class, null);
+            if (deviceManagementProviderService == null) {
+                log.error("DeviceManagementProviderService is not initialized.");
+                return Response.serverError().build();
+            }
+            List<Device> devices = deviceManagementProviderService.getDevicesByStatus(status);
+            return Response.ok().entity(getActiveDevices(devices)).build();
         } catch (DeviceManagementException e) {
-            response.setStatus(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode());
-            return null;
+            log.error("Error occurred while reading devices with status:" + status);
+            return Response.serverError().build();
         } finally {
-            this.endTenantFlow();
+            endTenantFlow();
         }
     }
 
@@ -365,14 +489,21 @@ import java.util.List;
     @GET
     @Consumes("application/json")
     @Produces("application/json")
-    public License getLicense(@PathParam("type") String type, @QueryParam("languageCode") String languageCode) {
-        try{
-            return this.getServiceProvider().getLicense(type,languageCode);
+    public Response getLicense(@PathParam("type") String type, @QueryParam("languageCode") String languageCode) {
+        try {
+            PrivilegedCarbonContext ctx = startTenantFlow();
+            DeviceManagementProviderService deviceManagementProviderService =
+                    (DeviceManagementProviderService) ctx.getOSGiService(DeviceManagementProviderService.class, null);
+            if (deviceManagementProviderService == null) {
+                log.error("DeviceManagementProviderService is not initialized.");
+                return Response.serverError().build();
+            }
+            return Response.ok().entity(deviceManagementProviderService.getLicense(type, languageCode)).build();
         } catch (DeviceManagementException e) {
-            response.setStatus(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode());
-            return null;
+            log.error("Error occurred while reading license of device-type: " + type);
+            return Response.serverError().build();
         } finally {
-            this.endTenantFlow();
+            endTenantFlow();
         }
     }
 
@@ -380,11 +511,18 @@ import java.util.List;
     @POST
     @Consumes("application/json")
     @Produces("application/json")
-    public void addLicense(@PathParam("type") String type, @FormParam("provider") String provider,
-            @FormParam("name") String name, @FormParam("version") String version,
-            @FormParam("language") String language, @FormParam("validFrom") Date validFrom,
-            @FormParam("validTo") Date validTo, @FormParam("text") String text) {
-        try{
+    public Response addLicense(@PathParam("type") String type, @FormParam("provider") String provider,
+                               @FormParam("name") String name, @FormParam("version") String version,
+                               @FormParam("language") String language, @FormParam("validFrom") Date validFrom,
+                               @FormParam("validTo") Date validTo, @FormParam("text") String text) {
+        try {
+            PrivilegedCarbonContext ctx = startTenantFlow();
+            DeviceManagementProviderService deviceManagementProviderService =
+                    (DeviceManagementProviderService) ctx.getOSGiService(DeviceManagementProviderService.class, null);
+            if (deviceManagementProviderService == null) {
+                log.error("DeviceManagementProviderService is not initialized.");
+                return Response.serverError().build();
+            }
             License license = new License();
             license.setProvider(provider);
             license.setName(name);
@@ -393,11 +531,13 @@ import java.util.List;
             license.setValidFrom(validFrom);
             license.setValidTo(validTo);
             license.setText(text);
-            this.getServiceProvider().addLicense(type, license);
+            deviceManagementProviderService.addLicense(type, license);
+            return Response.ok().build();
         } catch (DeviceManagementException e) {
-            response.setStatus(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode());
+            log.error("Error occurred while setting device license of device-type: " + type);
+            return Response.serverError().build();
         } finally {
-            this.endTenantFlow();
+            endTenantFlow();
         }
     }
 
@@ -405,12 +545,14 @@ import java.util.List;
     @PUT
     @Consumes("application/json")
     @Produces("application/json")
-    boolean modifyEnrollment(@PathParam("type") String type, @PathParam("identifier") String identifier,
-            @FormParam("name") String name, @FormParam("description") String description,
-            @FormParam("groupId") int groupId, @FormParam("enrollmentId") int enrollmentId,
-            @FormParam("dateOfEnrolment") long dateOfEnrolment, @FormParam("dateOfLastUpdate") long dateOfLastUpdate,
-            @FormParam("ownership") EnrolmentInfo.OwnerShip ownership, @FormParam("status") EnrolmentInfo.Status status,
-            @FormParam("owner") String owner){
+    public Response modifyEnrollment(@PathParam("type") String type, @PathParam("identifier") String identifier,
+                                     @FormParam("name") String name, @FormParam("description") String description,
+                                     @FormParam("groupId") int groupId, @FormParam("enrollmentId") int enrollmentId,
+                                     @FormParam("dateOfEnrolment") long dateOfEnrolment,
+                                     @FormParam("dateOfLastUpdate") long dateOfLastUpdate,
+                                     @FormParam("ownership") EnrolmentInfo.OwnerShip ownership,
+                                     @FormParam("status") EnrolmentInfo.Status status,
+                                     @FormParam("owner") String owner) {
 
         EnrolmentInfo enrolmentInfo = new EnrolmentInfo();
         enrolmentInfo.setId(enrollmentId);
@@ -428,12 +570,20 @@ import java.util.List;
         device.setGroupId(groupId);
         device.setEnrolmentInfo(enrolmentInfo);
         try {
-            return this.getServiceProvider().modifyEnrollment(device);
+            PrivilegedCarbonContext ctx = startTenantFlow();
+            DeviceManagementProviderService deviceManagementProviderService =
+                    (DeviceManagementProviderService) ctx.getOSGiService(DeviceManagementProviderService.class, null);
+            if (deviceManagementProviderService == null) {
+                log.error("DeviceManagementProviderService is not initialized.");
+                return Response.serverError().build();
+            }
+            return Response.ok(deviceManagementProviderService.modifyEnrollment(device)).build();
         } catch (DeviceManagementException e) {
-            response.setStatus(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode());
-            return false;
+            log.error("Error occurred while modifying enrollment in device identifier: " + identifier
+                              + " of device-type: " + type);
+            return Response.serverError().build();
         } finally {
-            this.endTenantFlow();
+            endTenantFlow();
         }
     }
 
@@ -441,12 +591,14 @@ import java.util.List;
     @POST
     @Consumes("application/json")
     @Produces("application/json")
-    boolean enrollDevice(@FormParam("type") String type, @FormParam("identifier") String identifier,
-            @FormParam("name") String name, @FormParam("description") String description,
-            @FormParam("groupId") int groupId, @FormParam("enrollmentId") int enrollmentId,
-            @FormParam("dateOfEnrolment") long dateOfEnrolment, @FormParam("dateOfLastUpdate") long dateOfLastUpdate,
-            @FormParam("ownership") EnrolmentInfo.OwnerShip ownership, @FormParam("status") EnrolmentInfo.Status status,
-            @FormParam("owner") String owner){
+    public Response enrollDevice(@FormParam("type") String type, @FormParam("identifier") String identifier,
+                                 @FormParam("name") String name, @FormParam("description") String description,
+                                 @FormParam("groupId") int groupId, @FormParam("enrollmentId") int enrollmentId,
+                                 @FormParam("dateOfEnrolment") long dateOfEnrolment,
+                                 @FormParam("dateOfLastUpdate") long dateOfLastUpdate,
+                                 @FormParam("ownership") EnrolmentInfo.OwnerShip ownership,
+                                 @FormParam("status") EnrolmentInfo.Status status,
+                                 @FormParam("owner") String owner) {
 
         EnrolmentInfo enrolmentInfo = new EnrolmentInfo();
         enrolmentInfo.setId(enrollmentId);
@@ -464,12 +616,20 @@ import java.util.List;
         device.setGroupId(groupId);
         device.setEnrolmentInfo(enrolmentInfo);
         try {
-            return this.getServiceProvider().enrollDevice(device);
+            PrivilegedCarbonContext ctx = startTenantFlow();
+            DeviceManagementProviderService deviceManagementProviderService =
+                    (DeviceManagementProviderService) ctx.getOSGiService(DeviceManagementProviderService.class, null);
+            if (deviceManagementProviderService == null) {
+                log.error("DeviceManagementProviderService is not initialized.");
+                return Response.serverError().build();
+            }
+            return Response.ok().entity(deviceManagementProviderService.enrollDevice(device)).build();
         } catch (DeviceManagementException e) {
-            response.setStatus(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode());
-            return false;
+            log.error("Error occurred while enrolling device with device identifier: " + identifier + " of device-type:"
+                              + type);
+            return Response.serverError().build();
         } finally {
-            this.endTenantFlow();
+            endTenantFlow();
         }
     }
 
@@ -477,14 +637,21 @@ import java.util.List;
     @GET
     @Consumes("application/json")
     @Produces("application/json")
-    public TenantConfiguration getConfiguration(){
+    public Response getConfiguration() {
         try {
-            return this.getServiceProvider().getConfiguration();
+            PrivilegedCarbonContext ctx = startTenantFlow();
+            DeviceManagementProviderService deviceManagementProviderService =
+                    (DeviceManagementProviderService) ctx.getOSGiService(DeviceManagementProviderService.class, null);
+            if (deviceManagementProviderService == null) {
+                log.error("DeviceManagementProviderService is not initialized.");
+                return Response.serverError().build();
+            }
+            return Response.ok().entity(deviceManagementProviderService.getConfiguration()).build();
         } catch (DeviceManagementException e) {
-            response.setStatus(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode());
-            return null;
+            log.error("Error occurred while reading tenant configuration.");
+            return Response.serverError().build();
         } finally {
-            this.endTenantFlow();
+            endTenantFlow();
         }
     }
 
@@ -492,14 +659,21 @@ import java.util.List;
     @POST
     @Consumes("application/json")
     @Produces("application/json")
-    public boolean saveConfiguration(@FormParam("tenantConfiguration") TenantConfiguration tenantConfiguration){
+    public Response saveConfiguration(@FormParam("tenantConfiguration") TenantConfiguration tenantConfiguration) {
         try {
-            return this.getServiceProvider().saveConfiguration(tenantConfiguration);
+            PrivilegedCarbonContext ctx = startTenantFlow();
+            DeviceManagementProviderService deviceManagementProviderService =
+                    (DeviceManagementProviderService) ctx.getOSGiService(DeviceManagementProviderService.class, null);
+            if (deviceManagementProviderService == null) {
+                log.error("DeviceManagementProviderService is not initialized.");
+                return Response.serverError().build();
+            }
+            return Response.ok().entity(deviceManagementProviderService.saveConfiguration(tenantConfiguration)).build();
         } catch (DeviceManagementException e) {
-            response.setStatus(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode());
-            return false;
+            log.error("Error occurred while saving tenant configuration.");
+            return Response.serverError().build();
         } finally {
-            this.endTenantFlow();
+            endTenantFlow();
         }
     }
 
@@ -507,17 +681,25 @@ import java.util.List;
     @DELETE
     @Consumes("application/json")
     @Produces("application/json")
-    public boolean disenrollDevice(@PathParam("type") String type, @PathParam("identifier") String identifier){
+    public Response disenrollDevice(@PathParam("type") String type, @PathParam("identifier") String identifier) {
         DeviceIdentifier deviceIdentifier = new DeviceIdentifier();
         deviceIdentifier.setType(type);
         deviceIdentifier.setId(identifier);
         try {
-            return this.getServiceProvider().disenrollDevice(deviceIdentifier);
+            PrivilegedCarbonContext ctx = startTenantFlow();
+            DeviceManagementProviderService deviceManagementProviderService =
+                    (DeviceManagementProviderService) ctx.getOSGiService(DeviceManagementProviderService.class, null);
+            if (deviceManagementProviderService == null) {
+                log.error("DeviceManagementProviderService is not initialized.");
+                return Response.serverError().build();
+            }
+            return Response.ok().entity(deviceManagementProviderService.disenrollDevice(deviceIdentifier)).build();
         } catch (DeviceManagementException e) {
-            response.setStatus(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode());
-            return false;
+            log.error("Error occurred while disenrolling device with identifier: " + identifier + " of device-type: "
+                              + type);
+            return Response.serverError().build();
         } finally {
-            this.endTenantFlow();
+            endTenantFlow();
         }
     }
 
@@ -525,34 +707,52 @@ import java.util.List;
     @GET
     @Consumes("application/json")
     @Produces("application/json")
-    public boolean isEnrolled(@PathParam("type") String type, @PathParam("identifier") String identifier){
+    public Response isEnrolled(@PathParam("type") String type, @PathParam("identifier") String identifier) {
         DeviceIdentifier deviceIdentifier = new DeviceIdentifier();
         deviceIdentifier.setType(type);
         deviceIdentifier.setId(identifier);
         try {
-            return this.getServiceProvider().isEnrolled(deviceIdentifier);
+            PrivilegedCarbonContext ctx = startTenantFlow();
+            DeviceManagementProviderService deviceManagementProviderService =
+                    (DeviceManagementProviderService) ctx.getOSGiService(DeviceManagementProviderService.class, null);
+            if (deviceManagementProviderService == null) {
+                log.error("DeviceManagementProviderService is not initialized.");
+                return Response.serverError().build();
+            }
+            return Response.ok().entity(deviceManagementProviderService.isEnrolled(deviceIdentifier)).build();
         } catch (DeviceManagementException e) {
-            response.setStatus(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode());
-            return false;
+            log.error("Error occurred while reading is-enrolled with device identifier: " + identifier
+                              + " of device-type: " + type);
+            return Response.serverError().build();
         } finally {
-            this.endTenantFlow();
+            endTenantFlow();
         }
     }
+
     @Path("/device/type/{type}/identifier/{identifier}/active")
     @GET
     @Consumes("application/json")
     @Produces("application/json")
-    public boolean isActive(@PathParam("type") String type, @PathParam("identifier") String identifier){
+    public Response isActive(@PathParam("type") String type, @PathParam("identifier") String identifier) {
         DeviceIdentifier deviceIdentifier = new DeviceIdentifier();
         deviceIdentifier.setType(type);
         deviceIdentifier.setId(identifier);
         try {
-            return this.getServiceProvider().isActive(deviceIdentifier);
+            PrivilegedCarbonContext ctx = startTenantFlow();
+            DeviceManagementProviderService deviceManagementProviderService =
+                    (DeviceManagementProviderService) ctx.getOSGiService(DeviceManagementProviderService.class, null);
+            if (deviceManagementProviderService == null) {
+                log.error("DeviceManagementProviderService is not initialized.");
+                return Response.serverError().build();
+            }
+            return Response.ok().entity(deviceManagementProviderService.isActive(deviceIdentifier)).build();
         } catch (DeviceManagementException e) {
-            response.setStatus(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode());
-            return false;
+            log.error(
+                    "Error occurred while reading is-active with device identifier: " + identifier + " of device-type: "
+                            + type);
+            return Response.serverError().build();
         } finally {
-            this.endTenantFlow();
+            endTenantFlow();
         }
     }
 
@@ -560,18 +760,26 @@ import java.util.List;
     @PUT
     @Consumes("application/json")
     @Produces("application/json")
-    public boolean setActive(@PathParam("type") String type, @PathParam("identifier") String identifier,
-            @FormParam("status") boolean status){
+    public Response setActive(@PathParam("type") String type, @PathParam("identifier") String identifier,
+                              @FormParam("status") boolean status) {
         DeviceIdentifier deviceIdentifier = new DeviceIdentifier();
         deviceIdentifier.setType(type);
         deviceIdentifier.setId(identifier);
         try {
-            return this.getServiceProvider().setActive(deviceIdentifier, status);
+            PrivilegedCarbonContext ctx = startTenantFlow();
+            DeviceManagementProviderService deviceManagementProviderService =
+                    (DeviceManagementProviderService) ctx.getOSGiService(DeviceManagementProviderService.class, null);
+            if (deviceManagementProviderService == null) {
+                log.error("DeviceManagementProviderService is not initialized.");
+                return Response.serverError().build();
+            }
+            return Response.ok().entity(deviceManagementProviderService.setActive(deviceIdentifier, status)).build();
         } catch (DeviceManagementException e) {
-            response.setStatus(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode());
-            return false;
+            log.error("Error occurred while setting active with device identifier: " + identifier + " of device-type: "
+                              + type);
+            return Response.serverError().build();
         } finally {
-            this.endTenantFlow();
+            endTenantFlow();
         }
     }
 
@@ -579,18 +787,27 @@ import java.util.List;
     @PUT
     @Consumes("application/json")
     @Produces("application/json")
-    public boolean setOwnership(@PathParam("type") String type, @PathParam("identifier") String identifier,
-            @FormParam("ownership") String ownership){
+    public Response setOwnership(@PathParam("type") String type, @PathParam("identifier") String identifier,
+                                 @FormParam("ownership") String ownership) {
         DeviceIdentifier deviceIdentifier = new DeviceIdentifier();
         deviceIdentifier.setType(type);
         deviceIdentifier.setId(identifier);
         try {
-            return this.getServiceProvider().setOwnership(deviceIdentifier, ownership);
+            PrivilegedCarbonContext ctx = startTenantFlow();
+            DeviceManagementProviderService deviceManagementProviderService =
+                    (DeviceManagementProviderService) ctx.getOSGiService(DeviceManagementProviderService.class, null);
+            if (deviceManagementProviderService == null) {
+                log.error("DeviceManagementProviderService is not initialized.");
+                return Response.serverError().build();
+            }
+            return Response.ok().entity(deviceManagementProviderService.setOwnership(deviceIdentifier, ownership))
+                    .build();
         } catch (DeviceManagementException e) {
-            response.setStatus(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode());
-            return false;
+            log.error("Error occurred while setting ownership with device identifier: " + identifier +
+                              " of deviceType: " + type);
+            return Response.serverError().build();
         } finally {
-            this.endTenantFlow();
+            endTenantFlow();
         }
     }
 
@@ -598,18 +815,27 @@ import java.util.List;
     @PUT
     @Consumes("application/json")
     @Produces("application/json")
-    public boolean setStatus(@PathParam("type") String type, @PathParam("identifier") String identifier,
-            @FormParam("owner") String owner, @FormParam("status") EnrolmentInfo.Status status){
+    public Response setStatus(@PathParam("type") String type, @PathParam("identifier") String identifier,
+                              @FormParam("owner") String owner, @FormParam("status") EnrolmentInfo.Status status) {
         DeviceIdentifier deviceIdentifier = new DeviceIdentifier();
         deviceIdentifier.setType(type);
         deviceIdentifier.setId(identifier);
         try {
-            return this.getServiceProvider().setStatus(deviceIdentifier, owner, status);
+            PrivilegedCarbonContext ctx = startTenantFlow();
+            DeviceManagementProviderService deviceManagementProviderService =
+                    (DeviceManagementProviderService) ctx.getOSGiService(DeviceManagementProviderService.class, null);
+            if (deviceManagementProviderService == null) {
+                log.error("DeviceManagementProviderService is not initialized.");
+                return Response.serverError().build();
+            }
+            return Response.ok().entity(deviceManagementProviderService.setStatus(deviceIdentifier, owner, status))
+                    .build();
         } catch (DeviceManagementException e) {
-            response.setStatus(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode());
-            return false;
+            log.error("Error occurred while setting status with device identifier: " + identifier + " of device-type: "
+                              + type);
+            return Response.serverError().build();
         } finally {
-            this.endTenantFlow();
+            endTenantFlow();
         }
     }
 
@@ -617,18 +843,25 @@ import java.util.List;
     @GET
     @Consumes("application/json")
     @Produces("application/json")
-    public boolean isClaimable(@PathParam("type") String type, @PathParam("identifier") String identifier){
+    public Response isClaimable(@PathParam("type") String type, @PathParam("identifier") String identifier) {
         DeviceIdentifier deviceIdentifier = new DeviceIdentifier();
         deviceIdentifier.setType(type);
         deviceIdentifier.setId(identifier);
         try {
-            return this.getServiceProvider().isClaimable(deviceIdentifier);
+            PrivilegedCarbonContext ctx = startTenantFlow();
+            DeviceManagementProviderService deviceManagementProviderService =
+                    (DeviceManagementProviderService) ctx.getOSGiService(DeviceManagementProviderService.class, null);
+            if (deviceManagementProviderService == null) {
+                log.error("DeviceManagementProviderService is not initialized.");
+                return Response.serverError().build();
+            }
+            return Response.ok().entity(deviceManagementProviderService.isClaimable(deviceIdentifier)).build();
         } catch (DeviceManagementException e) {
-            response.setStatus(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode());
-            return false;
+            log.error("Error occurred while reading claimable with device identifier: " + identifier
+                              + " of device-type: " + type);
+            return Response.serverError().build();
         } finally {
-            this.endTenantFlow();
+            endTenantFlow();
         }
     }
-
 }
