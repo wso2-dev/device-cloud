@@ -19,8 +19,8 @@ package org.wso2.carbon.device.mgt.iot.common.sensormgt;
 import org.wso2.carbon.device.mgt.iot.common.exception.DeviceControllerException;
 
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * This class is used to store latest sensor value readings against a device id in an in-memory map.
@@ -29,7 +29,7 @@ public class SensorDataManager {
 
     private static final SensorDataManager instance = new SensorDataManager();
     //key is deviceId
-    private Map<String, DeviceRecord> deviceRecords = new HashMap<>();
+    private Map<String, DeviceRecord> deviceRecords = new ConcurrentHashMap<>();
 
     private SensorDataManager() {
     }
