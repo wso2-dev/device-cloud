@@ -18,12 +18,12 @@
  *
  */
 var caramel;
-require('/modules/store.js').exec(function (ctx) {
-    caramel = require('caramel');
-    var app = require('rxt').app;
-    var server = require('store').server;
+require("/modules/store.js").exec(function (ctx) {
+    caramel = require("caramel");
+    var app = require("rxt").app;
+    var server = require("store").server;
     var user = server.current(ctx.session);
-    var ui = require('rxt').ui;
+    var ui = require("rxt").ui;
     var page = ui.buildPage(ctx.session, ctx.request);
     var appManager;
 
@@ -49,15 +49,15 @@ require('/modules/store.js').exec(function (ctx) {
             for (var i = 0; i < deviceTypes.length; i++) {
                 deviceType = deviceTypes[i];
 
-                //setting defaults
+                //Setting defaults
                 var storeTitle = deviceType.name;
                 var storeDescription = "Add policy for " + deviceType.name;
 
-                if (deviceType.storeTitle != null) {
+                if (deviceType.storeTitle) {
                     storeTitle = deviceType.storeTitle;
                 }
 
-                if (deviceType.storeDescription != null) {
+                if (deviceType.storeDescription) {
                     storeDescription = deviceType.storeDescription;
                 }
 
@@ -69,8 +69,8 @@ require('/modules/store.js').exec(function (ctx) {
             page.meta.title = "Store | Add Policy";
             page.title = "Add Device Policy";
         }
-        page.partial = 'policy-add-new';
-    }else if (uriMatcher.match("/{context}/pages/policies/add")) {
+        page.partial = "policy-add-new";
+    } else if (uriMatcher.match("/{context}/pages/policies/add")) {
         var deviceModule = require("../modules/device.js").deviceModule;
         var deviceTypes = deviceModule.getDeviceTypes().data;
         var deviceId = request.getParameter("deviceId");
@@ -105,14 +105,14 @@ require('/modules/store.js').exec(function (ctx) {
             page.meta.title = "Store | Add Policy";
             page.title = "Add Device Policy";
         }
-        page.partial = 'policy-add';
-    } else if(uriMatcher.match("/{context}/pages/policies/new")) {
+        page.partial = "policy-add";
+    } else if (uriMatcher.match("/{context}/pages/policies/new")) {
         var policyModule = require("../modules/policy.js").policyModule;
-        page.partial = 'policy-listing-new';
+        page.partial = "policy-listing-new";
         page.policies = policyModule.getPolicies();
     } else {
         var policyModule = require("../modules/policy.js").policyModule;
-        page.partial = 'policy-listing';
+        page.partial = "policy-listing";
         page.policies = policyModule.getPolicies();
     }
 

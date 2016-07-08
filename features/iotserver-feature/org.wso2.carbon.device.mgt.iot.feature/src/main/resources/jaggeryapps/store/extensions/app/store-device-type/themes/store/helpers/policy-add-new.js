@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2005-2014, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+ *  Copyright (c) 2016, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
  *
  *  WSO2 Inc. licenses this file to you under the Apache License,
  *  Version 2.0 (the "License"); you may not use this file except
@@ -21,6 +21,6 @@ var resources = function (page, meta) {
     return {
         js: ['libs/utils.js','libs/js.cookie.js', 'libs/invoker-lib.js', 'libs/codemirror.js', 'libs/select2.full.min.js',
             'libs/sql.js','libs/handlebars/handlebars-v2.0.0.js','libs/handlebars/utils.js', 'policy-add-new.js'],
-        css: ['codemirror.css', 'select2.min.css', 'policy-add.css']
+        css: ['codemirror.css', 'select2.min.css', 'policy-add.css', 'modal.css']
     };
 };

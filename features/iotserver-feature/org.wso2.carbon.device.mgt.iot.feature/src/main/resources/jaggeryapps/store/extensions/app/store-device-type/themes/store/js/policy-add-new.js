@@ -1,16 +1,34 @@
-var deviceId, deviceType;
-$('select.select2').select2({
-    placeholder: 'Select..'
-});
+/*
+ * Copyright (c) 2016, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+ *
+ * WSO2 Inc. licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file except
+ * in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+ * either express or implied. See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
 
-$('select.select2[multiple=multiple]').select2({
-    placeholder: 'Select..',
-    tags: true
-});
+var deviceId, deviceType;
+$("select.select2").select2({
+                                placeholder: "Select.."
+                            });
+
+$("select.select2[multiple=multiple]").select2({
+                                                   placeholder: "Select..",
+                                                   tags: true
+                                               });
 
 var stepperRegistry = {},
-    hiddenOperation = '.wr-hidden-operations-content > div',
-    advanceOperation = '.wr-advance-operations';
+    hiddenOperation = ".wr-hidden-operations-content > div",
+    advanceOperation = ".wr-advance-operations";
 
 function initStepper(selector) {
     $(selector).click(function () {
@@ -38,22 +56,20 @@ function initStepper(selector) {
         $(".wr-wizard").html($(".wr-steps").html());
         $("." + nextStep).removeClass("hidden");
         $("." + currentStep).addClass("hidden");
-
     });
 }
 
 function showAdvanceOperation(operation, button) {
-    $(button).addClass('selected');
-    $(button).siblings().removeClass('selected');
-    $(hiddenOperation + '[data-operation="' + operation + '"]').show();
-    $(hiddenOperation + '[data-operation="' + operation + '"]').siblings().hide();
+    $(button).addClass("selected");
+    $(button).siblings().removeClass("selected");
+    $(hiddenOperation + "[data-operation=\"" + operation + "\"]").show();
+    $(hiddenOperation + "[data-operation=\"" + operation + "\"]").siblings().hide();
 }
 
 var policy = {};
 var configuredProfiles = [];
 
 function savePolicy() {
-
     var payload = {
         policyName: policy.policyName,
         compliance: policy.selectedAction,
@@ -69,29 +85,29 @@ function savePolicy() {
         }
     };
 
-    invokerUtil.post("../../../apis/policies/add?deviceId="+deviceId, payload, function (data, txtStatus, jqxhr) {
+    invokerUtil.post("../../../apis/policies/add?deviceId=" + deviceId, payload, function (data, txtStatus, jqxhr) {
         $(".policy-message").removeClass("hidden");
         $(".add-policy").addClass("hidden");
         setTimeout(function () {
             window.location = "../policies";
         }, 1500);
     }, function (err) {
-        console.log(err);
+        //console.log(err);
     });
 }
 
 $(document).ready(function () {
-    deviceId = getQueryParams('deviceId');
-    deviceType = getQueryParams('deviceType');
+    deviceId = getQueryParams("deviceId");
+    deviceType = getQueryParams("deviceType");
 
     initStepper(".wizard-stepper");
     $(".wr-wizard").html($(".wr-steps").html());
 
-    if (deviceId && deviceType){
+    if (deviceId && deviceType) {
         policy.devicetype = deviceType;
         policy.deviceId = deviceId;
-        $('.policy-config-profile').removeClass("hidden");
-        $('.policy-devicetype').addClass("hidden");
+        $(".policy-config-profile").removeClass("hidden");
+        $(".policy-devicetype").addClass("hidden");
 
         var deviceType = policy.devicetype;
         var hiddenOperationsByDeviceType = $("#hidden-operations-" + deviceType);
@@ -111,30 +127,28 @@ $(document).ready(function () {
         );
     }
 
-    $("input[type='radio'].user-select-radio").change(function () {
-        $('.user-select').hide();
-        $('#' + $(this).val()).show();
+    $("input[type=\"radio\"].user-select-radio").change(function () {
+        $(".user-select").hide();
+        $("#" + $(this).val()).show();
     });
     //Adds an event listener to swithc
     $(advanceOperation).on("click", ".wr-input-control.switch", function (evt) {
         var operation = $(this).parents(".operation-data").data("operation");
-        //prevents event bubbling by figuring out what element it's being called from
+        //Prevents event bubbling by figuring out what element it's being called from
         if (evt.target.tagName == "INPUT") {
-            if (!$(this).hasClass('collapsed')) {
+            if (!$(this).hasClass("collapsed")) {
                 configuredProfiles.push(operation);
             } else {
-                //splicing the array if operation is present
+                //Splicing the array if operation is present
                 var index = jQuery.inArray(operation, configuredProfiles);
                 if (index != -1) {
                     configuredProfiles.splice(index, 1);
                 }
             }
-            console.log(configuredProfiles);
         }
-
     });
 
-    stepperRegistry['policy-devicetype'] = function (actionButton) {
+    stepperRegistry["policy-devicetype"] = function (actionButton) {
         policy.devicetype = $(actionButton).data("devicetype");
         policy.devicetypeId = $(actionButton).data("devicetype-id");
 
@@ -156,7 +170,6 @@ $(document).ready(function () {
         );
     };
 
-
     /**
      * Method to update the visibility of grouped input.
      * @param domElement HTML grouped-input element with class name "grouped-input"
@@ -167,44 +180,44 @@ $(document).ready(function () {
                 $(".grouped-child-input:first", domElement).removeClass("disabled");
             }
             $(".child-input", domElement).each(function () {
-                $(this).prop('disabled', false);
+                $(this).prop("disabled", false);
             });
         } else {
             if (!$(".grouped-child-input:first", domElement).hasClass("disabled")) {
                 $(".grouped-child-input:first", domElement).addClass("disabled");
             }
             $(".child-input", domElement).each(function () {
-                $(this).prop('disabled', true);
+                $(this).prop("disabled", true);
             });
         }
     };
 
-    stepperRegistry['policy-config-profile'] = function (actionButton) {
-        if(policy.devicetype == "virtual_firealarm"){
+    stepperRegistry["policy-config-profile"] = function (actionButton) {
+        if (policy.devicetype == "virtual_firealarm") {
             var timeInterval = $("#time-interval").val();
             var triggerTemp = $("#trigger-temp").val();
-            if(timeInterval == "" || timeInterval < 0){
+            if (timeInterval == "" || timeInterval < 0) {
                 timeInterval = 30;
             }
-            if(triggerTemp == "" ||triggerTemp < 0){
+            if (triggerTemp == "" || triggerTemp < 0) {
                 triggerTemp = 50;
             }
             window.queryEditor.setValue("define stream fireAlarmEventStream (deviceID string, temp int)\n" +
-            "from fireAlarmEventStream#window.time("+timeInterval+" sec)\n" +
-            "select deviceID, max(temp) as maxValue\n"+
-            "group by deviceID\n"+
-            "insert into analyzeStream for expired-events;\n" +
-            "from analyzeStream[maxValue < "+triggerTemp+"]\n"+
-            "select maxValue\n" +
-            "insert into bulbOnStream;\n" +
-            "from fireAlarmEventStream[temp > "+triggerTemp+"]\n" +
-            "select deviceID, temp\n" +
-            "insert into bulbOffStream;\n");
+                                        "from fireAlarmEventStream#window.time(" + timeInterval + " sec)\n" +
+                                        "select deviceID, max(temp) as maxValue\n" +
+                                        "group by deviceID\n" +
+                                        "insert into analyzeStream for expired-events;\n" +
+                                        "from analyzeStream[maxValue < " + triggerTemp + "]\n" +
+                                        "select maxValue\n" +
+                                        "insert into bulbOnStream;\n" +
+                                        "from fireAlarmEventStream[temp > " + triggerTemp + "]\n" +
+                                        "select deviceID, temp\n" +
+                                        "insert into bulbOffStream;\n");
             window.queryEditor.refresh();
         }
     };
 
-    stepperRegistry['policy-content'] = function (actionButton) {
+    stepperRegistry["policy-content"] = function (actionButton) {
         policy.policyDefinition = window.queryEditor.getValue();
         policy.policyName = $("#policy-name-input").val();
         policy.policyDescription = $("#policy-description-input").val();
@@ -223,12 +236,12 @@ $(document).ready(function () {
 
     var mime = MIME_TYPE_SIDDHI_QL;
 
-    // get mime type
-    if (window.location.href.indexOf('mime=') > -1) {
-        mime = window.location.href.substr(window.location.href.indexOf('mime=') + 5);
+    // Get mime type
+    if (window.location.href.indexOf("mime=") > -1) {
+        mime = window.location.href.substr(window.location.href.indexOf("mime=") + 5);
     }
 
-    window.queryEditor = CodeMirror.fromTextArea(document.getElementById('policy-definition-input'), {
+    window.queryEditor = CodeMirror.fromTextArea(document.getElementById("policy-definition-input"), {
         mode: mime,
         indentWithTabs: true,
         smartIndent: true,
@@ -237,25 +250,20 @@ $(document).ready(function () {
         autofocus: true,
         extraKeys: {
             "Shift-2": function (cm) {
-                insertStr(cm, cm.getCursor(), '@');
+                insertStr(cm, cm.getCursor(), "@");
                 CodeMirror.showHint(cm, getAnnotationHints);
             },
             "Ctrl-Space": "autocomplete"
         }
     });
-
 });
 
 function getQueryParams(key) {
-    var qs = document.location.search.split('+').join(' ');
-
-    var params = {},
-            tokens,
-            re = /[?&]?([^=]+)=([^&]*)/g;
-
+    var qs = document.location.search.split("+").join(" ");
+    var params = {}, tokens, re = /[?&]?([^=]+)=([^&]*)/g;
+    
     while (tokens = re.exec(qs)) {
         params[decodeURIComponent(tokens[1])] = decodeURIComponent(tokens[2]);
     }
-
     return params[key];
 }
